@@ -20,6 +20,21 @@ import java.util.Map;
 public interface EsGoodsIndexService {
 
     /**
+     * 删除下架商品索引
+     */
+    Boolean deleteGoodsDown();
+
+    /**
+     * 删除不存在的索引
+     * @return
+     */
+    Boolean delSkuIndex();
+
+    /**
+     * 商品索引数据初始化
+     */
+    Boolean goodsCache();
+    /**
      * 全局索引数据初始化
      */
     void init();

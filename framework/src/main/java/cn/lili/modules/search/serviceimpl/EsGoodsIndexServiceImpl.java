@@ -6,8 +6,6 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSON;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.PromotionTypeEnum;
@@ -16,10 +14,10 @@ import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.GsonUtils;
 import cn.lili.common.vo.PageVO;
 import cn.lili.elasticsearch.ElasticsearchIndexAbstractService;
-import cn.lili.elasticsearch.config.ElasticsearchProperties;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
+import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
 import cn.lili.modules.goods.entity.dto.GoodsSkuDTO;
 import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
 import cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum;
@@ -37,11 +35,16 @@ import cn.lili.modules.promotion.tools.PromotionTools;
 import cn.lili.modules.search.entity.dos.CustomWords;
 import cn.lili.modules.search.entity.dos.EsGoodsAttribute;
 import cn.lili.modules.search.entity.dos.EsGoodsIndex;
+import cn.lili.modules.search.entity.dto.EsDeleteDTO;
 import cn.lili.modules.search.entity.dto.EsGoodsSearchDTO;
 import cn.lili.modules.search.repository.EsGoodsIndexRepository;
 import cn.lili.modules.search.service.CustomWordsService;
 import cn.lili.modules.search.service.EsGoodsIndexService;
 import cn.lili.modules.search.service.EsGoodsSearchService;
+import cn.lili.mybatis.util.PageUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -49,10 +52,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
 
@@ -107,8 +114,127 @@ public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService i
     @Autowired
     private StoreGoodsLabelService storeGoodsLabelService;
     @Autowired
+    private EsGoodsSearchService esGoodsSearchService;
+    @Autowired
     private Cache<Object> cache;
 
+
+    @Override
+    public Boolean deleteGoodsDown() {
+        List<Goods> goodsList = goodsService.list(new LambdaQueryWrapper<Goods>().eq(Goods::getMarketEnable, GoodsStatusEnum.DOWN.name()));
+        for (Goods goods : goodsList) {
+            this.deleteIndex(
+                    EsDeleteDTO.builder()
+                            .queryFields(MapUtil.builder(new HashMap<String, Object>()).put("goodsId", goods.getId()).build())
+                            .clazz(EsGoodsIndex.class)
+                            .build());
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean delSkuIndex() {
+        PageVO pageVO = new PageVO();
+        EsGoodsSearchDTO goodsSearchParams = new EsGoodsSearchDTO();
+        log.error("开始");
+        try {
+            for (int i = 1; ; i++) {
+
+                log.error("第" + i + "页");
+
+                pageVO.setPageSize(1000);
+                pageVO.setPageNumber(i);
+                pageVO.setNotConvert(true);
+                pageVO.setSort("_id");
+                pageVO.setOrder("asc");
+
+                NativeQueryBuilder searchQueryBuilder = esGoodsSearchService.createSearchQueryBuilder(goodsSearchParams, pageVO);
+                searchQueryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"_id"}, null));
+
+                Pageable pageable = PageRequest.of(0, 1000);
+                //分页
+                searchQueryBuilder.withPageable(pageable);
+                Query query = searchQueryBuilder.build();
+
+                SearchPage<EsGoodsIndex> searchHits = goodsSearchService.searchGoods(query, EsGoodsIndex.class);
+
+                if (searchHits == null || searchHits.isEmpty()) {
+                    break;
+                }
+
+                List<String> idList = searchHits.getContent()
+                        .stream()
+                        .map(SearchHit::getContent)
+                        .map(EsGoodsIndex::getId)
+                        .collect(Collectors.toList());
+
+                LambdaQueryWrapper<GoodsSku> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.select(GoodsSku::getId);
+                queryWrapper.in(GoodsSku::getId, idList);
+                List<GoodsSku> goodsSkus = goodsSkuService.list(queryWrapper);
+
+                idList.forEach(id -> {
+                    if (goodsSkus.stream().noneMatch(goodsSku -> goodsSku.getId().equals(id))) {
+                        log.error("[{}]不存在，进行删除", id);
+                        this.deleteIndexById(id);
+                    }
+                });
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("结束了");
+        return true;
+    }
+
+    @Override
+    public Boolean goodsCache() {
+        GoodsSearchParams searchParams = new GoodsSearchParams();
+        searchParams.setAuthFlag(GoodsAuthEnum.PASS.name());
+        searchParams.setMarketEnable(GoodsStatusEnum.UPPER.name());
+
+        for (int i = 1; ; i++) {
+            try {
+                IPage<Goods> pagePage = new Page<>();
+                searchParams.setPageSize(1000);
+                searchParams.setPageNumber(i);
+                pagePage = goodsService.queryByParams(searchParams);
+
+                if (pagePage == null || CollUtil.isEmpty(pagePage.getRecords())) {
+                    break;
+                }
+                for (Goods goods : pagePage.getRecords()) {
+                    cache.remove(CachePrefix.GOODS.getPrefix() + goods.getId());
+                    goodsService.getGoodsVO(goods.getId());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        for (int i = 1; ; i++) {
+            try {
+                IPage<GoodsSkuDTO> skuIPage = new Page<>();
+                searchParams.setPageSize(1000);
+                searchParams.setPageNumber(i);
+                skuIPage = goodsSkuService.getGoodsSkuDTOByPage(PageUtil.initPage(searchParams),
+                        searchParams.queryWrapper());
+
+                if (skuIPage == null || CollUtil.isEmpty(skuIPage.getRecords())) {
+                    break;
+                }
+                for (GoodsSkuDTO goodsSkuDTO : skuIPage.getRecords()) {
+                    GoodsSku goodsSku = goodsSkuService.getById(goodsSkuDTO.getId());
+                    cache.put(GoodsSkuService.getCacheKeys(goodsSkuDTO.getId()), goodsSku, 600L);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
 
     @Override
     public void init() {
@@ -387,6 +513,17 @@ public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService i
     @Override
     public void updateIndex(EsGoodsIndex goods) {
         this.addIndex(goods);
+    }
+
+    /**
+     * 删除索引
+     *
+     * @param esDeleteDTO 删除索引参数
+     */
+    private void deleteIndex(EsDeleteDTO esDeleteDTO) {
+        if (esDeleteDTO.getIds() != null && !esDeleteDTO.getIds().isEmpty()) {
+            this.deleteIndexByIds(esDeleteDTO.getIds());
+        }
     }
 
     /**

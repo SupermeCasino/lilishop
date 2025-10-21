@@ -71,8 +71,7 @@ public abstract class ElasticsearchIndexAbstractService extends BaseElasticsearc
                 ));
             }
             // 判断values是否为数组
-            if (entry.getValue() instanceof List) {
-                List<?> list = (List<?>) entry.getValue();
+            if (entry.getValue() instanceof List list) {
                 List<FieldValue> fieldValues = new ArrayList<>();
                 for (Object o : list) {
                     fieldValues.add(FieldValue.of(o.toString()));

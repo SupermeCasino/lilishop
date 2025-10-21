@@ -23,6 +23,7 @@ import org.springframework.data.elasticsearch.core.query.HighlightQuery;
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -113,6 +114,12 @@ public class EsGoodsSearchServiceImpl extends EsGoodsSearchAbstractService imple
         }
 
         return SearchHitSupport.searchPageFor(search, searchQueryBuilder.getPageable());
+    }
+
+    @Override
+    public <T> SearchPage<T> searchGoods(Query searchQuery, Class<T> clazz) {
+        SearchHits<T> search = restTemplate.search(searchQuery, clazz);
+        return SearchHitSupport.searchPageFor(search, searchQuery.getPageable());
     }
 
     @Override
