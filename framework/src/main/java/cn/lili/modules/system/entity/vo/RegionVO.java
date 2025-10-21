@@ -2,7 +2,9 @@ package cn.lili.modules.system.entity.vo;
 
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.system.entity.dos.Region;
+import cn.lili.mybatis.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -15,8 +17,9 @@ import java.util.List;
  * @since 2021-02-08 09:49
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class RegionVO extends Region {
+public class RegionVO extends BaseEntity {
 
     /**
      * 子信息

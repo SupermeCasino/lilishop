@@ -2,9 +2,9 @@ package cn.lili.modules.system.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -15,13 +15,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @TableName("li_setting")
-@ApiModel(value = "配置")
+@Schema(description = "配置")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Setting extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "配置值value")
+    @Schema(description = "配置值value")
     private String settingValue;
 
 }

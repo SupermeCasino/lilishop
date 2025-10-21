@@ -32,6 +32,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -52,7 +53,7 @@ public class OrderStatisticsServiceImpl extends ServiceImpl<OrderStatisticsMappe
      */
     @Autowired
     private PlatformViewService platformViewService;
-
+    @Lazy
     @Autowired
     private StoreFlowStatisticsService storeFlowStatisticsService;
     @Autowired

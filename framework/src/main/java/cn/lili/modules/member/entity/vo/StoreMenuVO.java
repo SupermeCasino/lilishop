@@ -2,8 +2,9 @@ package cn.lili.modules.member.entity.vo;
 
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.member.entity.dos.StoreMenu;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,9 +18,10 @@ import java.util.List;
  */
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class StoreMenuVO extends StoreMenu {
 
-    @ApiModelProperty(value = "子菜单")
+    @Schema(description = "子菜单")
     private List<StoreMenuVO> children = new ArrayList<>();
 
     public StoreMenuVO() {

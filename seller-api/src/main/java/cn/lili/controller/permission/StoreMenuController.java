@@ -9,9 +9,9 @@ import cn.lili.modules.permission.entity.dos.Menu;
 import cn.lili.modules.permission.entity.dto.MenuSearchParams;
 import cn.lili.modules.permission.entity.vo.MenuVO;
 import cn.lili.modules.permission.service.MenuService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;  
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "店铺端,菜单管理接口")
+@Tag(name = "店铺端,菜单管理接口")
 @RequestMapping("/store/menu")
 public class StoreMenuController {
 
@@ -35,13 +35,13 @@ public class StoreMenuController {
     private StoreMenuService storeMenuService;
 
 
-    @ApiOperation(value = "获取所有菜单")
+    @Operation(description = "获取所有菜单")
     @GetMapping("/tree")
     public ResultMessage<List<StoreMenuVO>> getAllMenuList() {
         return ResultUtil.data(storeMenuService.tree());
     }
 
-    @ApiOperation(value = "获取所有菜单---根据当前用户角色")
+    @Operation(description = "获取所有菜单---根据当前用户角色")
     @GetMapping("/memberMenu")
     public ResultMessage<List<StoreMenuVO>> memberMenu() {
         return ResultUtil.data(storeMenuService.findUserTree());

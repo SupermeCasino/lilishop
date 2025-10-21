@@ -1,12 +1,5 @@
 package cn.lili.modules.distribution.serviceimpl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import cn.lili.common.context.ThreadContextHolder;
-import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.properties.RocketmqCustomProperties;
@@ -20,18 +13,7 @@ import cn.lili.modules.distribution.entity.vos.DistributionCashSearchParams;
 import cn.lili.modules.distribution.mapper.DistributionCashMapper;
 import cn.lili.modules.distribution.service.DistributionCashService;
 import cn.lili.modules.distribution.service.DistributionService;
-import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
-import cn.lili.modules.order.order.entity.dto.OrderExportDetailDTO;
-import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
-import cn.lili.modules.order.order.entity.dto.PriceDetailDTO;
-import cn.lili.modules.order.order.entity.enums.OrderItemAfterSaleStatusEnum;
-import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
-import cn.lili.modules.order.order.entity.enums.OrderTypeEnum;
-import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
-import cn.lili.modules.wallet.entity.dto.MemberWalletUpdateDTO;
 import cn.lili.modules.wallet.entity.dto.MemberWithdrawalMessage;
-import cn.lili.modules.wallet.entity.enums.DepositServiceTypeEnum;
-import cn.lili.modules.wallet.entity.enums.MemberWithdrawalDestinationEnum;
 import cn.lili.modules.wallet.entity.enums.WithdrawStatusEnum;
 import cn.lili.modules.wallet.service.MemberWalletService;
 import cn.lili.mybatis.util.PageUtil;
@@ -40,7 +22,7 @@ import cn.lili.rocketmq.tags.MemberTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.swagger.annotations.ApiOperation;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -49,12 +31,9 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,11 +51,6 @@ public class DistributionCashServiceImpl extends ServiceImpl<DistributionCashMap
      */
     @Autowired
     private DistributionService distributionService;
-    /**
-     * 会员余额
-     */
-    @Autowired
-    private MemberWalletService memberWalletService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
@@ -102,7 +76,7 @@ public class DistributionCashServiceImpl extends ServiceImpl<DistributionCashMap
             distribution.setCommissionFrozen(CurrencyUtil.add(distribution.getCommissionFrozen(), applyMoney));
             distributionService.updateById(distribution);
             //提现申请记录
-            DistributionCash distributionCash = new DistributionCash("D" + SnowFlake.getId(),applyMoney, distribution);
+            DistributionCash distributionCash = new DistributionCash("D" + SnowFlake.getId(), applyMoney, distribution);
             boolean result = this.save(distributionCash);
             if (result) {
                 //发送提现消息

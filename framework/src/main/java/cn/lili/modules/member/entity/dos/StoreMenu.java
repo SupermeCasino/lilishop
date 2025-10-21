@@ -2,9 +2,9 @@ package cn.lili.modules.member.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 菜单权限
@@ -14,34 +14,35 @@ import lombok.Data;
  */
 @Data
 @TableName("li_store_menu")
-@ApiModel(value = "店铺菜单权限")
+@Schema(description = "店铺菜单权限")
+@EqualsAndHashCode(callSuper = false)
 public class StoreMenu extends BaseEntity {
 
     private static final long serialVersionUID = 7050744476203495207L;
 
 
-    @ApiModelProperty(value = "菜单标题")
+    @Schema(description = "菜单标题")
     private String title;
 
-    @ApiModelProperty(value = "路由名称")
+    @Schema(description = "路由名称")
     private String name;
 
-    @ApiModelProperty(value = "路径")
+    @Schema(description = "路径")
     private String path;
 
-    @ApiModelProperty(value = "菜单层级")
+    @Schema(description = "菜单层级")
     private Integer level;
 
-    @ApiModelProperty(value = "前端目录文件")
+    @Schema(description = "前端目录文件")
     private String frontRoute;
 
-    @ApiModelProperty(value = "父id")
+    @Schema(description = "父id")
     private String parentId = "0";
 
-    @ApiModelProperty(value = "排序值")
+    @Schema(description = "排序值")
     private Double sortOrder;
 
-    @ApiModelProperty(value = "权限URL，*号模糊匹配，逗号分割")
+    @Schema(description = "权限URL，*号模糊匹配，逗号分割")
     private String permission;
 
 

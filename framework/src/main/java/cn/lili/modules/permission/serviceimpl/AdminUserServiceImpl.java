@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +55,9 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
     private UserRoleService userRoleService;
     @Autowired
     private RoleService roleService;
+    @Lazy
     @Autowired
     private DepartmentService departmentService;
-    @Autowired
-    private MenuService menuService;
     @Autowired
     private ManagerTokenGenerate managerTokenGenerate;
     @Autowired

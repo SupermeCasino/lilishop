@@ -1,7 +1,7 @@
 package cn.lili.modules.promotion.entity.vos;
 
 import cn.lili.modules.member.entity.dos.Member;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,28 +17,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PintuanMemberVO {
 
-    @ApiModelProperty(value = "会员编号")
+    @Schema(description = "会员编号")
     private String memberId;
 
-    @ApiModelProperty(value = "会员用户名")
+    @Schema(description = "会员用户名")
     private String memberName;
 
-    @ApiModelProperty(value = "会员头像")
+    @Schema(description = "会员头像")
     private String face;
 
-    @ApiModelProperty(value = "昵称")
+    @Schema(description = "昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "参团订单编号")
+    @Schema(description = "参团订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "已参团人数")
+    @Schema(description = "已参团人数")
     private long groupedNum;
 
-    @ApiModelProperty(value = "待参团人数")
+    @Schema(description = "待参团人数")
     private long toBeGroupedNum;
 
-    @ApiModelProperty(value = "成团人数")
+    @Schema(description = "成团人数")
     private long groupNum;
 
     public PintuanMemberVO(Member member) {

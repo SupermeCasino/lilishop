@@ -2,7 +2,7 @@ package cn.lili.common.vo;
 
 import cn.lili.common.utils.DateUtil;
 import com.alipay.api.internal.util.StringUtils;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +21,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class SearchVO implements Serializable {
 
-    @ApiModelProperty(value = "起始日期")
+    @Schema(description = "起始日期")
     private String startDate;
 
-    @ApiModelProperty(value = "结束日期")
+    @Schema(description = "结束日期")
     private String endDate;
 
     public Date getConvertStartDate() {

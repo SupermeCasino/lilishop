@@ -5,9 +5,10 @@ import cn.lili.modules.im.entity.enums.MessageTypeEnum;
 import cn.lili.modules.im.entity.vo.MessageOperation;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -16,8 +17,9 @@ import java.util.Date;
  * @author Chopper
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_im_message")
-@ApiModel(value = "Im消息")
+@Schema(description = "Im消息")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImMessage extends BaseEntity {
@@ -55,7 +57,7 @@ public class ImMessage extends BaseEntity {
     private String text;
 
 
-    public ImMessage(MessageOperation messageOperation){
+    public ImMessage(MessageOperation messageOperation) {
         this.setFromUser(messageOperation.getFrom());
         this.setMessageType(messageOperation.getMessageType());
         this.setIsRead(false);

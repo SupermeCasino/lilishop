@@ -7,8 +7,8 @@ import cn.lili.modules.distribution.entity.vos.DistributionOrderSearchParams;
 import cn.lili.modules.distribution.service.DistributionOrderService;
 import cn.lili.modules.distribution.service.DistributionService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:03 下午
  */
 @RestController
-@Api(tags = "买家端,分销订单接口")
+@Tag(name = "买家端,分销订单接口")
 @RequestMapping("/buyer/distribution/order")
 public class DistributionOrderBuyerController {
 
@@ -38,7 +38,7 @@ public class DistributionOrderBuyerController {
     private DistributionService distributionService;
 
 
-    @ApiOperation(value = "分销员订单")
+    @Operation(summary = "分销员订单")
     @GetMapping
     public ResultMessage<IPage<DistributionOrder>> casHistory(DistributionOrderSearchParams distributionOrderSearchParams) {
         //获取当前登录的分销员

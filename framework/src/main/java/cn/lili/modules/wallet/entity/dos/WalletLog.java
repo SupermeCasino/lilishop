@@ -4,14 +4,15 @@ import cn.lili.common.security.sensitive.Sensitive;
 import cn.lili.common.security.sensitive.enums.SensitiveStrategy;
 import cn.lili.modules.wallet.entity.dto.MemberWalletUpdateDTO;
 import cn.lili.modules.wallet.entity.enums.DepositServiceTypeEnum;
+import cn.lili.mybatis.BaseEntity;
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,43 +27,44 @@ import java.util.Date;
  * @since 2020-02-25 14:10:16
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_wallet_log")
-@ApiModel(value = "钱包变动日志")
+@Schema(description = "钱包变动日志")
 @NoArgsConstructor
 public class WalletLog extends BaseIdEntity {
 
     private static final long serialVersionUID = -1599270544927161096L;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
-    @ApiModelProperty(value = "金额")
+    @Schema(description = "金额")
     private Double money;
 
     /**
      * @see DepositServiceTypeEnum
      */
-    @ApiModelProperty(value = "业务类型")
+    @Schema(description = "业务类型")
     private String serviceType;
 
-    @ApiModelProperty(value = "日志明细")
+    @Schema(description = "日志明细")
     private String detail;
 
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
     /**

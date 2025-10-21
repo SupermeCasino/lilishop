@@ -1,7 +1,7 @@
 package cn.lili.modules.member.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,38 +16,38 @@ import java.util.Date;
 @Data
 public class MemberEvaluationListVO {
 
-    @ApiModelProperty(value = "评论ID")
+    @Schema(description = "评论ID")
     private String id;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "好中差评", allowableValues = "GOOD,NEUTRAL,BAD")
+    @Schema(description = "好中差评", allowableValues = "GOOD,NEUTRAL,BAD")
     private String grade;
 
-    @ApiModelProperty(value = "评价内容")
+    @Schema(description = "评价内容")
     private String content;
 
-    @ApiModelProperty(value = "状态 ", allowableValues = " OPEN 正常 ,CLOSE 关闭")
+    @Schema(description = "状态 ", allowableValues = " OPEN 正常 ,CLOSE 关闭")
     private String status;
 
-    @ApiModelProperty(value = "回复状态")
+    @Schema(description = "回复状态")
     private Boolean replyStatus;
 
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    @ApiModelProperty(value = "物流评分")
+    @Schema(description = "物流评分")
     private Integer deliveryScore;
 
-    @ApiModelProperty(value = "服务评分")
+    @Schema(description = "服务评分")
     private Integer serviceScore;
 
-    @ApiModelProperty(value = "描述评分")
+    @Schema(description = "描述评分")
     private Integer descriptionScore;
 }

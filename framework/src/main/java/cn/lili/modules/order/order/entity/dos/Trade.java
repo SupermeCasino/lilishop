@@ -6,9 +6,9 @@ import cn.lili.modules.order.cart.entity.enums.DeliveryMethodEnum;
 import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -19,62 +19,63 @@ import lombok.NoArgsConstructor;
  * @since 2020/11/17 7:34 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_trade")
-@ApiModel(value = "交易")
+@Schema(description = "交易")
 @NoArgsConstructor
 public class Trade extends BaseEntity {
 
     private static final long serialVersionUID = 5177608752643561827L;
 
-    @ApiModelProperty(value = "交易编号")
+    @Schema(description = "交易编号")
     private String sn;
 
-    @ApiModelProperty(value = "买家id")
+    @Schema(description = "买家id")
     private String memberId;
 
-    @ApiModelProperty(value = "买家用户名")
+    @Schema(description = "买家用户名")
     private String memberName;
 
     /**
      * @see PayStatusEnum
      */
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String paymentMethod;
 
     /**
      * @see cn.lili.modules.order.order.entity.enums.PayStatusEnum
      */
-    @ApiModelProperty(value = "付款状态")
+    @Schema(description = "付款状态")
     private String payStatus;
 
-    @ApiModelProperty(value = "总价格")
+    @Schema(description = "总价格")
     private Double flowPrice;
 
-    @ApiModelProperty(value = "原价")
+    @Schema(description = "原价")
     private Double goodsPrice;
 
-    @ApiModelProperty(value = "运费")
+    @Schema(description = "运费")
     private Double freightPrice;
 
-    @ApiModelProperty(value = "优惠的金额")
+    @Schema(description = "优惠的金额")
     private Double discountPrice;
 
     /**
      * @see DeliveryMethodEnum
      */
-    @ApiModelProperty(value = "配送方式")
+    @Schema(description = "配送方式")
     private String deliveryMethod;
 
-    @ApiModelProperty(value = "收货人姓名")
+    @Schema(description = "收货人姓名")
     private String consigneeName;
 
-    @ApiModelProperty(value = "收件人手机")
+    @Schema(description = "收件人手机")
     private String consigneeMobile;
 
-    @ApiModelProperty(value = "地址名称， '，'分割")
+    @Schema(description = "地址名称， '，'分割")
     private String consigneeAddressPath;
 
-    @ApiModelProperty(value = "地址id，'，'分割 ")
+    @Schema(description = "地址id，'，'分割 ")
     private String consigneeAddressIdPath;
 
     public Trade(TradeDTO tradeDTO) {

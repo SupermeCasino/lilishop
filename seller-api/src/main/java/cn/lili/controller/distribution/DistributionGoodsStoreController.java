@@ -12,13 +12,13 @@ import cn.lili.modules.distribution.service.DistributionGoodsService;
 import cn.lili.modules.distribution.service.DistributionSelectedGoodsService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -28,7 +28,7 @@ import java.util.Objects;
  * @since 2020/11/16 10:06 下午
  */
 @RestController
-@Api(tags = "店铺端,分销商品接口")
+@Tag(name = "店铺端,分销商品接口")
 @RequestMapping("/store/distribution/goods")
 public class DistributionGoodsStoreController {
 
@@ -44,16 +44,16 @@ public class DistributionGoodsStoreController {
     @Autowired
     private DistributionSelectedGoodsService distributionSelectedGoodsService;
 
-    @ApiOperation(value = "获取分销商商品列表")
+    @Operation(description = "获取分销商商品列表")
     @GetMapping
     public ResultMessage<IPage<DistributionGoodsVO>> distributionGoods(DistributionGoodsSearchParams distributionGoodsSearchParams) {
 
         return ResultUtil.data(distributionGoodsService.goodsPage(distributionGoodsSearchParams));
     }
 
-    @ApiOperation(value = "选择商品参与分销")
-    @ApiImplicitParam(name = "skuId", value = "规格ID", required = true, dataType = "String", paramType = "path")
-    @PutMapping(value = "/checked/{skuId}")
+    @Operation(description = "选择商品参与分销")
+    @Parameter(name = "skuId", description = "规格ID", required = true)
+    @PutMapping("/checked/{skuId}")
     public ResultMessage<DistributionGoods> distributionCheckGoods(@NotNull(message = "规格ID不能为空") @PathVariable String skuId,
                                                                    @NotNull(message = "佣金金额不能为空") @RequestParam Double commission) {
 
@@ -61,9 +61,9 @@ public class DistributionGoodsStoreController {
         return ResultUtil.data(distributionGoodsService.checked(skuId, commission, storeId));
     }
 
-    @ApiOperation(value = "取消分销商品")
-    @ApiImplicitParam(name = "id", value = "分销商商品ID", required = true, paramType = "path")
-    @DeleteMapping(value = "/cancel/{id}")
+    @Operation(description = "取消分销商品")
+    @Parameter(name = "id", description = "分销商商品ID", required = true)
+    @DeleteMapping("/cancel/{id}")
     public ResultMessage<Object> cancel(@NotNull @PathVariable String id) {
         OperationalJudgment.judgment(distributionGoodsService.getById(id));
         //清除分销商已选择分销商品

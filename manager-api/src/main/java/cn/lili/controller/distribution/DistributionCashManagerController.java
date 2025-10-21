@@ -7,17 +7,14 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.distribution.entity.dos.DistributionCash;
 import cn.lili.modules.distribution.entity.vos.DistributionCashSearchParams;
 import cn.lili.modules.distribution.service.DistributionCashService;
-import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 
 /**
  * 管理端,分销佣金管理接口
@@ -26,21 +23,22 @@ import javax.validation.constraints.NotNull;
  * @since 2020-03-14 23:04:56
  */
 @RestController
-@Api(tags = "管理端,分销佣金管理接口")
+@Tag(name = "管理端,分销佣金管理接口")
 @RequestMapping("/manager/distribution/cash")
 public class DistributionCashManagerController {
 
     @Autowired
     private DistributionCashService distributorCashService;
 
-    @ApiOperation(value = "通过id获取分销佣金详情")
-    @GetMapping(value = "/get/{id}")
-    public ResultMessage<DistributionCash> get(@PathVariable String id) {
+    @Operation(summary = "通过id获取分销佣金详情")
+    @GetMapping("/get/{id}")
+    public ResultMessage<DistributionCash> get(
+            @Parameter(description = "分销佣金ID", required = true) @PathVariable String id) {
         return ResultUtil.data(distributorCashService.getById(id));
     }
 
-    @ApiOperation(value = "分页获取")
-    @GetMapping(value = "/getByPage")
+    @Operation(summary = "分页获取")
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<DistributionCash>> getByPage(DistributionCashSearchParams distributionCashSearchParams) {
 
         return ResultUtil.data(distributorCashService.getDistributionCash(distributionCashSearchParams));
@@ -48,22 +46,20 @@ public class DistributionCashManagerController {
 
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "审核")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "分销佣金ID", required = true, paramType = "path", dataType = "String"),
-            @ApiImplicitParam(name = "result", value = "处理结果", required = true, paramType = "query", dataType = "String")
-    })
-    @PostMapping(value = "/audit/{id}")
-    public ResultMessage<DistributionCash> audit(@PathVariable String id, @NotNull String result) {
+    @Operation(summary = "审核")
+    @PostMapping("/audit/{id}")
+    public ResultMessage<DistributionCash> audit(
+            @Parameter(description = "分销佣金ID", required = true) @PathVariable String id, 
+            @Parameter(description = "处理结果", required = true) @NotNull String result) {
         return ResultUtil.data(distributorCashService.audit(id, result));
     }
 
 
-    @ApiOperation(value = "查询分销提现导出列表")
+    @Operation(summary = "查询分销提现导出列表")
     @GetMapping("/queryExport")
     public void queryExport(DistributionCashSearchParams distributionCashSearchParams) {
         HttpServletResponse response = ThreadContextHolder.getHttpResponse();
-        distributorCashService.queryExport(response,distributionCashSearchParams);
+        distributorCashService.queryExport(response, distributionCashSearchParams);
     }
 }
 

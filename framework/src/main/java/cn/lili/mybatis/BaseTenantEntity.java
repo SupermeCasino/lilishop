@@ -1,8 +1,9 @@
 package cn.lili.mybatis;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -14,11 +15,12 @@ import lombok.NoArgsConstructor;
  * @since 2020/8/20 14:34
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class BaseTenantEntity extends BaseEntity {
 
-    @ApiModelProperty(value = "租户id", hidden = true)
+    @Schema(description = "租户id", hidden = true)
     private String tenantId;
 
 }

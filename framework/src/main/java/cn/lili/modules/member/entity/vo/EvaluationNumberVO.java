@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,18 +12,18 @@ import lombok.Data;
 @Data
 public class EvaluationNumberVO {
 
-    @ApiModelProperty(value = "全部评价")
+    @Schema(description = "全部评价")
     private Integer all;
 
-    @ApiModelProperty(value = "好评数量")
+    @Schema(description = "好评数量")
     private Integer good;
 
-    @ApiModelProperty(value = "中评数量")
+    @Schema(description = "中评数量")
     private Integer moderate;
 
-    @ApiModelProperty(value = "差评数量")
+    @Schema(description = "差评数量")
     private Integer worse;
 
-    @ApiModelProperty(value = "有图数量")
+    @Schema(description = "有图数量")
     private Long haveImage;
 }

@@ -1,53 +1,44 @@
 package cn.lili.controller.security;
 
+import cn.lili.common.properties.IgnoredUrlsProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-/**
- * spring Security 核心配置类 通用安全
- *
- * @author Chopper
- * @version v4.0
- * @since 2020/11/14 16:20
- */
 @Slf4j
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+@EnableMethodSecurity
+public class CommonSecurityConfig {
 
-
-    /**
-     * spring security -》 权限不足处理
-     */
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Autowired
+    private IgnoredUrlsProperties ignoredUrlsProperties;
 
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
-                .authorizeRequests();
-        registry
-                .and()
-                //禁止网页iframe
-                .headers().frameOptions().disable()
-                .and()
-                .authorizeRequests()
-                //任何请求
-                .anyRequest()
-                //需要身份认证
-                .permitAll()
-                .and()
-                //允许跨域
-                .cors().configurationSource(corsConfigurationSource).and()
-                //关闭跨站请求防护
-                .csrf().disable();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // 配置不需要授权的URL
+        String[] ignoredUrls = ignoredUrlsProperties.getUrls().toArray(new String[0]);
+        
+        http
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+            .authorizeHttpRequests(auth -> {
+                // 配置忽略的URL
+                auth.requestMatchers(ignoredUrls).permitAll();
+                // 其他请求允许访问（因为这是common-api，主要提供公共服务）
+                auth.anyRequest().permitAll();
+            })
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            .csrf(csrf -> csrf.disable());
+        return http.build();
     }
 
 }

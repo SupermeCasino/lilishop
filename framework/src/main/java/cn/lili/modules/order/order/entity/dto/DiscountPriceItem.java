@@ -1,7 +1,7 @@
 package cn.lili.modules.order.order.entity.dto;
 
 import cn.lili.common.enums.PromotionTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,19 +22,19 @@ import lombok.NoArgsConstructor;
 public class DiscountPriceItem {
 
 
-    @ApiModelProperty(value = "促销类型")
+    @Schema(description = "促销类型")
     private PromotionTypeEnum promotionTypeEnum;
 
-    @ApiModelProperty(value = "促销id")
+    @Schema(description = "促销id")
     private String promotionId;
 
-    @ApiModelProperty(value = "减免金额")
+    @Schema(description = "减免金额")
     private Double discountPrice;
 
-    @ApiModelProperty(value = "涉及 商品ID")
+    @Schema(description = "涉及 商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "涉及 SKU ID")
+    @Schema(description = "涉及 SKU ID")
     private String skuId;
 
 

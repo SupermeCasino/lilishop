@@ -19,9 +19,9 @@ import cn.lili.modules.promotion.service.KanjiaActivityGoodsService;
 import cn.lili.modules.promotion.service.KanjiaActivityLogService;
 import cn.lili.modules.promotion.service.KanjiaActivityService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2021/7/12
  **/
 @RestController
-@Api(tags = "买家端,砍价商品接口")
+@Tag(name = "买家端,砍价商品接口")
 @RequestMapping("/buyer/promotion/kanjiaGoods")
 public class KanjiaGoodsActivityBuyerController {
 
@@ -53,7 +53,7 @@ public class KanjiaGoodsActivityBuyerController {
     private KanjiaActivityService kanJiaActivityService;
 
     @GetMapping
-    @ApiOperation(value = "分页获取砍价商品")
+    @Operation(summary = "分页获取砍价商品")
     public ResultMessage<IPage<KanjiaActivityGoodsListVO>> kanjiaActivityGoodsPage(KanjiaActivityGoodsParams kanjiaActivityGoodsParams, PageVO page) {
         // 会员端查询到的肯定是已经开始的活动商品
         kanjiaActivityGoodsParams.setPromotionStatus(PromotionsStatusEnum.START.name());
@@ -63,20 +63,20 @@ public class KanjiaGoodsActivityBuyerController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "获取砍价活动商品")
-    @ApiImplicitParam(name = "id", value = "砍价活动商品ID", required = true, paramType = "path")
+    @Operation(summary = "获取砍价活动商品")
+    @Parameter(name = "id", description = "砍价活动商品ID", required = true)
     public ResultMessage<KanjiaActivityGoodsVO> getKanjiaActivityGoods(@PathVariable String id) {
         return ResultUtil.data(kanJiaActivityGoodsService.getKanJiaGoodsVO(id));
     }
 
     @GetMapping("/getKanjiaActivity/logs")
-    @ApiOperation(value = "分页获取砍价活动-帮砍记录")
+    @Operation(summary = "分页获取砍价活动-帮砍记录")
     public ResultMessage<IPage<KanjiaActivityLog>> getKanjiaActivityLog(KanJiaActivityLogQuery kanJiaActivityLogQuery, PageVO page) {
         return ResultUtil.data(kanJiaActivityLogService.getForPage(kanJiaActivityLogQuery, page));
     }
 
     @PostMapping("/getKanjiaActivity")
-    @ApiOperation(value = "获取砍价活动")
+    @Operation(summary = "获取砍价活动")
     public ResultMessage<KanjiaActivityVO> getKanJiaActivity(KanjiaActivitySearchParams kanjiaActivitySearchParams) {
         //如果是非被邀请关系则填写会员ID
         if (CharSequenceUtil.isEmpty(kanjiaActivitySearchParams.getKanjiaActivityId())) {
@@ -86,23 +86,23 @@ public class KanjiaGoodsActivityBuyerController {
     }
 
     @PostMapping
-    @ApiImplicitParam(name = "id", value = "砍价活动商品ID", required = true, paramType = "path")
-    @ApiOperation(value = "发起砍价活动")
+    @Parameter(name = "id", description = "砍价活动商品ID", required = true)
+    @Operation(summary = "发起砍价活动")
     public ResultMessage<KanjiaActivityLog> launchKanJiaActivity(String id) {
         KanjiaActivityLog kanjiaActivityLog = kanJiaActivityService.add(id);
         return ResultUtil.data(kanjiaActivityLog);
     }
 
     @PostMapping("/help/{kanjiaActivityId}")
-    @ApiImplicitParam(name = "kanJiaActivityId", value = "砍价活动ID", required = true, paramType = "path")
-    @ApiOperation(value = "帮砍一刀")
+    @Parameter(name = "kanJiaActivityId", description = "砍价活动ID", required = true)
+    @Operation(summary = "帮砍一刀")
     public ResultMessage<KanjiaActivityLog> helpKanJia(@PathVariable String kanjiaActivityId) {
         KanjiaActivityLog kanjiaActivityLog = kanJiaActivityService.helpKanJia(kanjiaActivityId);
         return ResultUtil.data(kanjiaActivityLog);
     }
 
     @GetMapping("/kanjiaActivity/mine/")
-    @ApiOperation(value = "分页获取已参与的砍价活动")
+    @Operation(summary = "分页获取已参与的砍价活动")
     public ResultMessage<IPage<KanjiaActivity>> getPointsGoodsPage(KanjiaActivityQuery kanjiaActivityQuery, PageVO page) {
         // 会员端查询到的肯定是已经开始的活动商品
         kanjiaActivityQuery.setMemberId(UserContext.getCurrentUser().getId());

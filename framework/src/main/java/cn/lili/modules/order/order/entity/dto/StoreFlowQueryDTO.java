@@ -2,7 +2,7 @@ package cn.lili.modules.order.order.entity.dto;
 
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.store.entity.dos.Bill;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,25 +17,25 @@ import lombok.Data;
 @Builder
 public class StoreFlowQueryDTO {
 
-    @ApiModelProperty(value = "类型")
+    @Schema(description = "类型")
     private String type;
 
-    @ApiModelProperty(value = "售后编号")
+    @Schema(description = "售后编号")
     private String refundSn;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "订单货物编号")
+    @Schema(description = "订单货物编号")
     private String orderItemSn;
 
-    @ApiModelProperty(value = "过滤只看分销订单")
+    @Schema(description = "过滤只看分销订单")
     private Boolean justDistribution;
 
-    @ApiModelProperty("结算单")
+    @Schema(description = "结算单")
     private Bill bill;
 
-    @ApiModelProperty(value = "分页")
+    @Schema(description = "分页")
     private PageVO pageVO;
 
 }

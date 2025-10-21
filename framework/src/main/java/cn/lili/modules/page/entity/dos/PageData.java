@@ -7,9 +7,9 @@ import cn.lili.common.utils.StringUtils;
 import cn.lili.modules.page.entity.enums.PageEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -21,38 +21,39 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @TableName("li_page_data")
-@ApiModel(value = "页面数据DO")
+@Schema(description = "页面数据DO")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class PageData extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "页面名称")
+    @Schema(description = "页面名称")
 
     private String name;
 
-    @ApiModelProperty(value = "页面数据")
+    @Schema(description = "页面数据")
     private String pageData;
 
     /**
      * @see SwitchEnum
      */
-    @ApiModelProperty(value = "页面开关状态", allowableValues = "OPEN,CLOSE")
+    @Schema(description = "页面开关状态", allowableValues = "OPEN,CLOSE")
     private String pageShow;
 
     /**
      * @see PageEnum
      */
-    @ApiModelProperty(value = "页面类型", allowableValues = "INDEX,STORE,SPECIAL")
+    @Schema(description = "页面类型", allowableValues = "INDEX,STORE,SPECIAL")
     private String pageType;
 
     /**
      * @see ClientTypeEnum
      */
-    @ApiModelProperty(value = "客户端类型", allowableValues = "PC,H5,WECHAT_MP,APP")
+    @Schema(description = "客户端类型", allowableValues = "PC,H5,WECHAT_MP,APP")
     private String pageClientType;
 
-    @ApiModelProperty(value = "值")
+    @Schema(description = "值")
     private String num;
 
     public PageData(String name, String pageClientType, String pageData, String num) {

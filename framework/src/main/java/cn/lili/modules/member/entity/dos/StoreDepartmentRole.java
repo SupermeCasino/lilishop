@@ -2,10 +2,10 @@ package cn.lili.modules.member.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -17,18 +17,19 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @TableName("li_store_department_role")
-@ApiModel(value = "店铺角色部门")
+@Schema(description = "店铺角色部门")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class StoreDepartmentRole extends BaseEntity {
 
 
     private static final long serialVersionUID = 2342812932116647050L;
 
-    @ApiModelProperty(value = "角色id")
+    @Schema(description = "角色id")
     private String roleId;
 
-    @ApiModelProperty(value = "部门id")
+    @Schema(description = "部门id")
     private String departmentId;
 
 }

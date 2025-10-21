@@ -7,13 +7,13 @@ import cn.lili.modules.system.entity.dos.SensitiveWords;
 import cn.lili.modules.system.service.SensitiveWordsService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**
@@ -23,27 +23,27 @@ import java.util.List;
  * @since 2020-05-06 15:18:56
  */
 @RestController
-@Api(tags = "管理端,敏感词管理接口")
+@Tag(name = "管理端,敏感词管理接口")
 @RequestMapping("/manager/other/sensitiveWords")
 public class SensitiveWordsManagerController {
 
     @Autowired
     private SensitiveWordsService sensitiveWordsService;
 
-    @ApiOperation(value = "通过id获取")
-    @ApiImplicitParam(name = "id", value = "敏感词ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/get/{id}")
-    public ResultMessage<SensitiveWords> get(@PathVariable String id) {
+    @Operation(summary = "通过id获取")
+    @GetMapping("/{id}")
+    public ResultMessage<SensitiveWords> get(
+            @Parameter(description = "敏感词ID", required = true) @PathVariable String id) {
         return ResultUtil.data(sensitiveWordsService.getById(id));
     }
 
-    @ApiOperation(value = "分页获取")
+    @Operation(summary = "分页获取")
     @GetMapping
     public ResultMessage<IPage<SensitiveWords>> getByPage(PageVO page) {
         return ResultUtil.data(sensitiveWordsService.page(PageUtil.initPage(page)));
     }
 
-    @ApiOperation(value = "添加敏感词")
+    @Operation(summary = "添加敏感词")
     @PostMapping
     public ResultMessage<SensitiveWords> add(@Valid SensitiveWords sensitiveWords) {
         sensitiveWordsService.save(sensitiveWords);
@@ -51,20 +51,20 @@ public class SensitiveWordsManagerController {
         return ResultUtil.data(sensitiveWords);
     }
 
-    @ApiOperation(value = "修改敏感词")
-    @ApiImplicitParam(name = "id", value = "敏感词ID", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "修改敏感词")
     @PutMapping("/{id}")
-    public ResultMessage<SensitiveWords> edit(@PathVariable String id, SensitiveWords sensitiveWords) {
+    public ResultMessage<SensitiveWords> edit(
+            @Parameter(description = "敏感词ID", required = true) @PathVariable String id, SensitiveWords sensitiveWords) {
         sensitiveWords.setId(id);
         sensitiveWordsService.updateById(sensitiveWords);
         sensitiveWordsService.resetCache();
         return ResultUtil.data(sensitiveWords);
     }
 
-    @ApiOperation(value = "批量删除")
-    @ApiImplicitParam(name = "ids", value = "敏感词ID", required = true, dataType = "String", allowMultiple = true, paramType = "path")
-    @DeleteMapping(value = "/delByIds/{ids}")
-    public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
+    @Operation(summary = "批量删除")
+    @DeleteMapping("/delByIds/{ids}")
+    public ResultMessage<Object> delAllByIds(
+            @Parameter(description = "敏感词ID", required = true) @PathVariable List<String> ids) {
         sensitiveWordsService.removeByIds(ids);
         sensitiveWordsService.resetCache();
         return ResultUtil.success();

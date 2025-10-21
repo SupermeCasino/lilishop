@@ -2,9 +2,9 @@ package cn.lili.modules.im.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,16 +16,17 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @TableName("li_qa")
-@ApiModel(value = "租户问答")
+@Schema(description = "租户问答")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class QA extends BaseEntity {
 
-    @ApiModelProperty(value = "租户id")
+    @Schema(description = "租户id")
     private Integer tenantId;
 
-    @ApiModelProperty(value = "问题")
+    @Schema(description = "问题")
     private String question;
 
-    @ApiModelProperty(value = "答案")
+    @Schema(description = "答案")
     private String answer;
 }

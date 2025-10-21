@@ -2,6 +2,8 @@ package cn.lili.modules.connect.request;
 
 
 import cn.lili.cache.Cache;
+import cn.lili.common.utils.HttpUtils;
+import cn.lili.common.utils.IpUtils;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.utils.UrlBuilder;
 import cn.lili.modules.connect.config.AuthConfig;
@@ -14,9 +16,8 @@ import cn.lili.modules.connect.entity.enums.AuthResponseStatus;
 import cn.lili.modules.connect.entity.enums.AuthUserGender;
 import cn.lili.modules.connect.entity.enums.ConnectEnum;
 import cn.lili.modules.connect.exception.AuthException;
-import cn.lili.common.utils.HttpUtils;
-import cn.lili.common.utils.IpUtils;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 
 
@@ -35,7 +36,7 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
     @Override
     protected AuthToken getAccessToken(AuthCallback authCallback) {
         String response = doPostAuthorizationCode(authCallback.getCode());
-        JSONObject accessTokenObject = JSONObject.parseObject(response);
+        JSONObject accessTokenObject = JSON.parseObject(response);
         if (accessTokenObject.containsKey("error")) {
             throw new AuthException(accessTokenObject.getString("error_description"));
         }
@@ -45,6 +46,7 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
                 .openId(accessTokenObject.getString("uid"))
                 .expireIn(accessTokenObject.getIntValue("expires_in"))
                 .build();
+
     }
 
     @Override
@@ -57,7 +59,7 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
         httpHeader.add("Authorization", "OAuth2 " + oauthParam);
         httpHeader.add("API-RemoteIP", IpUtils.getLocalIp());
         String userInfo = new HttpUtils(config.getHttpConfig()).get(userInfoUrl(authToken), null, httpHeader, false);
-        JSONObject object = JSONObject.parseObject(userInfo);
+        JSONObject object = JSON.parseObject(userInfo);
         if (object.containsKey("error")) {
             throw new AuthException(object.getString("error"));
         }
@@ -75,6 +77,7 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
                 .token(authToken)
                 .source(ConnectEnum.WEIBO)
                 .build();
+
     }
 
     /**
@@ -101,7 +104,7 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
     @Override
     public AuthResponse revoke(AuthToken authToken) {
         String response = doGetRevoke(authToken);
-        JSONObject object = JSONObject.parseObject(response);
+        JSONObject object = JSON.parseObject(response);
         if (object.containsKey("error")) {
             return AuthResponse.builder()
                     .code(AuthResponseStatus.FAILURE.getCode())
@@ -109,7 +112,8 @@ public class BaseAuthWeiboRequest extends BaseAuthRequest {
                     .build();
         }
         //返回 result = true 表示取消授权成功，否则失败
-        AuthResponseStatus status = object.getBooleanValue("result") ? AuthResponseStatus.SUCCESS : AuthResponseStatus.FAILURE;
+        AuthResponseStatus status = object.getBoolean("result") ? AuthResponseStatus.SUCCESS : AuthResponseStatus.FAILURE;
         return AuthResponse.builder().code(status.getCode()).msg(status.getMsg()).build();
+
     }
 }

@@ -3,7 +3,7 @@ package cn.lili.modules.member.entity.dto;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
@@ -21,43 +21,43 @@ public class EvaluationQueryParams extends PageVO {
 
     private static final long serialVersionUID = 2038158669175297129L;
 
-    @ApiModelProperty(value = "ID")
+    @Schema(description = "ID")
     private String id;
 
-    @ApiModelProperty(value = "买家ID")
+    @Schema(description = "买家ID")
     private String memberId;
 
-    @ApiModelProperty(value = "skuID")
+    @Schema(description = "skuID")
     private String skuId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "卖家名称")
+    @Schema(description = "卖家名称")
     private String storeName;
 
-    @ApiModelProperty(value = "卖家ID")
+    @Schema(description = "卖家ID")
     private String storeId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "好中差评 , GOOD：好评，MODERATE：中评，WORSE：差评", allowableValues = "GOOD,MODERATE,WORSE")
+    @Schema(description = "好中差评 , GOOD：好评，MODERATE：中评，WORSE：差评", allowableValues = {"GOOD","MODERATE","WORSE"})
     private String grade;
 
-    @ApiModelProperty(value = "是否有图")
+    @Schema(description = "是否有图")
     private String haveImage;
 
-    @ApiModelProperty(value = "评论日期--开始时间")
+    @Schema(description = "评论日期--开始时间")
     private String startTime;
 
-    @ApiModelProperty(value = "评论日期--结束时间")
+    @Schema(description = "评论日期--结束时间")
     private String endTime;
 
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private String status;
 
     public <T> QueryWrapper<T> queryWrapper() {

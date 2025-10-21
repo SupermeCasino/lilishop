@@ -1,7 +1,7 @@
 package cn.lili.modules.payment.kit.plugin.alipay;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.SpringContextUtil;
@@ -58,7 +58,7 @@ public class AliPayApiConfigKit {
         try {
             SettingService settingService = (SettingService) SpringContextUtil.getBean("settingServiceImpl");
             Setting systemSetting = settingService.get(SettingEnum.ALIPAY_PAYMENT.name());
-            setting = JSONUtil.toBean(systemSetting.getSettingValue(), AlipayPaymentSetting.class);
+            setting = JSON.parseObject(systemSetting.getSettingValue(), AlipayPaymentSetting.class);
         } catch (Exception e) {
             throw new ServiceException(ResultCode.PAY_NOT_SUPPORT);
         }

@@ -9,7 +9,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.order.order.entity.enums.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,13 +28,13 @@ public class OrderSearchParams extends PageVO {
 
     private static final long serialVersionUID = -6380573339089959194L;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "页面标签",
+    @Schema(description = "页面标签",
             example = "ALL:全部," +
                     "WAIT_PAY:待付款," +
                     "WAIT_ROG:待收货," +
@@ -42,74 +42,74 @@ public class OrderSearchParams extends PageVO {
                     "COMPLETE:已完成")
     private String tag;
 
-    @ApiModelProperty(value = "商家ID")
+    @Schema(description = "商家ID")
     private String storeId;
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
-    @ApiModelProperty(value = "收货人")
+    @Schema(description = "收货人")
     private String shipName;
 
-    @ApiModelProperty(value = "买家昵称")
+    @Schema(description = "买家昵称")
     private String buyerName;
 
-    @ApiModelProperty(value = "订单状态")
+    @Schema(description = "订单状态")
     private String orderStatus;
 
-    @ApiModelProperty(value = "付款状态")
+    @Schema(description = "付款状态")
     private String payStatus;
 
-    @ApiModelProperty(value = "关键字 商品名称/买家名称/店铺名称")
+    @Schema(description = "关键字 商品名称/买家名称/店铺名称")
     private String keywords;
 
     /**
      * @see OrderTypeEnum
      * @see cn.lili.modules.order.order.entity.enums.OrderPromotionTypeEnum
      */
-    @ApiModelProperty(value = "订单类型", allowableValues = "NORMAL,VIRTUAL,GIFT,PINTUAN,POINT")
+    @Schema(description = "订单类型", allowableValues = "NORMAL,VIRTUAL,GIFT,PINTUAN,POINT")
     private String orderType;
 
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String paymentMethod;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "支付时间")
+    @Schema(description = "支付时间")
     private Date paymentTime;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "下单开始时间")
+    @Schema(description = "下单开始时间")
     private Date startDate;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "下单结束时间")
+    @Schema(description = "下单结束时间")
     private Date endDate;
 
-    @ApiModelProperty(value = "订单来源")
+    @Schema(description = "订单来源")
     private String clientType;
 
     /**
      * @see CommentStatusEnum
      */
-    @ApiModelProperty(value = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
+    @Schema(description = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
     private String commentStatus;
 
-    @ApiModelProperty(value = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
+    @Schema(description = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
     private String parentOrderSn;
 
-    @ApiModelProperty(value = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
+    @Schema(description = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
     private String promotionId;
 
-    @ApiModelProperty(value = "总价格,可以为范围，如10_1000")
+    @Schema(description = "总价格,可以为范围，如10_1000")
     private String flowPrice;
 
     /**
      * @see OrderPromotionTypeEnum
      */
-    @ApiModelProperty(value = "订单促销类型")
+    @Schema(description = "订单促销类型")
     private String orderPromotionType;
 
     public <T> QueryWrapper<T> queryWrapper() {

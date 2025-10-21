@@ -7,7 +7,7 @@ import cn.lili.modules.order.order.entity.enums.DeliverStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderTypeEnum;
 import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,28 +23,28 @@ public class AllowOperation implements Serializable {
 
     private static final long serialVersionUID = -5109440403955543227L;
 
-    @ApiModelProperty(value = "可以取消")
+    @Schema(description = "可以取消")
     private Boolean cancel = false;
 
-    @ApiModelProperty(value = "可以支付")
+    @Schema(description = "可以支付")
     private Boolean pay = false;
 
-    @ApiModelProperty(value = "可以发货")
+    @Schema(description = "可以发货")
     private Boolean ship = false;
 
-    @ApiModelProperty(value = "可以收货")
+    @Schema(description = "可以收货")
     private Boolean rog = false;
 
-    @ApiModelProperty(value = "是否允许查看物流信息")
+    @Schema(description = "是否允许查看物流信息")
     private Boolean showLogistics = false;
 
-    @ApiModelProperty(value = "是否允许更改收货人信息")
+    @Schema(description = "是否允许更改收货人信息")
     private Boolean editConsignee = false;
 
-    @ApiModelProperty(value = "是否允许更改价格")
+    @Schema(description = "是否允许更改价格")
     private Boolean editPrice = false;
 
-    @ApiModelProperty(value = "是否可以进行核销")
+    @Schema(description = "是否可以进行核销")
     private Boolean take = false;
 
 
@@ -84,7 +84,7 @@ public class AllowOperation implements Serializable {
         this.rog = status.equals(OrderStatusEnum.DELIVERED.name());
 
         //是否允许查看物流信息
-        this.showLogistics = (order.getDeliverStatus().equals(DeliverStatusEnum.DELIVERED.name()) ||  order.getDeliverStatus().equals(DeliverStatusEnum.PARTS_DELIVERED.name())) && (status.equals(OrderStatusEnum.DELIVERED.name()) || status.equals(OrderStatusEnum.PARTS_DELIVERED.name()));
+        this.showLogistics = (order.getDeliverStatus().equals(DeliverStatusEnum.DELIVERED.name()) || order.getDeliverStatus().equals(DeliverStatusEnum.PARTS_DELIVERED.name())) && (status.equals(OrderStatusEnum.DELIVERED.name()) || status.equals(OrderStatusEnum.PARTS_DELIVERED.name()));
 
         //虚拟订单 或 自提订单可以核销
         this.take =

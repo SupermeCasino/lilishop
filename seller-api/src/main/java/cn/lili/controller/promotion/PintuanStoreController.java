@@ -18,8 +18,9 @@ import cn.lili.modules.promotion.entity.vos.PintuanVO;
 import cn.lili.modules.promotion.service.PintuanService;
 import cn.lili.modules.promotion.service.PromotionGoodsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  * @since 2020/10/9
  **/
 @RestController
-@Api(tags = "店铺端,拼团管理接口")
+@Tag(name = "店铺端,拼团管理接口")
 @RequestMapping("/store/promotion/pintuan")
 public class PintuanStoreController {
 
@@ -47,22 +48,27 @@ public class PintuanStoreController {
 
 
     @GetMapping
-    @ApiOperation(value = "根据条件分页查询拼团活动列表")
+    @Operation(description = "根据条件分页查询拼团活动列表")
+    @Parameter(name = "queryParam", description = "拼团活动查询参数")
+    @Parameter(name = "pageVo", description = "分页参数")
     public ResultMessage<IPage<Pintuan>> getPintuanByPage(PintuanSearchParams queryParam, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         queryParam.setStoreId(currentUser.getStoreId());
         return ResultUtil.data(pintuanService.pageFindAll(queryParam, pageVo));
     }
 
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "通过id获取")
+    @GetMapping("/{id}")
+    @Operation(description = "通过id获取")
+    @Parameter(name = "id", description = "拼团活动ID", required = true)
     public ResultMessage<PintuanVO> get(@PathVariable String id) {
         PintuanVO pintuan = OperationalJudgment.judgment(pintuanService.getPintuanVO(id));
         return ResultUtil.data(pintuan);
     }
 
     @GetMapping("/goods/{pintuanId}")
-    @ApiOperation(value = "根据条件分页查询拼团活动商品列表")
+    @Operation(description = "根据条件分页查询拼团活动商品列表")
+    @Parameter(name = "pintuanId", description = "拼团活动ID", required = true)
+    @Parameter(name = "pageVo", description = "分页参数")
     public ResultMessage<IPage<PromotionGoods>> getPintuanGoodsByPage(@PathVariable String pintuanId, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         PromotionGoodsSearchParams searchParams = new PromotionGoodsSearchParams();
@@ -73,7 +79,8 @@ public class PintuanStoreController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "添加拼团活动")
+    @Operation(description = "添加拼团活动")
+    @Parameter(name = "pintuan", description = "拼团活动VO", required = true)
     public ResultMessage<String> addPintuan(@RequestBody @Validated PintuanVO pintuan) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         pintuan.setStoreId(currentUser.getStoreId());
@@ -85,7 +92,8 @@ public class PintuanStoreController {
     }
 
     @PutMapping(consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "修改拼团活动")
+    @Operation(description = "修改拼团活动")
+    @Parameter(name = "pintuan", description = "拼团活动VO", required = true)
     public ResultMessage<String> editPintuan(@RequestBody @Validated PintuanVO pintuan) {
         OperationalJudgment.judgment(pintuanService.getById(pintuan.getId()));
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -104,7 +112,10 @@ public class PintuanStoreController {
     }
 
     @PutMapping("/status/{pintuanId}")
-    @ApiOperation(value = "操作拼团活动状态")
+    @Operation(description = "操作拼团活动状态")
+    @Parameter(name = "pintuanId", description = "拼团活动ID", required = true)
+    @Parameter(name = "startTime", description = "拼团开始时间")
+    @Parameter(name = "endTime", description = "拼团结束时间")
     public ResultMessage<String> openPintuan(@PathVariable String pintuanId, Long startTime, Long endTime) {
         OperationalJudgment.judgment(pintuanService.getById(pintuanId));
         if (pintuanService.updateStatus(Collections.singletonList(pintuanId), startTime, endTime)) {
@@ -115,7 +126,8 @@ public class PintuanStoreController {
     }
 
     @DeleteMapping("/{pintuanId}")
-    @ApiOperation(value = "手动删除拼团活动")
+    @Operation(description = "手动删除拼团活动")
+    @Parameter(name = "pintuanId", description = "拼团活动ID", required = true)
     public ResultMessage<String> deletePintuan(@PathVariable String pintuanId) {
         OperationalJudgment.judgment(pintuanService.getById(pintuanId));
         if (pintuanService.removePromotions(Collections.singletonList(pintuanId))) {

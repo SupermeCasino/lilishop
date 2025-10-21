@@ -34,6 +34,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,7 @@ public class KanjiaActivityServiceImpl extends ServiceImpl<KanJiaActivityMapper,
 
     @Autowired
     private KanjiaActivityGoodsService kanjiaActivityGoodsService;
+    @Lazy
     @Autowired
     private KanjiaActivityLogService kanjiaActivityLogService;
     @Autowired
@@ -212,7 +214,7 @@ public class KanjiaActivityServiceImpl extends ServiceImpl<KanJiaActivityMapper,
         BigDecimal bigDecimal = RandomUtil.randomBigDecimal(Convert.toBigDecimal(kanjiaActivityGoods.getLowestPrice()),
                 Convert.toBigDecimal(kanjiaActivityGoods.getHighestPrice()));
 
-        if(bigDecimal.setScale(2, RoundingMode.UP).doubleValue() > surplusPrice){
+        if (bigDecimal.setScale(2, RoundingMode.UP).doubleValue() > surplusPrice) {
             return surplusPrice;
         }
         return bigDecimal.setScale(2, RoundingMode.UP).doubleValue();

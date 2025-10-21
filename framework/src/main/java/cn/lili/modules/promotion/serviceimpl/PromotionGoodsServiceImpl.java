@@ -1,13 +1,10 @@
 package cn.lili.modules.promotion.serviceimpl;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.cache.Cache;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
-import cn.lili.modules.goods.entity.vos.GoodsVO;
 import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.goods.service.GoodsSkuService;
 import cn.lili.modules.order.cart.entity.enums.CartTypeEnum;
@@ -25,12 +22,15 @@ import cn.lili.modules.search.entity.dos.EsGoodsIndex;
 import cn.lili.modules.search.service.EsGoodsIndexService;
 import cn.lili.modules.system.aspect.annotation.SystemLogPoint;
 import cn.lili.mybatis.util.PageUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +52,13 @@ public class PromotionGoodsServiceImpl extends ServiceImpl<PromotionGoodsMapper,
      * 秒杀活动申请
      */
     @Autowired
+    @Lazy
     private SeckillApplyService seckillApplyService;
     /**
      * 规格商品
      */
     @Autowired
+    @Lazy
     private GoodsSkuService goodsSkuService;
 
     @Autowired
@@ -331,8 +333,7 @@ public class PromotionGoodsServiceImpl extends ServiceImpl<PromotionGoodsMapper,
         Map<String, Object> promotionMap;
         EsGoodsIndex goodsIndex = goodsIndexService.findById(dataSku.getId());
         if (goodsIndex == null) {
-            GoodsVO goodsVO = this.goodsService.getGoodsVO(dataSku.getGoodsId());
-            goodsIndex = goodsIndexService.getResetEsGoodsIndex(dataSku, goodsVO.getGoodsParamsDTOList());
+            goodsIndex = goodsIndexService.getResetEsGoodsIndex(dataSku);
         }
         if (goodsIndex.getPromotionMap() != null && !goodsIndex.getPromotionMap().isEmpty()) {
             if (goodsIndex.getPromotionMap().keySet().stream().anyMatch(i -> i.contains(PromotionTypeEnum.SECKILL.name())) || (goodsIndex.getPromotionMap().keySet().stream().anyMatch(i -> i.contains(PromotionTypeEnum.PINTUAN.name())) && CartTypeEnum.PINTUAN.name().equals(cartType))) {
@@ -349,7 +350,7 @@ public class PromotionGoodsServiceImpl extends ServiceImpl<PromotionGoodsMapper,
     }
 
     private void setGoodsPromotionInfo(GoodsSku dataSku, Map.Entry<String, Object> promotionInfo) {
-        JSONObject promotionsObj = JSONUtil.parseObj(promotionInfo.getValue());
+        JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(promotionInfo.getValue()));
         PromotionGoodsSearchParams searchParams = new PromotionGoodsSearchParams();
         searchParams.setSkuId(dataSku.getId());
         searchParams.setPromotionId(promotionsObj.get("id").toString());

@@ -192,7 +192,7 @@ public class PintuanServiceImpl extends AbstractPromotionsServiceImpl<PintuanMap
      */
     @Override
     public void updateEsGoodsIndex(Pintuan promotions) {
-        Pintuan pintuan = JSONUtil.parse(promotions).toBean(Pintuan.class);
+        Pintuan pintuan = promotions;
         super.updateEsGoodsIndex(pintuan);
     }
 

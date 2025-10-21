@@ -13,15 +13,14 @@ import cn.lili.modules.page.entity.vos.PageDataListVO;
 import cn.lili.modules.page.service.PageDataService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -31,17 +30,18 @@ import java.util.Objects;
  * @since 2020-05-06 15:18:56
  */
 @RestController
-@Api(tags = "店铺端,页面设置管理接口")
+@Tag(name = "店铺端,页面设置管理接口")
 @RequestMapping("/store/settings/pageData")
 public class PageDataStoreController {
 
     @Autowired
     private PageDataService pageDataService;
 
-    @ApiOperation(value = "页面列表")
-    @ApiImplicitParam(name = "pageClientType", value = "客户端类型", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "页面列表")
+    @Parameter(name = "pageClientType", description = "客户端类型", required = true)
+    @Parameter(name = "pageVO", description = "分页VO")
     @GetMapping("/{pageClientType}/pageDataList")
-    public ResultMessage<IPage<PageDataListVO>> pageDataList(@PathVariable String pageClientType, PageVO pageVO) {
+    public ResultMessage<IPage<PageDataListVO>> pageDataList(@PathVariable String pageClientType, @Valid PageVO pageVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         PageDataDTO pageDataDTO = new PageDataDTO();
         pageDataDTO.setPageType(PageEnum.STORE.name());
@@ -50,9 +50,9 @@ public class PageDataStoreController {
         return ResultUtil.data(pageDataService.getPageDataList(pageVO, pageDataDTO));
     }
 
-    @ApiOperation(value = "获取页面信息")
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/{id}")
+    @Operation(description = "获取页面信息")
+    @Parameter(name = "id", description = "页面ID", required = true)
+    @GetMapping("/{id}")
     public ResultMessage<PageData> getPageData(@PathVariable String id) {
         //查询当前店铺下的页面数据
         PageData pageData = pageDataService.getOne(
@@ -63,7 +63,7 @@ public class PageDataStoreController {
         return ResultUtil.data(pageData);
     }
 
-    @ApiOperation(value = "添加页面")
+    @Operation(description = "添加页面")
     @PostMapping("/save")
     public ResultMessage<PageData> addPageData(@Valid PageData pageData) {
         //添加店铺类型，填写店铺ID
@@ -72,13 +72,11 @@ public class PageDataStoreController {
         return ResultUtil.data(pageDataService.addPageData(pageData));
     }
 
-    @ApiOperation(value = "修改页面")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
-    })
+    @Operation(description = "修改页面")
+    @Parameter(name = "id", description = "页面ID", required = true)
+    @Parameter(name = "pageData", description = "页面数据")
     @PutMapping("/update/{id}")
     public ResultMessage<PageData> updatePageData(@Valid PageData pageData, @NotNull @PathVariable String id) {
-
         this.checkAuthority(id);
         pageData.setId(id);
         //添加店铺类型，填写店铺ID
@@ -88,16 +86,16 @@ public class PageDataStoreController {
     }
 
 
-    @ApiOperation(value = "发布页面")
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "发布页面")
+    @Parameter(name = "id", description = "页面ID", required = true)
     @PutMapping("/release/{id}")
     public ResultMessage<PageData> release(@PathVariable String id) {
         this.checkAuthority(id);
         return ResultUtil.data(pageDataService.releasePageData(id));
     }
 
-    @ApiOperation(value = "删除页面")
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "删除页面")
+    @Parameter(name = "id", description = "页面ID", required = true)
     @DeleteMapping("/removePageData/{id}")
     public ResultMessage<Object> remove(@PathVariable String id) {
         this.checkAuthority(id);

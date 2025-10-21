@@ -2,8 +2,6 @@ package cn.lili.modules.connect.serviceimpl;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.cache.Cache;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
@@ -36,10 +34,13 @@ import cn.lili.rocketmq.RocketmqSendCallbackBuilder;
 import cn.lili.rocketmq.tags.MemberTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,16 +62,13 @@ import java.util.*;
 @Service
 public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> implements ConnectService {
 
-    static final boolean AUTO_REGION = true;
-
     @Autowired
     private SettingService settingService;
     @Autowired
+    @Lazy
     private MemberService memberService;
     @Autowired
     private MemberTokenGenerate memberTokenGenerate;
-    @Autowired
-    private Cache cache;
     /**
      * RocketMQ
      */
@@ -128,9 +126,9 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
         //得到微信小程序联合登陆信息
         JSONObject json = this.getConnect(params.getCode());
         //存储session key 后续登录用得到
-        String sessionKey = json.getStr("session_key");
-        String unionId = json.getStr("unionid");
-        String openId = json.getStr("openid");
+        String sessionKey = json.getString("session_key");
+        String unionId = json.getString("unionid");
+        String openId = json.getString("openid");
         map.put("sessionKey", sessionKey);
         map.put("unionId", unionId);
         map.put("openId", openId);
@@ -154,7 +152,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
                 "grant_type=authorization_code";
         String content = HttpUtils.doGet(url, "UTF-8", 100, 1000);
         log.error(content);
-        return JSONUtil.parseObj(content);
+        return JSON.parseObject(content);
     }
 
     /**
@@ -302,7 +300,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
             String destination =
                     rocketmqCustomProperties.getMemberTopic() + ":" + MemberTagsEnum.MEMBER_CONNECT_LOGIN.name();
             //发送用户第三方登录消息
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(memberConnectLoginMessage),
+            rocketMQTemplate.asyncSend(destination, JSON.toJSONString(memberConnectLoginMessage),
                     RocketmqSendCallbackBuilder.commonCallback());
 
             return memberTokenGenerate.createToken(member, longTerm);
@@ -320,7 +318,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
     private WechatConnectSettingItem getWechatMPSetting() {
         Setting setting = settingService.get(SettingEnum.WECHAT_CONNECT.name());
 
-        WechatConnectSetting wechatConnectSetting = JSONUtil.toBean(setting.getSettingValue(),
+        WechatConnectSetting wechatConnectSetting = JSON.parseObject(setting.getSettingValue(),
                 WechatConnectSetting.class);
 
         if (wechatConnectSetting == null) {
@@ -375,7 +373,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, StandardCharsets.UTF_8);
-                return JSONUtil.parseObj(result);
+                return JSON.parseObject(result);
             }
         } catch (Exception e) {
             log.error("解密，获取微信信息错误", e);

@@ -3,9 +3,9 @@ package cn.lili.modules.im.entity.vo;
 import cn.lili.modules.im.entity.dos.ImTalk;
 import cn.lili.mybatis.BaseTenantEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -14,44 +14,45 @@ import java.util.Date;
  * @author Chopper
  */
 @Data
-@ApiModel(value = "聊天")
+@Schema(description = "聊天")
+@EqualsAndHashCode(callSuper = false)
 public class ImTalkVO extends BaseTenantEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id")
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty("用户 id")
+    @Schema(description = "用户 id")
     private String userId;
 
-    @ApiModelProperty("置顶")
+    @Schema(description = "置顶")
     private Boolean top;
 
-    @ApiModelProperty("用户 不可见")
+    @Schema(description = "用户 不可见")
     private Boolean disable;
 
-    @ApiModelProperty("用户名字")
+    @Schema(description = "用户名字")
     private String name;
 
-    @ApiModelProperty("用户头像")
+    @Schema(description = "用户头像")
     private String face;
 
-    @ApiModelProperty("店铺标识")
+    @Schema(description = "店铺标识")
     private Boolean storeFlag;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "最后聊天时间", hidden = true)
+    @Schema(description = "最后聊天时间", hidden = true)
     private Date lastTalkTime;
 
-    @ApiModelProperty(value = "最后聊天内容")
+    @Schema(description = "最后聊天内容")
     private String lastTalkMessage;
 
-    @ApiModelProperty(value = "最后发送消息类型")
+    @Schema(description = "最后发送消息类型")
     private String lastMessageType;
 
-    @ApiModelProperty(value = "未读数量")
+    @Schema(description = "未读数量")
     private Long unread;
 
     public ImTalkVO() {

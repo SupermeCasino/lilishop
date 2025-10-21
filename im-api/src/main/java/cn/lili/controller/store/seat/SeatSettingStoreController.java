@@ -5,8 +5,9 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.im.entity.dos.SeatSetting;
 import cn.lili.modules.im.service.SeatSettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-02-18 15:18:56
  */
 @RestController
-@Api(tags = "店铺端,坐席设置")
+@Tag(name = "店铺端,坐席设置")
 @RequestMapping("/store/seat/setting")
 @Transactional(rollbackFor = Exception.class)
 public class SeatSettingStoreController {
@@ -29,13 +30,14 @@ public class SeatSettingStoreController {
     @Autowired
     private SeatSettingService seatSettingService;
 
-    @ApiOperation(value = "查询坐席设置")
+    @Operation(description = "查询坐席设置")
     @GetMapping
     public ResultMessage<SeatSetting> getSetting() {
         return ResultUtil.data(seatSettingService.getSetting(UserContext.getCurrentUser().getTenantId()));
     }
 
-    @ApiOperation(value = "更新坐席设置")
+    @Operation(description = "更新坐席设置")
+    @Parameter(name = "seatSetting", description = "坐席设置")
     @PutMapping
     public void update(SeatSetting seatSetting) {
         seatSetting.setTenantId(UserContext.getCurrentUser().getTenantId());

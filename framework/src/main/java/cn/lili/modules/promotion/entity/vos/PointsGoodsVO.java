@@ -2,7 +2,7 @@ package cn.lili.modules.promotion.entity.vos;
 
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.promotion.entity.dos.PointsGoods;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +18,7 @@ public class PointsGoodsVO extends PointsGoods {
 
     private static final long serialVersionUID = -5163709626742905057L;
 
-    @ApiModelProperty(value = "商品规格详细信息")
+    @Schema(description = "商品规格详细信息")
     private GoodsSku goodsSku;
 
 }

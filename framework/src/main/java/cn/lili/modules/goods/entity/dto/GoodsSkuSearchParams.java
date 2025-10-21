@@ -2,8 +2,9 @@ package cn.lili.modules.goods.entity.dto;
 
 import cn.lili.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 规格商品查询条件
@@ -12,11 +13,12 @@ import lombok.Data;
  * @since 2020/12/15
  **/
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class GoodsSkuSearchParams extends GoodsSearchParams {
 
     private static final long serialVersionUID = -6235885068610635045L;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String goodsId;
 
     @Override

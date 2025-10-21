@@ -8,8 +8,9 @@ import cn.lili.modules.system.entity.dos.Region;
 import cn.lili.modules.system.entity.vo.RegionVO;
 import cn.lili.modules.system.mapper.RegionMapper;
 import cn.lili.modules.system.service.RegionService;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -172,62 +173,46 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      * @throws Exception
      */
     private List<Region> initData(String jsonString) {
-
-        //最终数据承载对象
         List<Region> regions = new ArrayList<>();
-        JSONObject jsonObject = JSONObject.parseObject(jsonString);
-        //获取到国家及下面所有的信息 开始循环插入，这里可以写成递归调用，但是不如这样方便查看、理解
+        JSONObject jsonObject = JSON.parseObject(jsonString);
+        //获取国家
         JSONArray countryAll = jsonObject.getJSONArray("districts");
         for (int i = 0; i < countryAll.size(); i++) {
             JSONObject contry = countryAll.getJSONObject(i);
-            String id1 = "0";
+            String countryId = insert(regions, "0", contry.getString("citycode"), contry.getString("adcode"), contry.getString("name"), contry.getString("center"), contry.getString("level"), 1);
             JSONArray provinceAll = contry.getJSONArray("districts");
+            //获取省
             for (int j = 0; j < provinceAll.size(); j++) {
                 JSONObject province = provinceAll.getJSONObject(j);
-                String citycode1 = province.getString("citycode");
-                String adcode1 = province.getString("adcode");
-                String name1 = province.getString("name");
-                String center1 = province.getString("center");
-                String level1 = province.getString("level");
-                //插入省
-                String id2 = insert(regions, id1, citycode1, adcode1, name1, center1, level1, j, id1);
+                String provinceId = insert(regions, countryId, province.getString("citycode"), province.getString("adcode"), province.getString("name"), province.getString("center"), province.getString("level"), 2);
+                //如果省下面没有市，则跳过
+                if (province.getJSONArray("districts") == null) {
+                    continue;
+                }
                 JSONArray cityAll = province.getJSONArray("districts");
-
+                //获取市
                 for (int z = 0; z < cityAll.size(); z++) {
                     JSONObject city = cityAll.getJSONObject(z);
-                    String citycode2 = city.getString("citycode");
-                    String adcode2 = city.getString("adcode");
-                    String name2 = city.getString("name");
-                    String center2 = city.getString("center");
-                    String level2 = city.getString("level");
-                    //插入市
-                    String id3 = insert(regions, id2, citycode2, adcode2, name2, center2, level2, z, id1, id2);
+                    String cityId = insert(regions, provinceId, city.getString("citycode"), city.getString("adcode"), city.getString("name"), city.getString("center"), city.getString("level"), 3);
+                    //如果市下面没有区，则跳过
+                    if (city.getJSONArray("districts") == null) {
+                        continue;
+                    }
                     JSONArray districtAll = city.getJSONArray("districts");
+                    //获取区
                     for (int w = 0; w < districtAll.size(); w++) {
                         JSONObject district = districtAll.getJSONObject(w);
-                        String citycode3 = district.getString("citycode");
-                        String adcode3 = district.getString("adcode");
-                        String name3 = district.getString("name");
-                        String center3 = district.getString("center");
-                        String level3 = district.getString("level");
-                        //插入区县
-                        String id4 = insert(regions, id3, citycode3, adcode3, name3, center3, level3, w, id1, id2, id3);
-                        //有需要可以继续向下遍历
+                        String districtId = insert(regions, cityId, district.getString("citycode"), district.getString("adcode"), district.getString("name"), district.getString("center"), district.getString("level"), 4);
+                        //如果区下面没有街道，则跳过
+                        if (district.getJSONArray("districts") == null) {
+                            continue;
+                        }
                         JSONArray streetAll = district.getJSONArray("districts");
                         for (int r = 0; r < streetAll.size(); r++) {
                             JSONObject street = streetAll.getJSONObject(r);
-                            String citycode4 = street.getString("citycode");
-                            String adcode4 = street.getString("adcode");
-                            String name4 = street.getString("name");
-                            String center4 = street.getString("center");
-                            String level4 = street.getString("level");
-                            //插入区县
-                            insert(regions, id4, citycode4, adcode4, name4, center4, level4, r, id1, id2, id3, id4);
-
+                            insert(regions, districtId, street.getString("citycode"), street.getString("adcode"), street.getString("name"), street.getString("center"), street.getString("level"), 5);
                         }
-
                     }
-
                 }
             }
         }

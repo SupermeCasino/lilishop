@@ -1,8 +1,8 @@
 package cn.lili.modules.order.cart.render.impl;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.modules.goods.service.CategoryService;
@@ -75,8 +75,7 @@ public class CommissionRender implements CartRenderStep {
                 if (tradeDTO.getCartTypeEnum().equals(CartTypeEnum.POINTS) && tradeDTO.getSkuList().get(0).getPromotionMap() != null && !tradeDTO.getSkuList().get(0).getPromotionMap().isEmpty()) {
                     Optional<Map.Entry<String, Object>> pointsPromotions = tradeDTO.getSkuList().get(0).getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.POINTS_GOODS.name())).findFirst();
                     if (pointsPromotions.isPresent()) {
-                        JSONObject promotionsObj = JSONUtil.parseObj(pointsPromotions.get().getValue());
-                        PointsGoods pointsGoods = JSONUtil.toBean(promotionsObj, PointsGoods.class);
+                        PointsGoods pointsGoods = JSON.parseObject(JSON.toJSONString(pointsPromotions.get().getValue()), PointsGoods.class);
                         priceDetailDTO.setSettlementPrice(pointsGoods.getSettlementPrice());
                     }
                 }
@@ -84,8 +83,8 @@ public class CommissionRender implements CartRenderStep {
                 else if (tradeDTO.getCartTypeEnum().equals(CartTypeEnum.KANJIA) && tradeDTO.getSkuList().get(0).getPromotionMap() != null && !tradeDTO.getSkuList().get(0).getPromotionMap().isEmpty()) {
                     Optional<Map.Entry<String, Object>> kanjiaPromotions = tradeDTO.getSkuList().get(0).getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.KANJIA.name())).findFirst();
                     if (kanjiaPromotions.isPresent()) {
-                        JSONObject promotionsObj = JSONUtil.parseObj(kanjiaPromotions.get().getValue());
-                        KanjiaActivityGoods kanjiaActivityGoods = JSONUtil.toBean(promotionsObj, KanjiaActivityGoods.class);
+                        KanjiaActivityGoods kanjiaActivityGoods = JSON.parseObject(JSON.toJSONString(kanjiaPromotions.get().getValue()) , KanjiaActivityGoods.class);
+
                         priceDetailDTO.setSettlementPrice(CurrencyUtil.add(kanjiaActivityGoods.getSettlementPrice(),priceDetailDTO.getBillPrice()));
                     }
                 }

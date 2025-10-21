@@ -1,7 +1,7 @@
 package cn.lili.modules.order.cart.render.impl;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
@@ -56,16 +56,23 @@ public class FullDiscountRender implements CartRenderStep {
                 Optional<Map.Entry<String, Object>> fullDiscountOptional = fullDiscountSkuList.get(0).getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.FULL_DISCOUNT.name())).findFirst();
 
                 if (fullDiscountOptional.isPresent()) {
-                    JSONObject promotionsObj = JSONUtil.parseObj(fullDiscountOptional.get().getValue());
-                    FullDiscount fullDiscount = promotionsObj.toBean(FullDiscount.class);
-                    FullDiscountVO fullDiscountVO = new FullDiscountVO(fullDiscount);
-
-                    //如果有赠品，则将赠品信息写入
-                    if (Boolean.TRUE.equals(fullDiscount.getGiftFlag())) {
-                        GoodsSku goodsSku = goodsSkuService.getGoodsSkuByIdFromCache(fullDiscount.getGiftId());
-                        fullDiscountVO.setGiftSkuId(fullDiscount.getGiftId());
-                        fullDiscountVO.setGiftSkuName(goodsSku.getGoodsName());
+                    Object fullDiscountVal = fullDiscountOptional.get().getValue();
+                    FullDiscount fullDiscount;
+                    if (fullDiscountVal instanceof FullDiscount) {
+                        fullDiscount = (FullDiscount) fullDiscountVal;
+                    } else if (fullDiscountVal instanceof String) {
+                        fullDiscount = JSON.parseObject((String) fullDiscountVal, FullDiscount.class);
+                    } else {
+                        fullDiscount = JSON.parseObject(JSON.toJSONString(fullDiscountVal), FullDiscount.class);
                     }
+                     FullDiscountVO fullDiscountVO = new FullDiscountVO(fullDiscount);
+
+                     //如果有赠品，则将赠品信息写入
+                     if (Boolean.TRUE.equals(fullDiscount.getGiftFlag())) {
+                         GoodsSku goodsSku = goodsSkuService.getGoodsSkuByIdFromCache(fullDiscount.getGiftId());
+                         fullDiscountVO.setGiftSkuId(fullDiscount.getGiftId());
+                         fullDiscountVO.setGiftSkuName(goodsSku.getGoodsName());
+                     }
 
                     //写入满减活动
                     cart.setFullDiscount(fullDiscountVO);

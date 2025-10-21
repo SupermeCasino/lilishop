@@ -8,8 +8,9 @@ import cn.lili.modules.member.entity.dos.StoreDepartment;
 import cn.lili.modules.member.entity.vo.StoreDepartmentVO;
 import cn.lili.modules.member.service.StoreDepartmentService;
 import cn.lili.mybatis.util.PageUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,21 +24,22 @@ import java.util.List;
  * @since 2020/11/22 12:06
  */
 @RestController
-@Api(tags = "店铺端,部门管理接口")
+@Tag(name = "店铺端,部门管理接口")
 @RequestMapping("/store/department")
 public class StoreDepartmentController {
     @Autowired
     private StoreDepartmentService storeDepartmentService;
 
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "查看部门详情")
+    @GetMapping("/{id}")
+    @Operation(description = "查看部门详情")
+    @Parameter(name = "id", description = "部门ID", required = true)
     public ResultMessage<StoreDepartment> get(@PathVariable String id) {
         StoreDepartment storeDepartment = storeDepartmentService.getById(id);
         return ResultUtil.data(storeDepartment);
     }
 
     @GetMapping
-    @ApiOperation(value = "获取树状结构")
+    @Operation(description = "获取树状结构")
     public ResultMessage<List<StoreDepartmentVO>> getByPage(StoreDepartment entity,
                                                             SearchVO searchVo) {
         entity.setStoreId(UserContext.getCurrentUser().getStoreId());
@@ -46,23 +48,26 @@ public class StoreDepartmentController {
     }
 
     @PostMapping
-    @ApiOperation(value = "新增部门")
-    public ResultMessage<StoreDepartment> save(StoreDepartment storeDepartment) {
+    @Operation(description = "新增部门")
+    @Parameter(name = "storeDepartment", description = "部门信息", required = true)
+    public ResultMessage<StoreDepartment> save(@RequestBody StoreDepartment storeDepartment) {
         storeDepartment.setStoreId(UserContext.getCurrentUser().getStoreId());
         storeDepartmentService.save(storeDepartment);
         return ResultUtil.data(storeDepartment);
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "更新部门")
+    @Operation(description = "更新部门")
+    @Parameter(name = "id", description = "部门ID", required = true)
     public ResultMessage<StoreDepartment> update(@PathVariable String id, StoreDepartment storeDepartment) {
         storeDepartment.setId(id);
         storeDepartmentService.update(storeDepartment);
         return ResultUtil.data(storeDepartment);
     }
 
-    @DeleteMapping(value = "/{ids}")
-    @ApiOperation(value = "删除部门")
+    @DeleteMapping("/{ids}")
+    @Operation(description = "删除部门")
+    @Parameter(name = "ids", description = "部门ID列表", required = true)
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         storeDepartmentService.deleteByIds(ids);
         return ResultUtil.success();

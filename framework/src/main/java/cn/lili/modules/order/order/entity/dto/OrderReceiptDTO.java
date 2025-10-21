@@ -1,9 +1,9 @@
 package cn.lili.modules.order.order.entity.dto;
 
 import cn.lili.modules.order.order.entity.dos.Receipt;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -13,10 +13,11 @@ import lombok.Data;
  * @since 2020/11/28 11:38
  */
 @Data
-@ApiModel(value = "订单发票")
+@Schema(description = "订单发票")
+@EqualsAndHashCode(callSuper = false)
 public class OrderReceiptDTO extends Receipt {
 
-    @ApiModelProperty(value = "订单状态")
+    @Schema(description = "订单状态")
     private String orderStatus;
 
 }

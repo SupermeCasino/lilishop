@@ -1,6 +1,6 @@
 package cn.lili.modules.order.cart.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,10 +15,10 @@ import java.io.Serializable;
 public class StoreRemarkDTO implements Serializable {
 
     private static final long serialVersionUID = -6793274046513576434L;
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String storeId;
 
-    @ApiModelProperty(value = "备注")
+    @Schema(description = "备注")
     private String remark;
 
 }

@@ -118,11 +118,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Mysql Connector -->
+        <!-- 显式添加 mybatis-spring 以解决 Spring Boot 3.x 兼容性问题 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.29</version>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+        <!-- Mysql Connector：切换到新坐标 -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
         </dependency>
         <!-- Redis-->
         <dependency>
@@ -144,7 +150,7 @@
 
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
             <exclusions>
                 <exclusion>
@@ -168,7 +174,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok-version}</version>
+            <version>1.18.34</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Jasypt加密 -->
         <dependency>
@@ -216,11 +223,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--脚本编程-->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
+        
         <!-- rocketmq-spring-boot-starter -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
@@ -323,6 +326,11 @@
             <version>${druid-version}</version>
         </dependency>
         <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.xkcoding.http</groupId>
             <artifactId>simple-http</artifactId>
             <version>${simple-http-version}</version>
@@ -374,11 +382,7 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback-encoder}</version>
         </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>${de.codecentric}</version>
-        </dependency>
+
         <!-- 开源多维码生成工具 -->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -389,11 +393,6 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>${zxing}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api}</version>
         </dependency>
         <!-- 开源多维码生成工具 -->
         <dependency>
@@ -444,13 +443,6 @@
             <artifactId>sdk</artifactId>
             <version>${kuaidi100-api.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.qiyuesuo.sdk</groupId>
-            <artifactId>SDK</artifactId>
-            <version>2.1.7</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/maven-repository/SF-CSIM-EXPRESS-SDK-V2.1.7.jar</systemPath>
-        </dependency>
         <!-- netty-resolver-dns-native-macos -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -463,6 +455,16 @@
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-java</artifactId>
             <version>0.2.15</version>
+        </dependency>
+        <!-- 添加 springdoc OpenAPI 3 支持（WebMVC） -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

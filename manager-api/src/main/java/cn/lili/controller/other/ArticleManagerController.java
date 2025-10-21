@@ -8,14 +8,13 @@ import cn.lili.modules.page.entity.enums.ArticleEnum;
 import cn.lili.modules.page.entity.vos.ArticleVO;
 import cn.lili.modules.page.service.ArticleService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 管理端,文章接口
@@ -24,7 +23,7 @@ import javax.validation.Valid;
  * @since 2020-05-06 15:18:56
  */
 @RestController
-@Api(tags = "管理端,文章接口")
+@Tag(name = "管理端,文章接口")
 @RequestMapping("/manager/other/article")
 public class ArticleManagerController {
 
@@ -34,33 +33,32 @@ public class ArticleManagerController {
     @Autowired
     private ArticleService articleService;
 
-    @ApiOperation(value = "查看文章")
-    @ApiImplicitParam(name = "id", value = "文章ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/{id}")
-    public ResultMessage<Article> get(@PathVariable String id) {
+    @Operation(summary = "查看文章")
+    @Parameter(name = "id", description = "文章ID", required = true)
+    @GetMapping("/{id}")
+    public ResultMessage<Article> get(
+            @PathVariable String id) {
 
         return ResultUtil.data(articleService.getById(id));
     }
 
-    @ApiOperation(value = "根据类型查看文章")
-    @ApiImplicitParam(name = "type", value = "文章类型", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/type/{type}")
-    public ResultMessage<Article> getByType(@PathVariable String type) {
+    @Operation(summary = "根据类型查看文章")
+    @Parameter(name = "type", description = "文章类型", required = true)
+    @GetMapping("/type/{type}")
+    public ResultMessage<Article> getByType(
+            @PathVariable String type) {
 
         return ResultUtil.data(articleService.customGetByType(type));
     }
 
-    @ApiOperation(value = "分页获取")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "categoryId", value = "文章分类ID", paramType = "query"),
-            @ApiImplicitParam(name = "title", value = "标题", paramType = "query")
-    })
-    @GetMapping(value = "/getByPage")
+    @Operation(summary = "分页获取")
+    @Parameter(name = "articleSearchParams", description = "查询参数", required = true)
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<ArticleVO>> getByPage(ArticleSearchParams articleSearchParams) {
         return ResultUtil.data(articleService.managerArticlePage(articleSearchParams));
     }
 
-    @ApiOperation(value = "添加文章")
+    @Operation(summary = "添加文章")
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResultMessage<Article> save(@RequestBody Article article) {
         article.setType(ArticleEnum.OTHER.name());
@@ -68,39 +66,44 @@ public class ArticleManagerController {
         return ResultUtil.data(article);
     }
 
-    @ApiOperation(value = "修改文章--文章id")
-    @ApiImplicitParam(name = "id", value = "文章ID", required = true, paramType = "path")
-    @PutMapping(value = "update/{id}", consumes = "application/json", produces = "application/json")
-    public ResultMessage<Article> update(@RequestBody Article article, @PathVariable("id") String id) {
+    @Operation(summary = "修改文章--文章id")
+    @Parameter(name = "article", description = "文章信息", required = true)
+    @Parameter(name = "id", description = "文章ID", required = true)
+    @PutMapping(value="/update/{id}", consumes = "application/json", produces = "application/json")
+    public ResultMessage<Article> update(@RequestBody Article article, 
+            @PathVariable("id") String id) {
         article.setId(id);
         return ResultUtil.data(articleService.updateArticle(article));
     }
 
-    @ApiOperation(value = "修改文章--文章类型")
-    @ApiImplicitParam(name = "type", value = "文章类型", required = true, paramType = "path")
-    @PutMapping(value = "updateArticle/{type}", consumes = "application/json", produces = "application/json")
-    public ResultMessage<Article> updateArticle(@RequestBody Article article, @PathVariable("type") String type,String id) {
+    @Operation(summary = "修改文章--文章类型")
+    @Parameter(name = "article", description = "文章信息", required = true)
+    @Parameter(name = "type", description = "文章类型", required = true)
+    @Parameter(name = "id", description = "文章ID", required = true)
+    @PutMapping(value = "/updateArticle/{type}/{id}", consumes = "application/json", produces = "application/json")
+    public ResultMessage<Article> updateArticle(@RequestBody Article article, 
+            @PathVariable("type") String type, @PathVariable("id") String id) {
         article.setId(id);
         article.setType(type);
         return ResultUtil.data(articleService.updateArticleType(article));
     }
 
-    @ApiOperation(value = "修改文章状态")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "文章ID", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "status", value = "操作状态", required = true, paramType = "query")
-    })
+    @Operation(summary = "修改文章状态")
+    @Parameter(name = "id", description = "文章ID", required = true)
+    @Parameter(name = "status", description = "操作状态", required = true)
     @PutMapping("update/status/{id}")
-    public ResultMessage<Article> updateStatus(@PathVariable("id") String id, boolean status) {
+    public ResultMessage<Article> updateStatus(
+            @PathVariable("id") String id, 
+            @PathVariable("status") boolean status) {
         articleService.updateArticleStatus(id, status);
         return ResultUtil.success();
     }
 
 
-    @ApiOperation(value = "批量删除")
-    @ApiImplicitParam(name = "id", value = "文章ID", required = true, dataType = "String", paramType = "path")
-    @DeleteMapping(value = "/delByIds/{id}")
-    public ResultMessage<Object> delAllByIds(@PathVariable String id) {
+    @Operation(summary = "批量删除")
+    @DeleteMapping("/delByIds/{id}")
+    public ResultMessage<Object> delAllByIds(
+            @Parameter(description = "文章ID", required = true) @PathVariable String id) {
         articleService.customRemove(id);
         return ResultUtil.success();
     }

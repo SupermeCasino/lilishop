@@ -1,6 +1,6 @@
 package cn.lili.modules.order.order.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.OperationalJudgment;
@@ -145,7 +145,7 @@ public class OrderPriceServiceImpl implements OrderPriceService {
                 //修改订单货物金额
                 orderItem.setFlowPrice(priceDetailDTO.getFlowPrice());
                 orderItem.setUnitPrice(CurrencyUtil.div(priceDetailDTO.getFlowPrice(), orderItem.getNum()));
-                orderItem.setPriceDetail(JSONUtil.toJsonStr(priceDetailDTO));
+                orderItem.setPriceDetail(JSON.toJSONString(priceDetailDTO));
 
             } else {
 
@@ -158,7 +158,7 @@ public class OrderPriceServiceImpl implements OrderPriceService {
                 //修改订单货物金额
                 orderItem.setFlowPrice(priceDetailDTO.getFlowPrice());
                 orderItem.setUnitPrice(CurrencyUtil.div(priceDetailDTO.getFlowPrice(), orderItem.getNum()));
-                orderItem.setPriceDetail(JSONUtil.toJsonStr(priceDetailDTO));
+                orderItem.setPriceDetail(JSON.toJSONString(priceDetailDTO));
                 countUpdatePrice = CurrencyUtil.add(countUpdatePrice, priceDetailDTO.getUpdatePrice());
             }
         }

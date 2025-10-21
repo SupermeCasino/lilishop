@@ -1,6 +1,5 @@
 package cn.lili.modules.goods.util;
 
-import cn.hutool.json.JSONObject;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.HttpUtils;
@@ -8,6 +7,8 @@ import cn.lili.modules.goods.entity.dos.Commodity;
 import cn.lili.modules.goods.entity.dos.Studio;
 import cn.lili.modules.goods.entity.dto.GoodsInfo;
 import cn.lili.modules.wechat.util.WechatAccessTokenUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,8 +45,8 @@ public class WechatLivePlayerUtil {
         Map<String, String> map = this.mockRoom(studio);
         JSONObject json = this.doPostWithJson(url, map);
         Map<String, String> roomMap = new HashMap<>(2);
-        roomMap.put("roomId", json.getStr("roomId"));
-        roomMap.put("qrcodeUrl", json.getStr("qrcode_url"));
+        roomMap.put("roomId", json.getString("roomId"));
+        roomMap.put("qrcodeUrl", json.getString("qrcode_url"));
         return roomMap;
     }
 
@@ -87,7 +88,7 @@ public class WechatLivePlayerUtil {
         map.put("limit", "1");
         JSONObject json = this.doPostWithJson(url, map);
         //TODO get media_url
-        return json.getStr("live_replay");
+        return json.getString("live_replay");
     }
 
     /**
@@ -200,14 +201,15 @@ public class WechatLivePlayerUtil {
         //记录请求结果
         log.info("微信小程序请求结果：" + content);
         //获取请求内容，如果token过期则重新获取，如果出错则抛出错误
-        JSONObject jsonObject = new JSONObject(content);
-        if (("0").equals(jsonObject.get("errcode").toString())) {
+        JSONObject jsonObject = JSON.parseObject(content);
+        int errcode = jsonObject.getIntValue("errcode");
+        if (errcode == 0) {
             return jsonObject;
-        } else if (("40001").equals(jsonObject.get("errcode"))) {
+        } else if (errcode == 40001) {
             wechatAccessTokenUtil.removeAccessToken(ClientTypeEnum.WECHAT_MP);
             return this.doPostWithJson(url, map);
         } else {
-            throw new ServiceException(jsonObject.get("errmsg").toString());
+            throw new ServiceException(jsonObject.getString("errmsg"));
         }
     }
 

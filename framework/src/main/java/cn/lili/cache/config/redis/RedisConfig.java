@@ -1,8 +1,7 @@
 package cn.lili.cache.config.redis;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.redisson.Redisson;
@@ -18,7 +17,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -52,8 +51,7 @@ import java.util.Map;
 @Configuration
 @ConditionalOnClass(RedisOperations.class)
 @EnableConfigurationProperties(RedisProperties.class)
-public class RedisConfig extends CachingConfigurerSupport {
-
+public class RedisConfig implements CachingConfigurer {
 
     private static final String REDIS_PREFIX = "redis://";
 
@@ -77,20 +75,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
         //设置过期时间
         defaultCacheConfig = defaultCacheConfig.entryTtl(Duration.ofSeconds(timeout));
-        RedisCacheManager cacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
 
-        //设置白名单---非常重要********
-        /*
-        使用fastjson的时候：序列化时将class信息写入，反解析的时候，
-        fastjson默认情况下会开启autoType的检查，相当于一个白名单检查，
-        如果序列化信息中的类路径不在autoType中，
-        反解析就会报com.alibaba.fastjson.JSONException: autoType is not support的异常
-        可参考 https://blog.csdn.net/u012240455/article/details/80538540
-         */
-        ParserConfig.getGlobalInstance().addAccept("cn.lili.");
-        ParserConfig.getGlobalInstance().addAccept("cn.hutool.json.");
-
-        return cacheManager;
+        return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
     }
 
     @Bean(name = "redisTemplate")
@@ -141,7 +127,6 @@ public class RedisConfig extends CachingConfigurerSupport {
             if (CharSequenceUtil.isNotEmpty(redisProperties.getPassword())) {
                 singleServerConfig.setPassword(redisProperties.getPassword());
             }
-            singleServerConfig.setPingConnectionInterval(1000);
         }
 
         return Redisson.create(config);

@@ -1,8 +1,7 @@
 package cn.lili.modules.message.entity.vos;
 
 import cn.lili.modules.message.entity.enums.MessageStatusEnum;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
@@ -13,7 +12,7 @@ import lombok.Data;
  * @since 2020/12/2 17:50
  */
 @Data
-@ApiModel(value = "消息")
+@Schema(description = "消息")
 public class StoreMessageQueryVO {
 
     private static final long serialVersionUID = 1L;
@@ -21,13 +20,13 @@ public class StoreMessageQueryVO {
     /**
      * @see MessageStatusEnum
      */
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private String status;
 
-    @ApiModelProperty(value = "消息id")
+    @Schema(description = "消息id")
     private String messageId;
 
-    @ApiModelProperty(value = "商家id")
+    @Schema(description = "商家id")
     private String storeId;
 
 }

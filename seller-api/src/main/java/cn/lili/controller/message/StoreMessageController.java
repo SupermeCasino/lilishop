@@ -11,9 +11,9 @@ import cn.lili.modules.message.entity.enums.MessageStatusEnum;
 import cn.lili.modules.message.entity.vos.StoreMessageQueryVO;
 import cn.lili.modules.message.service.StoreMessageService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ import java.util.Objects;
  * @since 2020/11/22 14:23
  */
 @RestController
-@Api(tags = "店铺端,消息接口")
+@Tag(name = "店铺端,消息接口")
 @RequestMapping("/store/message/storeMessage")
 public class StoreMessageController {
 
@@ -38,8 +38,9 @@ public class StoreMessageController {
     @Autowired
     private StoreMessageService storeMessageService;
 
-    @ApiOperation(value = "获取商家消息")
-    @ApiImplicitParam(name = "status", value = "状态", required = true, paramType = "query")
+    @Operation(summary = "获取商家消息")
+    @Parameter(name = "status", description = "状态", required = true)
+    @Parameter(name = "pageVo", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<StoreMessage>> getPage(String status, PageVO pageVo) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -51,7 +52,8 @@ public class StoreMessageController {
     }
 
 
-    @ApiOperation(value = "获取商家消息总汇")
+    @Operation(summary = "获取商家消息总汇")
+    @Parameter(name = "pageVo", description = "分页参数")
     @GetMapping("/all")
     public ResultMessage<Map<String, Object>> getPage(PageVO pageVo) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -74,8 +76,8 @@ public class StoreMessageController {
         return ResultUtil.data(map);
     }
 
-    @ApiOperation(value = "已读操作")
-    @ApiImplicitParam(name = "id", value = "店铺消息id", required = true, paramType = "path")
+    @Operation(summary = "已读操作")
+    @Parameter(name = "id", description = "店铺消息id", required = true)
     @PutMapping("/{id}/read")
     public ResultMessage<Boolean> readMessage(@PathVariable String id) {
         OperationalJudgment.judgment(storeMessageService.getById(id));
@@ -84,8 +86,8 @@ public class StoreMessageController {
 
     }
 
-    @ApiOperation(value = "回收站还原消息")
-    @ApiImplicitParam(name = "id", value = "店铺消息id", required = true, paramType = "path")
+    @Operation(summary = "回收站还原消息")
+    @Parameter(name = "id", description = "店铺消息id", required = true)
     @PutMapping("/{id}/reduction")
     public ResultMessage<Boolean> reductionMessage(@PathVariable String id) {
         OperationalJudgment.judgment(storeMessageService.getById(id));
@@ -94,8 +96,8 @@ public class StoreMessageController {
 
     }
 
-    @ApiOperation(value = "删除操作")
-    @ApiImplicitParam(name = "id", value = "店铺消息id", required = true, paramType = "path")
+    @Operation(summary = "删除操作")
+    @Parameter(name = "id", description = "店铺消息id", required = true)
     @DeleteMapping("/{id}/delete")
     public ResultMessage<Boolean> deleteMessage(@PathVariable String id) {
         OperationalJudgment.judgment(storeMessageService.getById(id));
@@ -104,8 +106,8 @@ public class StoreMessageController {
 
     }
 
-    @ApiOperation(value = "彻底删除操作")
-    @ApiImplicitParam(name = "id", value = "店铺消息id", required = true, paramType = "path")
+    @Operation(summary = "彻底删除操作")
+    @Parameter(name = "id", description = "店铺消息id", required = true)
     @DeleteMapping("/{id}")
     public ResultMessage<Boolean> disabled(@PathVariable String id) {
         OperationalJudgment.judgment(storeMessageService.getById(id));

@@ -1,11 +1,11 @@
 package cn.lili.modules.wechat.util;
 
+import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.message.entity.dos.ShortLink;
 import cn.lili.modules.message.service.ShortLinkService;
-import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -55,18 +55,14 @@ public class WechatMpCodeUtil {
     public String createQrCode(String path) {
         try {
             String accessToken = wechatAccessTokenUtil.cgiAccessToken(ClientTypeEnum.WECHAT_MP);
-            Map<String, String> params = new HashMap<>(2);
+            Map<String, Object> params = new HashMap<>();
             params.put("path", path);
-            params.put("width", "280");
-
-            //======================================================================//
-            //执行URL Post调用
-            //======================================================================//
+            params.put("width", 430);
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(CREATE_QR_CODE + accessToken);
             httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
             //必须是json模式的 post
-            String body = JSON.toJSONString(params);
+            String body = JSONUtil.toJsonStr(params);
             StringEntity entity = new StringEntity(body);
             entity.setContentType("image/png");
             httpPost.setEntity(entity);
@@ -121,7 +117,7 @@ public class WechatMpCodeUtil {
             HttpPost httpPost = new HttpPost(UN_LIMIT_API + accessToken);
             httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
             //必须是json模式的 post
-            String body = JSON.toJSONString(params);
+            String body = JSONUtil.toJsonStr(params);
             StringEntity entity = new StringEntity(body);
             entity.setContentType("image/png");
             httpPost.setEntity(entity);

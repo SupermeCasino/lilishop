@@ -1,25 +1,12 @@
 package cn.lili.modules.im.config;
 
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import jakarta.websocket.server.ServerEndpointConfig;
 
-import javax.websocket.server.ServerEndpointConfig;
-
-/**
- * CustomSpringConfigurator
- *
- * @author Chopper
- * @version v1.0
- * 2021-12-31 11:53
- */
 public class CustomSpringConfigurator extends ServerEndpointConfig.Configurator implements ApplicationContextAware {
-
-    /**
-     * Spring application context.
-     */
     private static volatile BeanFactory context;
 
     @Override

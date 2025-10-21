@@ -1,6 +1,6 @@
 package cn.lili.modules.promotion.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.modules.promotion.entity.dos.*;
 import cn.lili.modules.promotion.entity.dto.search.PromotionGoodsSearchParams;
@@ -96,7 +96,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void removeByGoodsIds(String goodsIdsJsonStr) {
-        List<String> goodsIds = JSONUtil.toList(goodsIdsJsonStr, String.class);
+        List<String> goodsIds = JSON.parseArray(goodsIdsJsonStr, String.class);
         promotionGoodsService.deletePromotionGoodsByGoods(goodsIds);
         kanjiaActivityGoodsService.deleteByGoodsIds(goodsIds);
     }

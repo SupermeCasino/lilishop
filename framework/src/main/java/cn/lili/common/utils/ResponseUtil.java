@@ -1,10 +1,11 @@
 package cn.lili.common.utils;
 
 import com.google.gson.Gson;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,10 @@ import java.util.Map;
  *
  * @author Chopper
  */
-@Slf4j
 public class ResponseUtil {
+
+    // 显式声明日志器，替代 @Slf4j
+    private static final Logger log = LoggerFactory.getLogger(ResponseUtil.class);
 
     static final String ENCODING = "UTF-8";
     static final String CONTENT_TYPE = "application/json;charset=UTF-8";

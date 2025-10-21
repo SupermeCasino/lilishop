@@ -2,16 +2,9 @@ package cn.lili.common.context;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-/**
- * request / response 获取工具
- *
- * @author paulG
- * @since 2020/10/16
- **/
 public class ThreadContextHolder {
 
     public static HttpServletResponse getHttpResponse() {
@@ -25,6 +18,4 @@ public class ThreadContextHolder {
         assert servletRequestAttributes != null;
         return servletRequestAttributes.getRequest();
     }
-
-
 }

@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,14 +12,14 @@ import lombok.Data;
 @Data
 public class MemberPointsHistoryVO {
 
-    @ApiModelProperty(value = "当前会员积分")
+    @Schema(description = "当前会员积分")
     private Long point;
 
-    @ApiModelProperty(value = "累计获得积分")
+    @Schema(description = "累计获得积分")
     private Long totalPoint;
 
 
-    public MemberPointsHistoryVO(){
+    public MemberPointsHistoryVO() {
         this.point = 0L;
         this.totalPoint = 0L;
     }

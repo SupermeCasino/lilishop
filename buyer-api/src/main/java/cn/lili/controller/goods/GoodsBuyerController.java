@@ -20,10 +20,10 @@ import cn.lili.modules.statistics.aop.PageViewPoint;
 import cn.lili.modules.statistics.aop.enums.PageViewEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,7 @@ import java.util.Map;
  * @since 2020/11/16 10:06 下午
  */
 @Slf4j
-@Api(tags = "买家端,商品接口")
+@Tag(name = "买家端,商品接口")
 @RestController
 @RequestMapping("/buyer/goods/goods")
 public class GoodsBuyerController {
@@ -66,19 +66,19 @@ public class GoodsBuyerController {
     @Autowired
     private HotWordsService hotWordsService;
 
-    @ApiOperation(value = "通过id获取商品信息")
-    @ApiImplicitParam(name = "goodsId", value = "商品ID", required = true, paramType = "path", dataType = "Long")
-    @GetMapping(value = "/get/{goodsId}")
+    @Operation(summary = "通过id获取商品信息")
+    @Parameter(name = "goodsId", description = "商品ID", required = true)
+    @GetMapping("/get/{goodsId}")
     public ResultMessage<GoodsVO> get(@NotNull(message = "商品ID不能为空") @PathVariable("goodsId") String id) {
         return ResultUtil.data(goodsService.getGoodsVO(id));
     }
 
-    @ApiOperation(value = "通过id获取商品信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "goodsId", value = "商品ID", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "skuId", value = "skuId", required = true, paramType = "path")
+    @Operation(summary = "通过id获取商品信息")
+    @Parameters({
+            @Parameter(name = "goodsId", description = "商品ID", required = true),
+            @Parameter(name = "skuId", description = "skuId", required = true)
     })
-    @GetMapping(value = "/sku/{goodsId}/{skuId}")
+    @GetMapping("/sku/{goodsId}/{skuId}")
     @PageViewPoint(type = PageViewEnum.SKU, id = "#id")
     public ResultMessage<Map<String, Object>> getSku(@NotNull(message = "商品ID不能为空") @PathVariable("goodsId") String goodsId,
                                                      @NotNull(message = "SKU ID不能为空") @PathVariable("skuId") String skuId) {
@@ -96,26 +96,26 @@ public class GoodsBuyerController {
 
     }
 
-    @ApiOperation(value = "获取商品分页列表")
+    @Operation(summary = "获取商品分页列表")
     @GetMapping
     public ResultMessage<IPage<Goods>> getByPage(GoodsSearchParams goodsSearchParams) {
         return ResultUtil.data(goodsService.queryByParams(goodsSearchParams));
     }
 
-    @ApiOperation(value = "获取商品sku列表")
+    @Operation(summary = "获取商品sku列表")
     @GetMapping("/sku")
     public ResultMessage<List<GoodsSku>> getSkuByPage(GoodsSearchParams goodsSearchParams) {
         return ResultUtil.data(goodsSkuService.getGoodsSkuByList(goodsSearchParams));
     }
 
-    @ApiOperation(value = "从ES中获取商品信息")
+    @Operation(summary = "从ES中获取商品信息")
     @GetMapping("/es")
     public ResultMessage<Page<EsGoodsIndex>> getGoodsByPageFromEs(EsGoodsSearchDTO goodsSearchParams, PageVO pageVO) {
         pageVO.setNotConvert(true);
         return ResultUtil.data(goodsSearchService.searchGoodsByPage(goodsSearchParams, pageVO));
     }
 
-    @ApiOperation(value = "从ES中获取相关商品品牌名称，分类名称及属性")
+    @Operation(summary = "从ES中获取相关商品品牌名称，分类名称及属性")
     @GetMapping("/es/related")
     public ResultMessage<EsGoodsRelatedInfo> getGoodsRelatedByPageFromEs(EsGoodsSearchDTO goodsSearchParams, PageVO pageVO) {
         pageVO.setNotConvert(true);
@@ -123,7 +123,7 @@ public class GoodsBuyerController {
         return ResultUtil.data(selector);
     }
 
-    @ApiOperation(value = "获取搜索热词")
+    @Operation(summary = "获取搜索热词")
     @GetMapping("/hot-words")
     public ResultMessage<List<String>> getGoodsHotWords(Integer count) {
         List<String> hotWords = hotWordsService.getHotWords(count);

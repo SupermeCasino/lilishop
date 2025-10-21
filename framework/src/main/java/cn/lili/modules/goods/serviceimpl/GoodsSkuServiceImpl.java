@@ -3,8 +3,6 @@ package cn.lili.modules.goods.serviceimpl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.PromotionTypeEnum;
@@ -51,12 +49,17 @@ import cn.lili.mybatis.BaseEntity;
 import cn.lili.mybatis.util.PageUtil;
 import cn.lili.rocketmq.RocketmqSendCallbackBuilder;
 import cn.lili.rocketmq.tags.GoodsTagsEnum;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -64,12 +67,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -94,6 +96,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
      * 分类
      */
     @Autowired
+    @Lazy
     private MemberCouponService memberCouponService;
     /**
      * 商品相册
@@ -114,14 +117,17 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
      * 商品
      */
     @Autowired
+    @Lazy
     private GoodsService goodsService;
     /**
      * 商品索引
      */
     @Autowired
+    @Lazy
     private EsGoodsIndexService goodsIndexService;
 
     @Autowired
+    @Lazy
     private PromotionGoodsService promotionGoodsService;
 
     @Autowired
@@ -131,6 +137,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
     private WholesaleService wholesaleService;
 
     @Autowired
+    @Lazy
     private CouponService couponService;
 
     @Autowired
@@ -178,8 +185,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
 
             //发送mq消息
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.SKU_DELETE.name();
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(oldSkuIds),
-                    RocketmqSendCallbackBuilder.commonCallback());
+            asyncSendIfPresent(destination, JSON.toJSONString(oldSkuIds));
         } else {
             skuList = new ArrayList<>();
             for (Map<String, Object> map : goodsOperationDTO.getSkuList()) {
@@ -238,7 +244,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
             if (goodsSku == null) {
                 return null;
             }
-            cache.put(GoodsSkuService.getCacheKeys(id), goodsSku);
+            cache.put(GoodsSkuService.getCacheKeys(id), goodsSku,72 * 60 * 60L);
         }
 
         //获取商品库存
@@ -277,23 +283,21 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         if (goodsVO == null || goodsSku == null) {
             //发送mq消息
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.GOODS_DELETE.name();
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(Collections.singletonList(goodsId)),
-                    RocketmqSendCallbackBuilder.commonCallback());
+            asyncSendIfPresent(destination, JSON.toJSONString(Collections.singletonList(goodsId)));
             throw new ServiceException(ResultCode.GOODS_NOT_EXIST);
         }
 
         //商品下架||商品未审核通过||商品删除，则提示：商品已下架
         if (GoodsStatusEnum.DOWN.name().equals(goodsVO.getMarketEnable()) || !GoodsAuthEnum.PASS.name().equals(goodsVO.getAuthFlag()) || Boolean.TRUE.equals(goodsVO.getDeleteFlag())) {
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.GOODS_DELETE.name();
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(Collections.singletonList(goodsId)),
-                    RocketmqSendCallbackBuilder.commonCallback());
+            asyncSendIfPresent(destination, JSON.toJSONString(Collections.singletonList(goodsId)));
             throw new ServiceException(ResultCode.GOODS_NOT_EXIST);
         }
 
         //获取当前商品的索引信息
         EsGoodsIndex goodsIndex = goodsIndexService.findById(skuId);
         if (goodsIndex == null) {
-            goodsIndex = goodsIndexService.getResetEsGoodsIndex(goodsSku, goodsVO.getGoodsParamsDTOList());
+            goodsIndex = goodsIndexService.getResetEsGoodsIndex(goodsSku);
         }
 
         //商品规格
@@ -304,32 +308,31 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         //设置当前商品的促销价格
         if (promotionMap != null && !promotionMap.isEmpty()) {
             promotionMap = promotionMap.entrySet().stream().parallel().filter(i -> {
-                JSONObject jsonObject = JSONUtil.parseObj(i.getValue());
+                JSONObject jsonObject = JSON.parseObject(String.valueOf(i.getValue()));
                 if (i.getKey().contains(PromotionTypeEnum.COUPON.name()) && currentUser != null) {
-                    Integer couponLimitNum = jsonObject.getInt("couponLimitNum");
-                    Coupon coupon = couponService.getById(jsonObject.getStr("id"));
+                    Integer couponLimitNum = jsonObject.getInteger("couponLimitNum");
+                    Coupon coupon = couponService.getById(jsonObject.getString("id"));
                     if (coupon == null || (coupon.getPublishNum() != 0 && coupon.getReceivedNum() >= coupon.getPublishNum())) {
                         return false;
                     }
                     if (couponLimitNum > 0) {
-                        Long count = memberCouponService.getMemberCouponNum(currentUser.getId(), jsonObject.getStr(
-                                "id"));
+                        Long count = memberCouponService.getMemberCouponNum(currentUser.getId(), jsonObject.getString("id"));
                         if (count >= couponLimitNum) {
                             return false;
                         }
                     }
                 }
                 // 过滤活动赠送优惠券和无效时间的活动
-                return (jsonObject.get("getType") == null || jsonObject.get("getType", String.class).equals(CouponGetEnum.FREE.name())) && (jsonObject.get("startTime") != null && jsonObject.get("startTime", Date.class).getTime() <= System.currentTimeMillis()) && (jsonObject.get("endTime") == null || jsonObject.get("endTime", Date.class).getTime() >= System.currentTimeMillis());
+                return (jsonObject.get("getType") == null || CouponGetEnum.FREE.name().equals(jsonObject.getString("getType"))) && (jsonObject.get("startTime") != null && jsonObject.getObject("startTime", Date.class).getTime() <= System.currentTimeMillis()) && (jsonObject.get("endTime") == null || jsonObject.getObject("endTime", Date.class).getTime() >= System.currentTimeMillis());
             }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
             Optional<Map.Entry<String, Object>> containsPromotion =
                     promotionMap.entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.SECKILL.name()) || i.getKey().contains(PromotionTypeEnum.PINTUAN.name())).findFirst();
             if (containsPromotion.isPresent()) {
-                JSONObject jsonObject = JSONUtil.parseObj(containsPromotion.get().getValue());
+                JSONObject jsonObject = JSON.parseObject(String.valueOf(containsPromotion.get().getValue()));
                 PromotionGoodsSearchParams searchParams = new PromotionGoodsSearchParams();
                 searchParams.setSkuId(skuId);
-                searchParams.setPromotionId(jsonObject.get("id").toString());
+                searchParams.setPromotionId(jsonObject.getString("id"));
                 PromotionGoods promotionsGoods = promotionGoodsService.getPromotionsGoods(searchParams);
                 if (promotionsGoods != null && promotionsGoods.getPrice() != null) {
                     goodsSkuDetail.setPromotionFlag(true);
@@ -367,7 +370,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         if (currentUser != null) {
             FootPrint footPrint = new FootPrint(currentUser.getId(), goodsIndex.getStoreId(), goodsId, skuId);
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.VIEW_GOODS.name();
-            rocketMQTemplate.asyncSend(destination, footPrint, RocketmqSendCallbackBuilder.commonCallback());
+            asyncSendIfPresent(destination, footPrint);
         }
         return map;
     }
@@ -476,7 +479,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         //初始化商品
         GoodsSkuVO goodsSkuVO = new GoodsSkuVO(goodsSku);
         //获取sku信息
-        JSONObject jsonObject = JSONUtil.parseObj(goodsSku.getSpecs());
+        JSONObject jsonObject = JSON.parseObject(goodsSku.getSpecs());
         //用于接受sku信息
         List<SpecValueVO> specValueVOS = new ArrayList<>();
         //用于接受sku相册
@@ -486,8 +489,8 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
             SpecValueVO specValueVO = new SpecValueVO();
             if ("images".equals(entry.getKey())) {
                 specValueVO.setSpecName(entry.getKey());
-                List<String> specImages = JSONUtil.toList(JSONUtil.parseArray(entry.getValue()),
-                        String.class);
+                JSONArray jsonArray = (JSONArray) entry.getValue();
+                List<String> specImages = jsonArray.toJavaList(String.class);
                 specValueVO.setSpecImage(specImages);
                 goodsGalleryList = new ArrayList<>(specImages);
             } else {
@@ -499,6 +502,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         goodsSkuVO.setGoodsGalleryList(goodsGalleryList);
         goodsSkuVO.setSpecList(specValueVOS);
         return goodsSkuVO;
+
     }
 
     @Override
@@ -939,8 +943,8 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         if (goodsImages == null || goodsImages.isEmpty()) {
             return;
         }
-        JSONObject jsonObject = JSONUtil.parseObj(goodsSku.getSpecs());
-        List<String> images = jsonObject.getBeanList("images", String.class);
+        JSONObject jsonObject = JSON.parseObject(goodsSku.getSpecs());
+        List<String> images = jsonObject.getJSONArray("images").toJavaList(String.class);
         GoodsGallery goodsGallery;
         if (images != null && !images.isEmpty()) {
             goodsGallery = goodsGalleryService.getGoodsGallery(images.get(0));
@@ -1118,6 +1122,12 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
         skuListSheet.setColumnWidth(2, 30 * 256);
         skuListSheet.setColumnWidth(3, 30 * 256);
         skuListSheet.setColumnWidth(4, 30 * 256);
+    }
+
+    private void asyncSendIfPresent(String destination, Object payload) {
+        if (rocketMQTemplate != null) {
+            rocketMQTemplate.asyncSend(destination, payload, RocketmqSendCallbackBuilder.commonCallback());
+        }
     }
 
 }

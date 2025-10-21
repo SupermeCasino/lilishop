@@ -2,9 +2,9 @@ package cn.lili.modules.permission.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -15,18 +15,19 @@ import lombok.Data;
  */
 @Data
 @TableName("li_role_menu")
-@ApiModel(value = "角色权限")
+@Schema(description = "角色权限")
+@EqualsAndHashCode(callSuper = false)
 public class RoleMenu extends BaseEntity {
 
     private static final long serialVersionUID = -4680260092546996026L;
 
-    @ApiModelProperty(value = "角色id")
+    @Schema(description = "角色id")
     private String roleId;
 
-    @ApiModelProperty(value = "菜单")
+    @Schema(description = "菜单")
     private String menuId;
 
-    @ApiModelProperty(value = "是否拥有操作数据权限，为否则只有查看权限")
+    @Schema(description = "是否拥有操作数据权限，为否则只有查看权限")
     private Boolean isSuper;
 
 }

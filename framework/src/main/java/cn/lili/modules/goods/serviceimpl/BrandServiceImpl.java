@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.goods.entity.dos.Brand;
@@ -126,7 +126,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
         if (!categoryBrands.isEmpty()) {
             List<String> categoryIds = categoryBrands.stream().map(CategoryBrand::getCategoryId).collect(Collectors.toList());
             throw new ServiceException(ResultCode.BRAND_USE_DISABLE_ERROR,
-                    JSONUtil.toJsonStr(categoryService.getCategoryNameByIds(categoryIds)));
+                    JSON.toJSONString(categoryService.getCategoryNameByIds(categoryIds)));
         }
 
         //分了商品绑定关系查询
@@ -134,7 +134,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
         if (!goods.isEmpty()) {
             List<String> goodsNames = goods.stream().map(Goods::getGoodsName).collect(Collectors.toList());
             throw new ServiceException(ResultCode.BRAND_BIND_GOODS_ERROR,
-                    JSONUtil.toJsonStr(goodsNames));
+                    JSON.toJSONString(goodsNames));
         }
     }
 

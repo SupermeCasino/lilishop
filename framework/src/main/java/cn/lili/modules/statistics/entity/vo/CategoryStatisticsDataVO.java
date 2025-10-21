@@ -1,6 +1,6 @@
 package cn.lili.modules.statistics.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -13,15 +13,15 @@ import lombok.Data;
 public class CategoryStatisticsDataVO {
 
 
-    @ApiModelProperty("一级分类ID")
+    @Schema(description = "一级分类ID")
     private String categoryId;
 
-    @ApiModelProperty("一级分类名称")
+    @Schema(description = "一级分类名称")
     private String categoryName;
 
-    @ApiModelProperty(value = "销售数量")
+    @Schema(description = "销售数量")
     private String num;
 
-    @ApiModelProperty(value = "销售金额")
+    @Schema(description = "销售金额")
     private Double price;
 }

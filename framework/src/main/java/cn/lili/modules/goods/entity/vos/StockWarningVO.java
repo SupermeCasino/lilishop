@@ -2,7 +2,7 @@ package cn.lili.modules.goods.entity.vos;
 
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StockWarningVO {
 
-    @ApiModelProperty(value = "库存警告数量")
+    @Schema(description = "库存警告数量")
     private Integer stockWarningNum;
 
-    @ApiModelProperty(value = "商品SKU列表")
+    @Schema(description = "商品SKU列表")
     private IPage<GoodsSku> goodsSkuPage;
 
 }

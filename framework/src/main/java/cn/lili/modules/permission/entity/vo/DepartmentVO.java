@@ -3,6 +3,7 @@ package cn.lili.modules.permission.entity.vo;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.permission.entity.dos.Department;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @since 2020-11-23 18:48
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class DepartmentVO extends Department {
 
     private List<DepartmentVO> children = new ArrayList<>();

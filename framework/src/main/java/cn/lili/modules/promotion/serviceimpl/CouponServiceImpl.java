@@ -2,7 +2,7 @@ package cn.lili.modules.promotion.serviceimpl;
 
 import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.event.TransactionCommitSendMQEvent;
@@ -33,6 +33,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +55,13 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
      * 规格商品
      */
     @Autowired
+    @Lazy
     private GoodsSkuService goodsSkuService;
     /**
      * 促销商品
      */
     @Autowired
+    @Lazy
     private PromotionGoodsService promotionGoodsService;
     /**
      * 会员优惠券
@@ -68,6 +71,7 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
     /**
      * 满额活动
      */
+    @Lazy
     @Autowired
     private FullDiscountService fullDiscountService;
     /**
@@ -284,14 +288,14 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateEsGoodsIndex(Coupon promotions) {
-        Coupon coupon = JSONUtil.parse(promotions).toBean(Coupon.class);
+        Coupon coupon = JSON.parseObject(JSON.toJSONString(promotions), Coupon.class);
         if (!CouponRangeDayEnum.DYNAMICTIME.name().equals(coupon.getRangeDayType()) && promotions.getStartTime() == null && promotions.getEndTime() == null) {
             Map<Object, Object> build = MapBuilder.create().put("promotionKey", this.getPromotionType() + "-" + promotions.getId()).build();
             if(promotions.getScopeType().equals(PromotionsScopeTypeEnum.PORTION_GOODS.name())){
                 build.put("scopeId", promotions.getScopeId());
             }
             //删除商品促销消息
-            applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("删除商品促销事件", rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DELETE_GOODS_INDEX_PROMOTIONS.name(), JSONUtil.toJsonStr(build)));
+            applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("删除商品促销事件", rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DELETE_GOODS_INDEX_PROMOTIONS.name(), JSON.toJSONString(build)));
         } else {
             super.sendUpdateEsGoodsMsg(promotions);
         }

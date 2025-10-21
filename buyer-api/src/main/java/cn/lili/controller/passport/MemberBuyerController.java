@@ -15,10 +15,10 @@ import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.sms.SmsUtil;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @RestController
-@Api(tags = "买家端,会员接口")
+@Tag(name = "买家端,会员接口")
 @RequestMapping("/buyer/passport/member")
 public class MemberBuyerController {
 
@@ -51,8 +51,8 @@ public class MemberBuyerController {
     private VerificationService verificationService;
 
 
-    @ApiOperation(value = "web-获取登录二维码")
-    @PostMapping(value = "/pc_session", produces = "application/json;charset=UTF-8")
+    @Operation(summary = "web-获取登录二维码")
+    @PostMapping("/pc_session")
     public ResultMessage<Object> createPcSession() {
         return ResultUtil.data(memberService.createPcSession());
     }
@@ -65,8 +65,8 @@ public class MemberBuyerController {
      * @param beforeSessionStatus 上次记录的session状态
      * @return
      */
-    @ApiOperation(value = "web-二维码登录")
-    @PostMapping(value = "/session_login/{token}", produces = "application/json;charset=UTF-8")
+    @Operation(summary = "web-二维码登录")
+    @PostMapping("/session_login/{token}")
     public Object loginWithSession(@PathVariable("token") String token, Integer beforeSessionStatus) {
         log.info("receive login with session key {}", token);
         ResponseEntity<ResultMessage<Object>> timeoutResponseEntity =
@@ -110,29 +110,29 @@ public class MemberBuyerController {
         return deferredResult;
     }
 
-    @ApiOperation(value = "app扫码")
-    @PostMapping(value = "/app_scanner", produces = "application/json;charset=UTF-8")
+    @Operation(summary = "app扫码")
+    @PostMapping("/app_scanner")
     public ResultMessage<Object> appScanner(String token) {
         return ResultUtil.data(memberService.appScanner(token));
     }
 
 
-    @ApiOperation(value = "app扫码-登录确认：同意/拒绝")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "sessionToken", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "操作：0拒绝登录，1同意登录", required = true, paramType = "query")
+    @Operation(summary = "app扫码-登录确认：同意/拒绝")
+    @Parameters({
+            @Parameter(name = "token", description = "sessionToken", required = true),
+            @Parameter(name = "code", description = "操作：0拒绝登录，1同意登录", required = true)
     })
-    @PostMapping(value = "/app_confirm", produces = "application/json;charset=UTF-8")
+    @PostMapping("/app_confirm")
     public ResultMessage<Object> appSConfirm(String token, Integer code) {
         boolean flag = memberService.appSConfirm(token, code);
         return flag ? ResultUtil.success() : ResultUtil.error(ResultCode.ERROR);
     }
 
 
-    @ApiOperation(value = "登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
+    @Operation(summary = "登录接口")
+    @Parameters({
+            @Parameter(name = "username", description = "用户名", required = true),
+            @Parameter(name = "password", description = "密码", required = true)
     })
     @PostMapping("/userLogin")
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
@@ -142,17 +142,17 @@ public class MemberBuyerController {
         return ResultUtil.data(this.memberService.usernameLogin(username, password));
     }
 
-    @ApiOperation(value = "注销接口")
+    @Operation(summary = "注销接口")
     @PostMapping("/logout")
     public ResultMessage<Object> logout() {
         this.memberService.logout(UserEnums.MEMBER);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "短信登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query")
+    @Operation(summary = "短信登录接口")
+    @Parameters({
+            @Parameter(name = "mobile", description = "手机号", required = true),
+            @Parameter(name = "code", description = "验证码", required = true)
     })
     @PostMapping("/smsLogin")
     public ResultMessage<Object> smsLogin(@NotNull(message = "手机号为空") @RequestParam String mobile,
@@ -165,11 +165,11 @@ public class MemberBuyerController {
         }
     }
 
-    @ApiOperation(value = "绑定手机号")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query"),
+    @Operation(summary = "绑定手机号")
+    @Parameters({
+            @Parameter(name = "username", description = "用户名", required = true),
+            @Parameter(name = "mobile", description = "手机号", required = true),
+            @Parameter(name = "code", description = "验证码", required = true)
     })
     @PostMapping("/bindMobile")
     public ResultMessage<Object> bindMobile(@NotNull(message = "用户名不能为空") @RequestParam String username,
@@ -191,12 +191,11 @@ public class MemberBuyerController {
         }
     }
 
-    @ApiOperation(value = "注册用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "mobilePhone", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query")
+    @Operation(summary = "注册用户")
+    @Parameters({
+            @Parameter(name = "username", description = "用户名", required = true),
+            @Parameter(name = "password", description = "密码", required = true),
+            @Parameter(name = "mobilePhone", description = "手机号", required = true)
     })
     @PostMapping("/register")
     public ResultMessage<Object> register(@NotNull(message = "用户名不能为空") @RequestParam String username,
@@ -213,17 +212,19 @@ public class MemberBuyerController {
 
     }
 
-    @ApiOperation(value = "获取当前登录用户接口")
+   
+
+    @Operation(summary = "获取当前登录用户接口")
     @GetMapping
     public ResultMessage<Member> getUserInfo() {
 
         return ResultUtil.data(memberService.getUserInfo());
     }
 
-    @ApiOperation(value = "通过短信重置密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "是否保存登录", required = true, paramType = "query")
+    @Operation(summary = "通过短信重置密码")
+    @Parameters({
+            @Parameter(name = "mobile", description = "手机号", required = true),
+            @Parameter(name = "password", description = "是否保存登录", required = true)
     })
     @PostMapping("/resetByMobile")
     public ResultMessage<Member> resetByMobile(@NotNull(message = "手机号为空") @RequestParam String mobile,
@@ -239,9 +240,9 @@ public class MemberBuyerController {
         }
     }
 
-    @ApiOperation(value = "修改密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "是否保存登录", required = true, paramType = "query")
+    @Operation(summary = "修改密码")
+    @Parameters({
+            @Parameter(name = "password", description = "是否保存登录", required = true)
     })
     @PostMapping("/resetPassword")
     public ResultMessage<Object> resetByMobile(@NotNull(message = "密码为空") @RequestParam String password, @RequestHeader String uuid) {
@@ -249,17 +250,17 @@ public class MemberBuyerController {
         return ResultUtil.data(memberService.resetByMobile(uuid, password));
     }
 
-    @ApiOperation(value = "修改用户自己资料")
+    @Operation(summary = "修改用户自己资料")
     @PutMapping("/editOwn")
     public ResultMessage<Member> editOwn(MemberEditDTO memberEditDTO) {
 
         return ResultUtil.data(memberService.editOwn(memberEditDTO));
     }
 
-    @ApiOperation(value = "修改密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "旧密码", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, paramType = "query")
+    @Operation(summary = "修改密码")
+    @Parameters({
+            @Parameter(name = "password", description = "旧密码", required = true),
+            @Parameter(name = "newPassword", description = "新密码", required = true)
     })
     @PutMapping("/modifyPass")
     public ResultMessage<Member> modifyPass(@NotNull(message = "旧密码不能为空") @RequestParam String password,
@@ -267,18 +268,18 @@ public class MemberBuyerController {
         return ResultUtil.data(memberService.modifyPass(password, newPassword));
     }
 
-    @ApiOperation(value = "初始设置密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, paramType = "query")
+    @Operation(summary = "初始设置密码")
+    @Parameters({
+            @Parameter(name = "newPassword", description = "新密码", required = true)
     })
     @PutMapping("/canInitPassword")
     public ResultMessage<Object> canInitPassword() {
         return ResultUtil.data(memberService.canInitPass());
     }
 
-    @ApiOperation(value = "初始设置密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, paramType = "query")
+    @Operation(summary = "初始设置密码")
+    @Parameters({
+            @Parameter(name = "newPassword", description = "新密码", required = true)
     })
     @PutMapping("/initPassword")
     public ResultMessage<Object> initPassword(@NotNull(message = "密码不能为空") @RequestParam String password) {
@@ -286,29 +287,29 @@ public class MemberBuyerController {
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "注销账号")
+    @Operation(summary = "注销账号")
     @PutMapping("/cancellation")
     public ResultMessage<Member> cancellation() {
         memberService.cancellation();
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "刷新token")
+    @Operation(summary = "刷新token")
     @GetMapping("/refresh/{refreshToken}")
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.memberService.refreshToken(refreshToken));
     }
 
     @GetMapping("/getImUser")
-    @ApiOperation(value = "获取用户信息")
+    @Operation(summary = "获取用户信息")
     public ResultMessage<Member> getImUser() {
         AuthUser authUser = UserContext.getCurrentUser();
         return ResultUtil.data(memberService.getById(authUser.getId()));
     }
 
     @GetMapping("/getImUserDetail/{memberId}")
-    @ApiImplicitParam(name = "memberId", value = "店铺Id", required = true, dataType = "String", paramType = "path")
-    @ApiOperation(value = "获取用户信息")
+    @Parameter(name = "memberId", description = "店铺Id", required = true)
+    @Operation(summary = "获取用户信息")
     public ResultMessage<Member> getImUserDetail(@PathVariable String memberId) {
         return ResultUtil.data(memberService.getById(memberId));
     }

@@ -7,10 +7,11 @@ import cn.lili.modules.member.entity.dos.MemberNoticeLog;
 import cn.lili.modules.member.service.MemberNoticeLogService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Parameter;
 
 import java.util.List;
 
@@ -21,43 +22,47 @@ import java.util.List;
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Api(tags = "管理端,会员消息接口")
+@Tag(name = "管理端,会员消息接口")
 @RequestMapping("/manager/message/memberNoticeLog")
 public class MemberNoticeLogManagerController {
     @Autowired
     private MemberNoticeLogService memberNoticeLogService;
 
-    @ApiOperation(value = "通过id获取")
-    @GetMapping(value = "/get/{id}")
+    @Operation(summary = "通过id获取")
+    @Parameter(name = "id", description = "会员消息日志ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<MemberNoticeLog> get(@PathVariable String id) {
         MemberNoticeLog memberNoticeLog = memberNoticeLogService.getById(id);
         return ResultUtil.data(memberNoticeLog);
     }
 
-    @ApiOperation(value = "获取全部数据")
-    @GetMapping(value = "/getAll")
+    @Operation(summary = "获取全部数据")
+    @GetMapping("/getAll")
     public ResultMessage<List<MemberNoticeLog>> getAll() {
         List<MemberNoticeLog> list = memberNoticeLogService.list();
         return ResultUtil.data(list);
     }
 
-    @ApiOperation(value = "分页获取")
-    @GetMapping(value = "/getByPage")
+    @Operation(summary = "分页获取")
+    @Parameter(name = "page", description = "分页参数")
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<MemberNoticeLog>> getByPage(PageVO page) {
         IPage<MemberNoticeLog> data = memberNoticeLogService.page(PageUtil.initPage(page));
         return ResultUtil.data(data);
     }
 
-    @ApiOperation(value = "编辑或更新数据")
-    @PostMapping(value = "/insertOrUpdate")
+    @Operation(summary = "编辑或更新数据")
+    @Parameter(name = "memberNoticeLog", description = "会员消息日志实体")
+    @PostMapping("/insertOrUpdate")
     public ResultMessage<MemberNoticeLog> saveOrUpdate(MemberNoticeLog memberNoticeLog) {
         memberNoticeLogService.saveOrUpdate(memberNoticeLog);
         return ResultUtil.data(memberNoticeLog);
     }
 
-    @ApiOperation(value = "批量删除")
-    @DeleteMapping(value = "/delByIds/{ids}")
-    public ResultMessage<Object> delAllByIds(@PathVariable List ids) {
+    @Operation(summary = "批量删除")
+    @Parameter(name = "ids", description = "会员消息日志ID列表", required = true)
+    @DeleteMapping("/delByIds/{ids}")
+    public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         memberNoticeLogService.removeByIds(ids);
         return ResultUtil.success();
     }

@@ -12,8 +12,9 @@ import cn.lili.modules.promotion.entity.vos.SeckillApplyVO;
 import cn.lili.modules.promotion.service.SeckillApplyService;
 import cn.lili.modules.promotion.service.SeckillService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ import java.util.Objects;
  * @since 2020/8/26
  **/
 @RestController
-@Api(tags = "店铺端,秒杀活动接口")
+@Tag(name = "店铺端,秒杀活动接口")
 @RequestMapping("/store/promotion/seckill")
 public class SeckillStoreController {
     @Autowired
@@ -36,14 +37,14 @@ public class SeckillStoreController {
     private SeckillApplyService seckillApplyService;
 
     @GetMapping
-    @ApiOperation(value = "获取秒杀活动列表")
+    @Operation(description = "获取秒杀活动列表")
     public ResultMessage<IPage<Seckill>> getSeckillPage(SeckillSearchParams queryParam, PageVO pageVo) {
         IPage<Seckill> seckillPage = seckillService.pageFindAll(queryParam, pageVo);
         return ResultUtil.data(seckillPage);
     }
 
     @GetMapping("/apply")
-    @ApiOperation(value = "获取秒杀活动申请列表")
+    @Operation(description = "获取秒杀活动申请列表")
     public ResultMessage<IPage<SeckillApply>> getSeckillApplyPage(SeckillSearchParams queryParam, PageVO pageVo) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         queryParam.setStoreId(storeId);
@@ -52,20 +53,20 @@ public class SeckillStoreController {
     }
 
     @GetMapping("/{seckillId}")
-    @ApiOperation(value = "获取秒杀活动信息")
+    @Operation(description = "获取秒杀活动信息")
     public ResultMessage<Seckill> getSeckill(@PathVariable String seckillId) {
         return ResultUtil.data(seckillService.getById(seckillId));
     }
 
     @GetMapping("/apply/{seckillApplyId}")
-    @ApiOperation(value = "获取秒杀活动申请")
+    @Operation(description = "获取秒杀活动申请")
     public ResultMessage<SeckillApply> getSeckillApply(@PathVariable String seckillApplyId) {
         SeckillApply seckillApply = OperationalJudgment.judgment(seckillApplyService.getById(seckillApplyId));
         return ResultUtil.data(seckillApply);
     }
 
     @PostMapping(path = "/apply/{seckillId}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "添加秒杀活动申请")
+    @Operation(description = "添加秒杀活动申请")
     public ResultMessage<String> addSeckillApply(@PathVariable String seckillId, @RequestBody List<SeckillApplyVO> applyVos) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         seckillApplyService.addSeckillApply(seckillId, storeId, applyVos);
@@ -73,7 +74,7 @@ public class SeckillStoreController {
     }
 
     @DeleteMapping("/apply/{seckillId}/{id}")
-    @ApiOperation(value = "删除秒杀活动商品")
+    @Operation(description = "删除秒杀活动商品")
     public ResultMessage<String> deleteSeckillApply(@PathVariable String seckillId, @PathVariable String id) {
         OperationalJudgment.judgment(seckillApplyService.getById(id));
         seckillApplyService.removeSeckillApply(seckillId, id);

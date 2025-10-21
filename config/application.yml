@@ -19,42 +19,29 @@ management:
     web:
       exposure:
         include: '*'
-spring:
-  mail:
-    host: smtp.qq.com
-    port: 465
-    username: lifenlong@foxmail.com
-    password: dirpxpqgfvysbefh
-    protocol: smtps
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
-  # 要在其中注册的Spring Boot Admin Server的URL。
-  boot:
-    admin:
-      client:
-        url: http://127.0.0.1:8000
   cache:
     type: redis
   # Redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: lilishop
-    lettuce:
-      pool:
-        # 连接池最大连接数（使用负值表示没有限制） 默认 8
-        max-active: 200
-        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
-        max-wait: 20
-        # 连接池中的最大空闲连接 默认 8
-        max-idle: 10
-        # 连接池中的最小空闲连接 默认 8
-        min-idle: 8
+  data:
+    redis:
+      host: 192.168.31.100
+      port: 6379
+      password: lilishop
+      # SpringBoot3兼容性：添加超时配置
+      timeout: 10s
+      # SpringBoot3兼容性：添加连接超时配置  
+      connect-timeout: 10s
+      lettuce:
+        pool:
+          # 连接池最大连接数（使用负值表示没有限制） 默认 8
+          max-active: 200
+          # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+          max-wait: 20s
+          # 连接池中的最大空闲连接 默认 8
+          max-idle: 10
+          # 连接池中的最小空闲连接 默认 8
+          min-idle: 8
   # 文件大小上传配置
   servlet:
     multipart:
@@ -73,11 +60,11 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.31.100:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
-        maxActive: 50
-        initialSize: 20
+        maxActive: 20
+        initialSize: 5
         maxWait: 60000
         minIdle: 5
         timeBetweenEvictionRunsMillis: 60000
@@ -98,32 +85,15 @@ spring:
         useGlobalDataSourceStat: true
         loginUsername: druid
         loginPassword: druid
-    #    sharding:
-    #      default-data-source-name: default-datasource
-    #      #需要拆分的表，可以设置多个  在 li_order 级别即可
-    #      tables:
-    #        #需要进行分表的逻辑表名
-    #        li_order:
-    #          #实际的表结点,下面代表的是li_order_为开头的所有表，如果能确定表的范围例如按月份分表，这里的写法是data2020.li_order_$->{2020..2021}_$->{01..12}  表示例如 li_order_2020_01 li_order_2020_03 li_order_2021_01
-    #          actual-data-nodes: data2020.li_order_$->{2019..2021}_$->{01..12}
-    #          table-strategy:
-    #            # 分表策略，根据创建日期
-    #            standard:
-    #              sharding-column: create_time
-    #              #分表策略
-    #              precise-algorithm-class-name: cn.lili.mybatis.sharding.CreateTimeShardingTableAlgorithm
-    #              #范围查询实现
-    #              range-algorithm-class-name: cn.lili.mybatis.sharding.CreateTimeShardingTableAlgorithm
     props:
       #是否打印逻辑SQL语句和实际SQL语句，建议调试时打印，在生产环境关闭
       sql:
-        show: true
+        show: false
 
 # 忽略鉴权url
 ignored:
   urls:
     - /editor-app/**
-    - /actuator**
     - /actuator/**
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
@@ -146,8 +116,8 @@ ignored:
     - /buyer/promotion/seckill/**
     - /buyer/promotion/pointsGoods/**
     - /buyer/promotion/coupon
-    - /buyer/member/evaluation/**/goodsEvaluation
-    - /buyer/member/evaluation/**/evaluationNumber
+    - /buyer/member/evaluation/*/goodsEvaluation
+    - /buyer/member/evaluation/*/evaluationNumber
     - /buyer/other/appVersion/**
     - /buyer/broadcast/studio/**
     - /manager/passport/user/login
@@ -160,14 +130,15 @@ ignored:
     - /swagger-resources/**
     - /swagger/**
     - /webjars/**
-    - /v2/api-docs**
+    - /v2/api-docs/**
     - /configuration/ui
     - /boot-admin
     - /manager/promotion/seckill/init
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
+    - /favicon.ico
+    - /static/**
+    - /public/**
+    - /resources/**
+    - /META-INF/resources/**
 
 # Swagger界面内容配置
 swagger:
@@ -269,7 +240,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 127.0.0.1:9200
+      cluster-nodes: 192.168.31.100:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -280,7 +251,7 @@ lili:
     #        password: LiLiShopES
 
     logstash:
-      server: 127.0.0.1:4560
+      server: 192.168.31.100:4560
     rocketmq:
       promotion-topic: shop_lili_promotion_topic
       promotion-group: shop_lili_promotion_group
@@ -301,7 +272,7 @@ lili:
       after-sale-topic: shop_lili_after_sale_topic
       after-sale-group: shop_lili_after_sale_group
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: 192.168.31.100:9876
   isVIPChannel: false
   producer:
     group: lili_group
@@ -310,7 +281,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://127.0.0.1:9001/xxl-job-admin
+      addresses: http://192.168.31.100:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

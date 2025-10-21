@@ -5,7 +5,7 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,54 +24,54 @@ public class AfterSaleSearchParams extends PageVO {
 
     private static final long serialVersionUID = 28604026820923515L;
 
-    @ApiModelProperty(value = "关键字")
+    @Schema(description = "关键字")
     private String keywords;
 
-    @ApiModelProperty(value = "售后服务单号")
+    @Schema(description = "售后服务单号")
     private String sn;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "商家名称")
+    @Schema(description = "商家名称")
     private String storeName;
 
-    @ApiModelProperty(value = "商家ID")
+    @Schema(description = "商家ID")
     private String storeId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "申请退款金额,可以为范围，如10_1000")
+    @Schema(description = "申请退款金额,可以为范围，如10_1000")
     private String applyRefundPrice;
 
-    @ApiModelProperty(value = "实际退款金额,可以为范围，如10_1000")
+    @Schema(description = "实际退款金额,可以为范围，如10_1000")
     private String actualRefundPrice;
 
-    @ApiModelProperty(value = "总价格,可以为范围，如10_1000")
+    @Schema(description = "总价格,可以为范围，如10_1000")
     private String flowPrice;
 
     /**
      * @see cn.lili.modules.order.trade.entity.enums.AfterSaleTypeEnum
      */
-    @ApiModelProperty(value = "售后类型", allowableValues = "CANCEL,RETURN_GOODS,EXCHANGE_GOODS,REISSUE_GOODS")
+    @Schema(description = "售后类型", allowableValues = "CANCEL,RETURN_GOODS,EXCHANGE_GOODS,REISSUE_GOODS")
     private String serviceType;
 
     /**
      * @see cn.lili.modules.order.trade.entity.enums.AfterSaleStatusEnum
      */
-    @ApiModelProperty(value = "售后单状态", allowableValues = "APPLY,PASS,REFUSE,BUYER_RETURN,SELLER_RE_DELIVERY,BUYER_CONFIRM,SELLER_CONFIRM,COMPLETE")
+    @Schema(description = "售后单状态", allowableValues = "APPLY,PASS,REFUSE,BUYER_RETURN,SELLER_RE_DELIVERY,BUYER_CONFIRM,SELLER_CONFIRM,COMPLETE")
     private String serviceStatus;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "开始时间")
+    @Schema(description = "开始时间")
     private Date startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "结束时间")
+    @Schema(description = "结束时间")
     private Date endDate;
 
     public <T> QueryWrapper<T> queryWrapper() {
@@ -86,7 +86,7 @@ public class AfterSaleSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(orderSn)) {
             queryWrapper.like("order_sn", orderSn);
         }
-        if(UserContext.getCurrentUser() != null){
+        if (UserContext.getCurrentUser() != null) {
             //按买家查询
             if (CharSequenceUtil.equals(UserContext.getCurrentUser().getRole().name(), UserEnums.MEMBER.name())) {
                 queryWrapper.eq("member_id", UserContext.getCurrentUser().getId());

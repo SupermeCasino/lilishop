@@ -10,12 +10,13 @@ import cn.lili.modules.wallet.service.WalletLogService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 买家端,预存款变动日志记录接口
@@ -24,14 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "买家端,预存款变动日志记录接口")
+@Tag(name = "买家端,预存款变动日志记录接口")
 @RequestMapping("/buyer/wallet/log")
 public class WalletLogBuyerController {
 
     @Autowired
     private WalletLogService walletLogService;
 
-    @ApiOperation(value = "分页获取预存款变动日志")
+    @Operation(description = "分页获取预存款变动日志")
+    @Parameter(name = "page", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<WalletLog>> getByPage(PageVO page) {
         //获取当前登录用户

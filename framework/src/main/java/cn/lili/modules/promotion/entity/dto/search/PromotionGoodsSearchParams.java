@@ -3,7 +3,7 @@ package cn.lili.modules.promotion.entity.dto.search;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.modules.promotion.entity.enums.PromotionsScopeTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.Arrays;
@@ -22,31 +22,31 @@ import java.util.List;
 @Builder
 public class PromotionGoodsSearchParams extends BasePromotionsSearchParams {
 
-    @ApiModelProperty(value = "促销活动id")
+    @Schema(description = "促销活动id")
     private String promotionId;
 
-    @ApiModelProperty(value = "促销类型")
+    @Schema(description = "促销类型")
     private String promotionType;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "商品分类路径")
+    @Schema(description = "商品分类路径")
     private String categoryPath;
 
-    @ApiModelProperty(value = "商品SkuId")
+    @Schema(description = "商品SkuId")
     private String skuId;
 
-    @ApiModelProperty(value = "商品SkuIds")
+    @Schema(description = "商品SkuIds")
     private List<String> skuIds;
 
-    @ApiModelProperty(value = "促销活动id")
+    @Schema(description = "促销活动id")
     private List<String> promotionIds;
 
 
     @Override
     public <T> QueryWrapper<T> queryWrapper() {
-        if (CharSequenceUtil.isEmpty(this.getScopeType())){
+        if (CharSequenceUtil.isEmpty(this.getScopeType())) {
             this.setScopeType(PromotionsScopeTypeEnum.PORTION_GOODS.name());
         }
         QueryWrapper<T> queryWrapper = super.queryWrapper();

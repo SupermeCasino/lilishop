@@ -7,10 +7,10 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.mybatis.BaseTenantEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,64 +21,65 @@ import java.util.Date;
  */
 @Data
 @TableName("li_im_talk")
-@ApiModel(value = "聊天")
+@Schema(description = "聊天")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class ImTalk extends BaseTenantEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("用户1 id")
+    @Schema(description = "用户1 id")
     private String userId1;
 
-    @ApiModelProperty("用户2 id")
+    @Schema(description = "用户2 id")
     private String userId2;
 
-    @ApiModelProperty("用户1置顶")
+    @Schema(description = "用户1置顶")
     private Boolean top1;
 
-    @ApiModelProperty("用户2置顶")
+    @Schema(description = "用户2置顶")
     private Boolean top2;
 
-    @ApiModelProperty("用户1 不可见")
+    @Schema(description = "用户1 不可见")
     private Boolean disable1;
 
-    @ApiModelProperty("用户2 不可见")
+    @Schema(description = "用户2 不可见")
     private Boolean disable2;
 
-    @ApiModelProperty("用户1名字")
+    @Schema(description = "用户1名字")
     private String name1;
 
-    @ApiModelProperty("用户2名字")
+    @Schema(description = "用户2名字")
     private String name2;
 
-    @ApiModelProperty("用户1头像")
+    @Schema(description = "用户1头像")
     private String face1;
 
-    @ApiModelProperty("用户2头像")
+    @Schema(description = "用户2头像")
     private String face2;
 
-    @ApiModelProperty("用户1的店铺标识")
+    @Schema(description = "用户1的店铺标识")
     private Boolean storeFlag1;
 
-    @ApiModelProperty("用户2的店铺标识")
+    @Schema(description = "用户2的店铺标识")
     private Boolean storeFlag2;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "最后聊天时间", hidden = true)
+    @Schema(description = "最后聊天时间", hidden = true)
     private Date lastTalkTime;
 
-    @ApiModelProperty(value = "最后聊天内容")
+    @Schema(description = "最后聊天内容")
     private String lastTalkMessage;
 
-    @ApiModelProperty(value = "最后发送消息类型")
+    @Schema(description = "最后发送消息类型")
     private String lastMessageType;
 
-    @ApiModelProperty(value = "坐席Id")
+    @Schema(description = "坐席Id")
     private String tenantId;
 
-    @ApiModelProperty(value = "坐席名称")
+    @Schema(description = "坐席名称")
     private String tenantName;
 
 
@@ -102,8 +103,8 @@ public class ImTalk extends BaseTenantEntity {
         this.name2 = name2;
     }
 
-    public ImTalk(Member member1,Member member2){
-        if(Long.parseLong(member1.getId()) > Long.parseLong(member2.getId())){
+    public ImTalk(Member member1, Member member2) {
+        if (Long.parseLong(member1.getId()) > Long.parseLong(member2.getId())) {
             this.userId1 = member2.getId();
             this.userId2 = member1.getId();
             this.top1 = false;
@@ -118,7 +119,7 @@ public class ImTalk extends BaseTenantEntity {
             this.face2 = member1.getFace();
             this.name1 = member2.getNickName();
             this.name2 = member1.getNickName();
-        }else{
+        } else {
             this.userId1 = member1.getId();
             this.userId2 = member2.getId();
             this.top1 = false;
@@ -135,8 +136,9 @@ public class ImTalk extends BaseTenantEntity {
             this.name2 = member2.getNickName();
         }
     }
-    public ImTalk(Member member, Store store){
-        if(Long.parseLong(member.getId()) > Long.parseLong(store.getId())){
+
+    public ImTalk(Member member, Store store) {
+        if (Long.parseLong(member.getId()) > Long.parseLong(store.getId())) {
             this.userId1 = store.getId();
             this.userId2 = member.getId();
             this.top1 = false;
@@ -151,7 +153,7 @@ public class ImTalk extends BaseTenantEntity {
             this.face2 = member.getFace();
             this.name1 = store.getStoreName();
             this.name2 = member.getNickName();
-        }else{
+        } else {
             this.userId1 = member.getId();
             this.userId2 = store.getId();
             this.top1 = false;

@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -41,6 +42,7 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
      * 会员预存款
      */
     @Autowired
+    @Lazy
     private MemberWalletService memberWalletService;
 
     @Override

@@ -1,10 +1,12 @@
 package cn.lili.modules.goods.util;
 
-import cn.hutool.json.JSONObject;
+
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.wechat.util.WechatAccessTokenUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -106,16 +108,17 @@ public class WechatMediaUtil {
             log.error("微信媒体上传失败", e);
         }
         assert resultStr != null;
-        JSONObject jsonObject = new JSONObject(resultStr.toString());
+        JSONObject jsonObject = JSON.parseObject(resultStr.toString());
         log.info("微信媒体上传:" + jsonObject);
         //判断是否传递成功，如果token过期则重新获取
-        if (jsonObject.get("errcode") != null && ("40001").equals(jsonObject.get("errcode"))) {
+        int errcode = jsonObject.getIntValue("errcode");
+        if (errcode == 40001) {
             wechatAccessTokenUtil.removeAccessToken(ClientTypeEnum.WECHAT_MP);
             return this.uploadMedia(type, mediaFileUrl);
-        } else if (jsonObject.get("errcode") != null) {
-            throw new ServiceException(jsonObject.get("errmsg").toString());
+        } else if (errcode != 0) {
+            throw new ServiceException(jsonObject.getString("errmsg"));
         } else {
-            return jsonObject.get("media_id").toString();
+            return jsonObject.getString("media_id");
         }
 
     }

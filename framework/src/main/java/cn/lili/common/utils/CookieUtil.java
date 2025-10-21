@@ -1,10 +1,11 @@
 package cn.lili.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * CookieUtil
@@ -13,9 +14,10 @@ import javax.servlet.http.HttpServletResponse;
  * @version v1.0
  * 2020-12-14 09:32
  */
-@Slf4j
 public class CookieUtil {
 
+    // 显式声明日志器，替代 @Slf4j
+    private static final Logger log = LoggerFactory.getLogger(CookieUtil.class);
 
     /**
      * 新增cookie

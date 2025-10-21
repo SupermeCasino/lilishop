@@ -65,10 +65,11 @@ public class TokenUtil {
 
         Claims claims;
         try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(SecretKeyUtil.generalKeyByDecoders())
+            claims = Jwts.parser()
+                    .verifyWith(SecretKeyUtil.generalKeyByDecoders())
                     .build()
-                    .parseClaimsJws(oldRefreshToken).getBody();
+                    .parseSignedClaims(oldRefreshToken)
+                    .getPayload();
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
                  IllegalArgumentException e) {
             //token 过期 认证失败等

@@ -3,9 +3,10 @@ package cn.lili.modules.order.order.entity.vo;
 import cn.hutool.core.bean.BeanUtil;
 import cn.lili.modules.order.order.entity.dos.OrderComplaint;
 import cn.lili.modules.order.order.entity.dos.OrderComplaintCommunication;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -19,18 +20,19 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderComplaintVO extends OrderComplaint {
 
 
     private static final long serialVersionUID = -7013465343480854816L;
 
-    @ApiModelProperty(value = "投诉对话")
+    @Schema(description = "投诉对话")
     private List<OrderComplaintCommunication> orderComplaintCommunications;
 
-    @ApiModelProperty(value = "投诉图片")
+    @Schema(description = "投诉图片")
     private String[] orderComplaintImages;
 
-    @ApiModelProperty(value = "申诉商家上传的图片")
+    @Schema(description = "申诉商家上传的图片")
     private String[] appealImagesList;
 
     public OrderComplaintVO(OrderComplaint orderComplaint) {

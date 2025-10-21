@@ -4,7 +4,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,13 +20,13 @@ import java.util.Objects;
 @Data
 public class DistributionGoodsSearchParams extends PageVO {
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "是否已选择")
+    @Schema(description = "是否已选择")
     private boolean isChecked;
 
     public <T> QueryWrapper<T> queryWrapper() {

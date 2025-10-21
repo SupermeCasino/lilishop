@@ -1,7 +1,7 @@
 package cn.lili.modules.promotion.entity.dto;
 
 import cn.lili.modules.promotion.entity.enums.CouponActivityTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +21,12 @@ import lombok.NoArgsConstructor;
 public class CouponActivityTrigger {
 
 
-    @ApiModelProperty(value = "用户ID")
+    @Schema(description = "用户ID")
     private String userId;
 
-    @ApiModelProperty(value = "用户昵称")
+    @Schema(description = "用户昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "优惠券活动类型")
+    @Schema(description = "优惠券活动类型")
     private CouponActivityTypeEnum couponActivityTypeEnum;
 }

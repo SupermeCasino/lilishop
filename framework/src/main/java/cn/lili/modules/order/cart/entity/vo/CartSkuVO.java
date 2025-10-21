@@ -6,7 +6,7 @@ import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.order.cart.entity.enums.CartTypeEnum;
 import cn.lili.modules.order.cart.entity.enums.DeliveryMethodEnum;
 import cn.lili.modules.promotion.tools.PromotionTools;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Schema(description = "购物车sku信息")
 public class CartSkuVO extends CartBase implements Serializable {
 
 
@@ -40,61 +41,61 @@ public class CartSkuVO extends CartBase implements Serializable {
      */
     private DistributionGoods distributionGoods;
 
-    @ApiModelProperty(value = "购买数量")
+    @Schema(description = "购买数量")
     private Integer num;
 
-    @ApiModelProperty(value = "购买时的成交价")
+    @Schema(description = "购买时的成交价")
     private Double purchasePrice;
 
-    @ApiModelProperty(value = "小记")
+    @Schema(description = "小记")
     private Double subTotal;
 
-    @ApiModelProperty(value = "小记")
+    @Schema(description = "小记")
     private Double utilPrice;
     /**
      * 是否选中，要去结算 0:未选中 1:已选中，默认
      */
-    @ApiModelProperty(value = "是否选中，要去结算")
+    @Schema(description = "是否选中，要去结算")
     private Boolean checked;
 
-    @ApiModelProperty(value = "是否免运费")
+    @Schema(description = "是否免运费")
     private Boolean isFreeFreight;
 
-    @ApiModelProperty(value = "是否失效 ")
+    @Schema(description = "是否失效 ")
     private Boolean invalid;
 
-    @ApiModelProperty(value = "购物车商品错误消息")
+    @Schema(description = "购物车商品错误消息")
     private String errorMessage;
 
-    @ApiModelProperty(value = "是否可配送")
+    @Schema(description = "是否可配送")
     private Boolean isShip;
 
-    @ApiModelProperty(value = "拼团id 如果是拼团购买 此值为拼团活动id，" +
+    @Schema(description = "拼团id 如果是拼团购买 此值为拼团活动id，" +
             "当pintuanId为空，则表示普通购买（或者拼团商品，单独购买）")
     private String pintuanId;
 
-    @ApiModelProperty(value = "砍价ID")
+    @Schema(description = "砍价ID")
     private String kanjiaId;
 
-    @ApiModelProperty(value = "积分兑换ID")
+    @Schema(description = "积分兑换ID")
     private String pointsId;
 
-    @ApiModelProperty(value = "积分购买 积分数量")
+    @Schema(description = "积分购买 积分数量")
     private Long point;
 
-    @ApiModelProperty("商品促销活动集合，key 为 促销活动类型，value 为 促销活动实体信息 ")
+    @Schema(description = "商品促销活动集合，key 为 促销活动类型，value 为 促销活动实体信息 ")
     private Map<String, Object> promotionMap;
 
     /**
-     * @see CartTypeEnum
+     * 购物车类型
      */
-    @ApiModelProperty(value = "购物车类型")
+    @Schema(description = "购物车类型")
     private CartTypeEnum cartType;
 
     /**
-     * @see DeliveryMethodEnum
+     * 配送方式
      */
-    @ApiModelProperty(value = "配送方式")
+    @Schema(description = "配送方式")
     private String deliveryMethod;
 
     /**

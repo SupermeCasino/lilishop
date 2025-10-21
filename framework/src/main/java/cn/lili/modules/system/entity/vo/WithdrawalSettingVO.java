@@ -1,6 +1,6 @@
 package cn.lili.modules.system.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -15,17 +15,17 @@ public class WithdrawalSettingVO {
     /**
      * 提现最低金额
      */
-    @ApiModelProperty(value = "minPrice")
+    @Schema(description = "minPrice")
     private Double minPrice;
     /**
      * 提现手续费
      */
-    @ApiModelProperty(value = "提现手续费")
+    @Schema(description = "提现手续费")
     private Double fee;
     /**
      * 提现类型 WECHAT\ALI
      */
-    @ApiModelProperty(value = "提现类型 WECHAT、ALI")
+    @Schema(description = "提现类型 WECHAT、ALI")
     private String type;
 
 }

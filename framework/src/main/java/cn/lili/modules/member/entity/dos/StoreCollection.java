@@ -2,10 +2,10 @@ package cn.lili.modules.member.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -17,17 +17,18 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @TableName("li_store_collection")
-@ApiModel(value = "会员收藏")
+@Schema(description = "会员收藏")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class StoreCollection extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String storeId;
 
 

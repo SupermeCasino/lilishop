@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,8 +25,9 @@ import java.util.Date;
  */
 @Data
 @TableName("li_order_log")
-@ApiModel(value = "订单日志")
+@Schema(description = "订单日志")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderLog extends BaseIdEntity {
 
     private static final long serialVersionUID = -1599270944927160096L;
@@ -34,32 +35,32 @@ public class OrderLog extends BaseIdEntity {
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "操作者id(可以是卖家)")
+    @Schema(description = "操作者id(可以是卖家)")
     private String operatorId;
     /**
      * @see UserEnums
      */
-    @ApiModelProperty(value = "操作者类型")
+    @Schema(description = "操作者类型")
     private String operatorType;
 
 
-    @ApiModelProperty(value = "操作者名称")
+    @Schema(description = "操作者名称")
     private String operatorName;
 
-    @ApiModelProperty(value = "日志信息")
+    @Schema(description = "日志信息")
     private String message;
 
     public OrderLog(String orderSn, String operatorId, String operatorType, String operatorName, String message) {

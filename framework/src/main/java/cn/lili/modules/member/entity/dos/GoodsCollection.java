@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,8 +21,9 @@ import java.util.Date;
  * @since 2020/11/18 3:31 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@ApiModel(value = "会员商品收藏")
+@Schema(description = "会员商品收藏")
 @TableName("li_goods_collection")
 public class GoodsCollection extends BaseIdEntity {
 
@@ -30,13 +31,13 @@ public class GoodsCollection extends BaseIdEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String skuId;
 
     public GoodsCollection(String memberId, String goodsId) {

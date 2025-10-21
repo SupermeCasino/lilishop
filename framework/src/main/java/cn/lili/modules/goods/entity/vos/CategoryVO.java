@@ -3,9 +3,10 @@ package cn.lili.modules.goods.entity.vos;
 import cn.hutool.core.bean.BeanUtil;
 import cn.lili.modules.goods.entity.dos.Brand;
 import cn.lili.modules.goods.entity.dos.Category;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -22,17 +23,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class CategoryVO extends Category {
 
     private static final long serialVersionUID = 3775766246075838410L;
 
-    @ApiModelProperty(value = "父节点名称")
+    @Schema(description = "父节点名称")
     private String parentTitle;
 
-    @ApiModelProperty("子分类列表")
+    @Schema(description = "子分类列表")
     private List<CategoryVO> children;
 
-    @ApiModelProperty("分类关联的品牌列表")
+    @Schema(description = "分类关联的品牌列表")
     private List<Brand> brandList;
 
     public CategoryVO(Category category) {

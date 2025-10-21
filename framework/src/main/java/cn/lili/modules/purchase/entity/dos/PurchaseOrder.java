@@ -3,9 +3,9 @@ package cn.lili.modules.purchase.entity.dos;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -16,55 +16,56 @@ import java.util.Date;
  * @since 2020-03-14 23:04:56
  */
 @Data
-@ApiModel(value = "供求单")
+@Schema(description = "供求单")
 @TableName("li_purchase_order")
+@EqualsAndHashCode(callSuper = false)
 public class PurchaseOrder extends BaseEntity {
 
-    @ApiModelProperty(value = "标题")
+    @Schema(description = "标题")
     private String title;
 
-    @ApiModelProperty(value = "截止时间")
+    @Schema(description = "截止时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deadline;
 
-    @ApiModelProperty(value = "收货时间")
+    @Schema(description = "收货时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receiptTime;
 
-    @ApiModelProperty(value = "价格类型", notes = "可议价、不可议价、面议")
+    @Schema(description = "价格类型")
     private String priceMethod;
 
-    @ApiModelProperty(value = "地址名称， '，'分割")
+    @Schema(description = "地址名称， '，'分割")
     private String consigneeAddressPath;
 
-    @ApiModelProperty(value = "地址id，'，'分割 ")
+    @Schema(description = "地址id，'，'分割 ")
     private String consigneeAddressIdPath;
 
-    @ApiModelProperty(value = "是否需要发票")
+    @Schema(description = "是否需要发票")
     private Boolean needReceipt;
 
-    @ApiModelProperty(value = "补充说明")
+    @Schema(description = "补充说明")
     private String supplement;
 
-    @ApiModelProperty(value = "联系类型", notes = "联系方式什么时候可见 公开后、公开")
+    @Schema(description = "联系类型")
     private String contactType;
 
-    @ApiModelProperty(value = "联系人")
+    @Schema(description = "联系人")
     private String contacts;
 
-    @ApiModelProperty(value = "联系电话")
+    @Schema(description = "联系电话")
     private String contactNumber;
 
-    @ApiModelProperty(value = "供求人")
+    @Schema(description = "供求人")
     private String memberId;
 
-    @ApiModelProperty(value = "状态，开启：OPEN，关闭：CLOSE")
+    @Schema(description = "状态，开启：OPEN，关闭：CLOSE")
     private String status;
 
-    @ApiModelProperty(value = "分类ID")
+    @Schema(description = "分类ID")
     private String categoryId;
 
-    @ApiModelProperty(value = "分类名称")
+    @Schema(description = "分类名称")
     private String categoryName;
 
 }

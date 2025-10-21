@@ -5,8 +5,8 @@ import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/common/common/slider")
-@Api(tags = "滑块验证码接口")
+@Tag(name = "滑块验证码接口")
 public class SliderImageController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class SliderImageController {
 
     @LimitPoint(name = "slider_image", key = "verification")
     @GetMapping("/{verificationEnums}")
-    @ApiOperation(value = "获取校验接口,一分钟同一个ip请求10次")
+    @Operation(summary = "获取校验接口,一分钟同一个ip请求10次")
     public ResultMessage getSliderImage(@RequestHeader String uuid, @PathVariable VerificationEnums verificationEnums) {
         return ResultUtil.data(verificationService.createVerification(verificationEnums, uuid));
 
@@ -36,7 +36,7 @@ public class SliderImageController {
 
     @LimitPoint(name = "slider_image", key = "verification_pre_check", limit = 600)
     @PostMapping("/{verificationEnums}")
-    @ApiOperation(value = "验证码预校验")
+    @Operation(summary = "验证码预校验")
     public ResultMessage verificationImage(Integer xPos, @RequestHeader String uuid, @PathVariable VerificationEnums verificationEnums) {
         return ResultUtil.data(verificationService.preCheck(xPos, uuid, verificationEnums));
     }

@@ -33,9 +33,9 @@ public class BaseModel {
         String[] fieldNames = getFiledNames(this);
         HashMap<String, String> map = new HashMap<String, String>(fieldNames.length);
         for (String name : fieldNames) {
-            String value = (String) getFieldValueByName(name, this);
-            if (StrUtil.isNotEmpty(value)) {
-                map.put(name, value);
+            String description = (String) getFieldValueByName(name, this);
+            if (StrUtil.isNotEmpty(description)) {
+                map.put(name, description);
             }
         }
         return map;

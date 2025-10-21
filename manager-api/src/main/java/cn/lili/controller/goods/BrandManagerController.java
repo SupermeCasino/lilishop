@@ -11,15 +11,14 @@ import cn.lili.modules.goods.entity.vos.BrandVO;
 import cn.lili.modules.goods.service.BrandService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -30,7 +29,7 @@ import java.util.List;
  * @since 2020-02-18 15:18:56
  */
 @RestController
-@Api(tags = "管理端,品牌接口")
+@Tag(name = "管理端,品牌接口")
 @RequestMapping("/manager/goods/brand")
 public class BrandManagerController {
 
@@ -40,27 +39,27 @@ public class BrandManagerController {
     @Autowired
     private BrandService brandService;
 
-    @ApiOperation(value = "通过id获取")
-    @ApiImplicitParam(name = "id", value = "品牌ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/get/{id}")
+    @Operation(summary = "通过id获取")
+    @Parameter(name = "id", description = "品牌ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<Brand> get(@NotNull @PathVariable String id) {
         return ResultUtil.data(brandService.getById(id));
     }
 
-    @GetMapping(value = "/all")
-    @ApiOperation(value = "获取所有可用品牌")
+    @GetMapping("/all")
+    @Operation(summary = "获取所有可用品牌")
     public List<Brand> getAll() {
         List<Brand> list = brandService.list(new QueryWrapper<Brand>().eq("delete_flag", 0));
         return list;
     }
 
-    @ApiOperation(value = "分页获取")
-    @GetMapping(value = "/getByPage")
+    @Operation(summary = "分页获取")
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<Brand>> getByPage(BrandPageDTO page) {
         return ResultUtil.data(brandService.getBrandsByPage(page));
     }
 
-    @ApiOperation(value = "新增品牌")
+    @Operation(summary = "新增品牌")
     @PostMapping
     public ResultMessage<BrandVO> save(@Valid BrandVO brand) {
         if (brandService.addBrand(brand)) {
@@ -69,8 +68,8 @@ public class BrandManagerController {
         throw new ServiceException(ResultCode.BRAND_SAVE_ERROR);
     }
 
-    @ApiOperation(value = "更新数据")
-    @ApiImplicitParam(name = "id", value = "品牌ID", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "更新数据")
+    @Parameter(name = "id", description = "品牌ID", required = true)
     @PutMapping("/{id}")
     public ResultMessage<BrandVO> update(@PathVariable String id, @Valid BrandVO brand) {
         brand.setId(id);
@@ -80,12 +79,10 @@ public class BrandManagerController {
         throw new ServiceException(ResultCode.BRAND_UPDATE_ERROR);
     }
 
-    @ApiOperation(value = "后台禁用品牌")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "brandId", value = "品牌ID", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "disable", value = "是否可用", required = true, dataType = "boolean", paramType = "query")
-    })
-    @PutMapping(value = "/disable/{brandId}")
+    @Operation(summary = "后台禁用品牌")
+    @Parameter(name = "brandId", description = "品牌ID", required = true)
+    @Parameter(name = "disable", description = "是否可用", required = true)
+    @PutMapping("/disable/{brandId}")
     public ResultMessage<Object> disable(@PathVariable String brandId, @RequestParam Boolean disable) {
         if (brandService.brandDisable(brandId, disable)) {
             return ResultUtil.success();
@@ -93,9 +90,9 @@ public class BrandManagerController {
         throw new ServiceException(ResultCode.BRAND_DISABLE_ERROR);
     }
 
-    @ApiOperation(value = "批量删除")
-    @ApiImplicitParam(name = "ids", value = "品牌ID", required = true, dataType = "String", allowMultiple = true, paramType = "path")
-    @DeleteMapping(value = "/delByIds/{ids}")
+    @Operation(summary = "批量删除")
+    @Parameter(name = "ids", description = "品牌ID", required = true)
+    @DeleteMapping("/delByIds/{ids}")
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         brandService.deleteBrands(ids);
         return ResultUtil.success(ResultCode.SUCCESS);

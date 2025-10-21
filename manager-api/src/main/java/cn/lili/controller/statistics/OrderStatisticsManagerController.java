@@ -11,8 +11,9 @@ import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
 import cn.lili.modules.statistics.service.OrderStatisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ import java.util.List;
  * @since 2020/12/9 19:04
  */
 @Slf4j
-@Api(tags = "管理端,订单统计接口")
+@Tag(name = "管理端,订单统计接口")
 @RestController
 @RequestMapping("/manager/statistics/order")
 public class OrderStatisticsManagerController {
@@ -37,7 +38,8 @@ public class OrderStatisticsManagerController {
     @Autowired
     private AfterSaleStatisticsService afterSaleStatisticsService;
 
-    @ApiOperation(value = "订单概览统计")
+    @Operation(summary = "订单概览统计")
+    @Parameter(name = "statisticsQueryParam", description = "统计查询参数", required = true)
     @GetMapping("/overview")
     public ResultMessage<OrderOverviewVO> overview(StatisticsQueryParam statisticsQueryParam) {
         try {
@@ -48,7 +50,8 @@ public class OrderStatisticsManagerController {
         return null;
     }
 
-    @ApiOperation(value = "订单图表统计")
+    @Operation(summary = "订单图表统计")
+    @Parameter(name = "statisticsQueryParam", description = "统计查询参数", required = true)
     @GetMapping
     public ResultMessage<List<OrderStatisticsDataVO>> statisticsChart(StatisticsQueryParam statisticsQueryParam) {
         try {
@@ -60,7 +63,9 @@ public class OrderStatisticsManagerController {
     }
 
 
-    @ApiOperation(value = "订单统计")
+    @Operation(summary = "订单统计")
+    @Parameter(name = "statisticsQueryParam", description = "统计查询参数", required = true)
+    @Parameter(name = "pageVO", description = "分页参数", required = true)
     @GetMapping("/order")
     public ResultMessage<IPage<OrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         try {
@@ -72,7 +77,9 @@ public class OrderStatisticsManagerController {
     }
 
 
-    @ApiOperation(value = "退单统计")
+    @Operation(summary = "退单统计")
+    @Parameter(name = "statisticsQueryParam", description = "统计查询参数", required = true)
+    @Parameter(name = "pageVO", description = "分页参数", required = true)
     @GetMapping("/refund")
     public ResultMessage<IPage<AfterSale>> refund(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         return ResultUtil.data(afterSaleStatisticsService.getStatistics(statisticsQueryParam, pageVO));

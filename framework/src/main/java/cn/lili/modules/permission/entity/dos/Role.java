@@ -2,8 +2,7 @@ package cn.lili.modules.permission.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,18 +16,18 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_role")
-@ApiModel(value = "角色")
+@Schema(description = "角色")
 public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色名")
+    @Schema(description = "角色名")
     private String name;
 
-    @ApiModelProperty(value = "是否为注册默认角色")
+    @Schema(description = "是否为注册默认角色")
     private Boolean defaultRole;
 
-    @ApiModelProperty(value = "备注")
+    @Schema(description = "备注")
     private String description;
 
 }

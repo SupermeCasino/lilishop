@@ -8,12 +8,13 @@ import cn.lili.modules.order.trade.entity.vo.RechargeQueryVO;
 import cn.lili.modules.wallet.entity.dos.Recharge;
 import cn.lili.modules.wallet.service.RechargeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 买家端,预存款充值记录接口
@@ -22,14 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "买家端,预存款充值记录接口")
+@Tag(name = "买家端,预存款充值记录接口")
 @RequestMapping("/buyer/wallet/recharge")
 public class RechargeBuyerController {
 
     @Autowired
     private RechargeService rechargeService;
 
-    @ApiOperation(value = "分页获取预存款充值记录")
+    @Operation(description = "分页获取预存款充值记录")
+    @Parameter(name = "page", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<Recharge>> getByPage(PageVO page) {
         //构建查询参数

@@ -3,13 +3,12 @@ package cn.lili.modules.store.entity.dos;
 import cn.lili.modules.store.entity.dto.StoreLogisticsCustomerDTO;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 店铺-物流公司设置
@@ -19,61 +18,60 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @TableName("li_store_logistics")
-@ApiModel(value = "店铺-物流公司")
+@Schema(description = "店铺-物流公司")
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class StoreLogistics extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
-    @ApiModelProperty(value = "物流公司ID")
+    @Schema(description = "物流公司ID")
     @NotNull
     private String logisticsId;
 
-    @ApiModelProperty(value = "电子面单客户账户、月结账号、客户代码")
+    @Schema(description = "电子面单客户账户、月结账号、客户代码")
     private String customerName;
 
-    @ApiModelProperty(value = "客户密码、电子面单密码")
+    @Schema(description = "客户密码、电子面单密码")
     private String customerPwd;
 
-    @ApiModelProperty(value = "电子面单密钥")
+    @Schema(description = "电子面单密钥")
     private String monthCode;
 
-    @ApiModelProperty(value = "归属网点/网点编码,电子面单承载编号")
+    @Schema(description = "归属网点/网点编码,电子面单承载编号")
     private String sendSite;
 
-    @ApiModelProperty(value = "收件快递员")
+    @Schema(description = "收件快递员")
     private String sendStaff;
 
-    @ApiModelProperty(value = "是否使用电子面单")
+    @Schema(description = "是否使用电子面单")
     private boolean faceSheetFlag;
 
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String payType;
 
-    @ApiModelProperty(value = "快递类型")
+    @Schema(description = "快递类型")
     private String expType;
 
-    @ApiModelProperty(value = "电子面单客户账户名称")
+    @Schema(description = "电子面单客户账户名称")
     private String partnerName;
 
 
-
-    public StoreLogistics(StoreLogisticsCustomerDTO storeLogisticsCustomerDTO){
-        this.customerName=storeLogisticsCustomerDTO.getCustomerName();
-        this.customerPwd=storeLogisticsCustomerDTO.getCustomerPwd();
-        this.sendSite=storeLogisticsCustomerDTO.getSendSite();
-        this.sendStaff=storeLogisticsCustomerDTO.getSendStaff();
-        this.monthCode=storeLogisticsCustomerDTO.getMonthCode();
-        this.faceSheetFlag=storeLogisticsCustomerDTO.isFaceSheetFlag();
+    public StoreLogistics(StoreLogisticsCustomerDTO storeLogisticsCustomerDTO) {
+        this.customerName = storeLogisticsCustomerDTO.getCustomerName();
+        this.customerPwd = storeLogisticsCustomerDTO.getCustomerPwd();
+        this.sendSite = storeLogisticsCustomerDTO.getSendSite();
+        this.sendStaff = storeLogisticsCustomerDTO.getSendStaff();
+        this.monthCode = storeLogisticsCustomerDTO.getMonthCode();
+        this.faceSheetFlag = storeLogisticsCustomerDTO.isFaceSheetFlag();
         this.payType = storeLogisticsCustomerDTO.getPayType();
         this.expType = storeLogisticsCustomerDTO.getExpType();
         this.partnerName = storeLogisticsCustomerDTO.getPartnerName();
     }
-
 
 
 }

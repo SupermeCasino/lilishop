@@ -12,13 +12,11 @@ import cn.lili.modules.message.entity.dto.NoticeMessageDetailDTO;
 import cn.lili.modules.message.entity.enums.NoticeMessageParameterEnum;
 import cn.lili.modules.message.service.NoticeMessageService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;  
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
-import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,25 +32,22 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "管理端,会员站内信管理接口")
+@Tag(name = "管理端,会员站内信管理接口")
 @RequestMapping("/manager/setting/noticeMessage")
 public class NoticeMessageManagerController {
     @Autowired
     private NoticeMessageService noticeMessageService;
 
-    @ApiOperation(value = "消息模板分页")
+    @Operation(summary = "消息模板分页")
+    @Parameter(name = "type", description = "消息类型", required = false)
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "消息类型", dataType = "String", paramType = "query",
-                    allowableValues = "MEMBER,OTHER,STORE,WECHAT", allowMultiple = true)
-    })
     public ResultMessage<IPage<NoticeMessage>> getPage(PageVO pageVO, String type) {
         return ResultUtil.data(noticeMessageService.getMessageTemplate(pageVO, type));
     }
 
 
-    @ApiOperation(value = "根据id获取通知详情")
-    @ApiImplicitParam(name = "id", value = "模板id", dataType = "String", paramType = "path")
+    @Operation(summary = "根据id获取通知详情")
+    @Parameter(name = "id", description = "模板id", required = true)
     @GetMapping("/{id}")
     public ResultMessage<NoticeMessageDetailDTO> get(@PathVariable String id) {
         //根据id获取当前消息模板
@@ -76,16 +71,14 @@ public class NoticeMessageManagerController {
 
             return ResultUtil.data(noticeMessageDetailDTO);
         }
-        throw new ResourceNotFoundException(ResultCode.NOTICE_NOT_EXIST.message());
+        throw new ServiceException(ResultCode.NOTICE_NOT_EXIST.message());
     }
 
 
-    @ApiOperation(value = "修改站内信模板")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "noticeContent", value = "站内信内容", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "noticeTitle", value = "站内信模板标题", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "id", value = "模板id", dataType = "String", paramType = "path")
-    })
+    @Operation(summary = "修改站内信模板")
+    @Parameter(name = "noticeContent", description = "站内信内容", required = true)
+    @Parameter(name = "noticeTitle", description = "站内信模板标题", required = true)
+    @Parameter(name = "id", description = "模板id", required = true)
     @PutMapping("/{id}")
     public ResultMessage<NoticeMessage> updateNoticeTemplate(@RequestParam String noticeContent,
                                                              @RequestParam String noticeTitle,
@@ -98,15 +91,12 @@ public class NoticeMessageManagerController {
             noticeMessageService.updateById(noticeMessage);
             return ResultUtil.data(noticeMessage);
         }
-        throw new ResourceNotFoundException(ResultCode.NOTICE_NOT_EXIST.message());
+        throw new ServiceException(ResultCode.NOTICE_NOT_EXIST.message());
     }
 
-    @ApiOperation(value = "修改站内信状态")
-
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "站内信状态", dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "status", value = "站内信状态", dataType = "String", paramType = "path")
-    })
+    @Operation(summary = "修改站内信状态")
+    @Parameter(name = "id", description = "站内信状态", required = true)
+    @Parameter(name = "status", description = "站内信状态", required = true)
     @PutMapping("/{id}/{status}")
     public ResultMessage<NoticeMessage> status(@PathVariable String id, @PathVariable String status) {
         //根据id获取当前消息模板
@@ -122,7 +112,7 @@ public class NoticeMessageManagerController {
             }
             throw new ServiceException(ResultCode.NOTICE_ERROR);
         }
-        throw new ResourceNotFoundException(ResultCode.NOTICE_NOT_EXIST.message());
+        throw new ServiceException(ResultCode.NOTICE_NOT_EXIST.message());
     }
 
 }

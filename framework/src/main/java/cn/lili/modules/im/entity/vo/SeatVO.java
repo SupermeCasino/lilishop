@@ -2,6 +2,7 @@ package cn.lili.modules.im.entity.vo;
 
 import cn.lili.modules.im.entity.dos.Seat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 客服VO
@@ -11,6 +12,7 @@ import lombok.Data;
  * 2022-02-10 15:02
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SeatVO extends Seat {
 
     /**

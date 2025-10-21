@@ -1,7 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.properties.RocketmqCustomProperties;
@@ -16,8 +15,10 @@ import cn.lili.rocketmq.RocketmqSendCallbackBuilder;
 import cn.lili.rocketmq.tags.GoodsTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.alibaba.fastjson2.JSON;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class ParametersServiceImpl extends ServiceImpl<ParametersMapper, Paramet
 
 
     @Autowired
+    @Lazy
     private GoodsService goodsService;
 
     @Autowired
@@ -68,16 +70,16 @@ public class ParametersServiceImpl extends ServiceImpl<ParametersMapper, Paramet
         if (!goodsList.isEmpty()) {
             for (Map<String, Object> goods : goodsList) {
                 String params = (String) goods.get("params");
-                List<GoodsParamsDTO> goodsParamsDTOS = JSONUtil.toList(params, GoodsParamsDTO.class);
+                List<GoodsParamsDTO> goodsParamsDTOS = JSON.parseArray(params, GoodsParamsDTO.class);
                 List<GoodsParamsDTO> goodsParamsDTOList = goodsParamsDTOS.stream().filter(i -> i.getGroupId() != null && i.getGroupId().equals(parameters.getGroupId())).collect(Collectors.toList());
                 this.setGoodsItemDTOList(goodsParamsDTOList, parameters);
-                this.goodsService.updateGoodsParams(goods.get("id").toString(), JSONUtil.toJsonStr(goodsParamsDTOS));
+                this.goodsService.updateGoodsParams(goods.get("id").toString(), JSON.toJSONString(goodsParamsDTOS));
                 goodsIds.add(goods.get("id").toString());
             }
 
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.UPDATE_GOODS_INDEX.name();
             //发送mq消息
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(goodsIds), RocketmqSendCallbackBuilder.commonCallback());
+            rocketMQTemplate.asyncSend(destination, JSON.toJSONString(goodsIds), RocketmqSendCallbackBuilder.commonCallback());
         }
         return this.updateById(parameters);
     }

@@ -6,25 +6,24 @@ import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.permission.entity.vo.SystemLogVO;
 import cn.lili.modules.permission.repository.SystemLogRepository;
 import cn.lili.modules.permission.service.SystemLogService;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
+import co.elastic.clients.json.JsonData;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 系统日志
@@ -65,56 +64,49 @@ public class SystemLogServiceImpl implements SystemLogService {
     public IPage<SystemLogVO> queryLog(String storeId, String operatorName, String key, SearchVO searchVo, PageVO pageVO) {
         pageVO.setNotConvert(true);
         IPage<SystemLogVO> iPage = new Page<>();
-        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
-        if (pageVO.getPageNumber() != null && pageVO.getPageSize() != null) {
-            int pageNumber = pageVO.getPageNumber() - 1;
-            if (pageNumber < 0) {
-                pageNumber = 0;
-            }
-            Pageable pageable = PageRequest.of(pageNumber, pageVO.getPageSize());
-            //分页
-            nativeSearchQueryBuilder.withPageable(pageable);
-            iPage.setCurrent(pageVO.getPageNumber());
-            iPage.setSize(pageVO.getPageSize());
+        NativeQueryBuilder filterBuilder = createFilterBuilder(storeId, operatorName, key, searchVo);
+
+        filterBuilder.withPageable(PageRequest.of(pageVO.getPageNumber() - 1, pageVO.getPageSize()));
+
+        if (CharSequenceUtil.isNotEmpty(pageVO.getOrder()) && CharSequenceUtil.isNotEmpty(pageVO.getSort())) {
+            filterBuilder.withSort(Sort.by(Sort.Direction.valueOf(pageVO.getOrder().toUpperCase()), pageVO.getSort()));
+        } else {
+            filterBuilder.withSort(Sort.by(Sort.Direction.DESC, "createTime"));
         }
 
+        SearchHits<SystemLogVO> searchResult = restTemplate.search(filterBuilder.build(), SystemLogVO.class);
+        iPage.setTotal(searchResult.getTotalHits());
+        iPage.setRecords(searchResult.getSearchHits().stream().map(SearchHit::getContent).toList());
+        return iPage;
+    }
+
+
+    private NativeQueryBuilder createFilterBuilder(String storeId, String operatorName, String key, SearchVO searchVo) {
+        NativeQueryBuilder builder = NativeQuery.builder();
+        List<Query> queries = new ArrayList<>();
+
         if (CharSequenceUtil.isNotEmpty(storeId)) {
-            nativeSearchQueryBuilder.withFilter(QueryBuilders.matchQuery("storeId", storeId));
+            queries.add(QueryBuilders.match(m -> m.field("storeId").query(storeId)));
         }
 
         if (CharSequenceUtil.isNotEmpty(operatorName)) {
-            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("username", operatorName));
+            queries.add(QueryBuilders.match(m -> m.field("username").query(operatorName)));
         }
 
         if (CharSequenceUtil.isNotEmpty(key)) {
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(key, "requestUrl", "requestParam", "responseBody", "name");
-            multiMatchQueryBuilder.fuzziness(Fuzziness.AUTO);
-            nativeSearchQueryBuilder.withFilter(multiMatchQueryBuilder);
+            queries.add(QueryBuilders.multiMatch(m -> m.fields("requestUrl", "requestParam", "responseBody", "name", "customerLog", "ipInfo").query(key).fuzziness("AUTO").tieBreaker(0.3d).type(TextQueryType.BestFields)));
         }
-        //时间有效性判定
+
         if (searchVo.getConvertStartDate() != null && searchVo.getConvertEndDate() != null) {
-            BoolQueryBuilder filterBuilder = new BoolQueryBuilder();
-            //大于方法
-            filterBuilder.filter(
-                    QueryBuilders.rangeQuery("createTime")
-                            .gte(searchVo.getConvertStartDate().getTime())
-                            .lte(searchVo.getConvertEndDate().getTime()));
-
-            nativeSearchQueryBuilder.withFilter(filterBuilder);
+            queries.add(QueryBuilders.range(m -> m.field("createTime").gte(JsonData.of(searchVo.getConvertStartDate())).lte(JsonData.of(searchVo.getConvertEndDate()))));
         }
 
-        if (CharSequenceUtil.isNotEmpty(pageVO.getOrder()) && CharSequenceUtil.isNotEmpty(pageVO.getSort())) {
-            nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort(pageVO.getSort()).order(SortOrder.valueOf(pageVO.getOrder().toUpperCase())));
+        if (!queries.isEmpty()) {
+            builder.withQuery(QueryBuilders.bool(b -> b.must(queries)));
         } else {
-            nativeSearchQueryBuilder.withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC));
+            builder.withQuery(q -> q.matchAll(a -> a));
         }
-
-        SearchHits<SystemLogVO> searchResult = restTemplate.search(nativeSearchQueryBuilder.build(), SystemLogVO.class);
-
-        iPage.setTotal(searchResult.getTotalHits());
-
-        iPage.setRecords(searchResult.getSearchHits().stream().map(SearchHit::getContent).collect(Collectors.toList()));
-        return iPage;
+        return builder;
     }
 
 }

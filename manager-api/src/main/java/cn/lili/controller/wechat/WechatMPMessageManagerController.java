@@ -9,8 +9,9 @@ import cn.lili.modules.wechat.entity.dos.WechatMPMessage;
 import cn.lili.modules.wechat.service.WechatMPMessageService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,30 +22,34 @@ import java.util.List;
  * @author Chopper
  */
 @RestController
-@Api(tags = "微信小程序消息订阅接口")
+@Tag(name = "微信小程序消息订阅接口")
 @RequestMapping("/manager/wechat/wechatMPMessage")
 public class WechatMPMessageManagerController {
     @Autowired
     private WechatMPMessageService wechatMPMessageService;
 
     @DemoSite
-    @GetMapping(value = "/init")
-    @ApiOperation(value = "初始化微信小程序消息订阅")
+    @GetMapping("/init")
+    @Operation(summary = "初始化微信小程序消息订阅")
     public ResultMessage init() {
         wechatMPMessageService.init();
         return ResultUtil.success();
     }
 
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "查看微信小程序消息订阅详情")
+    @GetMapping("/{id}")
+    @Operation(summary = "查看微信小程序消息订阅详情")
+    @Parameter(name = "id", description = "微信小程序消息订阅ID", required = true)
     public ResultMessage<WechatMPMessage> get(@PathVariable String id) {
 
         WechatMPMessage wechatMPMessage = wechatMPMessageService.getById(id);
-        return new ResultUtil<WechatMPMessage>().setData(wechatMPMessage);
+        return ResultUtil.data(wechatMPMessage);
     }
 
     @GetMapping
-    @ApiOperation(value = "分页获取微信小程序消息订阅")
+    @Operation(summary = "分页获取微信小程序消息订阅")
+    @Parameter(name = "entity", description = "微信小程序消息订阅查询参数", required = true)
+    @Parameter(name = "searchVo", description = "分页参数", required = true)
+    @Parameter(name = "page", description = "分页参数", required = true)
     public ResultMessage<IPage<WechatMPMessage>> getByPage(WechatMPMessage entity,
                                                            SearchVO searchVo,
                                                            PageVO page) {
@@ -54,25 +59,28 @@ public class WechatMPMessageManagerController {
 
     @DemoSite
     @PostMapping
-    @ApiOperation(value = "新增微信小程序消息订阅")
+    @Operation(summary = "新增微信小程序消息订阅")
     public ResultMessage<WechatMPMessage> save(WechatMPMessage wechatMPMessage) {
 
         wechatMPMessageService.save(wechatMPMessage);
-        return new ResultUtil<WechatMPMessage>().setData(wechatMPMessage);
+        return ResultUtil.data(wechatMPMessage);
     }
 
     @DemoSite
     @PutMapping("/{id}")
-    @ApiOperation(value = "更新微信小程序消息订阅")
+    @Operation(summary = "更新微信小程序消息订阅")
+    @Parameter(name = "id", description = "微信小程序消息订阅ID", required = true)
+    @Parameter(name = "wechatMPMessage", description = "微信小程序消息订阅参数", required = true)
     public ResultMessage<WechatMPMessage> update(@PathVariable String id, WechatMPMessage wechatMPMessage) {
         wechatMPMessageService.updateById(wechatMPMessage);
-        return new ResultUtil<WechatMPMessage>().setData(wechatMPMessage);
+        return ResultUtil.data(wechatMPMessage);
     }
 
     @DemoSite
-    @DeleteMapping(value = "/{ids}")
-    @ApiOperation(value = "删除微信小程序消息订阅")
-    public ResultMessage<Object> delAllByIds(@PathVariable List ids) {
+    @DeleteMapping("/{ids}")
+    @Operation(summary = "删除微信小程序消息订阅")
+    @Parameter(name = "ids", description = "微信小程序消息订阅ID列表", required = true)
+    public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
 
         wechatMPMessageService.removeByIds(ids);
         return ResultUtil.success();

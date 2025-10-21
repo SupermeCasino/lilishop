@@ -10,8 +10,8 @@ import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.dto.ImSetting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/common/common/IM")
-@Api(tags = "IM 中心")
+@Tag(name = "IM 中心")
 public class IMController {
 
     @Autowired
     private SettingService settingService;
 
-    @ApiOperation(value = "获取IM接口前缀")
+    @Operation(summary = "获取IM接口前缀")
     @GetMapping
     public ResultMessage<String> getUrl() {
         String imUrl;

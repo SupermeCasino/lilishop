@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.entity.vos;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
 public class GoodsSkuSpecVO {
 
 
-    @ApiModelProperty(value = "商品skuId")
+    @Schema(description = "商品skuId")
     private String skuId;
 
-    @ApiModelProperty(value = "商品sku所包含规格")
+    @Schema(description = "商品sku所包含规格")
     private List<SpecValueVO> specValues;
 
-    @ApiModelProperty(value = "库存")
+    @Schema(description = "库存")
     private Integer quantity;
 
 }

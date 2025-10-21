@@ -11,14 +11,13 @@ import cn.lili.modules.system.entity.dos.AppVersion;
 import cn.lili.modules.system.service.AppVersionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 管理端,app版本控制器
@@ -27,25 +26,25 @@ import javax.validation.Valid;
  * @since 2018-07-04 21:50:52
  */
 @RestController
-@Api("管理端,app版本控制器")
+@Tag(name = "管理端,app版本控制器")
 @RequestMapping("/manager/other/appVersion")
 public class AppVersionManagerController {
     @Autowired
     private AppVersionService appVersionService;
 
 
-    @ApiOperation(value = "查询app升级消息", response = AppVersion.class)
+    @Operation(summary = "查询app升级消息")
+    @Parameter(name = "page", description = "分页参数")
+    @Parameter(name = "type", description = "APP类型", required = true)
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "APP类型", required = true, dataType = "type", paramType = "query")
-    })
     public ResultMessage<IPage<AppVersion>> getByPage(PageVO page, String type) {
         return ResultUtil.data(this.appVersionService.page(PageUtil.initPage(page),
                 new QueryWrapper<AppVersion>().eq(StringUtils.isNotEmpty(type), "type", type).orderByDesc("create_time")));
     }
 
 
-    @ApiOperation(value = "添加app版本信息", response = AppVersion.class)
+    @Operation(summary = "添加app版本信息")
+    @Parameter(name = "appVersion", description = "app版本信息", required = true)
     @PostMapping
     public ResultMessage<Object> add(@Valid AppVersion appVersion) {
 
@@ -57,12 +56,11 @@ public class AppVersionManagerController {
         throw new ServiceException(ResultCode.ERROR);
     }
 
-    @PutMapping(value = "/{id}")
-    @ApiOperation(value = "修改app版本信息", response = AppVersion.class)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键", required = true, dataType = "String", paramType = "path")
-    })
-    public ResultMessage<Object> edit(@Valid AppVersion appVersion, @PathVariable String id) {
+    @PutMapping("/{id}")
+    @Operation(summary = "修改app版本信息")
+    @Parameter(name = "id", description = "主键", required = true)
+    public ResultMessage<Object> edit(@Valid AppVersion appVersion, 
+            @PathVariable String id) {
         if(this.appVersionService.checkAppVersion(appVersion)){
             if(this.appVersionService.updateById(appVersion)){
                 return ResultUtil.success();
@@ -71,12 +69,11 @@ public class AppVersionManagerController {
         throw new ServiceException(ResultCode.ERROR);
     }
 
-    @DeleteMapping(value = "/{id}")
-    @ApiOperation(value = "删除app版本")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "要删除的app版本主键", required = true, dataType = "String", paramType = "path")
-    })
-    public ResultMessage<Boolean> delete(@PathVariable String id) {
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除app版本")
+    @Parameter(name = "id", description = "主键", required = true)
+    public ResultMessage<Boolean> delete(
+            @PathVariable String id) {
         if(this.appVersionService.removeById(id)){
             return ResultUtil.success();
         }

@@ -6,10 +6,10 @@ import cn.lili.modules.member.entity.dto.ClerkAddDTO;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -21,36 +21,37 @@ import lombok.NoArgsConstructor;
  * @date 2021/12/28 7:39 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_clerk")
-@ApiModel(value = "店员")
+@Schema(description = "店员")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Clerk extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "店员名称")
+    @Schema(description = "店员名称")
     private String clerkName;
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
-    @ApiModelProperty(value = "所属部门id")
+    @Schema(description = "所属部门id")
     private String departmentId;
 
-    @ApiModelProperty(value = "角色id集合")
+    @Schema(description = "角色id集合")
     private String roleIds;
 
-    @ApiModelProperty(value = "是否是店主", hidden = true)
+    @Schema(description = "是否是店主", hidden = true)
     private Boolean shopkeeper = false;
 
-    @ApiModelProperty(value = "是否是超级管理员 超级管理员/普通管理员")
+    @Schema(description = "是否是超级管理员 超级管理员/普通管理员")
     private Boolean isSuper = false;
 
-    @ApiModelProperty(value = "状态 默认true正常 false禁用")
+    @Schema(description = "状态 默认true正常 false禁用")
     private Boolean status = true;
 
 
@@ -71,7 +72,7 @@ public class Clerk extends BaseEntity {
     }
 
 
-    public Clerk(Store store){
+    public Clerk(Store store) {
         this.memberId = store.getMemberId();
         this.storeId = store.getId();
         this.clerkName = store.getMemberName();

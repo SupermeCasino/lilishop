@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,24 +12,24 @@ import lombok.Data;
 @Data
 public class GoodsCollectionVO {
 
-    @ApiModelProperty(value = "id")
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "规格ID")
+    @Schema(description = "规格ID")
     private String skuId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "商品图片")
+    @Schema(description = "商品图片")
     private String image;
 
-    @ApiModelProperty(value = "商品价格")
+    @Schema(description = "商品价格")
     private Double price;
 
-    @ApiModelProperty(value = "已失效")
+    @Schema(description = "已失效")
     private String marketEnable;
 }

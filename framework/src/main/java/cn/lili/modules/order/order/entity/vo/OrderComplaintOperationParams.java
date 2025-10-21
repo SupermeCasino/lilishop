@@ -1,6 +1,6 @@
 package cn.lili.modules.order.order.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -15,19 +15,19 @@ import java.util.List;
 public class OrderComplaintOperationParams {
 
 
-    @ApiModelProperty(value = "要更改的状态状态")
+    @Schema(description = "要更改的状态状态")
     private String complainStatus;
 
-    @ApiModelProperty("交易投诉主键")
+    @Schema(description = "交易投诉主键")
     private String complainId;
 
-    @ApiModelProperty("商家申诉内容")
+    @Schema(description = "商家申诉内容")
     private String appealContent;
 
-    @ApiModelProperty("商家申诉上传的图片")
+    @Schema(description = "商家申诉上传的图片")
     private List<String> images;
 
-    @ApiModelProperty("仲裁结果")
+    @Schema(description = "仲裁结果")
     private String arbitrationResult;
 
 }

@@ -1,7 +1,7 @@
 package cn.lili.modules.store.entity.vos;
 
 import cn.lili.modules.store.entity.dto.StoreEditDTO;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class StoreDetailVO extends StoreEditDTO {
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
 }

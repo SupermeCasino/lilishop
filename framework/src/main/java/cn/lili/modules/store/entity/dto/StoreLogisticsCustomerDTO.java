@@ -1,7 +1,6 @@
 package cn.lili.modules.store.entity.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,34 +10,34 @@ import lombok.Data;
  * @since 2022-4-13 10:00:58
  */
 @Data
-@ApiModel
+@Schema
 public class StoreLogisticsCustomerDTO {
 
-    @ApiModelProperty(value = "客户代码")
+    @Schema(description = "客户代码")
     private String customerName;
 
-    @ApiModelProperty(value = "客户密码")
+    @Schema(description = "客户密码")
     private String customerPwd;
 
-    @ApiModelProperty(value = "密钥")
+    @Schema(description = "密钥")
     private String monthCode;
 
-    @ApiModelProperty(value = "归属网点/网点编码")
+    @Schema(description = "归属网点/网点编码")
     private String sendSite;
 
-    @ApiModelProperty(value = "收件快递员")
+    @Schema(description = "收件快递员")
     private String sendStaff;
 
-    @ApiModelProperty(value = "是否使用电子面单")
+    @Schema(description = "是否使用电子面单")
     private boolean faceSheetFlag;
 
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String payType;
 
-    @ApiModelProperty(value = "快递类型")
+    @Schema(description = "快递类型")
     private String expType;
 
-    @ApiModelProperty(value = "电子面单客户账户名称")
+    @Schema(description = "电子面单客户账户名称")
     private String partnerName;
 
 }

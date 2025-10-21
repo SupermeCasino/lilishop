@@ -6,7 +6,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.Arrays;
@@ -29,78 +29,78 @@ public class GoodsSearchParams extends PageVO {
     private static final long serialVersionUID = 2544015852728566887L;
 
 
-    @ApiModelProperty(value = "商品编号")
+    @Schema(description = "商品编号")
     private String goodsId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "商品编号")
+    @Schema(description = "商品编号")
     private String id;
 
-    @ApiModelProperty(value = "商品编号")
+    @Schema(description = "商品编号")
     private List<String> ids;
 
-    @ApiModelProperty(value = "商家ID")
+    @Schema(description = "商家ID")
     private String storeId;
 
-    @ApiModelProperty(value = "卖家名字")
+    @Schema(description = "卖家名字")
     private String storeName;
 
-    @ApiModelProperty(value = "价格,可以为范围，如10_1000")
+    @Schema(description = "价格,可以为范围，如10_1000")
     private String price;
 
-    @ApiModelProperty(value = "分类path")
+    @Schema(description = "分类path")
     private String categoryPath;
 
-    @ApiModelProperty(value = "店铺分类id")
+    @Schema(description = "店铺分类id")
     private String storeCategoryPath;
 
-    @ApiModelProperty(value = "是否自营")
+    @Schema(description = "是否自营")
     private Boolean selfOperated;
 
     /**
      * @see GoodsStatusEnum
      */
-    @ApiModelProperty(value = "上下架状态")
+    @Schema(description = "上下架状态")
     private String marketEnable;
 
     /**
      * @see GoodsAuthEnum
      */
-    @ApiModelProperty(value = "审核状态")
+    @Schema(description = "审核状态")
     private String authFlag;
 
-    @ApiModelProperty(value = "商品状态")
+    @Schema(description = "商品状态")
     private String goodsStatus;
 
-    @ApiModelProperty(value = "库存数量")
+    @Schema(description = "库存数量")
     private Integer leQuantity;
 
-    @ApiModelProperty(value = "库存数量")
+    @Schema(description = "库存数量")
     private Integer geQuantity;
 
-    @ApiModelProperty(value = "是否为推荐商品")
+    @Schema(description = "是否为推荐商品")
     private Boolean recommend;
 
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsTypeEnum
      */
-    @ApiModelProperty(value = "商品类型")
+    @Schema(description = "商品类型")
     private String goodsType;
 
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum
      */
-    @ApiModelProperty(value = "销售模式", required = true)
+    @Schema(description = "销售模式", required = true)
     private String salesModel;
 
-    @ApiModelProperty(value = "预警库存")
+    @Schema(description = "预警库存")
     private Boolean alertQuantity;
 
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        
+
         // 统一使用 CharSequenceUtil.isNotEmpty() 处理字符串
         if (CharSequenceUtil.isNotEmpty(goodsId)) {
             queryWrapper.eq("goods_id", goodsId);
@@ -111,12 +111,12 @@ public class GoodsSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(id)) {
             queryWrapper.in("id", Arrays.asList(id.split(",")));
         }
-        
+
         // 统一使用 CollUtil.isNotEmpty() 处理集合
         if (CollUtil.isNotEmpty(ids)) {
             queryWrapper.in("id", ids);
         }
-        
+
         if (CharSequenceUtil.isNotEmpty(storeId)) {
             queryWrapper.eq("store_id", storeId);
         }
@@ -130,31 +130,31 @@ public class GoodsSearchParams extends PageVO {
             queryWrapper.like("store_category_path", storeCategoryPath);
         }
         if (CharSequenceUtil.isNotEmpty(goodsStatus)) {
-            if(goodsStatus.equals(GoodsStatusEnum.UPPER.name())){
+            if (goodsStatus.equals(GoodsStatusEnum.UPPER.name())) {
                 queryWrapper.eq("auth_flag", GoodsAuthEnum.PASS.name());
                 queryWrapper.eq("market_enable", GoodsStatusEnum.UPPER.name());
-            }else if(goodsStatus.equals(GoodsStatusEnum.DOWN.name())){
+            } else if (goodsStatus.equals(GoodsStatusEnum.DOWN.name())) {
                 queryWrapper.eq("auth_flag", GoodsAuthEnum.PASS.name());
                 queryWrapper.eq("market_enable", GoodsStatusEnum.DOWN.name());
-            }else if(goodsStatus.equals(GoodsAuthEnum.TOBEAUDITED.name())){
+            } else if (goodsStatus.equals(GoodsAuthEnum.TOBEAUDITED.name())) {
                 queryWrapper.eq("auth_flag", GoodsAuthEnum.TOBEAUDITED.name());
-            }else if(goodsStatus.equals(GoodsAuthEnum.REFUSE.name())){
+            } else if (goodsStatus.equals(GoodsAuthEnum.REFUSE.name())) {
                 queryWrapper.eq("auth_flag", GoodsAuthEnum.REFUSE.name());
             }
         }
-        
+
         // 统一使用 Objects.nonNull() 处理对象非空判断
         if (Objects.nonNull(selfOperated)) {
             queryWrapper.eq("self_operated", selfOperated);
         }
-        
+
         if (CharSequenceUtil.isNotEmpty(marketEnable)) {
             queryWrapper.eq("market_enable", marketEnable);
         }
         if (CharSequenceUtil.isNotEmpty(authFlag)) {
             queryWrapper.eq("auth_flag", authFlag);
         }
-        
+
         if (Objects.nonNull(leQuantity)) {
             queryWrapper.le("quantity", leQuantity);
         }
@@ -164,19 +164,19 @@ public class GoodsSearchParams extends PageVO {
         if (Objects.nonNull(recommend)) {
             queryWrapper.le("recommend", recommend);
         }
-        
+
         if (CharSequenceUtil.isNotEmpty(goodsType)) {
             queryWrapper.eq("goods_type", goodsType);
         }
         if (CharSequenceUtil.isNotEmpty(salesModel)) {
             queryWrapper.eq("sales_model", salesModel);
         }
-        
-        if(Objects.nonNull(alertQuantity) && alertQuantity){
+
+        if (Objects.nonNull(alertQuantity) && alertQuantity) {
             queryWrapper.apply("quantity <= alert_quantity");
             queryWrapper.ge("alert_quantity", 0);
         }
-        
+
         queryWrapper.in(CollUtil.isNotEmpty(ids), "id", ids);
         queryWrapper.eq("delete_flag", false);
         this.betweenWrapper(queryWrapper);

@@ -3,13 +3,13 @@ package cn.lili.modules.payment.kit.core.kit;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.payment.kit.core.PaymentHttpResponse;
 import cn.lili.modules.payment.kit.core.enums.RequestMethodEnums;
 import cn.lili.modules.payment.kit.core.enums.SignType;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -449,7 +449,7 @@ public class WxPayKit {
      * @param urlSuffix 可通过 WxApiType 来获取，URL挂载参数需要自行拼接
      * @param mchId     商户Id
      * @param serialNo  商户 API 证书序列号
-     * @param key   key.pem 证书
+     * @param key       key.pem 证书
      * @param publicKey 公钥证书
      * @param body      接口请求参数
      * @param nonceStr  随机字符库
@@ -459,7 +459,7 @@ public class WxPayKit {
      * @throws Exception 异常信息
      */
     public static String buildAuthorization(RequestMethodEnums method, String urlSuffix, String mchId,
-                                            String serialNo, String key, String publicKey ,String body, String nonceStr,
+                                            String serialNo, String key, String publicKey, String body, String nonceStr,
                                             long timestamp, String authType) throws Exception {
         //构建签名参数
         String buildSignMessage = PayKit.buildSignMessage(method, urlSuffix, timestamp, nonceStr, body);
@@ -662,11 +662,12 @@ public class WxPayKit {
         if (serialNumber.equals(serialNo)) {
             boolean verifySignature = WxPayKit.verifySignature(signature, body, nonce, timestamp, certificate.getPublicKey());
             if (verifySignature) {
-                JSONObject resultObject = JSONUtil.parseObj(body);
+
+                JSONObject resultObject = JSON.parseObject(body);
                 JSONObject resource = resultObject.getJSONObject("resource");
-                String cipherText = resource.getStr("ciphertext");
-                String nonceStr = resource.getStr("nonce");
-                String associatedData = resource.getStr("associated_data");
+                String cipherText = resource.getString("ciphertext");
+                String nonceStr = resource.getString("nonce");
+                String associatedData = resource.getString("associated_data");
 
                 AesUtil aesUtil = new AesUtil(key.getBytes(StandardCharsets.UTF_8));
                 //密文解密
@@ -699,11 +700,12 @@ public class WxPayKit {
         if (serialNumber.equals(serialNo)) {
             boolean verifySignature = WxPayKit.verifySignature(signature, body, nonce, timestamp, certificate.getPublicKey());
             if (verifySignature) {
-                JSONObject resultObject = JSONUtil.parseObj(body);
+
+                JSONObject resultObject = JSON.parseObject(body);
                 JSONObject resource = resultObject.getJSONObject("resource");
-                String cipherText = resource.getStr("ciphertext");
-                String nonceStr = resource.getStr("nonce");
-                String associatedData = resource.getStr("associated_data");
+                String cipherText = resource.getString("ciphertext");
+                String nonceStr = resource.getString("nonce");
+                String associatedData = resource.getString("associated_data");
 
                 AesUtil aesUtil = new AesUtil(key.getBytes(StandardCharsets.UTF_8));
                 //密文解密

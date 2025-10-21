@@ -8,8 +8,9 @@ import cn.lili.modules.order.trade.entity.dos.OrderLog;
 import cn.lili.modules.order.trade.service.OrderLogService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,21 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/17 4:34 下午
  */
 @RestController
-@Api(tags = "管理端,订单日志管理接口")
+@Tag(name = "管理端,订单日志管理接口")
 @RequestMapping("/manager/order/orderLog")
 public class OrderLogManagerController {
     @Autowired
     private OrderLogService orderLogService;
 
-    @GetMapping(value = "/get/{id}")
-    @ApiOperation(value = "通过id获取")
+    @Operation(description = "通过id获取")
+    @Parameter(name = "id", description = "订单日志ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<OrderLog> get(@PathVariable String id) {
 
         return ResultUtil.data(orderLogService.getById(id));
     }
 
-    @GetMapping(value = "/getByPage")
-    @ApiOperation(value = "分页获取")
+    @Operation(description = "分页获取")
+    @Parameter(name = "entity", description = "查询参数")
+    @Parameter(name = "searchVo", description = "分页参数")
+    @Parameter(name = "page", description = "分页参数")
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<OrderLog>> getByPage(OrderLog entity,
                                                     SearchVO searchVo,
                                                     PageVO page) {

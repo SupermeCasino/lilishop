@@ -33,8 +33,6 @@ import java.util.Objects;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ImMessageServiceImpl extends ServiceImpl<ImMessageMapper, ImMessage> implements ImMessageService {
 
-    @Autowired
-    private ImTalkService imTalkService;
 
     @Override
     public void read(String talkId, String accessToken) {

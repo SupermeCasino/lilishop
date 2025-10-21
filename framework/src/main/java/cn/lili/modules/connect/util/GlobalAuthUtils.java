@@ -1,9 +1,9 @@
 package cn.lili.modules.connect.util;
 
+import cn.hutool.json.JSONUtil;
 import cn.lili.common.utils.Base64Utils;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.modules.connect.exception.AuthException;
-import com.alibaba.fastjson.JSON;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -241,7 +241,7 @@ public class GlobalAuthUtils {
         sorted.put("timestamp", timestamp);
         StringBuffer string = new StringBuffer();
         for (Map.Entry<String, Object> entry : sorted.entrySet()) {
-            string.append(entry.getKey()).append("=").append(JSON.toJSONString(entry.getValue()));
+            string.append(entry.getKey()).append("=").append(JSONUtil.toJsonStr(entry.getValue()));
         }
         String splice = String.format("%s%s%s%s", action, token, string, secret);
         String calculatedSignature = md5(splice);
@@ -293,9 +293,9 @@ public class GlobalAuthUtils {
         StringBuilder signBuilder = new StringBuilder(appSecret);
         for (Map.Entry<String, Object> entry : treeMap.entrySet()) {
             String name = entry.getKey();
-            String value = String.valueOf(entry.getValue());
-            if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(value)) {
-                signBuilder.append(name).append(value);
+            String description = String.valueOf(entry.getValue());
+            if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(description)) {
+                signBuilder.append(name).append(description);
             }
         }
         signBuilder.append(appSecret);

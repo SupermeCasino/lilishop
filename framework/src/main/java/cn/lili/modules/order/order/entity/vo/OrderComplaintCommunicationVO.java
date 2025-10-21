@@ -2,6 +2,7 @@ package cn.lili.modules.order.order.entity.vo;
 
 import cn.lili.modules.order.order.entity.dos.OrderComplaintCommunication;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
  **/
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderComplaintCommunicationVO extends OrderComplaintCommunication {
 
     private static final long serialVersionUID = -8460949951683122695L;

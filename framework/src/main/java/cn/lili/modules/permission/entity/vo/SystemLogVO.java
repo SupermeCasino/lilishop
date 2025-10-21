@@ -2,7 +2,7 @@ package cn.lili.modules.permission.entity.vo;
 
 import cn.lili.common.utils.ObjectUtil;
 import cn.lili.elasticsearch.EsSuffix;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -34,58 +34,58 @@ public class SystemLogVO implements Serializable {
     private static final long serialVersionUID = -8995552592401630086L;
 
     @Id
-    @ApiModelProperty(value = "id")
+    @Schema(description = "id")
     private String id;
 
 
-    @ApiModelProperty(value = "日志记录时间")
+    @Schema(description = "日志记录时间")
     @Field(type = FieldType.Long)
     private Long createTime = new Date().getTime();
 
-    @ApiModelProperty(value = "请求用户")
+    @Schema(description = "请求用户")
     @Field(type = FieldType.Text)
     private String username;
 
-    @ApiModelProperty(value = "请求路径")
+    @Schema(description = "请求路径")
     @Field(type = FieldType.Text)
     private String requestUrl;
 
-    @ApiModelProperty(value = "请求参数")
+    @Schema(description = "请求参数")
     @Field(type = FieldType.Text)
     private String requestParam;
 
-    @ApiModelProperty(value = "响应参数")
+    @Schema(description = "响应参数")
     @Field(type = FieldType.Text)
     private String responseBody;
 
-    @ApiModelProperty(value = "ip")
+    @Schema(description = "ip")
     @Field(type = FieldType.Keyword)
     private String ip;
 
-    @ApiModelProperty(value = "方法操作名称")
+    @Schema(description = "方法操作名称")
     @Field(type = FieldType.Keyword)
     private String name;
 
 
-    @ApiModelProperty(value = "请求类型")
+    @Schema(description = "请求类型")
     @Field(type = FieldType.Keyword)
     private String requestType;
 
 
-    @ApiModelProperty(value = "自定义日志内容")
+    @Schema(description = "自定义日志内容")
     @Field(type = FieldType.Text)
     private String customerLog;
 
 
-    @ApiModelProperty(value = "ip信息")
+    @Schema(description = "ip信息")
     @Field(type = FieldType.Text)
     private String ipInfo;
 
-    @ApiModelProperty(value = "花费时间")
+    @Schema(description = "花费时间")
     @Field(type = FieldType.Integer)
     private Integer costTime;
 
-    @ApiModelProperty(value = "商家")
+    @Schema(description = "商家")
     @Field(type = FieldType.Long)
     private Long storeId = -1L;
 

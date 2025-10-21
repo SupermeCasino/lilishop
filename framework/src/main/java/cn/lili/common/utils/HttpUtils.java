@@ -1,6 +1,6 @@
 package cn.lili.common.utils;
 
-import com.alibaba.fastjson.JSONObject;
+
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.http.config.HttpConfig;
 import com.xkcoding.http.support.HttpHeader;
@@ -14,6 +14,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.alibaba.fastjson2.JSON;
 
 /**
  * HTTP 工具类
@@ -152,90 +154,57 @@ public class HttpUtils {
      * @return
      */
     public static String doPostWithJson(String reqUrl, Map<String, String> jsonParameters) {
-
-        BufferedReader reader = null;
+        HttpURLConnection urlConn = null;
         try {
-            //创建连接
-            URL url = new URL(reqUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setUseCaches(false);
-            connection.setInstanceFollowRedirects(true);
-            //设置请求方式
-            connection.setRequestMethod("POST");
-            //设置发送数据的格式
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.connect();
-            //一定要用BufferedReader 来接收响应， 使用字节来接收响应的方法是接收不到内容的
-            //utf-8编码
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8);
-            out.append(JSONObject.toJSONString(jsonParameters));
+            urlConn = sendPost(reqUrl, null, "utf-8", HTTP_CONN_TIMEOUT, HTTP_SOCKET_TIMEOUT);
+            urlConn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            urlConn.setRequestProperty("Accept", "application/json");
+            urlConn.setDoOutput(true);
+            urlConn.setDoInput(true);
+            PrintWriter out = new PrintWriter(urlConn.getOutputStream());
+            out.append(JSON.toJSONString(jsonParameters));
             out.flush();
             out.close();
-            //读取响应
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-            String line;
-            String res = "";
-            while ((line = reader.readLine()) != null) {
-                res += line;
+            return getContent(urlConn, "utf-8");
+        } catch (Exception e) {
+            log.error("请求异常", e);
+            try {
+                int responseCode = urlConn.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    return getContent(urlConn, "utf-8");
+                }
+            } catch (Exception ex) {
+                log.error("请求异常", ex);
             }
-            reader.close();
-
-            return res;
-        } catch (IOException e) {
-            log.error("post请求错误", e);
         }
-        //自定义错误信息
-        return "error";
-
+        return null;
     }
 
-    /**
-     * post携带json请求 静态方法
-     *
-     * @param reqUrl 请求地址
-     * @param object 对象
-     * @return
-     */
     public static String doPostWithJson(String reqUrl, Object object) {
-
-        BufferedReader reader = null;
+        HttpURLConnection urlConn = null;
         try {
-            //创建连接
-            URL url = new URL(reqUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setUseCaches(false);
-            connection.setInstanceFollowRedirects(true);
-            //设置请求方式
-            connection.setRequestMethod("POST");
-            //设置发送数据的格式
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.connect();
-            //一定要用BufferedReader 来接收响应， 使用字节来接收响应的方法是接收不到内容的
-            //utf-8编码
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8);
-            out.append(JSONObject.toJSONString(object));
+            urlConn = sendPost(reqUrl, null, "utf-8", HTTP_CONN_TIMEOUT, HTTP_SOCKET_TIMEOUT);
+            urlConn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            urlConn.setRequestProperty("Accept", "application/json");
+            urlConn.setDoOutput(true);
+            urlConn.setDoInput(true);
+            PrintWriter out = new PrintWriter(urlConn.getOutputStream());
+            out.append(JSON.toJSONString(object));
             out.flush();
             out.close();
-            //读取响应
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-            String line;
-            String res = "";
-            while ((line = reader.readLine()) != null) {
-                res += line;
+            return getContent(urlConn, "utf-8");
+        } catch (Exception e) {
+            log.error("请求异常", e);
+            try {
+                int responseCode = urlConn.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    return getContent(urlConn, "utf-8");
+                }
+            } catch (Exception ex) {
+                log.error("请求异常", ex);
             }
-            reader.close();
-
-            return res;
-        } catch (IOException e) {
-            log.error("post错误", e);
         }
-        //自定义错误信息
-        return "error";
-
+        return null;
     }
 
     /**
@@ -348,14 +317,14 @@ public class HttpUtils {
             for (Iterator<String> iter = parameters.keySet().iterator(); iter
                     .hasNext(); ) {
                 String name = iter.next();
-                String value = parameters.get(name);
+                String description = parameters.get(name);
                 params.append(name + "=");
                 try {
-                    params.append(URLEncoder.encode(value, encoding));
+                    params.append(URLEncoder.encode(description, encoding));
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e.getMessage(), e);
                 } catch (Exception e) {
-                    String message = String.format("'%s'='%s'", name, value);
+                    String message = String.format("'%s'='%s'", name, description);
                     throw new RuntimeException(message, e);
                 }
                 if (iter.hasNext()) {

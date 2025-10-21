@@ -5,7 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,10 +23,10 @@ public class KanjiaActivityGoodsParams extends BasePromotionsSearchParams implem
 
     private static final long serialVersionUID = 1344104067705714289L;
 
-    @ApiModelProperty(value = "活动商品")
+    @Schema(description = "活动商品")
     private String goodsName;
 
-    @ApiModelProperty(value = "skuId")
+    @Schema(description = "skuId")
     private String skuId;
 
     @Override

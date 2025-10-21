@@ -2,7 +2,7 @@ package cn.lili.modules.order.order.entity.dto;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -14,28 +14,28 @@ import lombok.Data;
 @Data
 public class ReceiptSearchParams {
 
-    @ApiModelProperty(value = "发票抬头")
+    @Schema(description = "发票抬头")
     private String receiptTitle;
 
-    @ApiModelProperty(value = "纳税人识别号")
+    @Schema(description = "纳税人识别号")
     private String taxpayerId;
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 
-    @ApiModelProperty(value = "商家ID")
+    @Schema(description = "商家ID")
     private String storeId;
 
-    @ApiModelProperty(value = "订单号")
+    @Schema(description = "订单号")
     private String orderSn;
 
-    @ApiModelProperty(value = "发票状态")
+    @Schema(description = "发票状态")
     private String receiptStatus;
 
     public <T> QueryWrapper<T> wrapper() {

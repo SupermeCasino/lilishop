@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.goods.entity.dos.CategorySpecification;
@@ -47,7 +47,7 @@ public class SpecificationServiceImpl extends ServiceImpl<SpecificationMapper, S
                 List<String> categoryIds = new ArrayList<>();
                 list.forEach(item -> categoryIds.add(item.getCategoryId()));
                 throw new ServiceException(ResultCode.SPEC_DELETE_ERROR,
-                        JSONUtil.toJsonStr(categoryService.getCategoryNameByIds(categoryIds)));
+                        JSON.toJSONString(categoryService.getCategoryNameByIds(categoryIds)));
             }
             //删除规格
             result = this.removeById(id);

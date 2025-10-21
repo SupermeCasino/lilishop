@@ -1,12 +1,10 @@
 package cn.lili.modules.promotion.entity.dos;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.validation.constraints.NotEmpty;
 
 /**
  * 砍价活动商品实体类
@@ -17,45 +15,45 @@ import javax.validation.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_kanjia_activity_goods")
-@ApiModel(value = "砍价活动商品对象")
+@Schema(description = "砍价活动商品对象")
 public class KanjiaActivityGoods extends BasePromotions {
 
     private static final long serialVersionUID = 6694714877345423488L;
 
-    @ApiModelProperty(value = "结算价格")
+    @Schema(description = "结算价格")
     @NotEmpty(message = "结算价格不能为空")
     private Double settlementPrice;
 
-    @ApiModelProperty(value = "商品原价")
+    @Schema(description = "商品原价")
     private Double originalPrice;
 
-    @ApiModelProperty(value = "最低购买金额")
+    @Schema(description = "最低购买金额")
     @NotEmpty(message = "最低购买金额不能为空")
     private Double purchasePrice;
 
-    @ApiModelProperty(value = "货品id")
+    @Schema(description = "货品id")
     @NotEmpty(message = "货品id不能为空")
     private String goodsId;
 
-    @ApiModelProperty(value = "货品SkuId")
+    @Schema(description = "货品SkuId")
     @NotEmpty(message = "货品SkuId不能为空")
     private String skuId;
 
-    @ApiModelProperty(value = "货品名称")
+    @Schema(description = "货品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "缩略图")
+    @Schema(description = "缩略图")
     private String thumbnail;
 
-    @ApiModelProperty(value = "活动库存")
+    @Schema(description = "活动库存")
     @NotEmpty(message = "活动库存不能为空")
     private Integer stock;
 
-    @ApiModelProperty(value = "每人最低砍价金额")
+    @Schema(description = "每人最低砍价金额")
     @NotEmpty(message = "每人最低砍价金额不能为空")
     private Double lowestPrice;
 
-    @ApiModelProperty(value = "每人最高砍价金额")
+    @Schema(description = "每人最高砍价金额")
     @NotEmpty(message = "每人最高砍价金额不能为空")
     private Double highestPrice;
 }

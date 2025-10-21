@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 public class MemberDistributionVO {
 
-    @ApiModelProperty(value = "客户端类型")
+    @Schema(description = "客户端类型")
     private String clientEnum;
 
-    @ApiModelProperty(value = "数量")
+    @Schema(description = "数量")
     private Integer num;
 
-    @ApiModelProperty(value = "比例")
+    @Schema(description = "比例")
     private Double proportion;
 
 }

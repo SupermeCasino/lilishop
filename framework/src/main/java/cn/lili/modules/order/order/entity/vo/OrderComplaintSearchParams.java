@@ -4,7 +4,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.modules.order.aftersale.entity.enums.ComplaintStatusEnum;
 import cn.lili.modules.order.order.entity.dos.OrderComplaint;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -19,22 +19,22 @@ public class OrderComplaintSearchParams {
     /**
      * @see ComplaintStatusEnum
      */
-    @ApiModelProperty(value = "交易投诉状态")
+    @Schema(description = "交易投诉状态")
     private String status;
 
-    @ApiModelProperty(value = "订单号")
+    @Schema(description = "订单号")
     private String orderSn;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "商家id")
+    @Schema(description = "商家id")
     private String storeId;
 
-    @ApiModelProperty(value = "商家名称")
+    @Schema(description = "商家名称")
     private String storeName;
 
     public LambdaQueryWrapper<OrderComplaint> lambdaQueryWrapper() {

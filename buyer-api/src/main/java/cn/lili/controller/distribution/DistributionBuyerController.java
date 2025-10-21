@@ -9,9 +9,9 @@ import cn.lili.modules.distribution.entity.vos.DistributionOrderSearchParams;
 import cn.lili.modules.distribution.service.DistributionOrderService;
 import cn.lili.modules.distribution.service.DistributionService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020/11/16 10:03 下午
  */
 @RestController
-@Api(tags = "买家端,分销员接口")
+@Tag(name = "买家端,分销员接口")
 @RequestMapping("/buyer/distribution/distribution")
 public class DistributionBuyerController {
 
@@ -38,20 +38,20 @@ public class DistributionBuyerController {
     @Autowired
     private DistributionOrderService distributionOrderService;
 
-    @ApiOperation(value = "申请分销员")
+    @Operation(summary = "申请分销员")
     @PostMapping
     public ResultMessage<Object> applyDistribution(DistributionApplyDTO distributionApplyDTO) {
         return ResultUtil.data(distributionService.applyDistribution(distributionApplyDTO));
     }
 
-    @ApiOperation(value = "获取分销员分页订单列表")
+    @Operation(summary = "获取分销员分页订单列表")
     @GetMapping("/distributionOrder")
     public ResultMessage<IPage<DistributionOrder>> distributionOrderPage(DistributionOrderSearchParams distributionOrderSearchParams) {
         distributionOrderSearchParams.setDistributionId(distributionService.getDistribution().getId());
         return ResultUtil.data(distributionOrderService.getDistributionOrderPage(distributionOrderSearchParams));
     }
 
-    @ApiOperation(value = "获取当前会员的分销员信息", notes = "可根据分销员信息查询待提现金额以及冻结金额等信息")
+    @Operation(summary = "获取当前会员的分销员信息", description = "可根据分销员信息查询待提现金额以及冻结金额等信息")
     @GetMapping
     public ResultMessage<Distribution> getDistribution() {
         //检查分销开关
@@ -60,10 +60,10 @@ public class DistributionBuyerController {
         return ResultUtil.data(distributionService.getDistribution());
     }
 
-    @ApiOperation(value = "绑定分销员")
-    @ApiImplicitParam(name = "distributionId", value = "分销员ID", required = true, paramType = "path")
+    @Operation(summary = "绑定分销员")
+    @Parameter(name = "distributionId", description = "分销员ID", required = true)
     @GetMapping("/bindingDistribution/{distributionId}")
-    public ResultMessage<Object> bindingDistribution(@PathVariable String distributionId){
+    public ResultMessage<Object> bindingDistribution(@PathVariable String distributionId) {
         distributionService.bindingDistribution(distributionId);
         return ResultUtil.success();
     }

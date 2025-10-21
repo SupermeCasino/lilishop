@@ -2,12 +2,10 @@ package cn.lili.modules.permission.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -18,19 +16,19 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @TableName("li_department")
-@ApiModel(value = "部门")
+@Schema(description = "部门")
 @EqualsAndHashCode(callSuper = true)
 public class Department extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "部门名称")
+    @Schema(description = "部门名称")
     @NotNull(message = "部门名称不能为空")
     private String title;
 
-    @ApiModelProperty(value = "父id")
+    @Schema(description = "父id")
     private String parentId;
 
-    @ApiModelProperty(value = "排序值")
+    @Schema(description = "排序值")
     private Double sortOrder;
 }

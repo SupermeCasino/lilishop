@@ -98,8 +98,8 @@ public class StringUtils extends StrUtil {
                 continue;
             }
             Method getter = property.getReadMethod();
-            Object value = getter != null ? getter.invoke(obj) : null;
-            map.put(key, value);
+            Object description = getter != null ? getter.invoke(obj) : null;
+            map.put(key, description);
         }
 
         return map;

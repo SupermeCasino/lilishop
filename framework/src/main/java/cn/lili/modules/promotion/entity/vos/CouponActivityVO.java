@@ -2,7 +2,7 @@ package cn.lili.modules.promotion.entity.vos;
 
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.promotion.entity.dos.CouponActivity;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CouponActivityVO extends CouponActivity {
 
-    @ApiModelProperty(value = "优惠券活动下的优惠券列表")
+    @Schema(description = "优惠券活动下的优惠券列表")
     private List<CouponActivityItemVO> couponActivityItems;
 
     public CouponActivityVO(CouponActivity couponActivity, List<CouponActivityItemVO> couponActivityItemVOS) {

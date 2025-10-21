@@ -3,7 +3,7 @@ package cn.lili.modules.order.order.entity.vo;
 import cn.lili.modules.order.order.entity.enums.CommentStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderComplaintStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderItemAfterSaleStatusEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,52 +17,52 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItemVO {
 
-    @ApiModelProperty(value = "编号")
+    @Schema(description = "编号")
     private String sn;
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "货品ID")
+    @Schema(description = "货品ID")
     private String skuId;
 
-    @ApiModelProperty(value = "销售量")
+    @Schema(description = "销售量")
     private String num;
 
-    @ApiModelProperty(value = "图片")
+    @Schema(description = "图片")
     private String image;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String name;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private Double goodsPrice;
 
     /**
      * @see OrderItemAfterSaleStatusEnum
      */
-    @ApiModelProperty(value = "售后状态", allowableValues = "NOT_APPLIED(未申请),ALREADY_APPLIED(已申请),EXPIRED(已失效不允许申请售后)")
+    @Schema(description = "售后状态", allowableValues = "NOT_APPLIED(未申请),ALREADY_APPLIED(已申请),EXPIRED(已失效不允许申请售后)")
     private String afterSaleStatus;
 
     /**
      * @see OrderComplaintStatusEnum
      */
-    @ApiModelProperty(value = "投诉状态")
+    @Schema(description = "投诉状态")
     private String complainStatus;
 
     /**
      * @see CommentStatusEnum
      */
-    @ApiModelProperty(value = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
+    @Schema(description = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
     private String commentStatus;
 
     /**
      * @see cn.lili.modules.order.order.entity.enums.RefundStatusEnum
      */
-    @ApiModelProperty(value = "退款状态")
+    @Schema(description = "退款状态")
     private String isRefund;
 
-    @ApiModelProperty(value = "退款金额")
+    @Schema(description = "退款金额")
     private String refundPrice;
 
     public void setSn(String sn) {

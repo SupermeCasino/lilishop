@@ -1,6 +1,6 @@
 package cn.lili.modules.wallet.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,16 +12,16 @@ import lombok.Data;
 @Data
 public class MemberWithdrawalMessage {
 
-    @ApiModelProperty(value = "提现申请ID")
+    @Schema(description = "提现申请ID")
     private String memberWithdrawApplyId;
 
-    @ApiModelProperty(value = "金额")
+    @Schema(description = "金额")
     private Double price;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "提现状态")
+    @Schema(description = "提现状态")
     private String status;
 
 }

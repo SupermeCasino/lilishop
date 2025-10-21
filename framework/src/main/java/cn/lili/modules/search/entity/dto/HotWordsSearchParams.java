@@ -1,20 +1,16 @@
 package cn.lili.modules.search.entity.dto;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
-import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
-import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.util.StatisticsDateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 
-import javax.validation.constraints.NotNull;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,19 +27,19 @@ public class HotWordsSearchParams extends PageVO {
     private static final long serialVersionUID = 2544015852728566887L;
 
     @NotNull(message = "搜索热词不能为空")
-    @ApiModelProperty(value = "热词")
+    @Schema(description = "热词")
     private String keywords;
 
-    @ApiModelProperty(value = "快捷搜索", allowableValues = "TODAY, YESTERDAY, LAST_SEVEN, LAST_THIRTY")
+    @Schema(description = "快捷搜索", allowableValues = "TODAY, YESTERDAY, LAST_SEVEN, LAST_THIRTY")
     private String searchType;
 
-    @ApiModelProperty(value = "类型：年（YEAR）、月（MONTH）")
+    @Schema(description = "类型：年（YEAR）、月（MONTH）")
     private String timeType;
 
-    @ApiModelProperty(value = "年份")
+    @Schema(description = "年份")
     private Integer year;
 
-    @ApiModelProperty(value = "月份")
+    @Schema(description = "月份")
     private Integer month;
 
 

@@ -43,6 +43,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
      * 会员
      */
     @Autowired
+    @Lazy
     private MemberService memberService;
 
     /**
@@ -74,14 +76,17 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
      * 商品
      */
     @Autowired
+    @Lazy
     private GoodsService goodsService;
 
     @Autowired
+    @Lazy
     private GoodsSkuService goodsSkuService;
     /**
      * 店铺详情
      */
     @Autowired
+    @Lazy
     private StoreDetailService storeDetailService;
 
     @Autowired
@@ -91,6 +96,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     private RocketMQTemplate rocketMQTemplate;
 
     @Autowired
+    @Lazy
     private FootprintService footprintService;
 
     @Autowired

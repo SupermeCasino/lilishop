@@ -9,16 +9,16 @@ import cn.lili.modules.page.entity.vos.ArticleVO;
 import cn.lili.modules.page.service.ArticleCategoryService;
 import cn.lili.modules.page.service.ArticleService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -27,8 +27,8 @@ import java.util.List;
  * @author Chopper
  * @since 2020/11/16 10:02 下午
  */
+@Tag(name = "买家端,文章接口")
 @RestController
-@Api(tags = "买家端,文章接口")
 @RequestMapping("/buyer/other/article")
 public class ArticleBuyerController {
 
@@ -44,28 +44,28 @@ public class ArticleBuyerController {
     @Autowired
     private ArticleCategoryService articleCategoryService;
 
-    @ApiOperation(value = "获取文章分类列表")
-    @GetMapping(value = "/articleCategory/list")
+    @Operation(summary = "获取文章分类列表")
+    @GetMapping("/articleCategory/list")
     public ResultMessage<List<ArticleCategoryVO>> getArticleCategoryList() {
         return ResultUtil.data(articleCategoryService.allChildren());
     }
 
-    @ApiOperation(value = "分页获取")
+    @Operation(summary = "分页获取")
     @GetMapping
     public ResultMessage<IPage<ArticleVO>> getByPage(ArticleSearchParams articleSearchParams) {
         return ResultUtil.data(articleService.articlePage(articleSearchParams));
     }
 
-    @ApiOperation(value = "通过id获取文章")
-    @ApiImplicitParam(name = "id", value = "文章ID", required = true, paramType = "path")
-    @GetMapping(value = "/get/{id}")
+    @Operation(summary = "通过id获取文章")
+    @Parameter(name = "id", description = "文章ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<Article> get(@NotNull(message = "文章ID") @PathVariable("id") String id) {
         return ResultUtil.data(articleService.customGet(id));
     }
 
-    @ApiOperation(value = "通过类型获取文章")
-    @ApiImplicitParam(name = "type", value = "文章类型", required = true, paramType = "path")
-    @GetMapping(value = "/type/{type}")
+    @Operation(description = "通过类型获取文章")
+    @Parameter(name = "type", description = "文章类型", required = true)
+    @GetMapping("/type/{type}")
     public ResultMessage<Article> getByType(@NotNull(message = "文章类型") @PathVariable("type") String type) {
         return ResultUtil.data(articleService.customGetByType(type));
     }

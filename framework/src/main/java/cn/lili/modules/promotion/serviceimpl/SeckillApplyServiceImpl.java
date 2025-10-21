@@ -34,6 +34,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,7 @@ public class SeckillApplyServiceImpl extends ServiceImpl<SeckillApplyMapper, Sec
      * 规格商品
      */
     @Autowired
+    @Lazy
     private GoodsSkuService goodsSkuService;
     /**
      * 促销商品
@@ -69,6 +71,7 @@ public class SeckillApplyServiceImpl extends ServiceImpl<SeckillApplyMapper, Sec
     /**
      * 秒杀
      */
+    @Lazy
     @Autowired
     private SeckillService seckillService;
 

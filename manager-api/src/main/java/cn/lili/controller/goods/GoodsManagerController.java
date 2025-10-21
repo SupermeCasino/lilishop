@@ -16,15 +16,13 @@ import cn.lili.modules.goods.entity.vos.GoodsVO;
 import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.goods.service.GoodsSkuService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,7 +32,7 @@ import java.util.List;
  * @since 2020-02-23 15:18:56
  */
 @RestController
-@Api(tags = "管理端,商品管理接口")
+@Tag(name = "管理端,商品管理接口")
 @RequestMapping("/manager/goods/goods")
 public class GoodsManagerController {
     /**
@@ -48,38 +46,40 @@ public class GoodsManagerController {
     @Autowired
     private GoodsSkuService goodsSkuService;
 
-    @ApiOperation(value = "分页获取")
-    @GetMapping(value = "/list")
+    @Operation(summary = "分页获取")
+    @Parameter(name = "goodsSearchParams", description = "商品查询参数")
+    @GetMapping("/list")
     public ResultMessage<IPage<Goods>> getByPage(GoodsSearchParams goodsSearchParams) {
         return ResultUtil.data(goodsService.queryByParams(goodsSearchParams));
     }
 
-    @ApiOperation(value = "获取商品数量")
-    @GetMapping(value = "/goodsNumber")
+    @Operation(summary = "获取商品数量")
+    @Parameter(name = "goodsSearchParams", description = "商品查询参数")
+    @GetMapping("/goodsNumber")
     public ResultMessage<GoodsNumVO> getGoodsNumVO(GoodsSearchParams goodsSearchParams) {
         return ResultUtil.data(goodsService.getGoodsNumVO(goodsSearchParams));
     }
 
-    @ApiOperation(value = "分页获取商品列表")
-    @GetMapping(value = "/sku/list")
+    @Operation(summary = "分页获取商品列表")
+    @Parameter(name = "goodsSearchParams", description = "商品查询参数")
+    @GetMapping("/sku/list")
     public ResultMessage<IPage<GoodsSku>> getSkuByPage(GoodsSearchParams goodsSearchParams) {
         return ResultUtil.data(goodsSkuService.getGoodsSkuByPage(goodsSearchParams));
     }
 
-    @ApiOperation(value = "分页获取待审核商品")
-    @GetMapping(value = "/auth/list")
+    @Operation(summary = "分页获取待审核商品")
+    @Parameter(name = "goodsSearchParams", description = "商品查询参数")
+    @GetMapping("/auth/list")
     public ResultMessage<IPage<Goods>> getAuthPage(GoodsSearchParams goodsSearchParams) {
         goodsSearchParams.setAuthFlag(GoodsAuthEnum.TOBEAUDITED.name());
         return ResultUtil.data(goodsService.queryByParams(goodsSearchParams));
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "管理员审核商品", notes = "管理员审核商品")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "goodsIds", value = "商品ID", required = true, paramType = "path", allowMultiple = true, dataType = "int"),
-            @ApiImplicitParam(name = "authFlag", value = "审核结果", required = true, paramType = "query", dataType = "string")
-    })
-    @PutMapping(value = "auth")
+    @Operation(description = "管理员审核商品")
+    @Parameter(name = "goodsId", description = "商品ID", required = true)
+    @Parameter(name = "authFlag", description = "审核结果", required = true)
+    @PutMapping("/auth")
     public ResultMessage<Object> auth(@RequestParam List<String> goodsIds, @RequestParam String authFlag) {
         //校验商品是否存在
         if (goodsService.auditGoods(goodsIds, GoodsAuthEnum.valueOf(authFlag))) {
@@ -90,11 +90,9 @@ public class GoodsManagerController {
 
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "管理员上架商品", notes = "管理员上架商品时使用")
-    @PutMapping(value = "/up")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "goodsId", value = "商品ID", required = true, allowMultiple = true)
-    })
+    @Operation(description = "管理员上架商品")
+    @Parameter(name = "goodsId", description = "商品ID", required = true)
+    @PutMapping("/up")
     public ResultMessage<Object> unpGoods(@RequestParam List<String> goodsId) {
         if (Boolean.TRUE.equals(goodsService.updateGoodsMarketAble(goodsId, GoodsStatusEnum.UPPER, ""))) {
             return ResultUtil.success();
@@ -103,13 +101,12 @@ public class GoodsManagerController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "管理员下架商品", notes = "管理员下架商品时使用")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "goodsId", value = "商品ID", required = true, paramType = "query", allowMultiple = true),
-            @ApiImplicitParam(name = "reason", value = "下架理由", required = true, paramType = "query")
-    })
+    @Operation(description = "管理员下架商品")
+    @Parameter(name = "goodsId", description = "商品ID", required = true)
+    @Parameter(name = "reason", description = "下架理由", required = true)
+
     @DemoSite
-    @PutMapping(value = "under")
+    @PutMapping("/under")
     public ResultMessage<Object> underGoods(@RequestParam List<String> goodsId, @NotEmpty(message = "下架原因不能为空") @RequestParam String reason) {
 
         if (Boolean.TRUE.equals(goodsService.managerUpdateGoodsMarketAble(goodsId, GoodsStatusEnum.DOWN, reason))) {
@@ -119,8 +116,9 @@ public class GoodsManagerController {
     }
 
 
-    @ApiOperation(value = "通过id获取商品详情")
-    @GetMapping(value = "/get/{id}")
+    @Operation(description = "通过id获取商品详情")
+    @Parameter(name = "id", description = "商品ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<GoodsVO> get(@PathVariable String id) {
         GoodsVO goods = goodsService.getGoodsVO(id);
         return ResultUtil.data(goods);

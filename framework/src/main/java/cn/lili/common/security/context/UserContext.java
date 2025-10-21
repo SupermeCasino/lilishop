@@ -13,8 +13,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 用户上下文
@@ -91,11 +90,12 @@ public class UserContext {
     public static AuthUser getAuthUser(String accessToken) {
         try {
             //获取token的信息
-            Claims claims
-                    = Jwts.parserBuilder()
-                    .setSigningKey(SecretKeyUtil.generalKeyByDecoders())
-                    .build()
-                    .parseClaimsJws(accessToken).getBody();
+            Claims claims =
+                    Jwts.parser()
+                            .verifyWith(SecretKeyUtil.generalKeyByDecoders())
+                            .build()
+                            .parseSignedClaims(accessToken)
+                            .getPayload();
             //获取存储在claims中的用户信息
             String json = claims.get(SecurityEnum.USER_CONTEXT.getValue()).toString();
             return new Gson().fromJson(json, AuthUser.class);

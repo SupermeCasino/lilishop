@@ -5,7 +5,6 @@ import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.SwitchEnum;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.OperationalJudgment;
-import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.logistics.LogisticsPluginFactory;
 import cn.lili.modules.logistics.entity.dto.LabelOrderDTO;
 import cn.lili.modules.logistics.entity.enums.LogisticsEnum;
@@ -31,8 +30,9 @@ import cn.lili.modules.system.service.SettingService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +50,7 @@ public class LogisticsServiceImpl extends ServiceImpl<LogisticsMapper, Logistics
     @Autowired
     private LogisticsPluginFactory logisticsPluginFactory;
     @Autowired
+    @Lazy
     private OrderService orderService;
     @Autowired
     private OrderItemService orderItemService;
@@ -88,7 +89,13 @@ public class LogisticsServiceImpl extends ServiceImpl<LogisticsMapper, Logistics
         //获取设置
         LogisticsSetting logisticsSetting = this.getLogisticsSetting();
         //获取订单及子订单
-        Order order = OperationalJudgment.judgment(orderService.getBySn(orderSn));
+        Order order = null;
+        if (orderService != null) {
+            order = OperationalJudgment.judgment(orderService.getBySn(orderSn));
+        }
+        if (order == null) {
+            throw new ServiceException(ResultCode.ORDER_NOT_EXIST);
+        }
         if ((LogisticsEnum.SHUNFENG.name().equals(logisticsSetting.getType()) && order.getDeliverStatus().equals(DeliverStatusEnum.DELIVERED.name()) && order.getOrderStatus().equals(OrderStatusEnum.DELIVERED.name()))
                 || (order.getDeliverStatus().equals(DeliverStatusEnum.UNDELIVERED.name()) && order.getOrderStatus().equals(OrderStatusEnum.UNDELIVERED.name()))) {
             //订单货物
@@ -96,9 +103,9 @@ public class LogisticsServiceImpl extends ServiceImpl<LogisticsMapper, Logistics
             //获取对应物流
             Logistics logistics;
 
-            if(LogisticsEnum.SHUNFENG.name().equals(logisticsSetting.getType())){
-                logistics = this.getOne(new LambdaQueryWrapper<Logistics>().eq(Logistics::getCode,"SF"));
-            }else{
+            if (LogisticsEnum.SHUNFENG.name().equals(logisticsSetting.getType())) {
+                logistics = this.getOne(new LambdaQueryWrapper<Logistics>().eq(Logistics::getCode, "SF"));
+            } else {
                 logistics = this.getById(logisticsId);
             }
             // 店铺-物流公司设置

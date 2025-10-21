@@ -4,8 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -206,9 +205,8 @@ public class PromotionTools {
             //移除无效促销活动
             return map.entrySet().stream().filter(Objects::nonNull).filter(i -> {
                 try {
-                    if (JSONUtil.isTypeJSON(JSONUtil.toJsonStr(i.getValue()))) {
-                        JSONObject promotionsObj = JSONUtil.parseObj(i.getValue());
-                        BasePromotions basePromotions = promotionsObj.toBean(BasePromotions.class);
+                    if (JSON.isValid(JSON.toJSONString(i.getValue()))) {
+                        BasePromotions basePromotions = JSON.parseObject(JSON.toJSONString(i.getValue()), BasePromotions.class);
                         if (basePromotions != null && basePromotions.getStartTime() != null && basePromotions.getEndTime() != null) {
                             return basePromotions.getStartTime().getTime() <= System.currentTimeMillis() && basePromotions.getEndTime().getTime() >= System.currentTimeMillis();
                         }

@@ -2,11 +2,10 @@ package cn.lili.modules.system.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
+import lombok.EqualsAndHashCode;
 
 /**
  * 物流公司设置
@@ -15,26 +14,27 @@ import javax.validation.constraints.NotEmpty;
  * @since 2020/11/17 8:01 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_logistics")
-@ApiModel(value = "物流公司")
+@Schema(description = "物流公司")
 public class Logistics extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "物流公司名称必填")
-    @ApiModelProperty(value = "物流公司名称")
+    @Schema(description = "物流公司名称")
     private String name;
 
     @NotEmpty(message = "物流公司code必填")
-    @ApiModelProperty(value = "物流公司code")
+    @Schema(description = "物流公司code")
     private String code;
 
-    @ApiModelProperty(value = "支持电子面单")
+    @Schema(description = "支持电子面单")
     private String standBy;
 
-    @ApiModelProperty(value = "物流公司电子面单表单")
+    @Schema(description = "物流公司电子面单表单")
     private String formItems;
 
-    @ApiModelProperty(value = "禁用状态 OPEN：开启，CLOSE：禁用")
+    @Schema(description = "禁用状态 OPEN：开启，CLOSE：禁用")
     private String disabled;
 }

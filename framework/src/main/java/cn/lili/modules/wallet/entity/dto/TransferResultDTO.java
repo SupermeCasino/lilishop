@@ -1,6 +1,6 @@
 package cn.lili.modules.wallet.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,9 +16,9 @@ import lombok.Data;
 @Builder
 public class TransferResultDTO {
 
-    @ApiModelProperty(value = "错误信息")
+    @Schema(description = "错误信息")
     private String response;
-    @ApiModelProperty(value = "是否成功")
+    @Schema(description = "是否成功")
     private Boolean result;
 
 }

@@ -6,14 +6,14 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.page.entity.dos.Feedback;
 import cn.lili.modules.page.service.FeedbackService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 买家端,意见反馈接口
@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @since 2020-05-5 15:10:16
  */
 @RestController
-@Api(tags = "买家端,意见反馈接口")
+@Tag(name = "买家端,意见反馈接口")
 @RequestMapping("/buyer/other/feedback")
 public class FeedbackBuyerController {
 
@@ -33,7 +33,7 @@ public class FeedbackBuyerController {
     private FeedbackService feedbackService;
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "添加意见反馈")
+    @Operation(summary = "添加意见反馈")
     @PostMapping()
     public ResultMessage<Object> save(@Valid Feedback feedback) {
         feedback.setUserName(UserContext.getCurrentUser().getNickName());

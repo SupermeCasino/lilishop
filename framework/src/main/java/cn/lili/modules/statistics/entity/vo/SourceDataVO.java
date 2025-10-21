@@ -1,6 +1,6 @@
 package cn.lili.modules.statistics.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,15 +12,14 @@ import lombok.Data;
 @Data
 public class SourceDataVO {
 
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String payType;
-    @ApiModelProperty(value = "收款合计")
+    @Schema(description = "收款合计")
     private Double total;
-    @ApiModelProperty(value = "营业收入")
+    @Schema(description = "营业收入")
     private Double income;
-    @ApiModelProperty(value = "新增储值金额")
+    @Schema(description = "新增储值金额")
     private Double recharge;
-
 
 
 }

@@ -12,8 +12,9 @@ import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
 import cn.lili.modules.statistics.service.OrderStatisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ import java.util.Objects;
  * @since 2020/12/9 19:04
  */
 @Slf4j
-@Api(tags = "店铺端,订单统计接口")
+@Tag(name = "店铺端,订单统计接口")
 @RestController
 @RequestMapping("/store/statistics/order")
 public class OrderStatisticsStoreController {
@@ -46,7 +47,8 @@ public class OrderStatisticsStoreController {
     @Autowired
     private OrderStatisticsService orderStatisticsService;
 
-    @ApiOperation(value = "订单概览统计")
+    @Operation(description = "订单概览统计")
+    @Parameter(name = "statisticsQueryParam", description = "订单统计查询参数", required = true)
     @GetMapping("/overview")
     public ResultMessage<OrderOverviewVO> overview(StatisticsQueryParam statisticsQueryParam) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -59,7 +61,8 @@ public class OrderStatisticsStoreController {
         return null;
     }
 
-    @ApiOperation(value = "订单图表统计")
+    @Operation(description = "订单图表统计")
+    @Parameter(name = "statisticsQueryParam", description = "订单统计查询参数", required = true)
     @GetMapping
     public ResultMessage<List<OrderStatisticsDataVO>> statisticsChart(StatisticsQueryParam statisticsQueryParam) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -73,7 +76,9 @@ public class OrderStatisticsStoreController {
     }
 
 
-    @ApiOperation(value = "订单统计")
+    @Operation(description = "订单统计")
+    @Parameter(name = "statisticsQueryParam", description = "订单统计查询参数", required = true)
+    @Parameter(name = "pageVO", description = "分页参数", required = true)
     @GetMapping("/order")
     public ResultMessage<IPage<OrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -87,7 +92,9 @@ public class OrderStatisticsStoreController {
     }
 
 
-    @ApiOperation(value = "退单统计")
+    @Operation(description = "退单统计")
+    @Parameter(name = "statisticsQueryParam", description = "订单统计查询参数", required = true)
+    @Parameter(name = "pageVO", description = "分页参数", required = true)
     @GetMapping("/refund")
     public ResultMessage<IPage<AfterSale>> refund(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();

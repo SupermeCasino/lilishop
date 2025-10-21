@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,30 +12,30 @@ import lombok.Data;
 @Data
 public class GoodsSkuStockDTO {
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String goodsId;
 
-    @ApiModelProperty(value = "商品skuId")
+    @Schema(description = "商品skuId")
     private String skuId;
 
-    @ApiModelProperty(value = "库存")
+    @Schema(description = "库存")
     private Integer quantity;
 
-    @ApiModelProperty(value = "预警库存")
+    @Schema(description = "预警库存")
     private Integer alertQuantity;
 
-    @ApiModelProperty(value = "规格信息")
+    @Schema(description = "规格信息")
     private String simpleSpecs;
 
-    @ApiModelProperty(value = "商品编号")
+    @Schema(description = "商品编号")
     private String sn;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsStockTypeEnum
      */
-    @ApiModelProperty(value = "类型")
+    @Schema(description = "类型")
     private String type;
 }

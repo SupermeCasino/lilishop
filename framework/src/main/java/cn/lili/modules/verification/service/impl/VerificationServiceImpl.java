@@ -114,7 +114,23 @@ public class VerificationServiceImpl implements VerificationService {
 
         Object object = cache.get(CachePrefix.VERIFICATION_IMAGE.getPrefix() + originalResource);
         if (object != null) {
-            return (SerializableStream) object;
+            // SpringBoot3兼容性：处理JSONObject类型转换问题
+            if (object instanceof cn.hutool.json.JSONObject) {
+                cn.hutool.json.JSONObject jsonObject = (cn.hutool.json.JSONObject) object;
+                String base64 = jsonObject.getStr("base64");
+                if (base64 != null) {
+                    SerializableStream stream = new SerializableStream();
+                    stream.setBase64(base64);
+                    return stream;
+                }
+            } else if (object instanceof SerializableStream) {
+                return (SerializableStream) object;
+            } else {
+                log.warn("Unexpected cache object type: {}, clearing cache for key: {}", 
+                    object.getClass().getName(), CachePrefix.VERIFICATION_IMAGE.getPrefix() + originalResource);
+                // 清除异常的缓存数据
+                cache.remove(CachePrefix.VERIFICATION_IMAGE.getPrefix() + originalResource);
+            }
         }
         if (StringUtils.isNotEmpty(originalResource)) {
             URL url = new URL(originalResource);

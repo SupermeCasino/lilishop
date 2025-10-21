@@ -2,9 +2,9 @@ package cn.lili.modules.permission.entity.dos;
 
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户角色
@@ -14,13 +14,14 @@ import lombok.Data;
  */
 @Data
 @TableName("li_user_role")
-@ApiModel(value = "用户角色")
+@Schema(description = "用户角色")
+@EqualsAndHashCode(callSuper = false)
 public class UserRole extends BaseIdEntity {
 
-    @ApiModelProperty(value = "用户唯一id")
+    @Schema(description = "用户唯一id")
     private String userId;
 
-    @ApiModelProperty(value = "角色唯一id")
+    @Schema(description = "角色唯一id")
     private String roleId;
 
     public UserRole(String userId, String roleId) {

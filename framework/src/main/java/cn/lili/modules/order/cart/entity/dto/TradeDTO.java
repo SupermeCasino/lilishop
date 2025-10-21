@@ -12,7 +12,7 @@ import cn.lili.modules.order.order.entity.vo.ReceiptVO;
 import cn.lili.modules.promotion.entity.dos.MemberCoupon;
 import cn.lili.modules.promotion.entity.vos.MemberCouponVO;
 import cn.lili.modules.store.entity.dos.StoreAddress;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,32 +33,32 @@ public class TradeDTO implements Serializable {
 
     private static final long serialVersionUID = -3137165707807057810L;
 
-    @ApiModelProperty(value = "sn")
+    @Schema(description = "sn")
     private String sn;
 
-    @ApiModelProperty(value = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
+    @Schema(description = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
     private String parentOrderSn;
 
-    @ApiModelProperty(value = "购物车列表")
+    @Schema(description = "购物车列表")
     private List<CartVO> cartList;
 
-    @ApiModelProperty(value = "整笔交易中所有的规格商品")
+    @Schema(description = "整笔交易中所有的规格商品")
     private List<CartSkuVO> skuList;
 
-    @ApiModelProperty(value = "购物车车计算后的总价")
+    @Schema(description = "购物车车计算后的总价")
     private PriceDetailVO priceDetailVO;
 
-    @ApiModelProperty(value = "购物车车计算后的总价")
+    @Schema(description = "购物车车计算后的总价")
     private PriceDetailDTO priceDetailDTO;
 
-    @ApiModelProperty(value = "发票信息")
+    @Schema(description = "发票信息")
     private ReceiptVO receiptVO;
 
-    @ApiModelProperty(value = "是否需要发票")
+    @Schema(description = "是否需要发票")
     private Boolean needReceipt;
 
 
-    @ApiModelProperty(value = "不支持配送方式")
+    @Schema(description = "不支持配送方式")
     private List<CartSkuVO> notSupportFreight;
 
     /**

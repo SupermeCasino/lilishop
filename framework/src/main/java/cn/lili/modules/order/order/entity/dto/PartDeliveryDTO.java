@@ -1,6 +1,6 @@
 package cn.lili.modules.order.order.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 public class PartDeliveryDTO {
 
-    @ApiModelProperty(value = "订单货物Id")
+    @Schema(description = "订单货物Id")
     private String orderItemId;
 
-    @ApiModelProperty(value = "发货数量")
+    @Schema(description = "发货数量")
     private Integer deliveryNum;
 
 

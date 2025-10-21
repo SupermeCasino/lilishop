@@ -2,8 +2,9 @@ package cn.lili.modules.goods.entity.vos;
 
 
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 商品关联参数的VO
@@ -12,18 +13,19 @@ import lombok.Data;
  * @since 2020-02-26 23:24:13
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class GoodsParamsVO extends GoodsParamsDTO {
 
     private static final long serialVersionUID = -4904700751774005326L;
-    @ApiModelProperty("1 输入项   2 选择项")
+    @Schema(description = "1 输入项   2 选择项")
     private Integer paramType;
-    @ApiModelProperty(" 选择项的内容获取值，使用optionList")
+    @Schema(description = " 选择项的内容获取值，使用optionList")
     private String options;
-    @ApiModelProperty("是否必填是  1    否   0")
+    @Schema(description = "是否必填是  1    否   0")
     private Integer required;
-    @ApiModelProperty("参数组id")
+    @Schema(description = "参数组id")
     private String groupId;
-    @ApiModelProperty("是否可索引  1 可以   0不可以")
+    @Schema(description = "是否可索引  1 可以   0不可以")
     private Integer isIndex;
 
     private String[] optionList;

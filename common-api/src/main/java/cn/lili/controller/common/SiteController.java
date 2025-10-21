@@ -4,11 +4,13 @@ import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 站点基础配置获取
@@ -21,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/common/common/site")
-@Api(tags = "站点基础接口")
+@Tag(name = "站点基础接口")
 public class SiteController {
 
     @Autowired
     private SettingService settingService;
 
-    @ApiOperation(value = "获取站点基础信息")
+    @Operation(summary = "获取站点基础信息")
     @GetMapping
     public ResultMessage<Object> baseSetting() {
         return ResultUtil.data(settingService.get(SettingEnum.BASE_SETTING.name()));

@@ -3,7 +3,10 @@ package cn.lili.modules.verification;
 import cn.lili.common.utils.Base64DecodeMultipartFile;
 import cn.lili.common.vo.SerializableStream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Base64Utils;
+import java.util.Base64;
+
+// 添加新的导入
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -105,9 +108,8 @@ public class SliderImageUtil {
         //利用ImageIO类提供的write方法，将bi以jpg图片的数据模式写入流
         ImageIO.write(originalImage, IMG_FILE_TYPE, oriImagesOs);
         byte[] oriImageByte = oriImagesOs.toByteArray();
-
-        pictureMap.put("slidingImage", "data:image/png;base64," + Base64Utils.encodeToString(newImagery));
-        pictureMap.put("backImage", "data:image/png;base64," + Base64Utils.encodeToString(oriImageByte));
+        pictureMap.put("slidingImage", "data:image/png;base64," + Base64.getEncoder().encodeToString(newImagery));
+        pictureMap.put("backImage", "data:image/png;base64," + Base64.getEncoder().encodeToString(oriImageByte));
 //       x轴
         pictureMap.put("randomX", randomX);
 //       y轴

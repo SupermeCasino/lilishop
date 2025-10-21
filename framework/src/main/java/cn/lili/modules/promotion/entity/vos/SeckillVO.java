@@ -2,7 +2,7 @@ package cn.lili.modules.promotion.entity.vos;
 
 import cn.lili.modules.promotion.entity.dos.Seckill;
 import cn.lili.modules.promotion.entity.dos.SeckillApply;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -25,7 +25,7 @@ public class SeckillVO extends Seckill {
     /**
      * @see cn.lili.modules.promotion.entity.enums.SeckillApplyStatusEnum
      */
-    @ApiModelProperty(value = "报名状态")
+    @Schema(description = "报名状态")
     private String seckillApplyStatus;
 
     /**

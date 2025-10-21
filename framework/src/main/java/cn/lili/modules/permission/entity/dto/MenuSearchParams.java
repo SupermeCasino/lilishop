@@ -1,6 +1,6 @@
 package cn.lili.modules.permission.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,22 +12,22 @@ import lombok.Data;
 @Data
 public class MenuSearchParams {
 
-    @ApiModelProperty(value = "菜单/权限名称")
+    @Schema(description = "菜单/权限名称")
     private String name;
 
-    @ApiModelProperty(value = "层级")
+    @Schema(description = "层级")
     private Integer level;
 
-    @ApiModelProperty(value = "菜单标题")
+    @Schema(description = "菜单标题")
     private String title;
 
-    @ApiModelProperty(value = "赋权API地址,正则表达式")
+    @Schema(description = "赋权API地址,正则表达式")
     private String path;
 
-    @ApiModelProperty(value = "前端路由")
+    @Schema(description = "前端路由")
     private String frontRoute;
 
-    @ApiModelProperty(value = "图标")
+    @Schema(description = "图标")
     private String icon;
 
 }

@@ -20,8 +20,8 @@ public class CreateTimeShardingTableAlgorithmBak implements PreciseShardingAlgor
     @Override
     public String doSharding(Collection<String> collection, PreciseShardingValue<Long> preciseShardingValue) {
         Long createTime = preciseShardingValue.getValue();
-        String value = DateUtil.toString(createTime, "MM");
-        Integer month = Integer.valueOf(value);
+        String description = DateUtil.toString(createTime, "MM");
+        Integer month = Integer.valueOf(description);
         //li_order_1,li_order_2~
         return "li_order_" + month;
 

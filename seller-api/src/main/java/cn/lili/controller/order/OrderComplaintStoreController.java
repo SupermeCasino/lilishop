@@ -13,10 +13,9 @@ import cn.lili.modules.order.order.entity.vo.*;
 import cn.lili.modules.order.order.service.OrderComplaintCommunicationService;
 import cn.lili.modules.order.order.service.OrderComplaintService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ import java.util.Objects;
  * @since 2020/12/5
  **/
 @RestController
-@Api(tags = "店铺端,交易投诉接口")
+@Tag(name = "店铺端,交易投诉接口")
 @RequestMapping("/store/order/complain")
 public class OrderComplaintStoreController {
 
@@ -45,14 +44,16 @@ public class OrderComplaintStoreController {
     @Autowired
     private OrderComplaintCommunicationService orderComplaintCommunicationService;
 
-    @ApiOperation(value = "通过id获取")
-    @ApiImplicitParam(name = "id", value = "投诉单ID", required = true, paramType = "path")
-    @GetMapping(value = "/{id}")
+    @Operation(summary = "通过id获取")
+    @Parameter(name = "id", description = "投诉单ID", required = true)
+    @GetMapping("/{id}")
     public ResultMessage<OrderComplaintVO> get(@PathVariable String id) {
         return ResultUtil.data(OperationalJudgment.judgment(orderComplaintService.getOrderComplainById(id)));
     }
 
-    @ApiOperation(value = "分页获取")
+    @Operation(summary = "分页获取")
+    @Parameter(name = "searchParams", description = "投诉查询参数")
+    @Parameter(name = "pageVO", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<OrderComplaint>> get(OrderComplaintSearchParams searchParams, PageVO pageVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -60,11 +61,11 @@ public class OrderComplaintStoreController {
         return ResultUtil.data(orderComplaintService.getOrderComplainByPage(searchParams, pageVO));
     }
 
-    @ApiOperation(value = "添加交易投诉对话")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "complainId", value = "投诉单ID", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "content", value = "内容", required = true, paramType = "query")
-    })
+
+
+    @Operation(summary = "添加交易投诉对话")
+    @Parameter(name = "complainId", description = "投诉单ID", required = true)
+    @Parameter(name = "content", description = "内容", required = true)
     @PostMapping("/communication")
     public ResultMessage<OrderComplaintCommunicationVO> addCommunication(@RequestParam String complainId, @RequestParam String content) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -73,7 +74,8 @@ public class OrderComplaintStoreController {
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "修改申诉信息")
+    @Operation(summary = "修改申诉信息")
+    @Parameter(name = "orderComplainVO", description = "投诉信息")
     @PutMapping
     public ResultMessage<OrderComplaintVO> update(OrderComplaintVO orderComplainVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -83,7 +85,8 @@ public class OrderComplaintStoreController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "申诉")
+    @Operation(summary = "申诉")
+    @Parameter(name = "storeAppealVO", description = "申诉信息")
     @PutMapping("/appeal")
     public ResultMessage<OrderComplaintVO> appeal(StoreAppealVO storeAppealVO) {
         orderComplaintService.appeal(storeAppealVO);
@@ -91,8 +94,9 @@ public class OrderComplaintStoreController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "修改状态")
-    @PutMapping(value = "/status")
+    @Operation(summary = "修改状态")
+    @Parameter(name = "orderComplainVO", description = "投诉状态参数")
+    @PutMapping("/status")
     public ResultMessage<Object> updateStatus(OrderComplaintOperationParams orderComplainVO) {
         orderComplaintService.updateOrderComplainByStatus(orderComplainVO);
         return ResultUtil.success();

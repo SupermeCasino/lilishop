@@ -2,7 +2,7 @@ package cn.lili.modules.distribution.entity.dto;
 
 import cn.lili.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -14,10 +14,10 @@ import lombok.Data;
 @Data
 public class DistributionSearchParams {
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "分销员状态", allowableValues = "APPLY,RETREAT,REFUSE,PASS")
+    @Schema(description = "分销员状态", allowableValues = "APPLY,RETREAT,REFUSE,PASS")
     private String distributionStatus;
 
     public <T> QueryWrapper<T> queryWrapper() {

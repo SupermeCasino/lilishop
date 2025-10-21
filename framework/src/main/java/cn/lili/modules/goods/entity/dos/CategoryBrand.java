@@ -1,13 +1,13 @@
 package cn.lili.modules.goods.entity.dos;
 
-import cn.lili.mybatis.BaseIdEntity;
+import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,37 +23,38 @@ import java.util.Date;
  * @since 2020-03-02 09:34:02
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_category_brand")
-@ApiModel(value = "商品分类品牌关联")
+@Schema(description = "商品分类品牌关联")
 @NoArgsConstructor
-public class CategoryBrand extends BaseIdEntity {
+public class CategoryBrand extends BaseEntity {
 
     private static final long serialVersionUID = 3315719881926878L;
 
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
     /**
      * 分类id
      */
     @TableField(value = "category_id")
-    @ApiModelProperty(value = "分类id")
+    @Schema(description = "分类id")
     private String categoryId;
     /**
      * 品牌id
      */
     @TableField(value = "brand_id")
-    @ApiModelProperty(value = "品牌id")
+    @Schema(description = "品牌id")
     private String brandId;
 
     public CategoryBrand(String categoryId, String brandId) {

@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.goods.entity.dos.CategoryParameterGroup;
@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ public class CategoryParameterGroupServiceImpl extends ServiceImpl<CategoryParam
      * 商品参数
      */
     @Autowired
+    @Lazy
     private ParametersService parametersService;
 
     @Autowired
@@ -80,12 +82,12 @@ public class CategoryParameterGroupServiceImpl extends ServiceImpl<CategoryParam
 
         for (Map<String, Object> goods : goodsList) {
             String params = (String) goods.get("params");
-            List<GoodsParamsDTO> goodsParamsDTOS = JSONUtil.toList(params, GoodsParamsDTO.class);
+            List<GoodsParamsDTO> goodsParamsDTOS = JSON.parseArray(params, GoodsParamsDTO.class);
             List<GoodsParamsDTO> goodsParamsDTOList = goodsParamsDTOS.stream().filter(i -> i.getGroupId() != null && i.getGroupId().equals(origin.getId())).collect(Collectors.toList());
             for (GoodsParamsDTO goodsParamsDTO : goodsParamsDTOList) {
                 goodsParamsDTO.setGroupName(categoryParameterGroup.getGroupName());
             }
-            this.goodsService.updateGoodsParams(goods.get("id").toString(), JSONUtil.toJsonStr(goodsParamsDTOS));
+            this.goodsService.updateGoodsParams(goods.get("id").toString(), JSON.toJSONString(goodsParamsDTOS));
         }
 
         return this.updateById(categoryParameterGroup);

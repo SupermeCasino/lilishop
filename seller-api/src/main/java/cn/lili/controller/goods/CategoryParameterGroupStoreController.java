@@ -2,9 +2,9 @@ package cn.lili.controller.goods;
 
 import cn.lili.modules.goods.entity.vos.ParameterGroupVO;
 import cn.lili.modules.goods.service.CategoryParameterGroupService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,7 @@ import java.util.List;
  * @since 2020-02-18 15:18:56
  */
 @RestController
-@Api(tags = "店铺端,分类绑定参数组管理接口")
+@Tag(name = "店铺端,分类绑定参数组管理接口")
 @RequestMapping("/store/goods/categoryParameters")
 public class CategoryParameterGroupStoreController {
 
@@ -28,9 +28,9 @@ public class CategoryParameterGroupStoreController {
     @Autowired
     private CategoryParameterGroupService categoryParameterGroupService;
 
-    @ApiOperation(value = "查询某分类下绑定的参数信息")
-    @GetMapping(value = "/{category_id}")
-    @ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询某分类下绑定的参数信息")
+    @GetMapping("/{category_id}")
+    @Parameter(name = "category_id", description = "分类id", required = true)
     public List<ParameterGroupVO> getCategoryParam(@PathVariable("category_id") String categoryId) {
         return categoryParameterGroupService.getCategoryParams(categoryId);
     }

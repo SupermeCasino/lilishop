@@ -2,8 +2,7 @@ package cn.lili.modules.member.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_foot_print")
-@ApiModel(value = "浏览历史")
+@Schema(description = "浏览历史")
 @NoArgsConstructor
 @AllArgsConstructor
 public class FootPrint extends BaseEntity {
@@ -27,16 +26,16 @@ public class FootPrint extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
-    @ApiModelProperty(value = "店铺Id")
+    @Schema(description = "店铺Id")
     private String storeId;
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "规格ID")
+    @Schema(description = "规格ID")
     private String skuId;
 
 }

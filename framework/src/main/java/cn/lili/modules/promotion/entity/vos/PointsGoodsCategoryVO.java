@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
  * @since 2021/1/15
  **/
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PointsGoodsCategoryVO extends PointsGoodsCategory {
 
     private static final long serialVersionUID = 5528833118735059182L;

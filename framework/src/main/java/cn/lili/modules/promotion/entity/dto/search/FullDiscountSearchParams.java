@@ -2,7 +2,7 @@ package cn.lili.modules.promotion.entity.dto.search;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,13 +21,13 @@ public class FullDiscountSearchParams extends BasePromotionsSearchParams impleme
     private static final long serialVersionUID = -4052716630253333681L;
 
 
-    @ApiModelProperty(value = "活动名称")
+    @Schema(description = "活动名称")
     private String promotionName;
 
-    @ApiModelProperty(value = "是否赠优惠券")
+    @Schema(description = "是否赠优惠券")
     private Boolean couponFlag;
 
-    @ApiModelProperty(value = "优惠券id")
+    @Schema(description = "优惠券id")
     private String couponId;
 
     @Override

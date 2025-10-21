@@ -1,11 +1,12 @@
 package cn.lili.listener;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ClassLoaderUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.aop.annotation.RetryOperation;
 import cn.lili.common.exception.RetryException;
 import cn.lili.common.vo.PageVO;
@@ -128,7 +129,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
         switch (GoodsTagsEnum.valueOf(messageExt.getTags())) {
             //查看商品
             case VIEW_GOODS:
-                FootPrint footPrint = JSONUtil.toBean(new String(messageExt.getBody()), FootPrint.class);
+                FootPrint footPrint = JSON.parseObject(new String(messageExt.getBody()), FootPrint.class);
                 footprintService.saveFootprint(footPrint);
                 break;
             //生成索引
@@ -154,13 +155,13 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
                 this.updateGoodsIndexPromotions(new String(messageExt.getBody()));
                 break;
             case DELETE_GOODS_INDEX_PROMOTIONS:
-                JSONObject jsonObject = JSONUtil.parseObj(new String(messageExt.getBody()));
-                String promotionKey = jsonObject.getStr("promotionKey");
+                JSONObject jsonObject = JSON.parseObject(new String(messageExt.getBody()));
+                String promotionKey = jsonObject.getString("promotionKey");
                 if (CharSequenceUtil.isEmpty(promotionKey)) {
                     break;
                 }
-                if (CharSequenceUtil.isNotEmpty(jsonObject.getStr("scopeId"))) {
-                    this.goodsIndexService.deleteEsGoodsPromotionByPromotionKey(Arrays.asList(jsonObject.getStr("scopeId").split(",")), promotionKey);
+                if (CharSequenceUtil.isNotEmpty(jsonObject.getString("scopeId"))) {
+                    this.goodsIndexService.deleteEsGoodsPromotionByPromotionKey(Arrays.asList(jsonObject.getString("scopeId").split(",")), promotionKey);
                 } else {
                     this.goodsIndexService.deleteEsGoodsPromotionByPromotionKey(promotionKey);
                 }
@@ -169,7 +170,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
                 try {
                     String goodsIdsJsonStr = new String(messageExt.getBody());
                     GoodsSearchParams searchParams = new GoodsSearchParams();
-                    searchParams.setId(ArrayUtil.join(JSONUtil.toList(goodsIdsJsonStr, String.class).toArray(), ","));
+                    searchParams.setId(ArrayUtil.join(JSON.parseArray(goodsIdsJsonStr, String.class).toArray(), ","));
                     List<Goods> goodsList = goodsService.queryListByParams(searchParams);
                     this.updateGoodsIndex(goodsList);
                 } catch (Exception e) {
@@ -179,35 +180,32 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
             case UPDATE_GOODS_INDEX_FIELD:
                 try {
                     String updateIndexFieldsJsonStr = new String(messageExt.getBody());
-                    JSONObject updateIndexFields = JSONUtil.parseObj(updateIndexFieldsJsonStr);
-                    @SuppressWarnings("unchecked") Map<String, Object> queryFields = updateIndexFields.get("queryFields", Map.class);
-                    @SuppressWarnings("unchecked") Map<String, Object> updateFields = updateIndexFields.get("updateFields", Map.class);
+                    JSONObject updateIndexFields = JSON.parseObject(updateIndexFieldsJsonStr);
+                    @SuppressWarnings("unchecked") Map<String, Object> queryFields = updateIndexFields.getObject("queryFields", Map.class);
+                    @SuppressWarnings("unchecked") Map<String, Object> updateFields = updateIndexFields.getObject("updateFields", Map.class);
                     goodsIndexService.updateIndex(queryFields, updateFields);
                 } catch (Exception e) {
                     log.error("更新商品索引事件执行异常，商品信息: " + new String(messageExt.getBody()), e);
                 }
                 break;
-            case RESET_GOODS_INDEX:
-                try {
-                    String goodsIdsJsonStr = new String(messageExt.getBody());
-                    List<EsGoodsIndex> goodsIndices = JSONUtil.toList(goodsIdsJsonStr, EsGoodsIndex.class);
-                    goodsIndexService.updateBulkIndex(goodsIndices);
-                } catch (Exception e) {
-                    log.error("重置商品索引事件执行异常，商品信息: " + new String(messageExt.getBody()), e);
-                }
-                break;
+
             //审核商品
             case GOODS_AUDIT:
-                Goods goods = JSONUtil.toBean(new String(messageExt.getBody()), Goods.class);
+                Goods goods = JSON.parseObject(new String(messageExt.getBody()), Goods.class);
                 updateGoodsIndex(goods);
                 break;
             //删除商品
             case GOODS_DELETE:
                 try {
                     String goodsIdsJsonStr = new String(messageExt.getBody());
-                    for (String goodsId : JSONUtil.toList(goodsIdsJsonStr, String.class)) {
-                        goodsIndexService.deleteIndex(MapUtil.builder(new HashMap<String, Object>()).put("goodsId", goodsId).build());
-                    }
+                    for (String goodsId : JSON.parseArray(goodsIdsJsonStr, String.class)) {
+                         // Find all SKU IDs for this goods and delete them
+                         List<GoodsSku> goodsSkus = goodsSkuService.getGoodsSkuListByGoodsId(goodsId);
+                         if (CollUtil.isNotEmpty(goodsSkus)) {
+                             List<String> skuIds = goodsSkus.stream().map(GoodsSku::getId).collect(Collectors.toList());
+                             goodsIndexService.deleteIndexByIds(skuIds);
+                         }
+                     }
 
                     promotionService.removeByGoodsIds(goodsIdsJsonStr);
                 } catch (Exception e) {
@@ -221,13 +219,18 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
             //规格删除
             case SKU_DELETE:
                 String message = new String(messageExt.getBody());
-                List<String> skuIds = JSONUtil.toList(message, String.class);
+                List<String> skuIds = JSON.parseArray(message, String.class);
                 goodsCollectionService.deleteSkuCollection(skuIds);
                 break;
             case STORE_GOODS_DELETE:
                 try {
                     String storeId = new String(messageExt.getBody());
-                    goodsIndexService.deleteIndex(MapUtil.builder(new HashMap<String, Object>()).put("storeId", storeId).build());
+                    // Find all SKU IDs for this store and delete them
+                    List<GoodsSku> storeGoodsSkus = goodsSkuService.getGoodsSkuListByGoodsId(storeId);
+                    if (CollUtil.isNotEmpty(storeGoodsSkus)) {
+                        skuIds = storeGoodsSkus.stream().map(GoodsSku::getId).collect(Collectors.toList());
+                        goodsIndexService.deleteIndexByIds(skuIds);
+                    }
                 } catch (RetryException re) {
                     throw re;
                 } catch (Exception e) {
@@ -242,7 +245,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
                 break;
             //商品评价
             case GOODS_COMMENT_COMPLETE:
-                MemberEvaluation memberEvaluation = JSONUtil.toBean(new String(messageExt.getBody()), MemberEvaluation.class);
+                MemberEvaluation memberEvaluation = JSON.parseObject(new String(messageExt.getBody()), MemberEvaluation.class);
                 for (GoodsCommentCompleteEvent goodsCommentCompleteEvent : goodsCommentCompleteEvents) {
                     try {
                         goodsCommentCompleteEvent.goodsComment(memberEvaluation);
@@ -264,11 +267,11 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
     private void updateGoodsIndexPromotions(String promotionsJsonStr) {
         try {
             log.info("更新商品索引促销信息: {}", promotionsJsonStr);
-            JSONObject jsonObject = JSONUtil.parseObj(promotionsJsonStr);
+            JSONObject jsonObject = JSON.parseObject(promotionsJsonStr);
             // 转换为详细的促销信息（注：促销信息必须继承自 BasePromotions，且必须保证派生类存在与sdk包下）
-            BasePromotions promotions = (BasePromotions) jsonObject.get("promotions", ClassLoaderUtil.loadClass(jsonObject.get("promotionsType").toString()));
+            BasePromotions promotions = (BasePromotions) jsonObject.getObject("promotions", ClassLoaderUtil.loadClass(jsonObject.get("promotionsType").toString()));
             // 获取促销唯一key,由 促销类型 + 促销id 组成
-            String esPromotionKey = jsonObject.get("esPromotionKey").toString();
+            String esPromotionKey = jsonObject.getString("esPromotionKey");
             if (PromotionsScopeTypeEnum.PORTION_GOODS.name().equals(promotions.getScopeType())) {
                 for (int i = 0; ; i++) {
                     PromotionGoodsSearchParams searchParams = new PromotionGoodsSearchParams();
@@ -385,6 +388,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
         List<EsGoodsIndex> esGoodsIndices = new ArrayList<>();
         for (GoodsSku goodsSku : goodsSkuList) {
             EsGoodsIndex goodsIndex = this.settingUpGoodsIndexData(goods, goodsSku);
+            this.settingUpGoodsIndexOtherParam(goodsIndex);
             skuSource--;
             if (skuSource <= 0) {
                 skuSource = 1;
@@ -394,14 +398,19 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
             log.info("生成商品索引 {}", goodsIndex);
             esGoodsIndices.add(goodsIndex);
         }
-        this.goodsIndexService.deleteIndex(MapUtil.builder(new HashMap<String, Object>()).put("goodsId", goods.getId()).build());
+        // Find all existing SKU IDs for this goods and delete them
+        List<GoodsSku> existingGoodsSkus = goodsSkuService.getGoodsSkuListByGoodsId(goods.getId());
+        if (CollUtil.isNotEmpty(existingGoodsSkus)) {
+            List<String> skuIds = existingGoodsSkus.stream().map(GoodsSku::getId).collect(Collectors.toList());
+            this.goodsIndexService.deleteIndexByIds(skuIds);
+        }
         this.goodsIndexService.addIndex(esGoodsIndices);
     }
 
     private EsGoodsIndex settingUpGoodsIndexData(Goods goods, GoodsSku goodsSku) {
         EsGoodsIndex goodsIndex = new EsGoodsIndex(goodsSku);
         if (goods.getParams() != null && !goods.getParams().isEmpty()) {
-            List<GoodsParamsDTO> goodsParamDTOS = JSONUtil.toList(goods.getParams(), GoodsParamsDTO.class);
+            List<GoodsParamsDTO> goodsParamDTOS = JSON.parseArray(goods.getParams(), GoodsParamsDTO.class);
             goodsIndex = new EsGoodsIndex(goodsSku, goodsParamDTOS);
         }
         goodsIndex.setAuthFlag(goods.getAuthFlag());
@@ -434,7 +443,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
 
         if (goodsIndex.getOriginPromotionMap() == null || goodsIndex.getOriginPromotionMap().isEmpty()) {
             Map<String, Object> goodsCurrentPromotionMap = promotionService.getGoodsSkuPromotionMap(goodsIndex.getStoreId(), goodsIndex.getId());
-            goodsIndex.setPromotionMapJson(JSONUtil.toJsonStr(goodsCurrentPromotionMap));
+            goodsIndex.setPromotionMapJson(JSON.toJSONString(goodsCurrentPromotionMap));
         }
     }
 
@@ -474,7 +483,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
      */
     private void goodsBuyComplete(MessageExt messageExt) {
         String goodsCompleteMessageStr = new String(messageExt.getBody());
-        List<GoodsCompleteMessage> goodsCompleteMessageList = JSONUtil.toList(JSONUtil.parseArray(goodsCompleteMessageStr), GoodsCompleteMessage.class);
+        List<GoodsCompleteMessage> goodsCompleteMessageList = JSON.parseArray(goodsCompleteMessageStr, GoodsCompleteMessage.class);
         for (GoodsCompleteMessage goodsCompleteMessage : goodsCompleteMessageList) {
             Goods goods = goodsService.getById(goodsCompleteMessage.getGoodsId());
             if (goods != null) {

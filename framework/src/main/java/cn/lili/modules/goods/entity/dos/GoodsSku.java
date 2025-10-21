@@ -4,16 +4,13 @@ import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
 import java.util.Date;
 
 /**
@@ -25,146 +22,145 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_goods_sku")
-@ApiModel(value = "商品sku对象")
+@Schema(description = "商品sku对象")
 @NoArgsConstructor
 public class GoodsSku extends BaseEntity {
 
     private static final long serialVersionUID = 4865908658161118934L;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String goodsId;
 
-    @ApiModelProperty(value = "规格信息json", hidden = true)
-    @JsonIgnore
+    @Schema(description = "规格信息json", hidden = true)
     private String specs;
 
-    @ApiModelProperty(value = "规格信息")
+    @Schema(description = "规格信息")
     private String simpleSpecs;
 
-    @ApiModelProperty(value = "配送模版id")
+    @Schema(description = "配送模版id")
     private String freightTemplateId;
 
-    @ApiModelProperty(value = "是否是促销商品")
+    @Schema(description = "是否是促销商品")
     private Boolean promotionFlag;
 
-    @ApiModelProperty(value = "促销价")
+    @Schema(description = "促销价")
     private Double promotionPrice;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
     @Length(max = 30, message = "商品规格编号太长，不能超过30个字符")
-    @ApiModelProperty(value = "商品编号")
+    @Schema(description = "商品编号")
     private String sn;
 
-    @ApiModelProperty(value = "品牌id")
+    @Schema(description = "品牌id")
     private String brandId;
 
-    @ApiModelProperty(value = "分类path")
+    @Schema(description = "分类path")
     private String categoryPath;
 
-    @ApiModelProperty(value = "计量单位")
+    @Schema(description = "计量单位")
     private String goodsUnit;
 
-    @ApiModelProperty(value = "卖点")
+    @Schema(description = "卖点")
     private String sellingPoint;
 
-    @ApiModelProperty(value = "重量")
+    @Schema(description = "重量")
     @Max(value = 99999999, message = "重量不能超过99999999")
     private Double weight;
     /**
      * @see GoodsStatusEnum
      */
-    @ApiModelProperty(value = "上架状态")
+    @Schema(description = "上架状态")
     private String marketEnable;
 
-    @ApiModelProperty(value = "商品详情")
+    @Schema(description = "商品详情")
     private String intro;
 
     @Max(value = 99999999, message = "价格不能超过99999999")
-    @ApiModelProperty(value = "商品价格")
+    @Schema(description = "商品价格")
     private Double price;
 
     @Max(value = 99999999, message = "成本价格99999999")
-    @ApiModelProperty(value = "成本价格")
+    @Schema(description = "成本价格")
     private Double cost;
 
-    @ApiModelProperty(value = "浏览数量")
+    @Schema(description = "浏览数量")
     private Integer viewCount;
 
-    @ApiModelProperty(value = "购买数量")
+    @Schema(description = "购买数量")
     private Integer buyCount;
 
     @Max(value = 99999999, message = "库存不能超过99999999")
-    @ApiModelProperty(value = "库存")
+    @Schema(description = "库存")
     private Integer quantity;
 
-    @ApiModelProperty(value = "商品好评率")
+    @Schema(description = "商品好评率")
     private Double grade;
 
-    @ApiModelProperty(value = "缩略图路径")
+    @Schema(description = "缩略图路径")
     private String thumbnail;
 
-    @ApiModelProperty(value = "大图路径")
+    @Schema(description = "大图路径")
     private String big;
 
-    @ApiModelProperty(value = "小图路径")
+    @Schema(description = "小图路径")
     private String small;
 
-    @ApiModelProperty(value = "原图路径")
+    @Schema(description = "原图路径")
     private String original;
 
-    @ApiModelProperty(value = "店铺分类id")
+    @Schema(description = "店铺分类id")
     private String storeCategoryPath;
 
-    @ApiModelProperty(value = "评论数量")
+    @Schema(description = "评论数量")
     private Integer commentNum;
 
-    @ApiModelProperty(value = "卖家id")
+    @Schema(description = "卖家id")
     private String storeId;
 
-    @ApiModelProperty(value = "卖家名字")
+    @Schema(description = "卖家名字")
     private String storeName;
 
-    @ApiModelProperty(value = "运费模板id")
+    @Schema(description = "运费模板id")
     private String templateId;
 
     /**
      * @see GoodsAuthEnum
      */
-    @ApiModelProperty(value = "审核状态")
+    @Schema(description = "审核状态")
     private String authFlag;
 
-    @ApiModelProperty(value = "审核信息")
+    @Schema(description = "审核信息")
     private String authMessage;
 
-    @ApiModelProperty(value = "下架原因")
+    @Schema(description = "下架原因")
     private String underMessage;
 
-    @ApiModelProperty(value = "是否自营")
+    @Schema(description = "是否自营")
     private Boolean selfOperated;
 
-    @ApiModelProperty(value = "商品移动端详情")
+    @Schema(description = "商品移动端详情")
     private String mobileIntro;
 
-    @ApiModelProperty(value = "商品视频")
+    @Schema(description = "商品视频")
     private String goodsVideo;
 
-    @ApiModelProperty(value = "是否为推荐商品", required = true)
+    @Schema(description = "是否为推荐商品", required = true)
     private Boolean recommend;
 
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum
      */
-    @ApiModelProperty(value = "销售模式", required = true)
+    @Schema(description = "销售模式", required = true)
     private String salesModel;
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsTypeEnum
      */
-    @ApiModelProperty(value = "商品类型", required = true)
+    @Schema(description = "商品类型", required = true)
     private String goodsType;
 
-    @ApiModelProperty(value = "预警数量")
+    @Schema(description = "预警数量")
     private Integer alertQuantity;
 
     public Double getWeight() {
@@ -175,7 +171,7 @@ public class GoodsSku extends BaseEntity {
     }
 
     public Integer getAlertQuantity() {
-        if(alertQuantity == null){
+        if (alertQuantity == null) {
             return 0;
         }
         return alertQuantity;
@@ -189,6 +185,7 @@ public class GoodsSku extends BaseEntity {
             return super.getCreateTime();
         }
     }
+
 
     /**
      * 设置规格商品的基本商品信息

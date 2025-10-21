@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.entity.vos;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,11 +15,11 @@ import java.util.List;
 @Data
 public class GoodsParamsGroupVO implements Serializable {
     private static final long serialVersionUID = 1450550797436233753L;
-    @ApiModelProperty("参数组关联的参数集合")
+    @Schema(description = "参数组关联的参数集合")
     private List<GoodsParamsVO> params;
-    @ApiModelProperty("参数组名称")
+    @Schema(description = "参数组名称")
     private String groupName;
-    @ApiModelProperty("参数组id")
+    @Schema(description = "参数组id")
     private String groupId;
 
 

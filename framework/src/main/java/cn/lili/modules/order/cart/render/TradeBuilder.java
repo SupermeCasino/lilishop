@@ -9,6 +9,7 @@ import cn.lili.modules.order.order.entity.dos.Trade;
 import cn.lili.modules.order.order.service.TradeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class TradeBuilder {
     /**
      * 购物车业务
      */
+    @Lazy
     @Autowired
     private CartService cartService;
 

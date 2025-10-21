@@ -3,6 +3,7 @@ package cn.lili.modules.message.serviceimpl;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.enums.ResultCode;
+import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.message.entity.dos.StoreMessage;
@@ -13,7 +14,6 @@ import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public class StoreMessageServiceImpl extends ServiceImpl<StoreMessageMapper, Sto
         if (storeMessage != null) {
             //校验权限
             if (!storeMessage.getStoreId().equals(UserContext.getCurrentUser().getStoreId())) {
-                throw new ResourceNotFoundException(ResultCode.USER_AUTHORITY_ERROR.message());
+                throw new ServiceException(ResultCode.USER_AUTHORITY_ERROR.message());
             }
             storeMessage.setStatus(status);
             return this.updateById(storeMessage);

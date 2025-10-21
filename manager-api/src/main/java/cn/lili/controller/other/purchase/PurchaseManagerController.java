@@ -10,13 +10,15 @@ import cn.lili.modules.purchase.entity.vos.PurchaseQuotedVO;
 import cn.lili.modules.purchase.service.PurchaseOrderService;
 import cn.lili.modules.purchase.service.PurchaseQuotedService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-import javax.validation.constraints.NotNull;
+
+
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  * @author Chopper
  * @since 2020/11/16 10:06 下午
  */
-@Api(tags = "管理端,采购接口")
+@Tag(name = "管理端,采购接口")
 @RestController
 @RequestMapping("/manager/other/purchase/purchase")
 public class PurchaseManagerController {
@@ -42,21 +44,22 @@ public class PurchaseManagerController {
     private PurchaseQuotedService purchaseQuotedService;
 
 
-    @ApiOperation(value = "采购单分页")
+    @Operation(description = "采购单分页")
+    @Parameter(name = "purchaseOrderSearchParams", description = "查询参数")
     @GetMapping
     public ResultMessage<IPage<PurchaseOrder>> get(PurchaseOrderSearchParams purchaseOrderSearchParams) {
         return ResultUtil.data(purchaseOrderService.page(purchaseOrderSearchParams));
     }
 
-    @ApiOperation(value = "采购单详情")
-    @ApiImplicitParam(name = "id", value = "采购单ID", required = true, dataType = "Long", paramType = "path")
+    @Operation(description = "采购单详情")
+    @Parameter(name = "id", description = "采购单ID", required = true)
     @GetMapping("/{id}")
     public ResultMessage<PurchaseOrderVO> getPurchaseOrder(@NotNull @PathVariable String id) {
         return ResultUtil.data(purchaseOrderService.getPurchaseOrder(id));
     }
 
-    @ApiOperation(value = "关闭采购单")
-    @ApiImplicitParam(name = "id", value = "采购单ID", required = true, dataType = "Long", paramType = "path")
+    @Operation(description = "关闭采购单")
+    @Parameter(name = "id", description = "采购单ID", required = true)
     @PutMapping("/{id}")
     public ResultMessage<Object> close(@NotNull @PathVariable String id) {
 
@@ -64,15 +67,15 @@ public class PurchaseManagerController {
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "报价列表")
-    @ApiImplicitParam(name = "purchaseOrderId", value = "采购单ID", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "报价列表")
+    @Parameter(name = "purchaseOrderId", description = "采购单ID", required = true)
     @GetMapping("/purchaseQuoted/list/{purchaseOrderId}")
     public ResultMessage<List<PurchaseQuoted>> get(@NotNull @PathVariable String purchaseOrderId) {
         return ResultUtil.data(purchaseQuotedService.getByPurchaseOrderId(purchaseOrderId));
     }
 
-    @ApiOperation(value = "报价单详情")
-    @ApiImplicitParam(name = "id", value = "报价单ID", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "报价单详情")
+    @Parameter(name = "id", description = "报价单ID", required = true)
     @GetMapping("/purchaseQuoted/{id}")
     public ResultMessage<PurchaseQuotedVO> getPurchaseQuoted(@NotNull @PathVariable String id) {
         return ResultUtil.data(purchaseQuotedService.getById(id));

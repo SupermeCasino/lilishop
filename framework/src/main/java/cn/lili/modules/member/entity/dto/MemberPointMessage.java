@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,12 +12,12 @@ import lombok.Data;
 @Data
 public class MemberPointMessage {
 
-    @ApiModelProperty(value = "积分")
+    @Schema(description = "积分")
     private Long point;
 
-    @ApiModelProperty(value = "是否增加积分")
+    @Schema(description = "是否增加积分")
     private String type;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 }

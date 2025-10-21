@@ -1,7 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
@@ -12,30 +11,30 @@ import lombok.Data;
  * @since 2021-03-29 14:10:16
  */
 @Data
-@ApiModel(value = "会员发票")
+@Schema(description = "会员发票")
 public class MemberReceiptAddVO {
 
     private static final long serialVersionUID = -8267092982915677995L;
 
-    @ApiModelProperty(value = "唯一标识", hidden = true)
+    @Schema(description = "唯一标识", hidden = true)
     private String id;
 
-    @ApiModelProperty(value = "发票抬头")
+    @Schema(description = "发票抬头")
     private String receiptTitle;
 
-    @ApiModelProperty(value = "纳税人识别号")
+    @Schema(description = "纳税人识别号")
     private String taxpayerId;
 
-    @ApiModelProperty(value = "发票内容")
+    @Schema(description = "发票内容")
     private String receiptContent;
 
     /**
      * @see cn.lili.modules.member.entity.enums.MemberReceiptEnum
      */
-    @ApiModelProperty(value = "发票类型")
+    @Schema(description = "发票类型")
     private String receiptType;
 
-    @ApiModelProperty(value = "是否为默认选项 0：否，1：是")
+    @Schema(description = "是否为默认选项 0：否，1：是")
     private Integer isDefault;
 
 }

@@ -567,4 +567,14 @@ public enum CachePrefix {
     public String getPrefix(UserEnums user, String customPrefix) {
         return "{" + this.name() + "_" + user.name() + "}_" + customPrefix + "_";
     }
+
+    /**
+     * 通用获取缓存key值
+     *
+     * @param key 缓存key值
+     * @return 缓存key值
+     */
+    public String getPrefix(String key) {
+        return "{" + this.name() + "}_" + key;
+    }
 }

@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class StoreCollectionVO {
 
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String id;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 
-    @ApiModelProperty(value = "店铺Logo")
+    @Schema(description = "店铺Logo")
     private String storeLogo;
 
-    @ApiModelProperty(value = "是否自营")
+    @Schema(description = "是否自营")
     private Boolean selfOperated;
 }

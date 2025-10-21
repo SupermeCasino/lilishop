@@ -6,7 +6,7 @@ import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
 import cn.lili.modules.promotion.entity.dos.BasePromotions;
 import cn.lili.modules.promotion.entity.dos.PromotionGoods;
 import cn.lili.modules.search.entity.dos.EsGoodsIndex;
-import org.elasticsearch.action.update.UpdateRequest;
+import co.elastic.clients.elasticsearch.core.UpdateRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -31,18 +31,29 @@ public interface EsGoodsIndexService {
      */
     Map<String, Long> getProgress();
 
+    /**
+     * 根据id获取商品索引信息
+     *
+     * @param id skuId
+     * @param clazz      索引类型
+     * @return 商品索引信息
+     */
+    <T> T findIndexById(String id, Class<T> clazz);
 
     /**
-     * 全局索引初始化
+     * 根据id获取商品索引信息
+     *
+     * @param id skuId
+     * @return 商品索引信息
      */
-    void initIndex();
+    EsGoodsIndex findEsGoodsIndexById(String id);
 
     /**
      * 添加商品索引
      *
      * @param goods 商品索引信息
      */
-    void addIndex(EsGoodsIndex goods);
+    EsGoodsIndex addIndex(EsGoodsIndex goods);
 
     /**
      * 添加商品索引
@@ -74,19 +85,13 @@ public interface EsGoodsIndexService {
      */
     void updateIndex(Map<String, Object> queryFields, Map<String, Object> updateFields);
 
-    /**
-     * 批量商品索引的的属性（ID 必填, 其他字段只填写更新的字段，不需要更新的字段不要填写。）
-     *
-     * @param goodsIndices 商品索引列表
-     */
-    void updateBulkIndex(List<EsGoodsIndex> goodsIndices);
 
-    /**
-     * 删除索引
-     *
-     * @param queryFields 查询条件 (key 为字段，value为字段值)
-     */
-    void deleteIndex(Map<String, Object> queryFields);
+//    /**
+//     * 删除索引
+//     *
+//     * @param queryFields 查询条件 (key 为字段，value为字段值)
+//     */
+//    void deleteIndex(Map<String, Object> queryFields);
 
     /**
      * 删除索引
@@ -105,19 +110,19 @@ public interface EsGoodsIndexService {
     /**
      * 初始化商品索引
      *
-     * @param goodsIndexList 商品索引列表
+     * @param goodsIndexList   商品索引列表
      * @param regeneratorIndex 是否重新生成索引
      */
     void initIndex(List<EsGoodsIndex> goodsIndexList, boolean regeneratorIndex);
 
-    /**
-     * 更新商品索引的促销信息
-     *
-     * @param id        id(skuId)
-     * @param promotion 促销信息
-     * @param key       促销信息的key
-     */
-    UpdateRequest updateEsGoodsIndexPromotions(String id, BasePromotions promotion, String key);
+//    /**
+//     * 更新商品索引的促销信息
+//     *
+//     * @param id        id(skuId)
+//     * @param promotion 促销信息
+//     * @param key       促销信息的key
+//     */
+//    UpdateRequest updateEsGoodsIndexPromotions(String id, BasePromotions promotion, String key);
 
     /**
      * 更新商品索引的促销信息
@@ -148,7 +153,7 @@ public interface EsGoodsIndexService {
     /**
      * 删除索引中指定的促销活动id的促销活动
      *
-     * @param skuIds      商品skuId
+     * @param skuIds        商品skuId
      * @param promotionsKey 促销活动Key
      */
     void deleteEsGoodsPromotionByPromotionKey(List<String> skuIds, String promotionsKey);
@@ -195,8 +200,7 @@ public interface EsGoodsIndexService {
      * 获取重置的商品索引
      *
      * @param goodsSku       商品sku信息
-     * @param goodsParamDTOS 商品参数
      * @return 商品索引
      */
-    EsGoodsIndex getResetEsGoodsIndex(GoodsSku goodsSku, List<GoodsParamsDTO> goodsParamDTOS);
+    EsGoodsIndex getResetEsGoodsIndex(GoodsSku goodsSku);
 }

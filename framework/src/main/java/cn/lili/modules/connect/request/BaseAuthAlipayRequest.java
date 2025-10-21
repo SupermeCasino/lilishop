@@ -13,9 +13,8 @@ import cn.lili.modules.connect.entity.dto.ConnectAuthUser;
 import cn.lili.modules.connect.entity.enums.AuthResponseStatus;
 import cn.lili.modules.connect.entity.enums.AuthUserGender;
 import cn.lili.modules.connect.entity.enums.ConnectEnum;
-import cn.lili.modules.connect.entity.enums.SourceEnum;
 import cn.lili.modules.connect.exception.AuthException;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -113,16 +112,17 @@ public class BaseAuthAlipayRequest extends BaseAuthRequest {
         String location = String.format("%s %s", StringUtils.isEmpty(province) ? "" : province, StringUtils.isEmpty(city) ? "" : city);
 
         return ConnectAuthUser.builder()
-            .rawUserInfo(JSONObject.parseObject(JSONObject.toJSONString(response)))
-            .uuid(response.getUserId())
-            .username(StringUtils.isEmpty(response.getUserName()) ? response.getNickName() : response.getUserName())
-            .nickname(response.getNickName())
-            .avatar(response.getAvatar())
-            .location(location)
-            .gender(AuthUserGender.getRealGender(response.getGender()))
-            .token(authToken)
-            .source(ConnectEnum.ALIPAY)
-            .build();
+                .rawUserInfo(JSON.parseObject(JSON.toJSONString(response)))
+                .uuid(response.getUserId())
+                .username(StringUtils.isEmpty(response.getUserName()) ? response.getNickName() : response.getUserName())
+                .nickname(response.getNickName())
+                .avatar(response.getAvatar())
+                .location(location)
+                .gender(AuthUserGender.getRealGender(response.getGender()))
+                .token(authToken)
+                .source(ConnectEnum.ALIPAY)
+                .build();
+
     }
 
     /**

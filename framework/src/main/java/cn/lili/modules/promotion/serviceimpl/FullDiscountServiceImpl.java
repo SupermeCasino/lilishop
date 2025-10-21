@@ -1,6 +1,6 @@
 package cn.lili.modules.promotion.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -18,6 +18,7 @@ import cn.lili.modules.promotion.service.PromotionGoodsService;
 import cn.lili.modules.promotion.tools.PromotionTools;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class FullDiscountServiceImpl extends AbstractPromotionsServiceImpl<FullD
     /**
      * 优惠券
      */
+    @Lazy
     @Autowired
     private CouponService couponService;
     /**
@@ -129,7 +131,7 @@ public class FullDiscountServiceImpl extends AbstractPromotionsServiceImpl<FullD
      */
     @Override
     public void updateEsGoodsIndex(FullDiscount promotions) {
-        FullDiscount fullDiscount = JSONUtil.parse(promotions).toBean(FullDiscount.class);
+        FullDiscount fullDiscount = promotions;
         super.updateEsGoodsIndex(fullDiscount);
     }
 

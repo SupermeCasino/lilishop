@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
-import cn.hutool.json.JSONUtil;
+
 import cn.lili.modules.file.entity.enums.OssEnum;
 import cn.lili.modules.goods.entity.dos.GoodsGallery;
 import cn.lili.modules.goods.mapper.GoodsGalleryMapper;
@@ -12,6 +12,7 @@ import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.alibaba.fastjson2.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,7 @@ public class GoodsGalleryServiceImpl extends ServiceImpl<GoodsGalleryMapper, Goo
         GoodsGallery goodsGallery = new GoodsGallery();
         //获取商品系统配置决定是否审核
         Setting setting = settingService.get(SettingEnum.GOODS_SETTING.name());
-        GoodsSetting goodsSetting = JSONUtil.toBean(setting.getSettingValue(), GoodsSetting.class);
+        GoodsSetting goodsSetting = JSON.parseObject(setting.getSettingValue(), GoodsSetting.class);
         //缩略图
         String thumbnail = this.getUrl(origin, goodsSetting.getAbbreviationPictureWidth(), goodsSetting.getAbbreviationPictureHeight());
         //小图
@@ -97,7 +98,7 @@ public class GoodsGalleryServiceImpl extends ServiceImpl<GoodsGalleryMapper, Goo
      */
     private String getUrl(String url, Integer width, Integer height) {
         Setting setting = settingService.get(SettingEnum.OSS_SETTING.name());
-        OssSetting ossSetting = JSONUtil.toBean(setting.getSettingValue(), OssSetting.class);
+        OssSetting ossSetting = JSON.parseObject(setting.getSettingValue(), OssSetting.class);
         switch (OssEnum.valueOf(ossSetting.getType())) {
             case MINIO:
                 //缩略图全路径

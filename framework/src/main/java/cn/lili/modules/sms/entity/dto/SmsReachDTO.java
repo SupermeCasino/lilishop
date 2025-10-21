@@ -2,6 +2,7 @@ package cn.lili.modules.sms.entity.dto;
 
 import cn.lili.modules.sms.entity.dos.SmsReach;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @since 2020/12/8 9:46
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SmsReachDTO extends SmsReach {
 
     private List<String> mobile;

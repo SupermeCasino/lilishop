@@ -2,7 +2,7 @@ package cn.lili.mybatis;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public abstract class BaseIdEntity implements Serializable {
 
 
     @TableId
-    @ApiModelProperty(value = "唯一标识", hidden = true)
+    @Schema(description = "唯一标识", hidden = true)
     private String id;
 
 

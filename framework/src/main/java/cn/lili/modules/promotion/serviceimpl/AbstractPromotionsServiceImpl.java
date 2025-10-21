@@ -26,9 +26,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.*;
 
 import static cn.lili.modules.promotion.tools.PromotionTools.queryPromotionStatus;
@@ -43,6 +44,7 @@ public abstract class AbstractPromotionsServiceImpl<M extends BaseMapper<T>, T e
      * 促销商品
      */
     @Autowired
+    @Lazy
     private PromotionGoodsService promotionGoodsService;
 
     /**

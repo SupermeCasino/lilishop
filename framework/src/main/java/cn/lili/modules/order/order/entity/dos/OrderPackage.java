@@ -2,38 +2,39 @@ package cn.lili.modules.order.order.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @TableName("li_order_package")
-@ApiModel(value = "订单包裹")
+@Schema(description = "订单包裹")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderPackage extends BaseEntity {
 
-    @ApiModelProperty(value = "包裹单号")
+    @Schema(description = "包裹单号")
     private String packageNo;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "发货单号")
+    @Schema(description = "发货单号")
     private String logisticsNo;
 
-    @ApiModelProperty(value = "物流公司CODE")
+    @Schema(description = "物流公司CODE")
     private String logisticsCode;
 
-    @ApiModelProperty(value = "物流公司名称")
+    @Schema(description = "物流公司名称")
     private String logisticsName;
 
-    @ApiModelProperty(value = "收件人手机")
+    @Schema(description = "收件人手机")
     private String consigneeMobile;
 
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private String status;
 
 }

@@ -1,9 +1,8 @@
 package cn.lili.modules.order.order.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * 交易投诉DTO
@@ -15,25 +14,25 @@ import javax.validation.constraints.NotBlank;
 public class OrderComplaintDTO {
 
     @NotBlank
-    @ApiModelProperty(value = "投诉主题")
+    @Schema(description = "投诉主题")
     private String complainTopic;
 
     @NotBlank
-    @ApiModelProperty(value = "投诉内容")
+    @Schema(description = "投诉内容")
     private String content;
 
-    @ApiModelProperty(value = "投诉凭证图片")
+    @Schema(description = "投诉凭证图片")
     private String images;
 
     @NotBlank
-    @ApiModelProperty(value = "订单号")
+    @Schema(description = "订单号")
     private String orderSn;
 
     @NotBlank
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String goodsId;
 
     @NotBlank
-    @ApiModelProperty(value = "sku主键")
+    @Schema(description = "sku主键")
     private String skuId;
 }

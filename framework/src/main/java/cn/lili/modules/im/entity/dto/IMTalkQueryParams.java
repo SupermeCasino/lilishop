@@ -3,7 +3,7 @@ package cn.lili.modules.im.entity.dto;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.modules.im.entity.dos.ImTalk;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,19 +19,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IMTalkQueryParams {
 
-    @ApiModelProperty("用户1 id")
+    @Schema(description = "用户1 id")
     private String userId1;
 
-    @ApiModelProperty("用户2 id")
+    @Schema(description = "用户2 id")
     private String userId2;
 
-    @ApiModelProperty("用户1 name")
+    @Schema(description = "用户1 name")
     private String name1;
 
-    @ApiModelProperty("用户2 name")
+    @Schema(description = "用户2 name")
     private String name2;
 
-    @ApiModelProperty("关键字")
+    @Schema(description = "关键字")
     private String userName;
 
 

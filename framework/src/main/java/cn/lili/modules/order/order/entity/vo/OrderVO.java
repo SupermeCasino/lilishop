@@ -3,8 +3,9 @@ package cn.lili.modules.order.order.entity.vo;
 import cn.hutool.core.bean.BeanUtil;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.dos.OrderItem;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -17,16 +18,17 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderVO extends Order {
 
 
     private static final long serialVersionUID = 5820637554656388777L;
 
-    @ApiModelProperty(value = "订单商品项目")
+    @Schema(description = "订单商品项目")
     private List<OrderItem> orderItems;
 
 
-    public OrderVO (Order order,List<OrderItem> orderItems){
+    public OrderVO(Order order, List<OrderItem> orderItems) {
         BeanUtil.copyProperties(order, this);
         this.setOrderItems(orderItems);
     }

@@ -1,6 +1,6 @@
 package cn.lili.modules.system.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,11 +15,11 @@ import java.io.Serializable;
 public class PointSettingItem implements Comparable<PointSettingItem>, Serializable {
 
 
-    @ApiModelProperty(value = "签到天数")
+    @Schema(description = "签到天数")
     private Integer day;
 
 
-    @ApiModelProperty(value = "赠送积分")
+    @Schema(description = "赠送积分")
     private Integer point;
 
     public Integer getPoint() {

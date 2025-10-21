@@ -7,10 +7,10 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.sms.SmsUtil;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020/11/26 15:41
  */
 @RestController
-@Api(tags = "短信验证码接口")
+@Tag(name = "短信验证码接口")
 @RequestMapping("/common/common/sms")
 public class SmsController {
 
@@ -31,12 +31,12 @@ public class SmsController {
     private VerificationService verificationService;
 
     @LimitPoint(name = "sms_send", key = "sms")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "String", name = "mobile", value = "手机号"),
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "uuid", value = "uuid"),
+    @Parameters({
+            @Parameter(name = "mobile", description = "手机号"),
+            @Parameter(name = "uuid", description = "uuid"),
     })
     @GetMapping("/{verificationEnums}/{mobile}")
-    @ApiOperation(value = "发送短信验证码,一分钟同一个ip请求1次")
+    @Operation(summary = "发送短信验证码,一分钟同一个ip请求1次")
     public ResultMessage getSmsCode(
             @RequestHeader String uuid,
             @PathVariable String mobile,

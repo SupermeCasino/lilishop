@@ -5,8 +5,9 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.im.entity.vo.SeatVO;
 import cn.lili.modules.im.service.SeatService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ import java.util.List;
  * 2022-02-10 11:50
  */
 @RestController
-@Api(tags = "店铺端,坐席管理")
+@Tag(name = "店铺端,坐席管理")
 @RequestMapping("/store/seat/setting")
 @Transactional(rollbackFor = Exception.class)
 public class SeatStoreController {
@@ -32,7 +33,7 @@ public class SeatStoreController {
     @Autowired
     private SeatService seatService;
 
-    @ApiOperation(value = "分页获取坐席")
+    @Operation(description = "分页获取坐席")
     @GetMapping("/list")
     public ResultMessage<List<SeatVO>> getSeats() {
         return ResultUtil.data(seatService.seatVoList(UserContext.getCurrentUser().getTenantId()));

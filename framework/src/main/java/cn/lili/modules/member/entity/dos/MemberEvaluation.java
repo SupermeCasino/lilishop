@@ -9,13 +9,12 @@ import cn.lili.modules.member.entity.dto.MemberEvaluationDTO;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 会员商品评价
@@ -25,89 +24,90 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @TableName("li_member_evaluation")
-@ApiModel(value = "会员商品评价")
+@Schema(description = "会员商品评价")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class MemberEvaluation extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
     @NotNull
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
     @NotNull
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 
     @NotNull
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
     @NotNull
-    @ApiModelProperty(value = " SKU ID")
+    @Schema(description = " SKU ID")
     private String skuId;
 
     @NotNull
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
     @NotNull
-    @ApiModelProperty(value = "会员头像")
+    @Schema(description = "会员头像")
     private String memberProfile;
 
     @NotNull
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
     @NotNull
-    @ApiModelProperty(value = "商品图片")
+    @Schema(description = "商品图片")
     private String goodsImage;
 
     @NotNull
-    @ApiModelProperty(value = "订单号")
+    @Schema(description = "订单号")
     private String orderNo;
 
     @NotNull
-    @ApiModelProperty(value = "好中差评 , GOOD：好评，MODERATE：中评，WORSE：差评", allowableValues = "GOOD,MODERATE,WORSE")
+    @Schema(description = "好中差评 , GOOD：好评，MODERATE：中评，WORSE：差评", allowableValues = "GOOD,MODERATE,WORSE")
     private String grade;
 
     @NotNull
-    @ApiModelProperty(value = " 评价内容")
+    @Schema(description = " 评价内容")
     private String content;
 
-    @ApiModelProperty(value = "评价图片")
+    @Schema(description = "评价图片")
     private String images;
 
     @NotNull
-    @ApiModelProperty(value = "状态  OPEN 正常 ,CLOSE 关闭 ")
+    @Schema(description = "状态  OPEN 正常 ,CLOSE 关闭 ")
     private String status;
 
-    @ApiModelProperty(value = "评价回复")
+    @Schema(description = "评价回复")
     private String reply;
 
-    @ApiModelProperty(value = "评价回复图片")
+    @Schema(description = "评价回复图片")
     private String replyImage;
 
-    @ApiModelProperty(value = "评论是否有图片 true 有 ,false 没有")
+    @Schema(description = "评论是否有图片 true 有 ,false 没有")
     private Boolean haveImage;
 
-    @ApiModelProperty(value = "回复是否有图片 true 有 ,false 没有")
+    @Schema(description = "回复是否有图片 true 有 ,false 没有")
     private Boolean haveReplyImage;
 
-    @ApiModelProperty(value = "回复状态")
+    @Schema(description = "回复状态")
     private boolean replyStatus;
 
-    @ApiModelProperty(value = "物流评分")
+    @Schema(description = "物流评分")
     private Integer deliveryScore;
 
-    @ApiModelProperty(value = "服务评分")
+    @Schema(description = "服务评分")
     private Integer serviceScore;
 
-    @ApiModelProperty(value = "描述评分")
+    @Schema(description = "描述评分")
     private Integer descriptionScore;
 
 

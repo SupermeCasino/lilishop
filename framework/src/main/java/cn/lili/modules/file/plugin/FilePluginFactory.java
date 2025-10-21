@@ -1,6 +1,6 @@
 package cn.lili.modules.file.plugin;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.file.entity.enums.OssEnum;
 import cn.lili.modules.file.plugin.impl.AliFilePlugin;
@@ -40,7 +40,7 @@ public class FilePluginFactory {
         try {
             Setting setting = settingService.get(SettingEnum.OSS_SETTING.name());
 
-            ossSetting = JSONUtil.toBean(setting.getSettingValue(), OssSetting.class);
+            ossSetting = JSON.parseObject(setting.getSettingValue(), OssSetting.class);
 
 
             switch (OssEnum.valueOf(ossSetting.getType())) {

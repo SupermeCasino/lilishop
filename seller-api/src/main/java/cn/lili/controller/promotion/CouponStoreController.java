@@ -18,8 +18,9 @@ import cn.lili.modules.promotion.service.MemberCouponService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  * @since 2020/8/28
  **/
 @RestController
-@Api(tags = "店铺端,优惠券接口")
+@Tag(name = "店铺端,优惠券接口")
 @RequestMapping("/store/promotion/coupon")
 public class CouponStoreController {
 
@@ -46,8 +47,10 @@ public class CouponStoreController {
     @Autowired
     private MemberCouponService memberCouponService;
 
+    @Operation(description = "获取优惠券列表")
+    @Parameter(name = "queryParam", description = "优惠券查询参数")
+    @Parameter(name = "page", description = "分页参数")
     @GetMapping
-    @ApiOperation(value = "获取优惠券列表")
     public ResultMessage<IPage<CouponVO>> getCouponList(CouponSearchParams queryParam, PageVO page) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         queryParam.setStoreId(storeId);
@@ -55,14 +58,16 @@ public class CouponStoreController {
         return ResultUtil.data(coupons);
     }
 
-    @ApiOperation(value = "获取优惠券详情")
+    @Operation(description = "获取优惠券详情")
+    @Parameter(name = "couponId", description = "优惠券ID", required = true)
     @GetMapping("/{couponId}")
     public ResultMessage<Coupon> getCouponList(@PathVariable String couponId) {
         CouponVO coupon = OperationalJudgment.judgment(couponService.getDetail(couponId));
         return ResultUtil.data(coupon);
     }
 
-    @ApiOperation(value = "添加优惠券")
+    @Operation(description = "添加优惠券")
+    @Parameter(name = "couponVO", description = "优惠券VO", required = true)
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResultMessage<CouponVO> addCoupon(@RequestBody CouponVO couponVO) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -75,7 +80,8 @@ public class CouponStoreController {
     }
 
     @PutMapping(consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "修改优惠券")
+    @Operation(description = "修改优惠券")
+    @Parameter(name = "couponVO", description = "优惠券VO", required = true)
     public ResultMessage<Coupon> updateCoupon(@RequestBody CouponVO couponVO) {
         OperationalJudgment.judgment(couponService.getById(couponVO.getId()));
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -87,8 +93,9 @@ public class CouponStoreController {
         return ResultUtil.error(ResultCode.COUPON_SAVE_ERROR);
     }
 
-    @DeleteMapping(value = "/{ids}")
-    @ApiOperation(value = "批量删除")
+    @Operation(description = "批量删除优惠券")
+    @DeleteMapping("/{ids}")
+    @Parameter(name = "ids", description = "优惠券ID列表", required = true)
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         LambdaQueryWrapper<Coupon> queryWrapper = new LambdaQueryWrapper<>();
@@ -99,8 +106,10 @@ public class CouponStoreController {
         return couponService.removePromotions(filterIds) ? ResultUtil.success() : ResultUtil.error(ResultCode.COUPON_DELETE_ERROR);
     }
 
-    @ApiOperation(value = "获取优惠券领取详情")
-    @GetMapping(value = "/received")
+    @Operation(description = "获取优惠券领取详情")
+    @Parameter(name = "searchParams", description = "优惠券领取查询参数")
+    @Parameter(name = "page", description = "分页参数")
+    @GetMapping("/received")
     public ResultMessage<IPage<MemberCouponVO>> getReceiveByPage(MemberCouponSearchParams searchParams,
                                                                  PageVO page) {
         searchParams.setStoreId(Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId());
@@ -108,7 +117,10 @@ public class CouponStoreController {
         return ResultUtil.data(result);
     }
 
-    @ApiOperation(value = "修改优惠券状态")
+    @Operation(description = "修改优惠券状态")
+    @Parameter(name = "couponIds", description = "优惠券ID列表", required = true)
+    @Parameter(name = "startTime", description = "优惠券开始时间")
+    @Parameter(name = "endTime", description = "优惠券结束时间")
     @PutMapping("/status")
     public ResultMessage<Object> updateCouponStatus(String couponIds, Long startTime, Long endTime) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());

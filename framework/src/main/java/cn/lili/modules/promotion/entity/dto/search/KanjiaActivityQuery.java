@@ -2,8 +2,7 @@ package cn.lili.modules.promotion.entity.dto.search;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
@@ -14,16 +13,16 @@ import lombok.Data;
  * @date 2020-7-1 10:44 上午
  */
 @Data
-@ApiModel(value = "砍价活动参与记录查询对象")
+@Schema(description = "砍价活动参与记录查询对象")
 public class KanjiaActivityQuery {
 
 
     private static final long serialVersionUID = -1583030890805926292L;
 
-    @ApiModelProperty(value = "货品名称")
+    @Schema(description = "货品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "会员id", hidden = true)
+    @Schema(description = "会员id", hidden = true)
     private String memberId;
 
     public <T> QueryWrapper<T> wrapper() {

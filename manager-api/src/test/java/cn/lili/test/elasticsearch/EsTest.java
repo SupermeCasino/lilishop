@@ -53,7 +53,7 @@ class EsTest {
     private GoodsService goodsService;
 
     @Autowired
-    private Cache cache;
+    private Cache<Object> cache;
 
     @Autowired
     private PromotionService promotionService;
@@ -187,11 +187,6 @@ class EsTest {
         Assertions.assertTrue(true);
     }
 
-    @Test
-    void deleteIndex() {
-        esGoodsIndexService.deleteIndex(null);
-        Assertions.assertTrue(true);
-    }
 
     @Test
     void cleanPromotion() {

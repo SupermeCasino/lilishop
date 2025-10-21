@@ -9,15 +9,14 @@ import cn.lili.modules.page.entity.dto.PageDataDTO;
 import cn.lili.modules.page.entity.vos.PageDataListVO;
 import cn.lili.modules.page.service.PageDataService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 管理端,页面设置管理接口
@@ -26,56 +25,54 @@ import javax.validation.constraints.NotNull;
  * @since 2020-05-06 15:18:56
  */
 @RestController
-@Api(tags = "管理端,页面设置管理接口")
+@Tag(name = "管理端,页面设置管理接口")
 @RequestMapping("/manager/other/pageData")
 public class PageDataManagerController {
 
     @Autowired
     private PageDataService pageDataService;
 
-    @ApiOperation(value = "获取页面信息")
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/{id}")
-    public ResultMessage<PageData> getPageData(@PathVariable String id) {
+    @Operation(summary = "获取页面信息")
+    @GetMapping("/{id}")
+    public ResultMessage<PageData> getPageData(
+            @Parameter(description = "页面ID", required = true) @PathVariable String id) {
         return ResultUtil.data(pageDataService.getById(id));
     }
 
-    @ApiOperation(value = "添加页面")
+    @Operation(summary = "添加页面")
     @PostMapping("/add")
     public ResultMessage<PageData> addPageData(@Valid PageData pageData) {
         return ResultUtil.data(pageDataService.addPageData(pageData));
     }
 
-    @ApiOperation(value = "修改页面")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
-    })
+    @Operation(summary = "修改页面")
     @DemoSite
     @PutMapping("/update/{id}")
-    public ResultMessage<PageData> updatePageData(@Valid PageData pageData, @NotNull @PathVariable String id) {
+    public ResultMessage<PageData> updatePageData(@Valid PageData pageData, 
+            @Parameter(description = "页面ID", required = true) @NotNull @PathVariable String id) {
         pageData.setId(id);
         return ResultUtil.data(pageDataService.updatePageData(pageData));
     }
 
-    @ApiOperation(value = "页面列表")
+    @Operation(summary = "页面列表")
     @GetMapping("/pageDataList")
     public ResultMessage<IPage<PageDataListVO>> pageDataList(PageVO pageVO, PageDataDTO pageDataDTO) {
         return ResultUtil.data(pageDataService.getPageDataList(pageVO, pageDataDTO));
     }
 
-    @ApiOperation(value = "发布页面")
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "发布页面")
     @PutMapping("/release/{id}")
     @DemoSite
-    public ResultMessage<PageData> release(@PathVariable String id) {
+    public ResultMessage<PageData> release(
+            @Parameter(description = "页面ID", required = true) @PathVariable String id) {
         return ResultUtil.data(pageDataService.releasePageData(id));
     }
 
-    @ApiOperation(value = "删除页面")
+    @Operation(summary = "删除页面")
     @DemoSite
-    @ApiImplicitParam(name = "id", value = "页面ID", required = true, dataType = "String", paramType = "path")
     @DeleteMapping("/remove/{id}")
-    public ResultMessage<Object> remove(@PathVariable String id) {
+    public ResultMessage<Object> remove(
+            @Parameter(description = "页面ID", required = true) @PathVariable String id) {
         return ResultUtil.data(pageDataService.removePageData(id));
     }
 }

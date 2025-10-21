@@ -2,8 +2,7 @@ package cn.lili.modules.promotion.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,16 +15,16 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_coupon_activity_item")
-@ApiModel(value = "优惠券活动-优惠券关联实体类")
+@Schema(description = "优惠券活动-优惠券关联实体类")
 public class CouponActivityItem extends BaseEntity {
 
-    @ApiModelProperty(value = "优惠券活动ID")
+    @Schema(description = "优惠券活动ID")
     private String activityId;
 
-    @ApiModelProperty(value = "优惠券ID")
+    @Schema(description = "优惠券ID")
     private String couponId;
 
-    @ApiModelProperty(value = "优惠券数量")
+    @Schema(description = "优惠券数量")
     private Integer num;
 
 

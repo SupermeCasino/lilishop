@@ -7,11 +7,12 @@ import cn.lili.modules.permission.service.MenuService;
 import cn.lili.modules.system.token.ManagerTokenGenerate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -23,9 +24,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
  */
 @Slf4j
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
-
+@EnableMethodSecurity(prePostEnabled = true)
+public class ManagerSecurityConfig {
 
     @Autowired
     public MenuService menuService;
@@ -45,39 +45,48 @@ public class ManagerSecurityConfig extends WebSecurityConfigurerAdapter {
     private CorsConfigurationSource corsConfigurationSource;
     @Autowired
     private ManagerTokenGenerate managerTokenGenerate;
+    // 新增：用于获取 AuthenticationManager
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // 仅对管理端接口路径生效，避免影响文档静态资源
+        http.securityMatcher("/manager/**")
+            // 禁止网页 iframe
+            .headers(h -> h.frameOptions(f -> f.disable()))
+            .authorizeHttpRequests(auth -> {
+                for (String url : ignoredUrlsProperties.getUrls()) {
+                    auth.requestMatchers(url).permitAll();
+                }
+                auth.anyRequest().authenticated();
+            })
+            // 允许跨域
+            .cors(c -> c.configurationSource(corsConfigurationSource))
+            // 关闭 CSRF（前后端分离）
+            .csrf(csrf -> csrf.disable())
+            // 前后端分离采用 JWT 不需要 session
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // 自定义权限拒绝处理，改为返回 JSON 而非重定向
+            .exceptionHandling(eh -> eh
+                    .accessDeniedHandler(accessDeniedHandler)
+                    .authenticationEntryPoint((req, res, ex) ->
+                            cn.lili.common.utils.ResponseUtil.output(res, 401,
+                                    cn.lili.common.utils.ResponseUtil.resultMap(false, 401, "未登录或token失效"))
+                    )
+            )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
 
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
-                .authorizeRequests();
-        //配置的url 不需要授权
-        for (String url : ignoredUrlsProperties.getUrls()) {
-            registry.antMatchers(url).permitAll();
-        }
-        registry
-                .and()
-                //禁止网页iframe
-                .headers().frameOptions().disable()
-                .and()
-                .authorizeRequests()
-                //任何请求
-                .anyRequest()
-                //需要身份认证
-                .authenticated()
-                .and()
-                //允许跨域
-                .cors().configurationSource(corsConfigurationSource).and()
-                //关闭跨站请求防护
-                .csrf().disable()
-                //前后端分离采用JWT 不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                //自定义权限拒绝处理类
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
-                .and()
-                //添加JWT认证过滤器
-                .addFilter(new ManagerAuthenticationFilter(authenticationManager(), menuService, managerTokenGenerate, cache));
+        // 添加 JWT 认证过滤器（保持你原有的构造参数）
+        http.addFilter(new ManagerAuthenticationFilter(
+            authenticationConfiguration.getAuthenticationManager(),
+            menuService,
+            managerTokenGenerate,
+            cache,
+            ignoredUrlsProperties
+        ));
+
+        return http.build();
     }
-
 }

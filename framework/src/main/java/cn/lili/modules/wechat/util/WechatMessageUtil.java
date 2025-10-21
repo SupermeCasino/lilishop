@@ -1,8 +1,8 @@
 package cn.lili.modules.wechat.util;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -114,14 +114,14 @@ public class WechatMessageUtil {
             //模版中所需数据
             map.put("data", createData(order, wechatMessage));
 
-            log.info("参数内容：" + JSONUtil.toJsonStr(map));
-            String content = HttpUtil.post(url, JSONUtil.toJsonStr(map));
-            JSONObject json = new JSONObject(content);
+            log.info("参数内容：" + JSON.toJSONString(map));
+            String content = HttpUtil.post(url, JSON.toJSONString(map));
+            JSONObject json = JSON.parseObject(content);
             log.info("微信消息发送结果：" + content);
-            String errorMessage = json.getStr("errmsg");
-            String errcode = json.getStr("errcode");
+            String errorMessage = json.getString("errmsg");
+            int errcode = json.getIntValue("errcode");
             //发送失败
-            if (!"0".equals(errcode)) {
+            if (errcode != 0) {
                 log.error("消息发送失败：" + errorMessage);
                 log.error("消息发送请求token：" + token);
                 log.error("消息发送请求：" + map.get("data"));
@@ -174,19 +174,19 @@ public class WechatMessageUtil {
             //模版中所需数据
             map.put("data", createData(order, wechatMPMessage));
             map.put("page", "pages/order/orderDetail?sn=" + order.getSn());
-            log.info("参数内容：" + JSONUtil.toJsonStr(map));
+            log.info("参数内容：" + JSON.toJSONString(map));
             String content = null;
             try {
-                content = HttpUtil.post(url, JSONUtil.toJsonStr(map));
+                content = HttpUtil.post(url, JSON.toJSONString(map));
             } catch (Exception e) {
                 log.error("微信消息发送错误", e);
             }
-            JSONObject json = new JSONObject(content);
+            JSONObject json = JSON.parseObject(content);
             log.info("微信小程序消息发送结果：" + content);
-            String errorMessage = json.getStr("errmsg");
-            String errcode = json.getStr("errcode");
+            String errorMessage = json.getString("errmsg");
+            int errcode = json.getIntValue("errcode");
             //发送失败
-            if (!"0".equals(errcode)) {
+            if (errcode != 0) {
                 log.error("消息发送失败：" + errorMessage);
                 log.error("消息发送请求token：" + token);
                 log.error("消息发送请求：" + map.get("data"));
@@ -227,8 +227,8 @@ public class WechatMessageUtil {
      */
     private Map<String, Map<String, String>> createData(Order order, WechatMPMessage wechatMPMessage) {
         WechatMessageData wechatMessageData = new WechatMessageData();
-        List<String> paramArray = JSONUtil.toList(wechatMPMessage.getKeywords(), String.class);
-        List<String> texts = JSONUtil.toList(wechatMPMessage.getKeywordsText(), String.class);
+        List<String> paramArray = JSON.parseArray(wechatMPMessage.getKeywords(), String.class);
+        List<String> texts = JSON.parseArray(wechatMPMessage.getKeywordsText(), String.class);
         Map<String, String> params = new LinkedHashMap<>();
         for (int i = 0; i < paramArray.size(); i++) {
             WechatMessageItemEnums wechatMessageItemEnums = WechatMessageItemEnums.valueOf(paramArray.get(i));
@@ -283,10 +283,10 @@ public class WechatMessageUtil {
      */
     public static void wechatHandler(JSONObject jsonObject) {
         if (jsonObject.containsKey("errmsg")) {
-            if (("ok").equals(jsonObject.getStr("errmsg"))) {
+            if (("ok").equals(jsonObject.getString("errmsg"))) {
                 return;
             }
-            log.error("微信接口异常，错误码" + jsonObject.get("errcode") + "，" + jsonObject.getStr("errmsg"));
+            log.error("微信接口异常，错误码" + jsonObject.getIntValue("errcode") + "，" + jsonObject.getString("errmsg"));
             throw new ServiceException(ResultCode.WECHAT_ERROR);
         }
     }
@@ -297,7 +297,7 @@ public class WechatMessageUtil {
      * @param string 返回消息
      */
     public static String wechatHandler(String string) {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = JSON.parseObject(string);
         wechatHandler(jsonObject);
         return string;
     }

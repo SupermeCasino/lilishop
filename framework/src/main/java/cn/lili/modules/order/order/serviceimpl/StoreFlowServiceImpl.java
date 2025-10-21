@@ -35,6 +35,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class StoreFlowServiceImpl extends ServiceImpl<StoreFlowMapper, StoreFlow
     /**
      * 订单
      */
+    @Lazy
     @Autowired
     private OrderService orderService;
     /**
@@ -68,9 +70,11 @@ public class StoreFlowServiceImpl extends ServiceImpl<StoreFlowMapper, StoreFlow
     private RefundLogService refundLogService;
 
     @Autowired
+    @Lazy
     private BillService billService;
 
     @Autowired
+    @Lazy
     private DistributionOrderService distributionOrderService;
 
     /**

@@ -2,9 +2,9 @@ package cn.lili.modules.distribution.entity.dos;
 
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -15,16 +15,17 @@ import lombok.NoArgsConstructor;
  * @since 2020-03-14 23:04:56
  */
 @Data
-@ApiModel(value = "分销商已选择分销商品")
+@Schema(description = "分销商已选择分销商品")
 @TableName("li_distribution_selected_goods")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class DistributionSelectedGoods extends BaseIdEntity {
 
 
-    @ApiModelProperty(value = "分销员ID")
+    @Schema(description = "分销员ID")
     private String distributionId;
 
-    @ApiModelProperty(value = "分销商品ID")
+    @Schema(description = "分销商品ID")
     private String distributionGoodsId;
 
     public DistributionSelectedGoods(String distributionId, String distributionGoodsId) {

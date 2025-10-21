@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
  * @since 2020/8/21
  **/
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SeckillApplyVO extends SeckillApply {
 
     private static final long serialVersionUID = 7076774723400062602L;

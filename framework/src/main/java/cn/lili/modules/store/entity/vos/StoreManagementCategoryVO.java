@@ -2,8 +2,9 @@ package cn.lili.modules.store.entity.vos;
 
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.goods.entity.dos.Category;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -13,9 +14,10 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class StoreManagementCategoryVO extends Category {
 
-    @ApiModelProperty(value = "已选择")
+    @Schema(description = "已选择")
     private Boolean selected;
 
     public StoreManagementCategoryVO(Category category) {

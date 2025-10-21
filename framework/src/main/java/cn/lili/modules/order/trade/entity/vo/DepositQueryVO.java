@@ -1,7 +1,6 @@
 package cn.lili.modules.order.trade.entity.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @since 2020-02-25 14:10:16
  */
 @Data
-@ApiModel(value = "预存款变动记录查询条件")
+@Schema(description = "预存款变动记录查询条件")
 @AllArgsConstructor
 @NoArgsConstructor
 public class DepositQueryVO implements Serializable {
@@ -26,18 +25,18 @@ public class DepositQueryVO implements Serializable {
     /**
      * 会员ID
      */
-    @ApiModelProperty(value = "会员Id")
+    @Schema(description = "会员Id")
     private String memberId;
     /**
      * 会员名称
      */
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "起始日期")
+    @Schema(description = "起始日期")
     private String startDate;
 
-    @ApiModelProperty(value = "结束日期")
+    @Schema(description = "结束日期")
     private String endDate;
 
 

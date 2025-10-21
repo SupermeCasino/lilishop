@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -48,9 +47,7 @@ public class RedisCache implements Cache {
     @Override
     public List multiGet(Collection keys) {
         return redisTemplate.opsForValue().multiGet(keys);
-
     }
-
 
     @Override
     public void multiSet(Map map) {
@@ -165,7 +162,7 @@ public class RedisCache implements Cache {
                 cursor.forEachRemaining(consumer);
                 return null;
 
-            } catch (IOException e) {
+            } catch (Exception e) { // 改为捕获 Exception 而不是 IOException
                 log.error("scan错误", e);
                 throw new RuntimeException(e);
             }
@@ -312,6 +309,6 @@ public class RedisCache implements Cache {
      */
     @Override
     public Long zRemove(String key, String... value) {
-        return redisTemplate.opsForZSet().remove(key, value);
+        return redisTemplate.opsForZSet().remove(key, (Object[]) value);
     }
 }

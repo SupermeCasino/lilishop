@@ -1,7 +1,7 @@
 package cn.lili.modules.order.order.entity.dos;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.security.sensitive.Sensitive;
@@ -19,8 +19,7 @@ import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -38,188 +37,188 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_order")
-@ApiModel(value = "订单")
+@Schema(description = "订单")
 @NoArgsConstructor
 public class Order extends BaseEntity {
 
 
     private static final long serialVersionUID = 2233811628066468683L;
-    @ApiModelProperty("订单编号")
+    @Schema(description = "订单编号")
     private String sn;
 
-    @ApiModelProperty("交易编号 关联Trade")
+    @Schema(description = "交易编号 关联Trade")
     private String tradeSn;
 
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 
-    @ApiModelProperty(value = "会员ID")
+    @Schema(description = "会员ID")
     private String memberId;
 
-    @ApiModelProperty(value = "用户名")
+    @Schema(description = "用户名")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
     /**
      * @see OrderStatusEnum
      */
-    @ApiModelProperty(value = "订单状态")
+    @Schema(description = "订单状态")
     private String orderStatus;
 
     /**
      * @see PayStatusEnum
      */
-    @ApiModelProperty(value = "付款状态")
+    @Schema(description = "付款状态")
     private String payStatus;
     /**
      * @see DeliverStatusEnum
      */
-    @ApiModelProperty(value = "货运状态")
+    @Schema(description = "货运状态")
     private String deliverStatus;
 
-    @ApiModelProperty(value = "第三方付款流水号")
+    @Schema(description = "第三方付款流水号")
     private String receivableNo;
 
     /**
      * @see PaymentMethodEnum
      */
-    @ApiModelProperty(value = "支付方式")
+    @Schema(description = "支付方式")
     private String paymentMethod;
 
-    @ApiModelProperty(value = "支付时间")
+    @Schema(description = "支付时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date paymentTime;
 
-    @ApiModelProperty(value = "收件人姓名")
+    @Schema(description = "收件人姓名")
     private String consigneeName;
 
-    @ApiModelProperty(value = "收件人手机")
+    @Schema(description = "收件人手机")
     private String consigneeMobile;
 
     /**
      * @see DeliveryMethodEnum
      */
-    @ApiModelProperty(value = "配送方式")
+    @Schema(description = "配送方式")
     private String deliveryMethod;
 
-    @ApiModelProperty(value = "地址名称， '，'分割")
+    @Schema(description = "地址名称， '，'分割")
     private String consigneeAddressPath;
 
-    @ApiModelProperty(value = "地址id，'，'分割 ")
+    @Schema(description = "地址id，'，'分割 ")
     private String consigneeAddressIdPath;
 
-    @ApiModelProperty(value = "详细地址")
+    @Schema(description = "详细地址")
     private String consigneeDetail;
 
-    @ApiModelProperty(value = "总价格")
+    @Schema(description = "总价格")
     private Double flowPrice;
 
-    @ApiModelProperty(value = "商品价格")
+    @Schema(description = "商品价格")
     private Double goodsPrice;
 
-    @ApiModelProperty(value = "运费")
+    @Schema(description = "运费")
     private Double freightPrice;
 
-    @ApiModelProperty(value = "优惠的金额")
+    @Schema(description = "优惠的金额")
     private Double discountPrice;
 
-    @ApiModelProperty(value = "修改价格")
+    @Schema(description = "修改价格")
     private Double updatePrice;
 
-    @ApiModelProperty(value = "发货单号")
+    @Schema(description = "发货单号")
     private String logisticsNo;
 
-    @ApiModelProperty(value = "物流公司CODE")
+    @Schema(description = "物流公司CODE")
     private String logisticsCode;
 
-    @ApiModelProperty(value = "物流公司名称")
+    @Schema(description = "物流公司名称")
     private String logisticsName;
 
-    @ApiModelProperty(value = "订单商品总重量")
+    @Schema(description = "订单商品总重量")
     private Double weight;
 
-    @ApiModelProperty(value = "商品数量")
+    @Schema(description = "商品数量")
     private Integer goodsNum;
 
-    @ApiModelProperty(value = "买家订单备注")
+    @Schema(description = "买家订单备注")
     private String remark;
 
-    @ApiModelProperty(value = "卖家订单备注")
+    @Schema(description = "卖家订单备注")
     private String sellerRemark;
 
-    @ApiModelProperty(value = "订单取消原因")
+    @Schema(description = "订单取消原因")
     private String cancelReason;
 
-    @ApiModelProperty(value = "完成时间")
+    @Schema(description = "完成时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date completeTime;
 
-    @ApiModelProperty(value = "送货时间")
+    @Schema(description = "送货时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date logisticsTime;
 
-    @ApiModelProperty(value = "支付方式返回的交易号")
+    @Schema(description = "支付方式返回的交易号")
     private String payOrderNo;
 
     /**
      * @see ClientTypeEnum
      */
-    @ApiModelProperty(value = "订单来源")
+    @Schema(description = "订单来源")
     private String clientType;
 
-    @ApiModelProperty(value = "是否需要发票")
+    @Schema(description = "是否需要发票")
     private Boolean needReceipt;
 
-    @ApiModelProperty(value = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
+    @Schema(description = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
     private String parentOrderSn = "";
 
-    @ApiModelProperty(value = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
+    @Schema(description = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
     private String promotionId;
 
     /**
      * @see OrderTypeEnum
      */
-    @ApiModelProperty(value = "订单类型")
+    @Schema(description = "订单类型")
     private String orderType;
 
     /**
      * @see OrderPromotionTypeEnum
      */
-    @ApiModelProperty(value = "订单促销类型")
+    @Schema(description = "订单促销类型")
     private String orderPromotionType;
 
-    @ApiModelProperty(value = "价格价格详情")
+    @Schema(description = "价格价格详情")
     private String priceDetail;
 
-    @ApiModelProperty(value = "订单是否支持原路退回")
+    @Schema(description = "订单是否支持原路退回")
     private Boolean canReturn;
 
-    @ApiModelProperty(value = "提货码")
+    @Schema(description = "提货码")
     private String verificationCode;
 
-    @ApiModelProperty(value = "分销员ID")
+    @Schema(description = "分销员ID")
     private String distributionId;
 
-    @ApiModelProperty(value = "使用的店铺会员优惠券id(,区分)")
+    @Schema(description = "使用的店铺会员优惠券id(,区分)")
     private String useStoreMemberCouponIds;
 
-    @ApiModelProperty(value = "使用的平台会员优惠券id")
+    @Schema(description = "使用的平台会员优惠券id")
     private String usePlatformMemberCouponId;
 
-    @ApiModelProperty(value = "qrCode  实物为提货码  虚拟货物为账号")
+    @Schema(description = "qrCode  实物为提货码  虚拟货物为账号")
     private String qrCode;
 
-    @ApiModelProperty(value = "自提点地址")
+    @Schema(description = "自提点地址")
     private String storeAddressPath;
 
-    @ApiModelProperty(value = "自提点电话")
+    @Schema(description = "自提点电话")
     private String storeAddressMobile;
 
-    @ApiModelProperty(value = "自提点地址经纬度")
+    @Schema(description = "自提点地址经纬度")
     private String storeAddressCenter;
 
     /**
@@ -316,14 +315,14 @@ public class Order extends BaseEntity {
     public PriceDetailDTO getPriceDetailDTO() {
 
         try {
-            return JSONUtil.toBean(priceDetail, PriceDetailDTO.class);
+            return JSON.parseObject(priceDetail, PriceDetailDTO.class);
         } catch (Exception e) {
             return null;
         }
     }
 
     public void setPriceDetailDTO(PriceDetailDTO priceDetail) {
-        this.priceDetail = JSONUtil.toJsonStr(priceDetail);
+        this.priceDetail = JSON.toJSONString(priceDetail);
     }
 
 

@@ -14,15 +14,14 @@ import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.sms.SmsUtil;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 店铺端,商家登录接口
@@ -32,7 +31,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @RestController
-@Api(tags = "店铺端,商家登录接口 ")
+@Tag(name = "店铺端,商家登录接口 ")
 @RequestMapping("/store/passport/login")
 public class StorePassportController {
 
@@ -48,11 +47,9 @@ public class StorePassportController {
     @Autowired
     private VerificationService verificationService;
 
-    @ApiOperation(value = "登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
-    })
+    @Operation(description = "登录接口")
+    @Parameter(name = "username", description = "用户名", required = true)
+    @Parameter(name = "password", description = "密码", required = true)
     @PostMapping("/userLogin")
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
@@ -63,11 +60,9 @@ public class StorePassportController {
         }
     }
 
-    @ApiOperation(value = "短信登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query")
-    })
+    @Operation(description = "短信登录接口")
+    @Parameter(name = "mobile", description = "手机号", required = true)
+    @Parameter(name = "code", description = "验证码", required = true)
     @PostMapping("/smsLogin")
     public ResultMessage<Object> smsLogin(@NotNull(message = "手机号为空") @RequestParam String mobile,
                                           @NotNull(message = "验证码为空") @RequestParam String code,
@@ -79,18 +74,16 @@ public class StorePassportController {
         }
     }
 
-    @ApiOperation(value = "注销接口")
+    @Operation(description = "注销接口")
     @PostMapping("/logout")
     public ResultMessage<Object> logout() {
         this.memberService.logout(UserEnums.STORE);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "通过短信重置密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "是否保存登录", required = true, paramType = "query")
-    })
+    @Operation(description = "通过短信重置密码")
+    @Parameter(name = "mobile", description = "手机号", required = true)
+    @Parameter(name = "code", description = "验证码", required = true)
     @PostMapping("/resetByMobile")
     public ResultMessage<Member> resetByMobile(@NotNull(message = "手机号为空") @RequestParam String mobile,
                                                @NotNull(message = "验证码为空") @RequestParam String code,
@@ -104,20 +97,17 @@ public class StorePassportController {
             throw new ServiceException(ResultCode.VERIFICATION_SMS_CHECKED_ERROR);
         }
     }
-    @ApiOperation(value = "修改密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
-    })
+    @Operation(description = "修改密码")
+    @Parameter(name = "password", description = "密码", required = true)
+    @Parameter(name = "newPassword", description = "新密码", required = true)
     @PostMapping("/resetPassword")
     public ResultMessage<Object> resetByMobile(@NotNull(message = "密码为空") @RequestParam String password, @RequestHeader String uuid) {
         return ResultUtil.data(memberService.resetByMobile(uuid, password));
     }
 
-    @ApiOperation(value = "修改密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "旧密码", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, paramType = "query")
-    })
+    @Operation(description = "修改密码")
+    @Parameter(name = "password", description = "旧密码", required = true)
+    @Parameter(name = "newPassword", description = "新密码", required = true)
     @PostMapping("/modifyPass")
     public ResultMessage<Member> modifyPass(@NotNull(message = "旧密码不能为空") @RequestParam String password,
                                             @NotNull(message = "新密码不能为空") @RequestParam String newPassword) {
@@ -128,7 +118,8 @@ public class StorePassportController {
         return ResultUtil.data(memberService.modifyPass(password, newPassword));
     }
 
-    @ApiOperation(value = "刷新token")
+    @Operation(description = "刷新token")
+    @Parameter(name = "refreshToken", description = "刷新token", required = true)
     @GetMapping("/refresh/{refreshToken}")
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));

@@ -5,8 +5,9 @@ import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -17,25 +18,26 @@ import java.io.Serializable;
  * @since 2020-03-07 17:02:05
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class StoreSearchParams extends PageVO implements Serializable {
 
     private static final long serialVersionUID = 6916054310764833369L;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
     /**
      * @see StoreStatusEnum
      */
-    @ApiModelProperty(value = "店铺状态")
+    @Schema(description = "店铺状态")
     private String storeDisable;
 
-    @ApiModelProperty(value = "开始时间")
+    @Schema(description = "开始时间")
     private String startDate;
 
-    @ApiModelProperty(value = "结束时间")
+    @Schema(description = "结束时间")
     private String endDate;
 
     public <T> QueryWrapper<T> queryWrapper() {

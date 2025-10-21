@@ -12,8 +12,9 @@ import cn.lili.modules.promotion.entity.dto.KanjiaActivityGoodsOperationDTO;
 import cn.lili.modules.promotion.entity.dto.search.KanjiaActivityGoodsParams;
 import cn.lili.modules.promotion.service.KanjiaActivityGoodsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,38 +28,43 @@ import java.util.Arrays;
  * @since 2021/7/2
  **/
 @RestController
-@Api(tags = "管理端,砍价促销接口")
+@Tag(name = "管理端,砍价促销接口")
 @RequestMapping("/manager/promotion/kanJiaGoods")
 public class KanJiaActivityGoodsManagerController {
 
     @Autowired
     private KanjiaActivityGoodsService kanJiaActivityGoodsService;
 
+    @Operation(description = "添加砍价活动")
+    @Parameter(name = "kanJiaActivityGoodsOperationDTO", description = "砍价活动商品操作DTO", required = true)
     @PostMapping
-    @ApiOperation(value = "添加砍价活动")
     public ResultMessage<Object> add(@RequestBody KanjiaActivityGoodsOperationDTO kanJiaActivityGoodsOperationDTO) {
         kanJiaActivityGoodsService.add(kanJiaActivityGoodsOperationDTO);
         return ResultUtil.success();
     }
 
 
-    @ApiOperation(value = "获取砍价活动分页")
+    @Operation(description = "获取砍价活动分页")
+    @Parameter(name = "kanJiaParams", description = "砍价活动查询参数")
+    @Parameter(name = "page", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<KanjiaActivityGoods>> getKanJiaActivityPage(KanjiaActivityGoodsParams kanJiaParams, PageVO page) {
         return ResultUtil.data(kanJiaActivityGoodsService.pageFindAll(kanJiaParams, page));
     }
 
 
+    @Operation(description = "获取砍价活动商品详情")
+    @Parameter(name = "id", description = "砍价活动商品ID", required = true)
     @GetMapping("/{id}")
-    @ApiOperation(value = "获取积分商品详情")
     public ResultMessage<Object> getPointsGoodsDetail(@PathVariable("id") String goodsId) {
         KanjiaActivityGoodsDTO kanJiaActivityGoodsDTO = kanJiaActivityGoodsService.getKanjiaGoodsDetail(goodsId);
         return ResultUtil.data(kanJiaActivityGoodsDTO);
     }
 
 
+    @Operation(description = "修改砍价商品")
+    @Parameter(name = "kanJiaActivityGoodsDTO", description = "砍价活动商品DTO", required = true)
     @PutMapping
-    @ApiOperation(value = "修改砍价商品")
     public ResultMessage<Object> updatePointsGoods(@RequestBody KanjiaActivityGoodsDTO kanJiaActivityGoodsDTO) {
         if (!kanJiaActivityGoodsService.updateKanjiaActivityGoods(kanJiaActivityGoodsDTO)) {
             return ResultUtil.error(ResultCode.KANJIA_GOODS_UPDATE_ERROR);
@@ -67,8 +73,9 @@ public class KanJiaActivityGoodsManagerController {
     }
 
 
+    @Operation(description = "删除砍价商品")
+    @Parameter(name = "ids", description = "砍价活动商品ID列表，多个用逗号分隔", required = true)
     @DeleteMapping("/{ids}")
-    @ApiOperation(value = "删除砍价商品")
     public ResultMessage<Object> delete(@PathVariable String ids) {
         if (kanJiaActivityGoodsService.removePromotions(Arrays.asList(ids.split(",")))) {
             return ResultUtil.success();

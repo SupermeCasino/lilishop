@@ -2,7 +2,7 @@ package cn.lili.modules.goods.serviceimpl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.properties.RocketmqCustomProperties;
@@ -182,7 +182,7 @@ public class StudioServiceImpl extends ServiceImpl<StudioMapper, Studio> impleme
             studio.setRoomGoodsNum(studio.getRoomGoodsNum() != null ? studio.getRoomGoodsNum() + 1 : 1);
             //设置直播间默认的商品（前台展示）只展示两个
             if (studio.getRoomGoodsNum() < 3) {
-                studio.setRoomGoodsList(JSONUtil.toJsonStr(commodityService.getSimpleCommodityByRoomId(roomId)));
+                studio.setRoomGoodsList(JSON.toJSONString(commodityService.getSimpleCommodityByRoomId(roomId)));
             }
             return this.updateById(studio);
         }
@@ -204,7 +204,7 @@ public class StudioServiceImpl extends ServiceImpl<StudioMapper, Studio> impleme
             studio.setRoomGoodsNum(studio.getRoomGoodsNum() - 1);
             //设置直播间默认的商品（前台展示）只展示两个
             if (studio.getRoomGoodsNum() < 3) {
-                studio.setRoomGoodsList(JSONUtil.toJsonStr(commodityService.getSimpleCommodityByRoomId(roomId)));
+                studio.setRoomGoodsList(JSON.toJSONString(commodityService.getSimpleCommodityByRoomId(roomId)));
             }
             return this.updateById(studio);
         }

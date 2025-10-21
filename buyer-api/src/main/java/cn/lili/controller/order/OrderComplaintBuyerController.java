@@ -16,14 +16,13 @@ import cn.lili.modules.order.order.entity.vo.OrderComplaintVO;
 import cn.lili.modules.order.order.service.OrderComplaintCommunicationService;
 import cn.lili.modules.order.order.service.OrderComplaintService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Objects;
 
 /**
@@ -33,7 +32,7 @@ import java.util.Objects;
  * @since 2020/12/7
  **/
 @RestController
-@Api(tags = "买家端,交易投诉接口")
+@Tag(name = "买家端,交易投诉接口")
 @RequestMapping("/buyer/order/complain")
 public class OrderComplaintBuyerController {
 
@@ -50,15 +49,15 @@ public class OrderComplaintBuyerController {
     private OrderComplaintCommunicationService orderComplaintCommunicationService;
 
 
-    @ApiOperation(value = "通过id获取")
-    @ApiImplicitParam(name = "id", value = "投诉单ID", required = true, paramType = "path")
-    @GetMapping(value = "/{id}")
+    @Operation(summary = "通过id获取")
+    @Parameter(name = "id", description = "投诉单ID", required = true)
+    @GetMapping("/{id}")
     public ResultMessage<OrderComplaintVO> get(@PathVariable String id) {
         OrderComplaintVO orderComplaintVO = OperationalJudgment.judgment(orderComplaintService.getOrderComplainById(id));
         return ResultUtil.data(orderComplaintVO);
     }
 
-    @ApiOperation(value = "分页获取")
+    @Operation(summary = "分页获取")
     @GetMapping
     public ResultMessage<IPage<OrderComplaint>> get(OrderComplaintSearchParams searchParams, PageVO pageVO) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -68,17 +67,15 @@ public class OrderComplaintBuyerController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "添加交易投诉")
+    @Operation(summary = "添加交易投诉")
     @PostMapping
     public ResultMessage<OrderComplaint> add(@Valid OrderComplaintDTO orderComplaintDTO) {
         return ResultUtil.data(orderComplaintService.addOrderComplain(orderComplaintDTO));
     }
 
-    @ApiOperation(value = "添加交易投诉对话")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "complainId", value = "投诉单ID", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "content", value = "内容", required = true, paramType = "query")
-    })
+    @Operation(summary = "添加交易投诉对话")
+    @Parameter(name = "complainId", description = "投诉单ID", required = true)
+    @Parameter(name = "content", description = "内容", required = true)
     @PostMapping("/communication")
     public ResultMessage<OrderComplaintCommunicationVO> addCommunication(@RequestParam String complainId, @RequestParam String content) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -87,10 +84,11 @@ public class OrderComplaintBuyerController {
         return ResultUtil.data(communicationVO);
     }
 
+
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "取消售后")
-    @ApiImplicitParam(name = "id", value = "投诉单ID", required = true, paramType = "path")
-    @PutMapping(value = "/status/{id}")
+    @Operation(summary = "取消售后")
+    @Parameter(name = "id", description = "投诉单ID", required = true)
+    @PutMapping("/status/{id}")
     public ResultMessage<Object> cancel(@PathVariable String id) {
         orderComplaintService.cancel(id);
         return ResultUtil.success();

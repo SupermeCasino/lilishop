@@ -26,6 +26,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +53,7 @@ public class DistributionOrderServiceImpl extends ServiceImpl<DistributionOrderM
      * 店铺流水
      */
     @Autowired
+    @Lazy
     private StoreFlowService storeFlowService;
     /**
      * 分销员

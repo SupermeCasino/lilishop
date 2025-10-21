@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
@@ -36,7 +37,7 @@ public class KanjiaActivityLogServiceImpl extends ServiceImpl<KanJiaActivityLogM
 
     @Autowired
     private KanjiaActivityGoodsService kanJiaActivityGoodsService;
-
+    @Lazy
     @Autowired
     private KanjiaActivityService kanJiaActivityService;
 
@@ -52,7 +53,7 @@ public class KanjiaActivityLogServiceImpl extends ServiceImpl<KanJiaActivityLogM
         //校验当前会员是否已经参与过此次砍价
         LambdaQueryWrapper<KanjiaActivityLog> queryWrapper = new LambdaQueryWrapper<KanjiaActivityLog>();
         queryWrapper.eq(kanjiaActivityDTO.getKanjiaActivityId() != null, KanjiaActivityLog::getKanjiaActivityId, kanjiaActivityDTO.getKanjiaActivityId());
-        queryWrapper.eq( KanjiaActivityLog::getKanjiaMemberId, UserContext.getCurrentUser().getId());
+        queryWrapper.eq(KanjiaActivityLog::getKanjiaMemberId, UserContext.getCurrentUser().getId());
         long count = this.baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new ServiceException(ResultCode.KANJIA_ACTIVITY_LOG_MEMBER_ERROR);

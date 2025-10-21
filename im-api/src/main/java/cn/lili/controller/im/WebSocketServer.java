@@ -1,5 +1,6 @@
 package cn.lili.controller.im;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.lili.cache.Cache;
 import cn.lili.common.security.AuthUser;
@@ -13,18 +14,16 @@ import cn.lili.modules.im.entity.vo.MessageOperation;
 import cn.lili.modules.im.entity.vo.MessageVO;
 import cn.lili.modules.im.service.ImMessageService;
 import cn.lili.modules.im.service.ImTalkService;
-import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +70,11 @@ public class WebSocketServer {
             try {
                 oldSession.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("关闭旧会话异常", e);
             }
         }
         sessionPools.put(sessionId, session);
+        log.info("用户建立连接，sessionId: {}", sessionId);
     }
 
     /**
@@ -82,9 +82,10 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose(@PathParam("accessToken") String accessToken) {
-        AuthUser authUser = UserContext.getAuthUser(accessToken);
-        log.info("用户断开断开连接:{}", JSONUtil.toJsonStr(authUser));
-        sessionPools.remove(authUser);
+        AuthUser authUser = UserContext.getAuthUser(cache, accessToken);
+        String sessionId = UserEnums.STORE.equals(authUser.getRole()) ? authUser.getStoreId() : authUser.getId();
+        log.info("用户断开连接:{}", JSONUtil.toJsonStr(authUser));
+        sessionPools.remove(sessionId);
     }
 
     /**
@@ -96,7 +97,7 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(@PathParam("accessToken") String accessToken, String msg) {
         log.info("发送消息：{}", msg);
-        MessageOperation messageOperation = JSON.parseObject(msg, MessageOperation.class);
+        MessageOperation messageOperation = JSONUtil.toBean(msg, MessageOperation.class);
         operation(accessToken, messageOperation);
     }
 
@@ -108,7 +109,7 @@ public class WebSocketServer {
      */
     private void operation(String accessToken, MessageOperation messageOperation) {
 
-        AuthUser authUser = UserContext.getAuthUser(accessToken);
+        AuthUser authUser = UserContext.getAuthUser(cache, accessToken);
         switch (messageOperation.getOperationType()) {
             case PING:
                 break;
@@ -125,7 +126,7 @@ public class WebSocketServer {
                 sendMessage(messageOperation.getTo(), new MessageVO(MessageResultType.MESSAGE, imMessage));
                 break;
             case READ:
-                if (!StringUtils.isEmpty(messageOperation.getContext())) {
+                if (StrUtil.isNotEmpty(messageOperation.getContext())) {
                     imMessageService.read(messageOperation.getTalkId(), accessToken);
                 }
                 break;
@@ -162,9 +163,9 @@ public class WebSocketServer {
     private void sendMessage(Session session, MessageVO message) {
         if (session != null) {
             try {
-                session.getBasicRemote().sendText(JSON.toJSONString(message, true));
+                session.getBasicRemote().sendText(JSONUtil.toJsonStr(message));
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("发送消息异常", e);
             }
         }
     }

@@ -7,7 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -36,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,7 @@ public class SeckillServiceImpl extends AbstractPromotionsServiceImpl<SeckillMap
     @Autowired
     private SettingService settingService;
 
+    @Lazy
     @Autowired
     private SeckillApplyService seckillApplyService;
 
@@ -200,7 +202,7 @@ public class SeckillServiceImpl extends AbstractPromotionsServiceImpl<SeckillMap
         //删除商品促销消息
         String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.DELETE_GOODS_INDEX_PROMOTIONS.name();
         //发送mq消息
-        rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(build), RocketmqSendCallbackBuilder.commonCallback());
+        rocketMQTemplate.asyncSend(destination, JSON.toJSONString(build), RocketmqSendCallbackBuilder.commonCallback());
     }
 
     @Override

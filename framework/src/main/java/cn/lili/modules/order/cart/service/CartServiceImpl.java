@@ -2,8 +2,6 @@ package cn.lili.modules.order.cart.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.cache.Cache;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
@@ -51,8 +49,11 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreAddress;
 import cn.lili.modules.store.service.StoreAddressService;
 import cn.lili.modules.store.service.StoreService;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,6 +110,7 @@ public class CartServiceImpl implements CartService {
     /**
      * 交易
      */
+    @Lazy
     @Autowired
     private TradeBuilder tradeBuilder;
 
@@ -755,11 +757,11 @@ public class CartServiceImpl implements CartService {
         if (cartSkuVO.getPromotionMap() != null && !cartSkuVO.getPromotionMap().isEmpty()) {
             Optional<Map.Entry<String, Object>> pintuanPromotions = cartSkuVO.getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.PINTUAN.name())).findFirst();
             if (pintuanPromotions.isPresent()) {
-                JSONObject promotionsObj = JSONUtil.parseObj(pintuanPromotions.get().getValue());
+                JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(pintuanPromotions.get().getValue()));
                 //写入拼团信息
                 cartSkuVO.setPintuanId(promotionsObj.get("id").toString());
                 //检测拼团限购数量
-                Integer limitNum = promotionsObj.get("limitNum", Integer.class);
+                Integer limitNum = promotionsObj.getInteger("limitNum");
                 if (limitNum != 0 && cartSkuVO.getNum() > limitNum) {
                     throw new ServiceException(ResultCode.CART_PINTUAN_LIMIT_ERROR);
                 }
@@ -776,10 +778,10 @@ public class CartServiceImpl implements CartService {
         if (cartSkuVO.getPromotionMap() != null && !cartSkuVO.getPromotionMap().isEmpty()) {
             Optional<Map.Entry<String, Object>> kanjiaPromotions = cartSkuVO.getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.KANJIA.name())).findFirst();
             if (kanjiaPromotions.isPresent()) {
-                JSONObject promotionsObj = JSONUtil.parseObj(kanjiaPromotions.get().getValue());
+                JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(kanjiaPromotions.get().getValue()));
                 //查找当前会员的砍价商品活动
                 KanjiaActivitySearchParams kanjiaActivitySearchParams = new KanjiaActivitySearchParams();
-                kanjiaActivitySearchParams.setKanjiaActivityGoodsId(promotionsObj.get("id", String.class));
+                kanjiaActivitySearchParams.setKanjiaActivityGoodsId(promotionsObj.getString("id"));
                 kanjiaActivitySearchParams.setMemberId(UserContext.getCurrentUser().getId());
                 kanjiaActivitySearchParams.setStatus(KanJiaStatusEnum.SUCCESS.name());
                 KanjiaActivity kanjiaActivity = kanjiaActivityService.getKanjiaActivity(kanjiaActivitySearchParams);

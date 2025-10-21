@@ -8,9 +8,9 @@ import cn.lili.modules.page.entity.enums.PageEnum;
 import cn.lili.modules.page.entity.vos.PageDataVO;
 import cn.lili.modules.page.service.PageDataService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020/11/16 10:08 下午
  */
 @RestController
-@Api(tags = "买家端,页面接口")
+@Tag(name = "买家端,页面接口")
 @RequestMapping("/buyer/other/pageData")
 public class PageBuyerController {
 
@@ -31,7 +31,8 @@ public class PageBuyerController {
     @Autowired
     private PageDataService pageService;
 
-    @ApiOperation(value = "获取首页数据")
+    @Operation(description = "获取首页数据")
+    @Parameter(name = "clientType", description = "客户端类型", required = true)
     @GetMapping("/getIndex")
     public ResultMessage<PageDataVO> getIndex(@RequestParam String clientType) {
         PageDataDTO pageDataDTO = new PageDataDTO(PageEnum.INDEX.name());
@@ -40,14 +41,16 @@ public class PageBuyerController {
         return ResultUtil.data(pageDataVO);
     }
 
-    @ApiOperation(value = "获取页面数据")
+    @Operation(summary = "获取页面数据")
     @GetMapping
     public ResultMessage<PageDataVO> get(PageDataDTO pageDataDTO) {
         PageDataVO pageDataVO=pageService.getPageData(pageDataDTO);
         return ResultUtil.data(pageDataVO);
     }
 
-    @ApiOperation(value = "获取店铺首页")
+    @Operation(description = "获取店铺首页")
+    @Parameter(name = "clientType", description = "客户端类型", required = true)
+    @Parameter(name = "storeId", description = "店铺ID", required = true)
     @GetMapping("/getStore")
     public ResultMessage<PageDataVO> getShopPage(@RequestParam String clientType,String storeId) {
         PageDataDTO pageDataDTO = new PageDataDTO(PageEnum.STORE.name());
@@ -57,14 +60,14 @@ public class PageBuyerController {
         return ResultUtil.data(pageDataVO);
     }
 
-    @ApiOperation(value = "获取页面数据")
-    @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "String", paramType = "path")
+    @Operation(description = "获取页面数据")
+    @Parameter(name = "id", description = "id", required = true)
     @GetMapping("/get/{id}")
     public ResultMessage<PageData> getPage(@PathVariable("id") String id) {
         return ResultUtil.data(pageService.getSpecial(id));
     }
 
-    @ApiOperation(value = "获取专题页面数据（根据消息内容得知）")
+    @Operation(description = "获取专题页面数据（根据消息内容得知）")
     @GetMapping("/getSpecial")
     public ResultMessage<PageData> getSpecial(@RequestParam String body) {
         String name = "";

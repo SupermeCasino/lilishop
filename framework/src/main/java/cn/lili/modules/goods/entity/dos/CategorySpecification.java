@@ -1,12 +1,11 @@
 package cn.lili.modules.goods.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,10 +15,11 @@ import lombok.NoArgsConstructor;
  * @since 2020-02-26 10:34:02
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_category_specification")
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "商品分类规格")
+@Schema(description = "商品分类规格")
 public class CategorySpecification extends BaseEntity {
 
 
@@ -27,13 +27,11 @@ public class CategorySpecification extends BaseEntity {
     /**
      * 分类id
      */
-    @TableField(value = "category_id")
-    @ApiModelProperty(value = "分类id")
+    @Schema(description = "分类id")
     private String categoryId;
     /**
      * 规格id
      */
-    @TableField(value = "specification_id")
-    @ApiModelProperty(value = "规格id")
+    @Schema(description = "规格id")
     private String specificationId;
 }

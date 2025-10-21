@@ -1,6 +1,5 @@
 package cn.lili.modules.sms.plugin.impl;
 
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.Base64Utils;
@@ -9,6 +8,7 @@ import cn.lili.modules.sms.entity.dos.SmsTemplate;
 import cn.lili.modules.sms.entity.enums.SmsEnum;
 import cn.lili.modules.sms.plugin.SmsPlugin;
 import cn.lili.modules.system.entity.dto.SmsSetting;
+import com.alibaba.fastjson2.JSON;
 import com.aliyun.dysmsapi20170525.models.*;
 import com.aliyun.teaopenapi.models.Config;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class AliSmsPlugin implements SmsPlugin {
                 .setSignName(signName)
                 .setPhoneNumbers(mobile)
                 .setTemplateCode(templateCode)
-                .setTemplateParam(JSONUtil.toJsonStr(param));
+                .setTemplateParam(JSON.toJSONString(param));
         try {
             SendSmsResponse response = client.sendSms(sendSmsRequest);
             if (!("OK").equals(response.getBody().getCode())) {
@@ -83,8 +83,8 @@ public class AliSmsPlugin implements SmsPlugin {
 //       //发送短信
         for (int i = 0; i < mobileList.size(); i++) {
             SendBatchSmsRequest sendBatchSmsRequest = new SendBatchSmsRequest()
-                    .setPhoneNumberJson(JSONUtil.toJsonStr(mobileList.get(i)))
-                    .setSignNameJson(JSONUtil.toJsonStr(signNameList.get(i)))
+                    .setPhoneNumberJson(JSON.toJSONString(mobileList.get(i)))
+                    .setSignNameJson(JSON.toJSONString(signNameList.get(i)))
                     .setTemplateCode(templateCode);
             try {
                 client.sendBatchSms(sendBatchSmsRequest);

@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,9 +23,10 @@ import java.util.Date;
  * @since 2020-03-14 23:04:56
  */
 @Data
-@ApiModel(value = "分销订单")
+@Schema(description = "分销订单")
 @TableName("li_distribution_order")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class DistributionOrder extends BaseIdEntity {
 
     private static final long serialVersionUID = 501799944909496507L;
@@ -34,52 +35,52 @@ public class DistributionOrder extends BaseIdEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
     /**
      * @see DistributionOrderStatusEnum
      */
-    @ApiModelProperty(value = "分销订单状态")
+    @Schema(description = "分销订单状态")
     private String distributionOrderStatus;
-    @ApiModelProperty(value = "购买会员的id")
+    @Schema(description = "购买会员的id")
     private String memberId;
-    @ApiModelProperty(value = "购买会员的名称")
+    @Schema(description = "购买会员的名称")
     private String memberName;
-    @ApiModelProperty(value = "分销员id")
+    @Schema(description = "分销员id")
     private String distributionId;
-    @ApiModelProperty(value = "分销员名称")
+    @Schema(description = "分销员名称")
     private String distributionName;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "解冻日期")
+    @Schema(description = "解冻日期")
     private Date settleCycle;
-    @ApiModelProperty(value = "提成金额")
+    @Schema(description = "提成金额")
     private Double rebate;
-    @ApiModelProperty(value = "退款金额")
+    @Schema(description = "退款金额")
     private Double sellBackRebate;
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String storeId;
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
-    @ApiModelProperty(value = "子订单编号")
+    @Schema(description = "子订单编号")
     private String orderItemSn;
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
-    @ApiModelProperty(value = "货品ID")
+    @Schema(description = "货品ID")
     private String skuId;
-    @ApiModelProperty(value = "规格")
+    @Schema(description = "规格")
     private String specs;
-    @ApiModelProperty(value = "图片")
+    @Schema(description = "图片")
     private String image;
-    @ApiModelProperty(value = "商品数量")
+    @Schema(description = "商品数量")
     private Integer num;
-    @ApiModelProperty(value = "退款商品数量")
+    @Schema(description = "退款商品数量")
     private Integer refundNum;
 
     public DistributionOrder(StoreFlow storeFlow) {
@@ -97,8 +98,8 @@ public class DistributionOrder extends BaseIdEntity {
         specs = storeFlow.getSpecs();
         image = storeFlow.getImage();
         num = storeFlow.getNum();
-        refundNum=0;
-        sellBackRebate=0D;
+        refundNum = 0;
+        sellBackRebate = 0D;
     }
 
 }

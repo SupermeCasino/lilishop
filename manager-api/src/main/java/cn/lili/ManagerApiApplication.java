@@ -29,6 +29,7 @@ public class ManagerApiApplication {
     public static void main(String[] args) {
         System.setProperty("es.set.netty.runtime.available.processors", "false");
         System.setProperty("rocketmq.client.logUseSlf4j","true");
+        System.setProperty("spring.profiles.active", "default");
         SpringApplication.run(ManagerApiApplication.class, args);
     }
 

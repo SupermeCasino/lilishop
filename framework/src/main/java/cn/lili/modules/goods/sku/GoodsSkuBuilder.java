@@ -3,12 +3,13 @@ package cn.lili.modules.goods.sku;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.json.JSONUtil;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+
+import com.alibaba.fastjson2.JSON;
 
 /**
  * @author paulG
@@ -89,7 +90,7 @@ public class GoodsSkuBuilder {
         goodsSku.setPrice(Convert.toDouble(skuInfo.get("price"), 0D));
         goodsSku.setCost(Convert.toDouble(skuInfo.get("cost"), 0D));
         goodsSku.setQuantity(Convert.toInt(skuInfo.get("quantity"), 0));
-        goodsSku.setSpecs(JSONUtil.toJsonStr(specMap));
+        goodsSku.setSpecs(JSON.toJSONString(specMap));
         goodsSku.setSimpleSpecs(simpleSpecs.toString());
         goodsSku.setAlertQuantity(Convert.toInt(skuInfo.get("alertQuantity"), 0));
     }

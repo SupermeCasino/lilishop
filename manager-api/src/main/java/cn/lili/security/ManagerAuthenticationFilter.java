@@ -16,7 +16,10 @@ import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.SneakyThrows;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,12 +31,11 @@ import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.naming.NoPermissionException;
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import cn.lili.common.properties.IgnoredUrlsProperties;
 
 /**
  * 管理端token过滤
@@ -49,19 +51,33 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
 
     private final ManagerTokenGenerate managerTokenGenerate;
 
+    private final IgnoredUrlsProperties ignoredUrlsProperties;
+
     public ManagerAuthenticationFilter(AuthenticationManager authenticationManager,
                                        MenuService menuService,
                                        ManagerTokenGenerate managerTokenGenerate,
-                                       Cache cache) {
+                                       Cache cache,
+                                       IgnoredUrlsProperties ignoredUrlsProperties) {
         super(authenticationManager);
         this.cache = cache;
         this.menuService = menuService;
         this.managerTokenGenerate = managerTokenGenerate;
+        this.ignoredUrlsProperties = ignoredUrlsProperties;
     }
 
-    @SneakyThrows
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws IOException, ServletException {
+
+        // 忽略无需鉴权的路径，直接放行
+        String requestUri = request.getRequestURI();
+        for (String url : ignoredUrlsProperties.getUrls()) {
+            if (PatternMatchUtils.simpleMatch(url, requestUri)) {
+                chain.doFilter(request, response);
+                return;
+            }
+        }
 
         //从header中获取jwt
         String jwt = request.getHeader(SecurityEnum.HEADER_TOKEN.getValue());
@@ -75,8 +91,13 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken authentication = getAuthentication(jwt, response);
         //自定义权限过滤
         if (authentication != null) {
-            customAuthentication(request, response, authentication);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                customAuthentication(request, response, authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (NoPermissionException e) {
+                // 已写响应并记录日志，终止链
+                return;
+            }
         }
         chain.doFilter(request, response);
     }
@@ -92,7 +113,6 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
         AuthUser authUser = (AuthUser) authentication.getDetails();
         String requestUrl = request.getRequestURI();
 
-
         //如果不是超级管理员， 则鉴权
         if (Boolean.FALSE.equals(authUser.getIsSuper())) {
             String permissionCacheKey = CachePrefix.PERMISSION_LIST.getPrefix(UserEnums.MANAGER) + authUser.getId();
@@ -105,7 +125,6 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
             }
             //获取数据(GET 请求)权限
             if (request.getMethod().equals(RequestMethod.GET.name())) {
-                //如果用户的超级权限和查阅权限都不包含当前请求的api
                 if (match(permission.get(PermissionEnum.SUPER.name()), requestUrl) ||
                         match(permission.get(PermissionEnum.QUERY.name()), requestUrl)) {
                 } else {
@@ -113,9 +132,7 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
                     log.error("当前请求路径：{},所拥有权限：{}", requestUrl, JSONUtil.toJsonStr(permission));
                     throw new NoPermissionException("权限不足");
                 }
-            }
-            //非get请求（数据操作） 判定鉴权
-            else {
+            } else {
                 if (!match(permission.get(PermissionEnum.SUPER.name()), requestUrl)) {
                     ResponseUtil.output(response, ResponseUtil.resultMap(false, 400, "权限不足"));
                     log.error("当前请求路径：{},所拥有权限：{}", requestUrl, JSONUtil.toJsonStr(permission));
@@ -149,21 +166,20 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String jwt, HttpServletResponse response) {
 
         try {
-            Claims claims
-                    = Jwts.parserBuilder()
-                    .setSigningKey(SecretKeyUtil.generalKeyByDecoders())
-                    .build()
-                    .parseClaimsJws(jwt).getBody();
+            Claims claims =
+                    Jwts.parser()
+                            .verifyWith(SecretKeyUtil.generalKeyByDecoders())
+                            .build()
+                            .parseSignedClaims(jwt)
+                            .getPayload();
             //获取存储在claims中的用户信息
             String json = claims.get(SecurityEnum.USER_CONTEXT.getValue()).toString();
             AuthUser authUser = new Gson().fromJson(json, AuthUser.class);
 
             //校验redis中是否有权限
             if (cache.hasKey(CachePrefix.ACCESS_TOKEN.getPrefix(UserEnums.MANAGER, authUser.getId()) + jwt)) {
-                //用户角色
                 List<GrantedAuthority> auths = new ArrayList<>();
                 auths.add(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()));
-                //构造返回信息
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUser.getUsername(), null, auths);
                 authentication.setDetails(authUser);
                 return authentication;

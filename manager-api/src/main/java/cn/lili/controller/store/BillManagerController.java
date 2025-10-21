@@ -12,15 +12,14 @@ import cn.lili.modules.store.entity.dto.BillSearchParams;
 import cn.lili.modules.store.entity.vos.BillListVO;
 import cn.lili.modules.store.service.BillService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 管理端,商家结算单接口
@@ -29,7 +28,7 @@ import javax.validation.constraints.NotNull;
  * @since 2020/11/17 7:23 下午
  */
 @RestController
-@Api(tags = "管理端,商家结算单接口")
+@Tag(name = "管理端,商家结算单接口")
 @RequestMapping("/manager/order/bill")
 public class BillManagerController {
     @Autowired
@@ -38,46 +37,42 @@ public class BillManagerController {
     @Autowired
     private StoreFlowService storeFlowService;
 
-    @ApiOperation(value = "通过id获取结算单")
-    @ApiImplicitParam(name = "id", value = "结算单ID", required = true, paramType = "path")
-    @GetMapping(value = "/get/{id}")
+    @Operation(summary = "通过id获取结算单")
+    @Parameter(name = "id", description = "结算单ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<Bill> get(@PathVariable @NotNull String id) {
         return ResultUtil.data(billService.getById(id));
     }
 
-    @ApiOperation(value = "获取结算单分页")
-    @GetMapping(value = "/getByPage")
+    @Operation(summary = "获取结算单分页")
+    @Parameter(name = "billSearchParams", description = "结算单查询参数", required = true)
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<BillListVO>> getByPage(BillSearchParams billSearchParams) {
         return ResultUtil.data(billService.billPage(billSearchParams));
     }
 
-    @ApiOperation(value = "获取商家结算单流水分页")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "结算单ID", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "flowType", value = "流水类型:PAY、REFUND", paramType = "query")
-    })
-    @GetMapping(value = "/{id}/getStoreFlow")
+    @Operation(summary = "获取商家结算单流水分页")
+    @Parameter(name = "id", description = "结算单ID", required = true)
+    @Parameter(name = "flowType", description = "流水类型:PAY、REFUND")
+    @GetMapping("/{id}/getStoreFlow")
     public ResultMessage<IPage<StoreFlow>> getStoreFlow(@PathVariable String id, String flowType, PageVO pageVO) {
         return ResultUtil.data(storeFlowService.getStoreFlow(id, flowType, pageVO));
     }
 
-    @ApiOperation(value = "支付结算单")
-    @ApiImplicitParam(name = "id", value = "结算单ID", required = true, paramType = "path")
-    @PutMapping(value = "/pay/{id}")
+    @Operation(summary = "支付结算单")
+    @Parameter(name = "id", description = "结算单ID", required = true)
+    @PutMapping("/pay/{id}")
     public ResultMessage<Object> pay(@PathVariable String id) {
         billService.complete(id);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "下载结算单", produces = "application/octet-stream")
-    @ApiImplicitParam(name = "id", value = "结算单ID", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/downLoad/{id}")
+    @Operation(summary = "下载结算单")
+    @Parameter(name = "id", description = "结算单ID", required = true)
+    @GetMapping(value = "/downLoad/{id}", produces = "application/octet-stream")
     public void downLoadDeliverExcel(@PathVariable String id) {
-        OperationalJudgment.judgment(billService.getById(id));
-        HttpServletResponse response = ThreadContextHolder.getHttpResponse();
-        billService.download(response, id);
-
+            OperationalJudgment.judgment(billService.getById(id));
+            HttpServletResponse response = ThreadContextHolder.getHttpResponse();
+            billService.download(response, id);
     }
-
-
 }

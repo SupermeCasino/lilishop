@@ -16,15 +16,14 @@ import cn.lili.modules.order.aftersale.service.AfterSaleReasonService;
 import cn.lili.modules.order.aftersale.service.AfterSaleService;
 import cn.lili.modules.store.entity.dto.StoreAfterSaleAddressDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +34,7 @@ import java.util.List;
  * @since 2020/11/16 10:02 下午
  */
 @RestController
-@Api(tags = "买家端,售后管理接口")
+@Tag(name = "买家端,售后管理接口")
 @RequestMapping("/buyer/order/afterSale")
 public class AfterSaleBuyerController {
 
@@ -55,47 +54,43 @@ public class AfterSaleBuyerController {
     @Autowired
     private AfterSaleLogService afterSaleLogService;
 
-    @ApiOperation(value = "查看售后服务详情")
-    @ApiImplicitParam(name = "sn", value = "售后单号", required = true, paramType = "path")
-    @GetMapping(value = "/get/{sn}")
+    @Operation(summary = "查看售后服务详情")
+    @Parameter(name = "sn", description = "售后单号", required = true)
+    @GetMapping("/get/{sn}")
     public ResultMessage<AfterSaleVO> get(@NotNull(message = "售后单号") @PathVariable("sn") String sn) {
         AfterSaleVO afterSale = OperationalJudgment.judgment(afterSaleService.getAfterSale(sn));
         return ResultUtil.data(afterSale);
     }
 
-    @ApiOperation(value = "分页获取售后服务")
-    @GetMapping(value = "/page")
+    @Operation(summary = "分页获取售后服务")
+    @Parameter(name = "searchParams", description = "售后查询参数")
+    @GetMapping("/page")
     public ResultMessage<IPage<AfterSaleVO>> getByPage(AfterSaleSearchParams searchParams) {
         return ResultUtil.data(afterSaleService.getAfterSalePages(searchParams));
     }
 
-    @ApiOperation(value = "获取申请售后页面信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "sn", value = "订单货物编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/applyAfterSaleInfo/{sn}")
+    @Operation(summary = "获取申请售后页面信息")
+    @Parameter(name = "sn", description = "订单货物编号", required = true)
+    @GetMapping("/applyAfterSaleInfo/{sn}")
     public ResultMessage<AfterSaleApplyVO> applyAfterSaleInfo(@PathVariable String sn) {
         return ResultUtil.data(afterSaleService.getAfterSaleVO(sn));
     }
 
     @PreventDuplicateSubmissions
-    @PostMapping(value = "/save/{orderItemSn}")
-    @ApiImplicitParam(name = "orderItemSn", value = "订单货物编号", required = true, paramType = "query")
-    @ApiOperation(value = "申请售后")
+    @Operation(summary = "申请售后")
+    @Parameter(name = "orderItemSn", description = "订单货物编号", required = true)
+    @PostMapping("/save/{orderItemSn}")
     public ResultMessage<AfterSale> save(AfterSaleDTO afterSaleDTO) {
         return ResultUtil.data(afterSaleService.saveAfterSale(afterSaleDTO));
 
     }
 
-    @ApiOperation(value = "买家 退回 物流信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "afterSaleSn", value = "售后sn", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "logisticsNo", value = "发货单号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司id", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "mDeliverTime", value = "买家发货时间", required = true, dataType = "date", paramType = "query")
-
-    })
-    @PostMapping(value = "/delivery/{afterSaleSn}")
+    @Operation(summary = "买家 退回 物流信息")
+    @Parameter(name = "afterSaleSn", description = "售后sn", required = true)
+    @Parameter(name = "logisticsNo", description = "发货单号", required = true)
+    @Parameter(name = "logisticsId", description = "物流公司id", required = true)
+    @Parameter(name = "mDeliverTime", description = "买家发货时间", required = true)
+    @PostMapping("/delivery/{afterSaleSn}")
     public ResultMessage<AfterSale> delivery(@NotNull(message = "售后编号不能为空") @PathVariable("afterSaleSn") String afterSaleSn,
                                              @NotNull(message = "发货单号不能为空") @RequestParam String logisticsNo,
                                              @NotNull(message = "请选择物流公司") @RequestParam String logisticsId,
@@ -104,34 +99,34 @@ public class AfterSaleBuyerController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "售后，取消售后")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "afterSaleSn", value = "售后sn", required = true, dataType = "String", paramType = "path")
-    })
-    @PostMapping(value = "/cancel/{afterSaleSn}")
+    @Operation(summary = "售后，取消售后")  
+    @Parameter(name = "afterSaleSn", description = "售后sn", required = true)
+    @PostMapping("/cancel/{afterSaleSn}")
     public ResultMessage<AfterSale> cancel(@NotNull(message = "参数非法") @PathVariable("afterSaleSn") String afterSaleSn) {
         return ResultUtil.data(afterSaleService.cancel(afterSaleSn));
     }
 
-    @ApiOperation(value = "获取商家售后收件地址")
-    @ApiImplicitParam(name = "sn", value = "售后单号", required = true, paramType = "path")
-    @GetMapping(value = "/getStoreAfterSaleAddress/{sn}")
+    @Operation(summary = "获取商家售后收件地址")
+    @Parameter(name = "sn", description = "售后单号", required = true)
+    @GetMapping("/getStoreAfterSaleAddress/{sn}")
     public ResultMessage<StoreAfterSaleAddressDTO> getStoreAfterSaleAddress(@NotNull(message = "售后单号") @PathVariable("sn") String sn) {
         return ResultUtil.data(afterSaleService.getStoreAfterSaleAddressDTO(sn));
     }
 
-    @ApiOperation(value = "获取售后原因")
-    @ApiImplicitParam(name = "serviceType", value = "售后类型", required = true, paramType = "path", allowableValues = "CANCEL,RETURN_GOODS,RETURN_MONEY,COMPLAIN")
-    @GetMapping(value = "/get/afterSaleReason/{serviceType}")
+    @Operation(summary = "获取售后原因")
+    @Parameter(name = "serviceType", description = "售后类型", required = true)
+    @GetMapping("/get/afterSaleReason/{serviceType}")
     public ResultMessage<List<AfterSaleReason>> getAfterSaleReason(@PathVariable String serviceType) {
         return ResultUtil.data(afterSaleReasonService.afterSaleReasonList(serviceType));
     }
 
-    @ApiOperation(value = "获取售后日志")
-    @ApiImplicitParam(name = "sn", value = "售后编号", required = true, paramType = "path")
-    @GetMapping(value = "/get/getAfterSaleLog/{sn}")
+    @Operation(summary = "获取售后日志")
+    @Parameter(name = "sn", description = "售后编号", required = true)
+    @GetMapping("/get/getAfterSaleLog/{sn}")
     public ResultMessage<List<AfterSaleLog>> getAfterSaleLog(@PathVariable String sn) {
         return ResultUtil.data(afterSaleLogService.getAfterSaleLog(sn));
     }
+
+   
 
 }

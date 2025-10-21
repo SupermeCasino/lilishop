@@ -7,12 +7,11 @@ import cn.lili.modules.goods.entity.dos.Specification;
 import cn.lili.modules.goods.service.CategorySpecificationService;
 import cn.lili.modules.goods.service.SpecificationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.List;
  * @since 2020-02-27 15:18:56
  */
 @RestController
-@Api(tags = "管理端,商品分类规格接口")
+@Tag(name = "管理端,商品分类规格接口")
 @RequestMapping("/manager/goods/categorySpec")
 public class CategorySpecificationManagerController {
 
@@ -41,27 +40,25 @@ public class CategorySpecificationManagerController {
     private SpecificationService specificationService;
 
 
-    @ApiOperation(value = "查询某分类下绑定的规格信息")
-    @GetMapping(value = "/{categoryId}")
-    @ApiImplicitParam(name = "categoryId", value = "分类id", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询某分类下绑定的规格信息")
+    @Parameter(name = "categoryId", description = "分类id", required = true)
+    @GetMapping("/{categoryId}")
     public List<Specification> getCategorySpec(@PathVariable String categoryId) {
         return categorySpecificationService.getCategorySpecList(categoryId);
     }
 
-    @ApiOperation(value = "查询某分类下绑定的规格信息,商品操作使用")
-    @GetMapping(value = "/goods/{categoryId}")
-    @ApiImplicitParam(name = "categoryId", value = "分类id", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询某分类下绑定的规格信息,商品操作使用")
+    @Parameter(name = "categoryId", description = "分类id", required = true)
+    @GetMapping("/goods/{categoryId}")
     public List<Specification> getSpec(@PathVariable String categoryId) {
         return specificationService.list();
     }
 
 
-    @ApiOperation(value = "保存某分类下绑定的规格信息")
-    @PostMapping(value = "/{categoryId}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "categoryId", value = "分类id", required = true, paramType = "path", dataType = "String"),
-            @ApiImplicitParam(name = "categorySpecs", value = "规格id数组", required = true, paramType = "query", dataType = "String[]")
-    })
+    @Operation(summary = "保存某分类下绑定的规格信息")
+    @Parameter(name = "categoryId", description = "分类id", required = true)
+    @Parameter(name = "categorySpecs", description = "规格id数组", required = true)
+    @PostMapping("/{categoryId}")
     public ResultMessage<String> saveCategoryBrand(@PathVariable String categoryId,
                                                    @RequestParam String[] categorySpecs) {
         //删除分类规格绑定信息

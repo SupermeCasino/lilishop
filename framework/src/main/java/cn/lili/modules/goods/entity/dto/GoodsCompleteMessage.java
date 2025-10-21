@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -13,16 +13,16 @@ import lombok.Data;
 public class GoodsCompleteMessage {
 
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(description = "商品id")
     private String goodsId;
 
-    @ApiModelProperty(value = "商品skuId")
+    @Schema(description = "商品skuId")
     private String skuId;
 
-    @ApiModelProperty(value = "购买会员sn")
+    @Schema(description = "购买会员sn")
     private String memberId;
 
-    @ApiModelProperty(value = "购买数量")
+    @Schema(description = "购买数量")
     private Integer buyNum;
 
 }

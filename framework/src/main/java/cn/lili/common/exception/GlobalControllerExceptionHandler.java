@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +85,7 @@ public class GlobalControllerExceptionHandler {
     }
 /*
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(description = HttpStatus.BAD_REQUEST)
     public ResultMessage<Object> constraintExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
 
         log.error("全局异常[RuntimeException]:", e);
@@ -148,7 +148,7 @@ public class GlobalControllerExceptionHandler {
     /**
      * bean校验未通过异常
      *
-     * @see javax.validation.Valid
+     * @see jakarta.validation.Valid
      * @see org.springframework.validation.Validator
      * @see org.springframework.validation.DataBinder
      */
@@ -177,7 +177,7 @@ public class GlobalControllerExceptionHandler {
     /**
      * bean校验未通过异常
      *
-     * @see javax.validation.Valid
+     * @see jakarta.validation.Valid
      * @see org.springframework.validation.Validator
      * @see org.springframework.validation.DataBinder
      */

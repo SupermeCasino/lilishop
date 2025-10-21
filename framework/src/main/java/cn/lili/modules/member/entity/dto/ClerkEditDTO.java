@@ -2,12 +2,12 @@ package cn.lili.modules.member.entity.dto;
 
 import cn.lili.common.security.sensitive.Sensitive;
 import cn.lili.common.security.sensitive.enums.SensitiveStrategy;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -24,22 +24,22 @@ public class ClerkEditDTO {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "店员id", hidden = true)
+    @Schema(description = "店员id", hidden = true)
     private String id;
 
-    @ApiModelProperty(value = "会员密码")
+    @Schema(description = "会员密码")
     private String password;
 
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private Boolean status;
 
-    @ApiModelProperty(value = "所属部门id")
+    @Schema(description = "所属部门id")
     private String departmentId;
 
-    @ApiModelProperty(value = "是否是超级管理员 超级管理员/普通管理员")
+    @Schema(description = "是否是超级管理员 超级管理员/普通管理员")
     private Boolean isSuper = false;
 
-    @ApiModelProperty(value = "角色")
+    @Schema(description = "角色")
     private List<String> roles;
 
 

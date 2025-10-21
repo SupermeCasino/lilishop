@@ -3,8 +3,7 @@ package cn.lili.modules.promotion.entity.dos;
 import cn.lili.modules.promotion.entity.enums.KanJiaStatusEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,40 +17,40 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_kanjia_activity")
-@ApiModel(value = "砍价活动参与对象")
+@Schema(description = "砍价活动参与对象")
 public class KanjiaActivity extends BaseEntity {
 
 
     private static final long serialVersionUID = -1583030890805926292L;
 
-    @ApiModelProperty(value = "砍价商品id")
+    @Schema(description = "砍价商品id")
     private String kanjiaActivityGoodsId;
 
-    @ApiModelProperty(value = "发起砍价活动会员id")
+    @Schema(description = "发起砍价活动会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "发起砍价活动会员名称")
+    @Schema(description = "发起砍价活动会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "剩余购买金额")
+    @Schema(description = "剩余购买金额")
     private Double surplusPrice;
 
-    @ApiModelProperty(value = "砍价最低购买金额")
+    @Schema(description = "砍价最低购买金额")
     private Double purchasePrice;
 
-    @ApiModelProperty(value = "砍价商品skuId")
+    @Schema(description = "砍价商品skuId")
     private String skuId;
 
-    @ApiModelProperty(value = "货品名称")
+    @Schema(description = "货品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "缩略图")
+    @Schema(description = "缩略图")
     private String thumbnail;
 
     /**
      * @see KanJiaStatusEnum
      */
-    @ApiModelProperty(value = "砍价活动状态")
+    @Schema(description = "砍价活动状态")
     private String status;
 
 

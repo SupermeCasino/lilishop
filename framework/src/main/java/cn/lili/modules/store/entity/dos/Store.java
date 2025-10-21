@@ -1,21 +1,21 @@
 package cn.lili.modules.store.entity.dos;
 
-import cn.lili.mybatis.BaseEntity;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
+import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -26,98 +26,99 @@ import java.util.Date;
  */
 @Data
 @TableName("li_store")
-@ApiModel(value = "店铺")
+@Schema(description = "店铺")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Store extends BaseEntity {
 
     private static final long serialVersionUID = -5861767726387892272L;
 
-    @ApiModelProperty(value = "会员Id")
+    @Schema(description = "会员Id")
     private String memberId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "店铺关闭时间")
+    @Schema(description = "店铺关闭时间")
     private Date storeEndTime;
 
     /**
      * @see StoreStatusEnum
      */
-    @ApiModelProperty(value = "店铺状态")
+    @Schema(description = "店铺状态")
     private String storeDisable;
 
-    @ApiModelProperty(value = "是否自营")
+    @Schema(description = "是否自营")
     private Boolean selfOperated;
 
-    @ApiModelProperty(value = "店铺logo")
+    @Schema(description = "店铺logo")
     private String storeLogo;
 
-    @ApiModelProperty(value = "经纬度")
+    @Schema(description = "经纬度")
     @NotEmpty
     private String storeCenter;
 
     @Size(min = 6, max = 200, message = "店铺简介需在6-200字符之间")
     @NotBlank(message = "店铺简介不能为空")
-    @ApiModelProperty(value = "店铺简介")
+    @Schema(description = "店铺简介")
     private String storeDesc;
 
-    @ApiModelProperty(value = "地址名称， '，'分割")
+    @Schema(description = "地址名称， '，'分割")
     private String storeAddressPath;
 
-    @ApiModelProperty(value = "地址id，'，'分割 ")
+    @Schema(description = "地址id，'，'分割 ")
     private String storeAddressIdPath;
 
-    @ApiModelProperty(value = "详细地址")
+    @Schema(description = "详细地址")
     private String storeAddressDetail;
 
-    @ApiModelProperty(value = "描述评分")
+    @Schema(description = "描述评分")
     private Double descriptionScore;
 
-    @ApiModelProperty(value = "服务评分")
+    @Schema(description = "服务评分")
     private Double serviceScore;
 
-    @ApiModelProperty(value = "物流评分")
+    @Schema(description = "物流评分")
     private Double deliveryScore;
 
-    @ApiModelProperty(value = "商品数量")
+    @Schema(description = "商品数量")
     private Integer goodsNum;
 
-    @ApiModelProperty(value = "收藏数量")
+    @Schema(description = "收藏数量")
     private Integer collectionNum;
 
-    @ApiModelProperty(value = "腾讯云智服唯一标识")
+    @Schema(description = "腾讯云智服唯一标识")
     private String yzfSign;
 
-    @ApiModelProperty(value = "腾讯云智服小程序唯一标识")
+    @Schema(description = "腾讯云智服小程序唯一标识")
     private String yzfMpSign;
 
-    @ApiModelProperty(value = "udesk IM标识")
+    @Schema(description = "udesk IM标识")
     private String merchantEuid;
 
     public Boolean getPageShow() {
-        if(pageShow == null){
+        if (pageShow == null) {
             return false;
         }
         return pageShow;
     }
 
     public Boolean getSelfPickFlag() {
-        if(selfPickFlag == null){
+        if (selfPickFlag == null) {
             return false;
         }
         return selfPickFlag;
     }
 
-    @ApiModelProperty(value = "默认页面是否开启")
+    @Schema(description = "默认页面是否开启")
     private Boolean pageShow;
 
-    @ApiModelProperty(value = "是否开启自提")
+    @Schema(description = "是否开启自提")
     private Boolean selfPickFlag;
 
     public Store(Member member) {

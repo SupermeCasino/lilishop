@@ -2,8 +2,7 @@ package cn.lili.modules.promotion.entity.vos;
 
 import cn.lili.modules.promotion.entity.dos.Coupon;
 import cn.lili.modules.promotion.entity.dos.PromotionGoods;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "优惠券")
+@Schema(description = "优惠券")
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class CouponVO extends Coupon {
@@ -30,7 +29,7 @@ public class CouponVO extends Coupon {
     /**
      * 促销关联的商品
      */
-    @ApiModelProperty(value = "优惠券关联商品集合")
+    @Schema(description = "优惠券关联商品集合")
     private List<PromotionGoods> promotionGoodsList;
 
     public CouponVO(Coupon coupon) {

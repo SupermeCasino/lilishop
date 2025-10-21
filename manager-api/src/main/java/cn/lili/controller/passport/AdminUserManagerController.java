@@ -20,16 +20,16 @@ import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "管理员")
+@Tag(name = "管理员")
 @RequestMapping("/manager/passport/user")
 @Validated
 public class AdminUserManagerController {
@@ -57,8 +57,11 @@ public class AdminUserManagerController {
     @Autowired
     private VerificationService verificationService;
 
-    @PostMapping(value = "/login")
-    @ApiOperation(value = "登录管理员")
+    @PostMapping("/login")
+    @Operation(description = "登录管理员")
+    @Parameter(name = "username", description = "用户名", required = true)
+    @Parameter(name = "password", description = "密码", required = true)
+    @Parameter(name = "uuid", description = "验证码uuid", required = true)
     public ResultMessage<Token> login(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                       @NotNull(message = "密码不能为空") @RequestParam String password,
                                       @RequestHeader String uuid) {
@@ -69,22 +72,22 @@ public class AdminUserManagerController {
         }
     }
 
-    @ApiOperation(value = "注销接口")
+    @Operation(description = "注销接口")
     @PostMapping("/logout")
     public ResultMessage<Object> logout() {
         this.memberService.logout(UserEnums.MANAGER);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "刷新token")
+    @Operation(description = "刷新token")
     @GetMapping("/refresh/{refreshToken}")
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.adminUserService.refreshToken(refreshToken));
     }
 
 
-    @GetMapping(value = "/info")
-    @ApiOperation(value = "获取当前登录用户接口")
+    @GetMapping("/info")
+    @Operation(description = "获取当前登录用户接口")
     public ResultMessage<AdminUser> getUserInfo() {
         AuthUser tokenUser = UserContext.getCurrentUser();
         if (tokenUser != null) {
@@ -95,8 +98,8 @@ public class AdminUserManagerController {
         throw new ServiceException(ResultCode.USER_NOT_LOGIN);
     }
 
-    @PutMapping(value = "/edit")
-    @ApiOperation(value = "修改用户自己资料", notes = "用户名密码不会修改")
+    @PutMapping("/edit")
+    @Operation(description = "修改用户自己资料")
     public ResultMessage<Object> editOwner(AdminUser adminUser) {
 
         AuthUser tokenUser = UserContext.getCurrentUser();
@@ -113,8 +116,8 @@ public class AdminUserManagerController {
         throw new ServiceException(ResultCode.USER_NOT_LOGIN);
     }
 
-    @PutMapping(value = "/admin/edit")
-    @ApiOperation(value = "超级管理员修改其他管理员资料")
+    @PutMapping("/admin/edit")
+    @Operation(description = "超级管理员修改其他管理员资料")
     @DemoSite
     public ResultMessage<Object> edit(@Valid AdminUser adminUser,
                                       @RequestParam(required = false) List<String> roles) {
@@ -131,24 +134,24 @@ public class AdminUserManagerController {
      * @param newPassword
      * @return
      */
-    @PutMapping(value = "/editPassword")
-    @ApiOperation(value = "修改密码")
+    @PutMapping("/editPassword")
+    @Operation(description = "修改密码")
     @DemoSite
     public ResultMessage<Object> editPassword(String password, String newPassword) {
         adminUserService.editPassword(password, newPassword);
         return ResultUtil.success(ResultCode.USER_EDIT_SUCCESS);
     }
 
-    @PostMapping(value = "/resetPassword/{ids}")
-    @ApiOperation(value = "重置密码")
+    @PostMapping("/resetPassword/{ids}")
+    @Operation(description = "重置密码")
     @DemoSite
-    public ResultMessage<Object> resetPassword(@PathVariable List ids) {
+    public ResultMessage<Object> resetPassword(@PathVariable List<String> ids) {
         adminUserService.resetPassword(ids);
         return ResultUtil.success(ResultCode.USER_EDIT_SUCCESS);
     }
 
-    @GetMapping
-    @ApiOperation(value = "多条件分页获取用户列表")
+    @GetMapping("/getByCondition")
+    @Operation(description = "多条件分页获取用户列表")
     public ResultMessage<IPage<AdminUserVO>> getByCondition(AdminUserDTO user,
                                                             SearchVO searchVo,
                                                             PageVO pageVo) {
@@ -158,8 +161,8 @@ public class AdminUserManagerController {
     }
 
 
-    @PostMapping
-    @ApiOperation(value = "添加用户")
+    @PostMapping("/register")
+    @Operation(description = "添加用户")
     public ResultMessage<Object> register(@Valid AdminUserDTO adminUser,
                                           @RequestParam(required = false) List<String> roles) {
         int rolesMaxSize = 10;
@@ -175,10 +178,10 @@ public class AdminUserManagerController {
         }
     }
 
-    @PutMapping(value = "/enable/{userId}")
-    @ApiOperation(value = "禁/启 用 用户")
+    @PutMapping("/enable/{userId}")
+    @Operation(description = "禁/启 用 用户")
     @DemoSite
-    public ResultMessage<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String userId, Boolean status) {
+    public ResultMessage<Object> disable(@Parameter(description = "用户唯一id标识") @PathVariable String userId, Boolean status) {
         AdminUser user = adminUserService.getById(userId);
         if (user == null) {
             throw new ServiceException(ResultCode.USER_NOT_EXIST);
@@ -196,8 +199,8 @@ public class AdminUserManagerController {
         return ResultUtil.success();
     }
 
-    @DeleteMapping(value = "/{ids}")
-    @ApiOperation(value = "批量通过ids删除")
+    @DeleteMapping("/{ids}")
+    @Operation(description = "批量通过ids删除")
     @DemoSite
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         adminUserService.deleteCompletely(ids);

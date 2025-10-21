@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,35 +21,36 @@ import java.util.Date;
  */
 @Data
 @TableName("li_purchase_order_item")
-@ApiModel(value = "采购单子内容")
+@Schema(description = "采购单子内容")
+@EqualsAndHashCode(callSuper = false)
 public class PurchaseOrderItem extends BaseIdEntity {
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty(value = "采购ID")
+    @Schema(description = "采购ID")
     private String purchaseOrderId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "数量")
+    @Schema(description = "数量")
     private String num;
 
-    @ApiModelProperty(value = "数量单位")
+    @Schema(description = "数量单位")
     private String goodsUnit;
 
-    @ApiModelProperty(value = "价格")
+    @Schema(description = "价格")
     private Double price;
 
-    @ApiModelProperty(value = "规格")
+    @Schema(description = "规格")
     private String specs;
 
-    @ApiModelProperty(value = "图片")
+    @Schema(description = "图片")
     private String images;
 
 

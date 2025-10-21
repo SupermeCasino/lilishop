@@ -4,14 +4,13 @@ import cn.lili.common.security.sensitive.Sensitive;
 import cn.lili.common.security.sensitive.enums.SensitiveStrategy;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -28,36 +27,36 @@ public class ClerkAddDTO {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "会员用户名")
+    @Schema(description = "会员用户名")
     @NotEmpty(message = "会员用户名不能为空")
     @Length(max = 30, message = "会员用户名不能超过20个字符")
     private String username;
 
-    @ApiModelProperty(value = "会员密码")
+    @Schema(description = "会员密码")
     @NotEmpty(message = "会员密码不能为空")
     private String password;
 
     @NotEmpty(message = "手机号码不能为空")
-    @ApiModelProperty(value = "手机号码", required = true)
+    @Schema(description = "手机号码", requiredMode = Schema.RequiredMode.REQUIRED)
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String mobile;
 
-    @ApiModelProperty(value = "所属部门id")
+    @Schema(description = "所属部门id")
     private String departmentId;
 
-    @ApiModelProperty(value = "是否是超级管理员 超级管理员/普通管理员")
+    @Schema(description = "是否是超级管理员 超级管理员/普通管理员")
     private Boolean isSuper = false;
 
-    @ApiModelProperty(value = "角色")
+    @Schema(description = "角色")
     private List<String> roles;
 
-    @ApiModelProperty(value = "会员id", required = true)
+    @Schema(description = "会员id", requiredMode = Schema.RequiredMode.REQUIRED)
     private String memberId;
 
-    @ApiModelProperty(value = "是否是店主", hidden = true)
+    @Schema(description = "是否是店主", hidden = true)
     private Boolean shopkeeper = false;
 
-    @ApiModelProperty(value = "店铺id", hidden = true)
+    @Schema(description = "店铺id", hidden = true)
     private String storeId;
 
 

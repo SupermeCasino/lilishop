@@ -1,6 +1,6 @@
 package cn.lili.modules.store.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,28 +12,28 @@ import lombok.Data;
 @Data
 public class StoreSettingDTO {
 
-    @ApiModelProperty(value = "店铺logo")
+    @Schema(description = "店铺logo")
     private String storeLogo;
 
-    @ApiModelProperty(value = "店铺简介")
+    @Schema(description = "店铺简介")
     private String storeDesc;
 
-    @ApiModelProperty(value = "地址id，'，'分割 ")
+    @Schema(description = "地址id，'，'分割 ")
     private String storeAddressIdPath;
 
-    @ApiModelProperty(value = "地址名称， '，'分割")
+    @Schema(description = "地址名称， '，'分割")
     private String storeAddressPath;
 
-    @ApiModelProperty(value = "详细地址")
+    @Schema(description = "详细地址")
     private String storeAddressDetail;
 
-    @ApiModelProperty(value = "经纬度")
+    @Schema(description = "经纬度")
     private String storeCenter;
 
-    @ApiModelProperty(value = "默认页面是否开启")
+    @Schema(description = "默认页面是否开启")
     private Boolean pageShow;
 
-    @ApiModelProperty(value = "是否开启自提")
+    @Schema(description = "是否开启自提")
     private Boolean selfPickFlag;
 
 }

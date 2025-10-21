@@ -19,6 +19,7 @@ import cn.lili.modules.member.service.StoreMenuRoleService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.Map;
 @Component
 public class StoreTokenGenerate extends AbstractTokenGenerate<Member> {
     @Autowired
+    @Lazy
     private StoreService storeService;
     @Autowired
     private TokenUtil tokenUtil;

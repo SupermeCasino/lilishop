@@ -42,6 +42,10 @@ public class AuthUser implements Serializable {
     /**
      * 长期有效（用于手机app登录场景或者信任场景等）
      */
+    /**
+     * 长期有效（用于手机app登录场景或者信任场景等）
+     */
+    @Builder.Default
     private Boolean longTerm = false;
 
     /**
@@ -70,6 +74,7 @@ public class AuthUser implements Serializable {
     /**
      * 是否是超级管理员
      */
+    @Builder.Default
     private Boolean isSuper = false;
 
     /**

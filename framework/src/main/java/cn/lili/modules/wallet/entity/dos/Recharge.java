@@ -8,16 +8,16 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 /**
@@ -28,53 +28,54 @@ import java.util.Date;
  */
 @Data
 @TableName("li_recharge")
-@ApiModel(value = "预存款充值记录")
+@Schema(description = "预存款充值记录")
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Recharge extends BaseIdEntity {
 
     private static final long serialVersionUID = -1529240544327161096L;
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty(value = "充值订单编号")
+    @Schema(description = "充值订单编号")
     private String rechargeSn;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(description = "会员id")
     private String memberId;
 
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
     @NotEmpty(message = "充值金额不能为空")
-    @ApiModelProperty(value = "充值金额")
+    @Schema(description = "充值金额")
     private Double rechargeMoney;
 
     @NotEmpty(message = "充值方式，如：支付宝，微信不能为空")
-    @ApiModelProperty(value = "充值方式，如：支付宝，微信")
+    @Schema(description = "充值方式，如：支付宝，微信")
     private String rechargeWay;
 
-    @ApiModelProperty(value = "支付状态")
+    @Schema(description = "支付状态")
     private String payStatus;
 
-    @ApiModelProperty(value = "支付插件id")
+    @Schema(description = "支付插件id")
     private String paymentPluginId;
 
-    @ApiModelProperty(value = "第三方流水")
+    @Schema(description = "第三方流水")
     private String receivableNo;
 
-    @ApiModelProperty(value = "支付时间")
+    @Schema(description = "支付时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date payTime;

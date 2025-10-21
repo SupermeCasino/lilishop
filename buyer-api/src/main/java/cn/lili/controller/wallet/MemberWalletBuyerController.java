@@ -21,17 +21,16 @@ import cn.lili.modules.wallet.entity.vo.MemberWalletVO;
 import cn.lili.modules.wallet.service.MemberWalletService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Pattern;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 买家端,会员余额接口
@@ -40,7 +39,7 @@ import javax.validation.constraints.Pattern;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "买家端,会员余额接口")
+@Tag(name = "买家端,会员余额接口")
 @RequestMapping("/buyer/wallet/wallet")
 @Validated
 public class MemberWalletBuyerController {
@@ -65,7 +64,7 @@ public class MemberWalletBuyerController {
     private SettingService settingService;
 
     @GetMapping
-    @ApiOperation(value = "查询会员预存款余额")
+    @Operation(description = "查询会员预存款余额")
     public ResultMessage<MemberWalletVO> get() {
         AuthUser authUser = UserContext.getCurrentUser();
         if (authUser != null) {
@@ -74,8 +73,8 @@ public class MemberWalletBuyerController {
         throw new ServiceException(ResultCode.USER_NOT_LOGIN);
     }
 
-    @GetMapping(value = "/withdrawalSettingVO")
-    @ApiOperation(value = "获取提现设置VO")
+    @GetMapping("/withdrawalSettingVO")
+    @Operation(description = "获取提现设置VO")
     public ResultMessage<Object> minPrice() {
         Setting setting = settingService.get(SettingEnum.WITHDRAWAL_SETTING.name());
         WithdrawalSetting withdrawalSetting = new Gson().fromJson(setting.getSettingValue(), WithdrawalSetting.class);
@@ -88,22 +87,18 @@ public class MemberWalletBuyerController {
     }
 
     @PreventDuplicateSubmissions
-    @PostMapping(value = "/withdrawal")
-    @ApiOperation(value = "会员中心余额提现")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "price", value = "提现金额", required = true, dataType = "double", paramType = "query"),
-            @ApiImplicitParam(name = "realName", value = "真实姓名", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "connectNumber", value = "第三方登录账号", required = true, dataType = "String", paramType = "query")
-    })
+    @PostMapping("/withdrawal")
+    @Operation(description = "会员中心余额提现")
+    @Parameter(name = "price", description = "提现金额", required = true)
+    @Parameter(name = "realName", description = "真实姓名", required = true)
+    @Parameter(name = "connectNumber", description = "第三方登录账号", required = true)
     public ResultMessage<Boolean> withdrawal(@Max(value = 9999, message = "充值金额单次最多允许提现9999元") Double price, @RequestParam String realName, @RequestParam String connectNumber) {
         return ResultUtil.data(memberWalletService.applyWithdrawal(price, realName, connectNumber));
     }
 
-    @PostMapping(value = "/set-password")
-    @ApiOperation(value = "设置支付密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "支付密码", required = true, dataType = "String", paramType = "query")
-    })
+    @PostMapping("/set-password")
+    @Operation(description = "设置支付密码")
+    @Parameter(name = "password", description = "支付密码", required = true)
     public ResultMessage<Object> setPassword(String password, @RequestHeader String uuid) {
         AuthUser authUser = UserContext.getCurrentUser();
         //校验当前用户是否存在
@@ -120,13 +115,12 @@ public class MemberWalletBuyerController {
         }
 
     }
+    
 
-    @PostMapping(value = "/update-password/ordinary")
-    @ApiOperation(value = "普通方式进行支付密码的修改")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "oldPassword", value = "旧支付密码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "newPassword", value = "新支付密码", required = true, dataType = "String", paramType = "query")
-    })
+    @PostMapping("/update-password/ordinary")
+    @Operation(description = "普通方式进行支付密码的修改")
+    @Parameter(name = "oldPassword", description = "旧支付密码", required = true)
+    @Parameter(name = "newPassword", description = "新支付密码", required = true)
     public ResultMessage updatePassword(@RequestParam @Pattern(regexp = "[a-fA-F0-9]{32}", message = "旧密码格式不正确") String oldPassword,
                                         @RequestParam @Pattern(regexp = "[a-fA-F0-9]{32}", message = "新密码格式不正确") String newPassword) {
         AuthUser authUser = UserContext.getCurrentUser();
@@ -149,10 +143,10 @@ public class MemberWalletBuyerController {
     }
 
 
-    @GetMapping(value = "/check")
-    @ApiOperation(value = "检测会员是否设置过支付密码,会员中心设置或者修改密码时使用")
-    public Boolean checkPassword() {
-        return memberWalletService.checkPassword();
+    @GetMapping("/check")
+    @Operation(description = "检测会员是否设置过支付密码,会员中心设置或者修改密码时使用")
+    public ResultMessage<Boolean> checkPassword() {
+        return ResultUtil.data(memberWalletService.checkPassword());
     }
 
 }

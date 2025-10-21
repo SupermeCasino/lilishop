@@ -2,15 +2,13 @@ package cn.lili.modules.search.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotEmpty;
 
 /**
  * 自定义分词
@@ -20,7 +18,7 @@ import javax.validation.constraints.NotEmpty;
  **/
 @Data
 @TableName("li_custom_words")
-@ApiModel(value = "自定义分词")
+@Schema(description = "自定义分词")
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,13 +29,13 @@ public class CustomWords extends BaseEntity {
     /**
      * 名称
      */
-    @ApiModelProperty(value = "名称")
+    @Schema(description = "名称")
     @NotEmpty(message = "分词名称必填")
     @Length(max = 20, message = "分词名称长度不能大于20")
     private String name;
 
 
-    @ApiModelProperty(value = "是否禁用: 0,禁用;1,不禁用")
+    @Schema(description = "是否禁用: 0,禁用;1,不禁用")
     private Integer disabled;
 
 

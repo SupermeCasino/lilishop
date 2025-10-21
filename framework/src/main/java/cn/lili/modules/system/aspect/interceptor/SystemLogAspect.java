@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class SystemLogAspect {
                 return;
             }
 
-            Map map = spelFormat(joinPoint, rvt);
+            Map<String, String> map = spelFormat(joinPoint, rvt);
             String description = map.get("description").toString();
             String customerLog = map.get("customerLog").toString();
 
@@ -136,10 +136,8 @@ public class SystemLogAspect {
      * 保存日志
      */
     private static class SaveSystemLogThread implements Runnable {
-        @Autowired
-        private SystemLogVO systemLogVO;
-        @Autowired
-        private SystemLogService systemLogService;
+        private final SystemLogVO systemLogVO;
+        private final SystemLogService systemLogService;
 
         public SaveSystemLogThread(SystemLogVO systemLogVO, SystemLogService systemLogService) {
             this.systemLogVO = systemLogVO;
@@ -176,5 +174,4 @@ public class SystemLogAspect {
         result.put("customerLog", customerLog);
         return result;
     }
-
 }

@@ -119,11 +119,11 @@ public class PageUtil {
                 //获取属性的名字
                 String key = fieldNames[j];
                 //获取值
-                Object value = BeanUtil.getFieldValueByName(key, object);
+                Object description = BeanUtil.getFieldValueByName(key, object);
                 //如果值不为空才做查询处理
-                if (value != null && !"".equals(value)) {
+                if (description != null && !"".equals(description)) {
                     //字段数据库中，驼峰转下划线
-                    queryWrapper.eq(StringUtils.camel2Underline(key), value);
+                    queryWrapper.eq(StringUtils.camel2Underline(key), description);
                 }
             }
         }

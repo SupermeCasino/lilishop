@@ -1,6 +1,6 @@
 package cn.lili.modules.system.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,11 +15,11 @@ import java.io.Serializable;
 public class HotWordsSettingItem implements Comparable<HotWordsSettingItem>, Serializable {
 
 
-    @ApiModelProperty(value = "热词")
+    @Schema(description = "热词")
     private String keywords;
 
 
-    @ApiModelProperty(value = "默认分数")
+    @Schema(description = "默认分数")
     private Integer score;
 
 

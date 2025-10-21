@@ -2,7 +2,7 @@ package cn.lili.modules.store.serviceimpl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
 import cn.lili.common.properties.RocketmqCustomProperties;
@@ -120,7 +120,7 @@ public class StoreDetailServiceImpl extends ServiceImpl<StoreDetailMapper, Store
                 MapUtil.builder(new HashMap<String, Object>()).put("storeName", store.getStoreName()).put("selfOperated", store.getSelfOperated()).build());
         String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.UPDATE_GOODS_INDEX_FIELD.name();
         //发送mq消息
-        rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(updateIndexFieldsMap), RocketmqSendCallbackBuilder.commonCallback());
+        rocketMQTemplate.asyncSend(destination, JSON.toJSONString(updateIndexFieldsMap), RocketmqSendCallbackBuilder.commonCallback());
     }
 
     @Override

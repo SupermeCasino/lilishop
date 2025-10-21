@@ -1,6 +1,6 @@
 package cn.lili.modules.page.entity.vos;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,6 +12,6 @@ import lombok.Data;
 @Data
 public class PageDataVO {
 
-    @ApiModelProperty(value = "页面数据")
+    @Schema(description = "页面数据")
     private String pageData;
 }

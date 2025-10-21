@@ -16,6 +16,7 @@ import cn.lili.modules.wallet.entity.dos.Recharge;
 import cn.lili.modules.wallet.service.RechargeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,6 +32,7 @@ public class RechargeCashier implements CashierExecute {
      * 余额
      */
     @Autowired
+    @Lazy
     private RechargeService rechargeService;
     /**
      * 设置

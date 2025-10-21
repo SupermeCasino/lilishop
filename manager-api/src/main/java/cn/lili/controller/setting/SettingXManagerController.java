@@ -3,8 +3,8 @@ package cn.lili.controller.setting;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.system.entity.dto.payment.dto.PaymentSupportForm;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/26 15:53
  */
 @RestController
-@Api(tags = "管理端,系统设置扩展接口")
+@Tag(name = "管理端,系统设置扩展接口")
 @RequestMapping("/manager/setting/settingx")
 public class SettingXManagerController {
 
-    @ApiOperation(value = "支持支付方式表单")
+    @Operation(summary = "支持支付方式表单")
     @GetMapping("/paymentSupport")
     public ResultMessage<PaymentSupportForm> paymentForm() {
         return ResultUtil.data(new PaymentSupportForm());

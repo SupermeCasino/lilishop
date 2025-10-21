@@ -9,8 +9,9 @@ import cn.lili.modules.promotion.entity.enums.PromotionsStatusEnum;
 import cn.lili.modules.promotion.service.PromotionGoodsService;
 import cn.lili.modules.promotion.service.PromotionService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ import java.util.Map;
  * @since 2021/2/2
  **/
 @RestController
-@Api(tags = "管理端,促销接口")
+@Tag(name = "管理端,促销接口")
 @RequestMapping("/manager/promotion/promotion")
 public class PromotionManagerController {
 
@@ -36,15 +37,19 @@ public class PromotionManagerController {
     @Autowired
     private PromotionGoodsService promotionGoodsService;
 
+    @Operation(summary = "获取当前进行中的促销活动")
+    @Parameter(name = "promotionId", description = "促销活动ID", required = true)
     @GetMapping("/current")
-    @ApiOperation(value = "获取当前进行中的促销活动")
     public ResultMessage<Map<String, List<PromotionGoods>>> getCurrentPromotion() {
         Map<String, List<PromotionGoods>> currentPromotion = promotionService.getCurrentPromotion();
         return ResultUtil.data(currentPromotion);
     }
 
+    @Operation(summary = "获取当前进行中的促销活动商品")
+    @Parameter(name = "promotionId", description = "促销活动ID", required = true)
+    @Parameter(name = "promotionType", description = "促销活动类型", required = true)
+    @Parameter(name = "page", description = "分页参数", required = true)
     @GetMapping("/{promotionId}/goods")
-    @ApiOperation(value = "获取当前进行中的促销活动商品")
     public ResultMessage<IPage<PromotionGoods>> getPromotionGoods(@PathVariable String promotionId, String promotionType, PageVO pageVO) {
         PromotionGoodsSearchParams searchParams = new PromotionGoodsSearchParams();
         searchParams.setPromotionId(promotionId);

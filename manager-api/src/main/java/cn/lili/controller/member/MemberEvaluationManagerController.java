@@ -9,14 +9,13 @@ import cn.lili.modules.member.entity.vo.MemberEvaluationListVO;
 import cn.lili.modules.member.entity.vo.MemberEvaluationVO;
 import cn.lili.modules.member.service.MemberEvaluationService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 管理端,会员商品评价接口
@@ -25,43 +24,43 @@ import javax.validation.constraints.NotNull;
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Api(tags = "管理端,会员商品评价接口")
+@Tag(name = "管理端,会员商品评价接口")
 @RequestMapping("/manager/member/evaluation")
 public class MemberEvaluationManagerController {
     @Autowired
     private MemberEvaluationService memberEvaluationService;
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "通过id获取评论")
-    @ApiImplicitParam(name = "id", value = "评价ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/get/{id}")
+    @Operation(description = "通过id获取评论")
+    @Parameter(name = "id", description = "评价ID", required = true)
+    @GetMapping("/get/{id}")
     public ResultMessage<MemberEvaluationVO> get(@PathVariable String id) {
 
         return ResultUtil.data(memberEvaluationService.queryById(id));
     }
 
-    @ApiOperation(value = "获取评价分页")
-    @GetMapping(value = "/getByPage")
+    @Operation(description = "获取评价分页")
+    @Parameter(name = "evaluationQueryParams", description = "评价查询参数")
+    @Parameter(name = "page", description = "分页参数")
+    @GetMapping("/getByPage")
     public ResultMessage<IPage<MemberEvaluationListVO>> getByPage(EvaluationQueryParams evaluationQueryParams, PageVO page) {
 
         return ResultUtil.data(memberEvaluationService.queryPage(evaluationQueryParams));
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "修改评价状态")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "评价ID", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "status", value = "显示状态,OPEN 正常 ,CLOSE 关闭", required = true, paramType = "query")
-    })
-    @GetMapping(value = "/updateStatus/{id}")
+    @Operation(description = "修改评价状态")
+    @Parameter(name = "id", description = "评价ID", required = true)
+    @Parameter(name = "status", description = "显示状态,OPEN 正常 ,CLOSE 关闭", required = true)
+    @GetMapping("/updateStatus/{id}")
     public ResultMessage<Object> updateStatus(@PathVariable String id, @NotNull String status) {
         memberEvaluationService.updateStatus(id, status);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "删除评论")
-    @ApiImplicitParam(name = "id", value = "评价ID", required = true, dataType = "String", paramType = "path")
-    @PutMapping(value = "/delete/{id}")
+    @Operation(description = "删除评论")
+    @Parameter(name = "id", description = "评价ID", required = true)
+    @PutMapping("/delete/{id}")
     public ResultMessage<IPage<Object>> delete(@PathVariable String id) {
         memberEvaluationService.delete(id);
         return ResultUtil.success();

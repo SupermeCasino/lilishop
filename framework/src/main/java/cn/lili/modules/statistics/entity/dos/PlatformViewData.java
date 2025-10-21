@@ -2,9 +2,9 @@ package cn.lili.modules.statistics.entity.dos;
 
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -16,22 +16,23 @@ import java.util.Date;
  */
 @Data
 @TableName("li_s_platform_view_data")
-@ApiModel(value = "平台pv统计")
+@Schema(description = "平台pv统计")
+@EqualsAndHashCode(callSuper = false)
 public class PlatformViewData extends BaseIdEntity {
 
 
-    @ApiModelProperty(value = "pv数量")
+    @Schema(description = "pv数量")
     private Long pvNum;
 
-    @ApiModelProperty(value = "uv数量")
+    @Schema(description = "uv数量")
     private Long uvNum;
 
 
-    @ApiModelProperty(value = "统计日")
+    @Schema(description = "统计日")
     private Date date;
 
     //默认是平台流量统计//
 
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String storeId = "-1";
 }

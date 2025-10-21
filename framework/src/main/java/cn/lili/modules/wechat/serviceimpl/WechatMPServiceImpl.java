@@ -1,7 +1,7 @@
 package cn.lili.modules.wechat.serviceimpl;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.context.UserContext;
@@ -155,13 +155,12 @@ public class WechatMPServiceImpl implements WechatMPService {
     private Boolean isTradeManaged() {
 
         Setting systemSetting = settingService.get(SettingEnum.WECHAT_PAYMENT.name());
-        WechatPaymentSetting wechatPaymentSetting = JSONUtil.toBean(systemSetting.getSettingValue(), WechatPaymentSetting.class);
+        WechatPaymentSetting wechatPaymentSetting = JSON.parseObject(systemSetting.getSettingValue(), WechatPaymentSetting.class);
         //发送url
         Map<String, Object> map = new HashMap<>(2);
         map.put("appid", wechatPaymentSetting.getMpAppId());
         JSONObject jsonObject = this.doPostWithJson(isTradeManagedUrl, map);
-
-        return jsonObject.getBool("is_trade_managed");
+return jsonObject.getBooleanValue("is_trade_managed");
     }
 
     /**
@@ -174,7 +173,7 @@ public class WechatMPServiceImpl implements WechatMPService {
         Map<String, Object> map = new HashMap<>(2);
         JSONObject jsonObject = this.doPostWithJson(DeliveryUrl, map);
         Map<String, String> roomMap = new HashMap<>(2);
-        List<Delivery> deliveryList = JSONUtil.toList(jsonObject.getStr("delivery_list"), Delivery.class);
+        List<Delivery> deliveryList = JSON.parseArray(jsonObject.getString("delivery_list"), Delivery.class);
         for (Delivery delivery : deliveryList) {
             if (order.getLogisticsName().equals(delivery.getDelivery_name())) {
                 return delivery.getDelivery_id();
@@ -201,7 +200,7 @@ public class WechatMPServiceImpl implements WechatMPService {
         //记录请求结果
         log.info("微信小程序请求结果：" + content);
         //获取请求内容，如果token过期则重新获取，如果出错则抛出错误
-        JSONObject jsonObject = new JSONObject(content);
+        JSONObject jsonObject = JSON.parseObject(content);
         if (("0").equals(jsonObject.get("errcode").toString())) {
             return jsonObject;
         } else if (("40001").equals(jsonObject.get("errcode"))) {

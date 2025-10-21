@@ -7,8 +7,8 @@ import cn.lili.modules.member.entity.dto.FootPrintQueryParams;
 import cn.lili.modules.member.service.FootprintService;
 import cn.lili.modules.search.entity.dos.EsGoodsIndex;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022/6/2114:46
  */
 @RestController
-@Api(tags = "商家端,浏览历史接口")
+@Tag(name = "商家端,浏览历史接口")
 @RequestMapping("/store/member/footprint")
 public class FootprintStoreController {
 
@@ -31,7 +31,7 @@ public class FootprintStoreController {
     @Autowired
     private FootprintService footprintService;
 
-    @ApiOperation(value = "分页获取")
+    @Operation(summary = "分页获取")
     @GetMapping
     public ResultMessage<IPage<EsGoodsIndex>> getByPage(FootPrintQueryParams params) {
         return ResultUtil.data(footprintService.footPrintPage(params));

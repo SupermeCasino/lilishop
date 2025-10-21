@@ -21,20 +21,19 @@ import cn.lili.modules.order.order.service.OrderPriceService;
 import cn.lili.modules.order.order.service.OrderService;
 import cn.lili.modules.system.service.LogisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +46,7 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/store/order/order")
-@Api(tags = "店铺端,订单接口")
+@Tag(name = "店铺端,订单接口")
 public class OrderStoreController {
 
     /**
@@ -76,43 +75,40 @@ public class OrderStoreController {
     private OrderPackageService orderPackageService;
 
 
-    @ApiOperation(value = "查询订单列表")
+    @Operation(description = "查询订单列表")
     @GetMapping
     public ResultMessage<IPage<OrderSimpleVO>> queryMineOrder(OrderSearchParams orderSearchParams) {
         return ResultUtil.data(orderService.queryByParams(orderSearchParams));
     }
 
-    @ApiOperation(value = "获取订单数量")
-    @GetMapping(value = "/orderNum")
+    @Operation(description = "获取订单数量")
+    @GetMapping("/orderNum")
     public ResultMessage<OrderNumVO> getOrderNumVO(OrderSearchParams orderSearchParams) {
         return ResultUtil.data(orderService.getOrderNumVO(orderSearchParams));
     }
 
-    @ApiOperation(value = "订单明细")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/{orderSn}")
+    @Operation(description = "订单明细")
+    @Parameter(name = "orderSn", description = "订单编号", required = true)
+    @GetMapping("/{orderSn}")
     public ResultMessage<OrderDetailVO> detail(@NotNull @PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         return ResultUtil.data(orderService.queryDetail(orderSn));
     }
 
-    @ApiOperation(value = "修改收货人信息")
-    @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path")
-    @PostMapping(value = "/update/{orderSn}/consignee")
+    @PreventDuplicateSubmissions
+    @Operation(description = "修改收货人信息")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @PostMapping("/update/{orderSn}/consignee")
     public ResultMessage<Object> consignee(@NotNull(message = "参数非法") @PathVariable String orderSn,
                                            @Valid MemberAddressDTO memberAddressDTO) {
         return ResultUtil.data(orderService.updateConsignee(orderSn, memberAddressDTO));
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "修改订单价格")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "orderPrice", value = "订单价格", required = true, dataType = "Double", paramType = "query"),
-    })
-    @PutMapping(value = "/update/{orderSn}/price")
+    @Operation(description = "修改订单价格")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "orderPrice", description = "订单价格", required = true)
+    @PutMapping("/update/{orderSn}/price")
     public ResultMessage<Object> updateOrderPrice(@PathVariable String orderSn,
                                                   @NotNull(message = "订单价格不能为空") @RequestParam Double orderPrice) {
         if (NumberUtil.isGreater(Convert.toBigDecimal(orderPrice), Convert.toBigDecimal(0))) {
@@ -123,13 +119,11 @@ public class OrderStoreController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "订单发货")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "logisticsNo", value = "发货单号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司", required = true, dataType = "String", paramType = "query")
-    })
-    @PostMapping(value = "/{orderSn}/delivery")
+    @Operation(description = "订单发货")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "logisticsNo", description = "发货单号", required = true)
+    @Parameter(name = "logisticsId", description = "物流公司", required = true)
+    @PostMapping("/{orderSn}/delivery")
     public ResultMessage<Object> delivery(@NotNull(message = "参数非法") @PathVariable String orderSn,
                                           @NotNull(message = "发货单号不能为空") String logisticsNo,
                                           @NotNull(message = "请选择物流公司") String logisticsId) {
@@ -137,62 +131,49 @@ public class OrderStoreController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "订单顺丰发货")
-    @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path")
-    @PostMapping(value = "/{orderSn}/shunfeng/delivery")
+    @Operation(description = "订单顺丰发货")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @PostMapping("/{orderSn}/shunfeng/delivery")
     public ResultMessage<Object> shunFengDelivery(@NotNull(message = "参数非法") @PathVariable String orderSn) {
         return ResultUtil.data(orderService.shunFengDelivery(orderSn));
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "取消订单")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "reason", value = "取消原因", required = true, dataType = "String", paramType = "query")
-    })
-    @PostMapping(value = "/{orderSn}/cancel")
+    @Operation(description = "取消订单")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "reason", description = "取消原因", required = true)
+    @PostMapping("/{orderSn}/cancel")
     public ResultMessage<Object> cancel(@PathVariable String orderSn, @RequestParam String reason) {
         return ResultUtil.data(orderService.cancel(orderSn, reason));
     }
 
-    @ApiOperation(value = "根据核验码获取订单信息")
-    @ApiImplicitParam(name = "verificationCode", value = "核验码", required = true, paramType = "path")
-    @GetMapping(value = "/getOrderByVerificationCode/{verificationCode}")
+
+    @Operation(description = "根据核验码获取订单信息")
+    @Parameter(name = "verificationCode", description = "核验码", required = true)
+    @GetMapping("/getOrderByVerificationCode/{verificationCode}")
     public ResultMessage<Object> getOrderByVerificationCode(@PathVariable String verificationCode) {
         return ResultUtil.data(orderService.getOrderByVerificationCode(verificationCode));
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "订单核验")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单号", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "verificationCode", value = "核验码", required = true, paramType = "path")
-    })
-    @PutMapping(value = "/take/{orderSn}/{verificationCode}")
+    @Operation(description = "订单核验")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "verificationCode", description = "核验码", required = true)
+    @PutMapping("/take/{orderSn}/{verificationCode}")
     public ResultMessage<Object> take(@PathVariable String orderSn, @PathVariable String verificationCode) {
         return ResultUtil.data(orderService.take(orderSn, verificationCode));
     }
 
-    @PreventDuplicateSubmissions
-    @ApiOperation(value = "订单核验")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "verificationCode", value = "核验码", required = true, paramType = "path")
-    })
-    @PutMapping(value = "/take/{verificationCode}")
-    public ResultMessage<Object> take(@PathVariable String verificationCode) {
-        return ResultUtil.data(orderService.take(verificationCode));
-    }
-
-    @ApiOperation(value = "查询物流踪迹")
-    @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/getTraces/{orderSn}")
+    @Operation(description = "查询物流踪迹")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @GetMapping("/getTraces/{orderSn}")
     public ResultMessage<Object> getTraces(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         return ResultUtil.data(orderService.getTraces(orderSn));
     }
 
-    @ApiOperation(value = "下载待发货的订单列表", produces = "application/octet-stream")
-    @GetMapping(value = "/downLoadDeliverExcel")
+    @Operation(description = "下载待发货的订单列表")
+    @GetMapping(value = "/downLoadDeliverExcel", produces = "application/octet-stream")
     public void downLoadDeliverExcel() {
         HttpServletResponse response = ThreadContextHolder.getHttpResponse();
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -203,14 +184,17 @@ public class OrderStoreController {
 
     }
 
-    @PostMapping(value = "/batchDeliver", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "上传文件进行订单批量发货")
+
+    @Operation(description = "上传文件进行订单批量发货")
+    @PostMapping(value="/batchDeliver", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Parameter(name = "files", description = "订单批量发货文件", required = true)
     public ResultMessage<Object> batchDeliver(@RequestPart("files") MultipartFile files) {
         orderService.batchDeliver(files);
         return ResultUtil.success(ResultCode.SUCCESS);
     }
 
-    @ApiOperation(value = "查询订单导出列表")
+    @Operation(description = "查询订单导出列表")
+    @Parameter(name = "orderSearchParams", description = "订单查询参数", required = true)
     @GetMapping("/queryExportOrder")
     public void queryExportOrder(OrderSearchParams orderSearchParams) {
         HttpServletResponse response = ThreadContextHolder.getHttpResponse();
@@ -218,47 +202,42 @@ public class OrderStoreController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "创建电子面单")
-    @PostMapping(value = "/{orderSn}/createElectronicsFaceSheet")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单号", required = true, paramType = "path"),
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司", required = true, dataType = "String", paramType = "query")
-    })
+    @Operation(description = "创建电子面单")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "logisticsId", description = "物流公司", required = true)
+    @PostMapping("/{orderSn}/createElectronicsFaceSheet")
     public ResultMessage<Object> createElectronicsFaceSheet(@NotNull(message = "参数非法") @PathVariable String orderSn,
                                                             @NotNull(message = "请选择物流公司") String logisticsId) {
         return ResultUtil.data(logisticsService.labelOrder(orderSn, logisticsId));
     }
 
-    @ApiOperation(value = "查看包裹列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/getPackage/{orderSn}")
+    
+    @Operation(description = "查看包裹列表")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @GetMapping("/getPackage/{orderSn}")
     public ResultMessage<Object> getPackage(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         return ResultUtil.data(orderPackageService.getOrderPackageVOList(orderSn));
     }
 
-    @ApiOperation(value = "查询物流踪迹")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/getTracesList/{orderSn}")
+    @Operation(description = "查询物流踪迹")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @GetMapping("/getTracesList/{orderSn}")
     public ResultMessage<Object> getTracesList(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         return ResultUtil.data(orderPackageService.getOrderPackageVOList(orderSn));
     }
 
-    @ApiOperation(value = "订单包裹发货")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "logisticsNo", value = "发货单号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司", required = true, dataType = "String", paramType = "query")
-    })
-    @PostMapping(value = "/{orderSn}/partDelivery")
+    @Operation(description = "订单包裹发货")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "logisticsNo", description = "发货单号", required = true)
+    @Parameter(name = "logisticsId", description = "物流公司", required = true)
+    @PostMapping("/{orderSn}/partDelivery")
     public ResultMessage<Object> delivery(@RequestBody PartDeliveryParamsDTO partDeliveryParamsDTO) {
         return ResultUtil.data(orderService.partDelivery(partDeliveryParamsDTO));
     }
 
-    @ApiOperation(value = "卖家订单备注")
+    @Operation(description = "卖家订单备注")
+    @Parameter(name = "orderSn", description = "订单sn", required = true)
+    @Parameter(name = "sellerRemark", description = "卖家备注", required = true)
     @PutMapping("/{orderSn}/sellerRemark")
     public ResultMessage<Object> sellerRemark(@PathVariable String orderSn, @RequestParam String sellerRemark) {
         orderService.updateSellerRemark(orderSn, sellerRemark);

@@ -144,19 +144,19 @@ public class PayKit {
         StringBuilder content = new StringBuilder();
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
-            String value = params.get(key);
+            String description = params.get(key);
             //拼接时，不包括最后一个&字符
             if (i == keys.size() - 1) {
                 if (quotes) {
-                    content.append(key).append("=").append('"').append(encode ? urlEncode(value) : value).append('"');
+                    content.append(key).append("=").append('"').append(encode ? urlEncode(description) : description).append('"');
                 } else {
-                    content.append(key).append("=").append(encode ? urlEncode(value) : value);
+                    content.append(key).append("=").append(encode ? urlEncode(description) : description);
                 }
             } else {
                 if (quotes) {
-                    content.append(key).append("=").append('"').append(encode ? urlEncode(value) : value).append('"').append(connStr);
+                    content.append(key).append("=").append('"').append(encode ? urlEncode(description) : description).append('"').append(connStr);
                 } else {
-                    content.append(key).append("=").append(encode ? urlEncode(value) : value).append(connStr);
+                    content.append(key).append("=").append(encode ? urlEncode(description) : description).append(connStr);
                 }
             }
         }
@@ -194,9 +194,9 @@ public class PayKit {
         }
         for (Map.Entry<String, String> entry : params.entrySet()) {
             String key = entry.getKey();
-            String value = entry.getValue();
+            String description = entry.getValue();
             //略过空值
-            if (StrUtil.isEmpty(value)) {
+            if (StrUtil.isEmpty(description)) {
                 continue;
             }
             xml.append("<").append(key).append(">");

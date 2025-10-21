@@ -14,8 +14,8 @@ import cn.lili.modules.store.entity.dto.StoreDeliverGoodsAddressDTO;
 import cn.lili.modules.system.entity.dos.Logistics;
 import cn.lili.modules.system.entity.dto.LogisticsSetting;
 import cn.lili.modules.system.entity.vo.Traces;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -69,7 +69,7 @@ public class KdniaoPlugin implements LogisticsPlugin {
             params.put("DataType", "2");
 
             String result = sendPost(reqURL, params);
-            Map map = (Map) JSON.parse(result);
+            Map map = JSON.parseObject(result, Map.class);
             return new Traces(logistics.getName(), expNo, (List<Map>) map.get("Traces"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -214,15 +214,13 @@ public class KdniaoPlugin implements LogisticsPlugin {
                 throw new ServiceException(ResultCode.LOGISTICS_CHECK_SETTING);
             }
             //根据公司业务处理返回的信息......
-            JSONObject obj = JSONObject.parseObject(result);
+            JSONObject obj = JSON.parseObject(result);
             log.info("电子面单响应：{}", result);
             if (!"100".equals(obj.getString("ResultCode"))) {
-                //                resultMap.put("Reason",obj.getString("Reason"));
                 throw new ServiceException(obj.getString("Reason"));
-                //                return resultMap;
             }
 
-            JSONObject orderJson = JSONObject.parseObject(obj.getString("Order"));
+            JSONObject orderJson = JSON.parseObject(obj.getString("Order"));
             resultMap.put("printTemplate", obj.getString("PrintTemplate"));
             return resultMap;
         } catch (Exception e) {

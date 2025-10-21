@@ -30,10 +30,10 @@ import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.naming.NoPermissionException;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,11 +97,12 @@ public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String jwt, HttpServletResponse response) {
 
         try {
-            Claims claims
-                    = Jwts.parserBuilder()
-                    .setSigningKey(SecretKeyUtil.generalKeyByDecoders())
-                    .build()
-                    .parseClaimsJws(jwt).getBody();
+            Claims claims =
+                    Jwts.parser()
+                            .verifyWith(SecretKeyUtil.generalKeyByDecoders())
+                            .build()
+                            .parseSignedClaims(jwt)
+                            .getPayload();
             //获取存储在claims中的用户信息
             String json = claims.get(SecurityEnum.USER_CONTEXT.getValue()).toString();
             AuthUser authUser = new Gson().fromJson(json, AuthUser.class);

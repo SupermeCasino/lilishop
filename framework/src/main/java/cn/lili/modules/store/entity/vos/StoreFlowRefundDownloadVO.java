@@ -1,7 +1,8 @@
 package cn.lili.modules.store.entity.vos;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 店铺流水下载
@@ -10,9 +11,10 @@ import lombok.Data;
  * @date: 2021/8/13 4:14 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class StoreFlowRefundDownloadVO extends StoreFlowPayDownloadVO {
 
-    @ApiModelProperty(value = "售后SN")
+    @Schema(description = "售后SN")
     private String refundSn;
 
 }

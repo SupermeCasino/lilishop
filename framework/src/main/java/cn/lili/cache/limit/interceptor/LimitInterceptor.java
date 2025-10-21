@@ -12,12 +12,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.io.Serializable;
 
 /**
  * 流量拦截
@@ -28,13 +26,13 @@ import java.io.Serializable;
 @Configuration
 @Slf4j
 public class LimitInterceptor {
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     private DefaultRedisScript<Long> limitScript;
 
     @Autowired
-    public void setRedisTemplate(RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     @Autowired
@@ -57,7 +55,12 @@ public class LimitInterceptor {
         }
         ImmutableList<String> keys = ImmutableList.of(StringUtils.join(limitPointAnnotation.prefix(), key));
         try {
-            Number count = redisTemplate.execute(limitScript, keys, limitCount, limitPeriod);
+            Long count = stringRedisTemplate.execute(
+                    limitScript,
+                    keys,
+                    String.valueOf(limitCount),
+                    String.valueOf(limitPeriod)
+            );
             assert count != null;
             log.info("限制请求{}, 当前请求{},缓存key{}", limitCount, count.intValue(), key);
             //如果缓存里没有值，或者他的值小于限制频率

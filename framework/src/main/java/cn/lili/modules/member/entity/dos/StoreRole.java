@@ -2,12 +2,10 @@ package cn.lili.modules.member.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -18,19 +16,20 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @TableName("li_store_role")
-@ApiModel(value = "店铺角色")
+@Schema(description = "店铺角色")
+@EqualsAndHashCode(callSuper = false)
 public class StoreRole extends BaseEntity {
 
-    @ApiModelProperty(value = "角色名")
+    @Schema(description = "角色名")
     @NotEmpty(message = "角色名称必填")
     private String name;
 
-    @ApiModelProperty(value = "店铺id", hidden = true)
+    @Schema(description = "店铺id", hidden = true)
     private String storeId;
 
-    @ApiModelProperty(value = "是否为注册默认角色")
+    @Schema(description = "是否为注册默认角色")
     private Boolean defaultRole = false;
 
-    @ApiModelProperty(value = "备注")
+    @Schema(description = "备注")
     private String description;
 }

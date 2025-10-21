@@ -9,10 +9,9 @@ import cn.lili.modules.wallet.entity.dos.MemberWithdrawApply;
 import cn.lili.modules.wallet.entity.vo.MemberWithdrawApplyQueryVO;
 import cn.lili.modules.wallet.service.MemberWithdrawApplyService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,14 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "管理端,余额提现记录接口")
+@Tag(name = "管理端,余额提现记录接口")
 @RequestMapping("/manager/wallet/withdrawApply")
 public class MemberWithdrawApplyManagerController {
     @Autowired
     private MemberWithdrawApplyService memberWithdrawApplyService;
 
 
-    @ApiOperation(value = "分页获取提现记录")
+    @Operation(summary = "分页获取提现记录")
+    @Parameter(name = "page", description = "分页参数", required = true)
+    @Parameter(name = "memberWithdrawApplyQueryVO", description = "提现记录查询参数", required = true)
     @GetMapping
     public ResultMessage<IPage<MemberWithdrawApply>> getByPage(PageVO page, MemberWithdrawApplyQueryVO memberWithdrawApplyQueryVO) {
         //构建查询 返回数据
@@ -44,15 +45,13 @@ public class MemberWithdrawApplyManagerController {
 
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "提现申请审核")
+    @Operation(summary = "提现申请审核")
+    @Parameter(name = "applyId", description = "审核记录id", required = true)
+    @Parameter(name = "result", description = "审核结果", required = true)
+    @Parameter(name = "remark", description = "审核备注")
     @PostMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "applyId", value = "审核记录id", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "result", value = "审核结果", required = true, paramType = "query", dataType = "boolean"),
-            @ApiImplicitParam(name = "remark", value = "审核备注", paramType = "query")
-    })
-    public Boolean audit(String applyId, Boolean result, String remark) {
-        return memberWithdrawApplyService.audit(applyId, result, remark);
+    public ResultMessage<Boolean> audit(String applyId, Boolean result, String remark) {
+        return ResultUtil.data(memberWithdrawApplyService.audit(applyId, result, remark));
     }
 
 }

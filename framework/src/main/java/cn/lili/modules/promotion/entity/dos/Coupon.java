@@ -4,8 +4,7 @@ import cn.lili.modules.promotion.entity.enums.CouponRangeDayEnum;
 import cn.lili.modules.promotion.entity.enums.PromotionsStatusEnum;
 import cn.lili.modules.promotion.entity.vos.CouponVO;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,14 +21,14 @@ import org.springframework.beans.BeanUtils;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_coupon")
-@ApiModel(value = "优惠券实体类")
+@Schema(description = "优惠券实体类")
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class Coupon extends BasePromotions {
 
     private static final long serialVersionUID = 8372820376262437018L;
 
-    @ApiModelProperty(value = "优惠券名称")
+    @Schema(description = "优惠券名称")
     private String couponName;
 
     /**
@@ -37,49 +36,49 @@ public class Coupon extends BasePromotions {
      *
      * @see cn.lili.modules.promotion.entity.enums.CouponTypeEnum
      */
-    @ApiModelProperty(value = "优惠券类型")
+    @Schema(description = "优惠券类型")
     private String couponType;
 
-    @ApiModelProperty(value = "面额")
+    @Schema(description = "面额")
     private Double price;
 
-    @ApiModelProperty(value = "折扣")
+    @Schema(description = "折扣")
     private Double couponDiscount;
 
     /**
      * @see cn.lili.modules.promotion.entity.enums.CouponGetEnum
      */
-    @ApiModelProperty(value = "优惠券类型，分为免费领取和活动赠送")
+    @Schema(description = "优惠券类型，分为免费领取和活动赠送")
     private String getType;
 
-    @ApiModelProperty(value = "店铺承担比例,平台发布时可以提供一定返点")
+    @Schema(description = "店铺承担比例,平台发布时可以提供一定返点")
     private Double storeCommission;
 
-    @ApiModelProperty(value = "活动描述")
+    @Schema(description = "活动描述")
     private String description;
 
-    @ApiModelProperty(value = "发行数量,如果是0则是不限制")
+    @Schema(description = "发行数量,如果是0则是不限制")
     private Integer publishNum;
 
-    @ApiModelProperty(value = "领取限制")
+    @Schema(description = "领取限制")
     private Integer couponLimitNum;
 
-    @ApiModelProperty(value = "已被使用的数量")
+    @Schema(description = "已被使用的数量")
     private Integer usedNum;
 
-    @ApiModelProperty(value = "已被领取的数量")
+    @Schema(description = "已被领取的数量")
     private Integer receivedNum;
 
-    @ApiModelProperty(value = "消费门槛")
+    @Schema(description = "消费门槛")
     private Double consumeThreshold;
 
     /**
      * @see cn.lili.modules.promotion.entity.enums.CouponRangeDayEnum
      */
-    @ApiModelProperty(value = "时间范围类型")
+    @Schema(description = "时间范围类型")
     private String rangeDayType;
 
-    @ApiModelProperty(value = "有效期")
+    @Schema(description = "有效期")
     private Integer effectiveDays;
 
     public Coupon(CouponVO couponVO) {

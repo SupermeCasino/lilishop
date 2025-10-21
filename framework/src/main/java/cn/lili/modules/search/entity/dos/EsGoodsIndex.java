@@ -1,12 +1,12 @@
 package cn.lili.modules.search.entity.dos;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.elasticsearch.EsSuffix;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
 import cn.lili.modules.promotion.tools.PromotionTools;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -37,13 +37,13 @@ public class EsGoodsIndex implements Serializable {
     private static final long serialVersionUID = -6856471777036048874L;
 
     @Id
-    @ApiModelProperty("商品skuId")
+    @Schema(description = "商品skuId")
     private String id;
 
     /**
      * 商品id
      */
-    @ApiModelProperty("商品Id")
+    @Schema(description = "商品Id")
     @Field(type = FieldType.Text)
     private String goodsId;
 
@@ -51,166 +51,166 @@ public class EsGoodsIndex implements Serializable {
      * 商品名称
      */
     @Field(type = FieldType.Text, analyzer = "ik_max_word")
-    @ApiModelProperty("商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
     /**
      * 商品编号
      */
     @Field(type = FieldType.Keyword)
-    @ApiModelProperty("商品编号")
+    @Schema(description = "商品编号")
     private String sn;
 
     /**
      * 卖家id
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("卖家id")
+    @Schema(description = "卖家id")
     private String storeId;
 
     /**
      * 卖家名称
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("卖家名称")
+    @Schema(description = "卖家名称")
     private String storeName;
 
     /**
      * 销量
      */
     @Field(type = FieldType.Integer)
-    @ApiModelProperty("销量")
+    @Schema(description = "销量")
     private Integer buyCount;
 
     /**
      * 小图
      */
-    @ApiModelProperty("小图")
+    @Schema(description = "小图")
     private String small;
 
     /**
      * 缩略图
      */
-    @ApiModelProperty("缩略图")
+    @Schema(description = "缩略图")
     private String thumbnail;
 
     /**
      * 品牌id
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("品牌id")
+    @Schema(description = "品牌id")
     private String brandId;
 
     /**
      * 品牌名称
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("品牌名称")
+    @Schema(description = "品牌名称")
     private String brandName;
 
     /**
      * 品牌图片地址
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("品牌图片地址")
+    @Schema(description = "品牌图片地址")
     private String brandUrl;
 
     /**
      * 分类path
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("分类path")
+    @Schema(description = "分类path")
     private String categoryPath;
 
     /**
      * 分类名称path
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("分类名称path")
+    @Schema(description = "分类名称path")
     private String categoryNamePath;
 
     /**
      * 店铺分类id
      */
     @Field(type = FieldType.Text, fielddata = true)
-    @ApiModelProperty("店铺分类id")
+    @Schema(description = "店铺分类id")
     private String storeCategoryPath;
 
     /**
      * 店铺分类名称
      */
     @Field(type = FieldType.Keyword)
-    @ApiModelProperty("店铺分类名称")
+    @Schema(description = "店铺分类名称")
     private String storeCategoryNamePath;
 
     /**
      * 商品价格
      */
     @Field(type = FieldType.Double)
-    @ApiModelProperty("商品价格")
+    @Schema(description = "商品价格")
     private Double price;
 
     /**
      * 促销价
      */
     @Field(type = FieldType.Double)
-    @ApiModelProperty("促销价")
+    @Schema(description = "促销价")
     private Double promotionPrice;
 
     /**
      * 如果是积分商品需要使用的积分
      */
     @Field(type = FieldType.Integer)
-    @ApiModelProperty("积分商品需要使用的积分")
+    @Schema(description = "积分商品需要使用的积分")
     private Integer point;
 
     /**
      * 评价数量
      */
     @Field(type = FieldType.Integer)
-    @ApiModelProperty("评价数量")
+    @Schema(description = "评价数量")
     private Integer commentNum;
 
     /**
      * 好评数量
      */
     @Field(type = FieldType.Integer)
-    @ApiModelProperty("好评数量")
+    @Schema(description = "好评数量")
     private Integer highPraiseNum;
 
     /**
      * 好评率
      */
     @Field(type = FieldType.Double)
-    @ApiModelProperty("好评率")
+    @Schema(description = "好评率")
     private Double grade;
 
     /**
      * 详情
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("详情")
+    @Schema(description = "详情")
     private String intro;
 
     /**
      * 商品移动端详情
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("商品移动端详情")
+    @Schema(description = "商品移动端详情")
     private String mobileIntro;
 
     /**
      * 是否自营
      */
     @Field(type = FieldType.Boolean)
-    @ApiModelProperty("是否自营")
+    @Schema(description = "是否自营")
     private Boolean selfOperated;
 
     /**
      * 是否为推荐商品
      */
     @Field(type = FieldType.Boolean)
-    @ApiModelProperty("是否为推荐商品")
+    @Schema(description = "是否为推荐商品")
     private Boolean recommend;
 
     /**
@@ -219,49 +219,49 @@ public class EsGoodsIndex implements Serializable {
      * @see cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("销售模式")
+    @Schema(description = "销售模式")
     private String salesModel;
 
     /**
      * 审核状态
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("审核状态")
+    @Schema(description = "审核状态")
     private String authFlag;
 
     /**
      * 卖点
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("卖点")
+    @Schema(description = "卖点")
     private String sellingPoint;
 
     /**
      * 上架状态
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("上架状态")
+    @Schema(description = "上架状态")
     private String marketEnable;
 
     /**
      * 商品视频
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("商品视频")
+    @Schema(description = "商品视频")
     private String goodsVideo;
 
-    @ApiModelProperty("商品发布时间")
+    @Schema(description = "商品发布时间")
     @Field(type = FieldType.Date)
     private Long releaseTime;
 
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsTypeEnum
      */
-    @ApiModelProperty(value = "商品类型", required = true)
+    @Schema(description = "商品类型", required = true)
     @Field(type = FieldType.Text)
     private String goodsType;
 
-    @ApiModelProperty(value = "商品sku基础分数", required = true)
+    @Schema(description = "商品sku基础分数", required = true)
     @Field(type = FieldType.Integer)
     private Integer skuSource;
 
@@ -279,7 +279,7 @@ public class EsGoodsIndex implements Serializable {
      * value 为 促销活动实体信息
      */
     @Field(type = FieldType.Text)
-    @ApiModelProperty("商品促销活动集合JSON，key 为 促销活动类型，value 为 促销活动实体信息 ")
+    @Schema(description = "商品促销活动集合JSON，key 为 促销活动类型，value 为 促销活动实体信息 ")
     private String promotionMapJson;
 
 
@@ -385,10 +385,10 @@ public class EsGoodsIndex implements Serializable {
     }
 
     public Map<String, Object> getOriginPromotionMap() {
-        return JSONUtil.parseObj(this.promotionMapJson);
+        return JSON.parseObject(this.promotionMapJson);
     }
 
     public Map<String, Object> getPromotionMap() {
-        return PromotionTools.filterInvalidPromotionsMap(JSONUtil.parseObj(this.promotionMapJson));
+        return PromotionTools.filterInvalidPromotionsMap(JSON.parseObject(this.promotionMapJson));
     }
 }

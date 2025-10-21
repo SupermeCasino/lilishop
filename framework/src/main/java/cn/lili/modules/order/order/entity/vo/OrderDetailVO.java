@@ -1,16 +1,16 @@
 package cn.lili.modules.order.order.entity.vo;
 
 
+import cn.lili.modules.order.cart.entity.enums.DeliveryMethodEnum;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.dos.OrderItem;
 import cn.lili.modules.order.order.entity.dos.Receipt;
 import cn.lili.modules.order.order.entity.enums.DeliverStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
-import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
-import cn.lili.modules.order.cart.entity.enums.DeliveryMethodEnum;
 import cn.lili.modules.order.trade.entity.dos.OrderLog;
-import io.swagger.annotations.ApiModelProperty;
+import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -74,14 +74,14 @@ public class OrderDetailVO implements Serializable {
      * 获取订单日志
      */
     private List<OrderLog> orderLogs;
-    @ApiModelProperty(value = "价格详情")
+    @Schema(description = "价格详情")
     private String priceDetail;
 
-    public OrderDetailVO(Order order, List<OrderItem> orderItems, List<OrderLog> orderLogs,Receipt receipt) {
+    public OrderDetailVO(Order order, List<OrderItem> orderItems, List<OrderLog> orderLogs, Receipt receipt) {
         this.order = order;
         this.orderItems = orderItems;
         this.orderLogs = orderLogs;
-        this.receipt =  receipt;
+        this.receipt = receipt;
     }
 
     /**

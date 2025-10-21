@@ -72,12 +72,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.*;
@@ -113,6 +114,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     /**
      * 物流公司
      */
+    @Lazy
     @Autowired
     private LogisticsService logisticsService;
     /**
@@ -133,15 +135,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     /**
      * 订单流水
      */
+    @Lazy
     @Autowired
     private StoreFlowService storeFlowService;
     /**
      * 拼团
      */
+    @Lazy
     @Autowired
     private PintuanService pintuanService;
 
     @Autowired
+    @Lazy
     private TradeService tradeService;
 
 
@@ -479,13 +484,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if ((order.getDeliverStatus().equals(DeliverStatusEnum.UNDELIVERED.name()) || order.getDeliverStatus().equals(DeliverStatusEnum.PARTS_DELIVERED.name())) &&
                 (order.getOrderStatus().equals(OrderStatusEnum.UNDELIVERED.name()) || order.getOrderStatus().equals(OrderStatusEnum.PARTS_DELIVERED.name()))) {
             //获取对应物流
-            Logistics logistics = logisticsService.getById(logisticsId);
-            if (logistics == null) {
-                throw new ServiceException(ResultCode.ORDER_LOGISTICS_ERROR);
+            if (logisticsService != null) {
+                Logistics logistics = logisticsService.getById(logisticsId);
+                if (logistics == null) {
+                    throw new ServiceException(ResultCode.ORDER_LOGISTICS_ERROR);
+                }
+                //写入物流信息
+                order.setLogisticsCode(logistics.getId());
+                order.setLogisticsName(logistics.getName());
             }
-            //写入物流信息
-            order.setLogisticsCode(logistics.getId());
-            order.setLogisticsName(logistics.getName());
             order.setLogisticsNo(logisticsNo);
             order.setLogisticsTime(new Date());
             order.setDeliverStatus(DeliverStatusEnum.DELIVERED.name());

@@ -1,9 +1,6 @@
 package cn.lili.modules.goods.serviceimpl;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.AuthUser;
@@ -32,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSON;
+
 /**
  * 直播商品业务层实现
  *
@@ -56,12 +57,12 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             commodity.setStoreId(storeId);
             //添加直播商品
             JSONObject json = wechatLivePlayerUtil.addGoods(commodity);
-            if (!"0".equals(json.getStr("errcode"))) {
-                log.error(json.getStr("errmsg"));
+            if (!"0".equals(json.getString("errcode"))) {
+                log.error(json.getString("errmsg"));
                 throw new ServiceException(ResultCode.COMMODITY_ERROR);
             }
-            commodity.setLiveGoodsId(Convert.toInt(json.getStr("goodsId")));
-            commodity.setAuditId(json.getStr("auditId"));
+            commodity.setLiveGoodsId(Convert.toInt(json.getString("goodsId")));
+            commodity.setAuditId(json.getString("auditId"));
             //默认为待审核状态
             commodity.setAuditStatus("0");
             this.save(commodity);
@@ -88,7 +89,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             throw new ServiceException(ResultCode.USER_AUTHORITY_ERROR);
         }
         JSONObject json = wechatLivePlayerUtil.deleteGoods(goodsId);
-        if ("0".equals(json.getStr("errcode"))) {
+        if ("0".equals(json.getString("errcode"))) {
             return this.remove(new LambdaQueryWrapper<Commodity>().eq(Commodity::getLiveGoodsId, goodsId).eq(Commodity::getStoreId, currentUser.getStoreId()));
         }
         return false;
@@ -103,7 +104,8 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             //同步状态
             JSONObject json = wechatLivePlayerUtil.getGoodsWareHouse(goodsIdList);
             //修改状态
-            List<CommodityDTO> commodityDTOList = JSONUtil.toList((JSONArray) json.get("goods"), CommodityDTO.class);
+            JSONArray goodsArray = json.getJSONArray("goods");
+            List<CommodityDTO> commodityDTOList = JSON.parseArray(JSON.toJSONString(goodsArray), CommodityDTO.class);
             for (CommodityDTO commodityDTO : commodityDTOList) {
                 //修改审核状态
                 this.update(new LambdaUpdateWrapper<Commodity>()

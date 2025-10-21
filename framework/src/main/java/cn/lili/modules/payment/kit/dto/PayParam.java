@@ -1,10 +1,9 @@
 package cn.lili.modules.payment.kit.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 支付参数
@@ -18,17 +17,16 @@ public class PayParam {
 
 
     @NotNull
-    @ApiModelProperty(value = "交易类型", allowableValues = "TRADE,ORDER,RECHARGE")
+    @Schema(description = "交易类型", allowableValues = "TRADE,ORDER,RECHARGE")
     private String orderType;
 
     @NotNull
-    @ApiModelProperty(value = "订单号")
+    @Schema(description = "订单号")
     private String sn;
 
     @NotNull
-    @ApiModelProperty(value = "客户端类型")
+    @Schema(description = "客户端类型")
     private String clientType;
-
 
 
 }

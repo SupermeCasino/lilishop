@@ -18,17 +18,17 @@ import cn.lili.modules.promotion.service.CouponActivityService;
 import cn.lili.modules.promotion.service.CouponService;
 import cn.lili.modules.promotion.service.MemberCouponService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ import java.util.Objects;
  * @since 2020/11/17 3:35 下午
  */
 @RestController
-@Api(tags = "买家端,买家优惠券接口")
+@Tag(name = "买家端,买家优惠券接口")
 @RequestMapping("/buyer/promotion/coupon")
 public class CouponBuyerController {
 
@@ -62,7 +62,7 @@ public class CouponBuyerController {
     private MemberCouponService memberCouponService;
 
     @GetMapping("/activity")
-    @ApiOperation(value = "自动领取优惠券")
+    @Operation(summary = "自动领取优惠券")
     public ResultMessage<List<MemberCoupon>> activity() {
         if (UserContext.getCurrentUser() == null) {
             return ResultUtil.success();
@@ -83,7 +83,7 @@ public class CouponBuyerController {
     }
 
     @GetMapping
-    @ApiOperation(value = "获取可领取优惠券列表")
+    @Operation(summary = "获取可领取优惠券列表")
     public ResultMessage<IPage<CouponVO>> getCouponList(CouponSearchParams queryParam, PageVO page) {
         queryParam.setPromotionStatus(PromotionsStatusEnum.START.name());
         queryParam.setGetType(CouponGetEnum.FREE.name());
@@ -91,7 +91,7 @@ public class CouponBuyerController {
         return ResultUtil.data(canUseCoupons);
     }
 
-    @ApiOperation(value = "获取当前会员的优惠券列表")
+    @Operation(summary = "获取当前会员的优惠券列表")
     @GetMapping("/getCoupons")
     public ResultMessage<IPage<MemberCoupon>> getCoupons(MemberCouponSearchParams param, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -99,7 +99,7 @@ public class CouponBuyerController {
         return ResultUtil.data(memberCouponService.getMemberCoupons(param, pageVo));
     }
 
-    @ApiOperation(value = "获取当前会员的对于当前商品可使用的优惠券列表")
+    @Operation(summary = "获取当前会员的对于当前商品可使用的优惠券列表")
     @GetMapping("/canUse")
     public ResultMessage<IPage<MemberCoupon>> getCouponsByCanUse(MemberCouponSearchParams param, Double totalPrice, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -107,15 +107,15 @@ public class CouponBuyerController {
         return ResultUtil.data(memberCouponService.getMemberCouponsByCanUse(param, totalPrice, pageVo));
     }
 
-    @ApiOperation(value = "获取当前会员可使用的优惠券数量")
+    @Operation(summary = "获取当前会员可使用的优惠券数量")
     @GetMapping("/getCouponsNum")
     public ResultMessage<Object> getMemberCouponsNum() {
         return ResultUtil.data(memberCouponService.getMemberCouponsNum());
     }
 
-    @ApiOperation(value = "会员领取优惠券")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "couponId", value = "优惠券ID", required = true, dataType = "Long", paramType = "path")
+    @Operation(summary = "会员领取优惠券")
+    @Parameters({
+            @Parameter(name = "couponId", description = "优惠券ID", required = true)
     })
     @GetMapping("/receive/{couponId}")
     public ResultMessage<Object> receiveCoupon(@NotNull(message = "优惠券ID不能为空") @PathVariable("couponId") String couponId) {
@@ -124,11 +124,11 @@ public class CouponBuyerController {
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "通过id获取")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "优惠券ID", required = true, dataType = "Long", paramType = "path")
+    @Operation(summary = "通过id获取")
+    @Parameters({
+            @Parameter(name = "id", description = "优惠券ID", required = true)
     })
-    @GetMapping(value = "/get/{id}")
+    @GetMapping("/get/{id}")
     public ResultMessage<MemberCoupon> get(@NotNull(message = "优惠券ID不能为空") @PathVariable("id") String id) {
         MemberCoupon memberCoupon = OperationalJudgment.judgment(memberCouponService.getById(id));
         return ResultUtil.data(memberCoupon);

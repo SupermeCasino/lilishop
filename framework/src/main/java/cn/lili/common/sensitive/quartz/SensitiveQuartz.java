@@ -31,10 +31,23 @@ public class SensitiveQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
         log.info("敏感词定时更新");
-        List<String> sensitives = cache.get(CachePrefix.SENSITIVE.getPrefix());
-        if (sensitives == null || sensitives.isEmpty()) {
-            return;
+        try {
+            List<String> sensitives = cache.get(CachePrefix.SENSITIVE.getPrefix());
+            if (sensitives == null || sensitives.isEmpty()) {
+                log.warn("敏感词缓存为空，跳过本次更新");
+                return;
+            }
+            SensitiveWordsFilter.init(sensitives);
+            log.info("敏感词更新完成，共加载 {} 个敏感词", sensitives.size());
+        } catch (Exception e) {
+            log.error("敏感词定时更新失败，可能是缓存数据格式错误", e);
+            // 清除可能损坏的缓存数据
+            try {
+                cache.remove(CachePrefix.SENSITIVE.getPrefix());
+                log.info("已清除损坏的敏感词缓存数据");
+            } catch (Exception clearException) {
+                log.error("清除敏感词缓存失败", clearException);
+            }
         }
-        SensitiveWordsFilter.init(sensitives);
     }
 }

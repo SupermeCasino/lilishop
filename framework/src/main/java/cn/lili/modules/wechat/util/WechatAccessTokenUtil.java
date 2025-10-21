@@ -1,7 +1,8 @@
 package cn.lili.modules.wechat.util;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.ClientTypeEnum;
@@ -70,11 +71,11 @@ public class WechatAccessTokenUtil {
             String content = HttpUtil.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" +
                     "&appid=" + item.getAppId() + "&secret=" + item.getAppSecret());
 
-            JSONObject object = new JSONObject(content);
+            JSONObject object = JSON.parseObject(content);
             log.info("token获取【" + clientTypeEnum.name() + "】返回" + object.toString());
-            String accessToken = object.get("access_token").toString();
+            String accessToken = object.getString("access_token");
             cache.put(CachePrefix.WECHAT_CGI_ACCESS_TOKEN.getPrefix() + clientTypeEnum.name(),
-                    object.getStr("access_token"), object.getLong("expires_in"));
+                    object.getString("access_token"), object.getLong("expires_in"));
             return accessToken;
         } else {
             log.error("获取token客户端异常" + clientTypeEnum.name());
@@ -98,8 +99,8 @@ public class WechatAccessTokenUtil {
         try {
             String content = new HttpUtils().get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken + "&type=jsapi");
 
-            JSONObject object = new JSONObject(content);
-            String ticket = object.getStr("ticket");
+           JSONObject object = JSON.parseObject(content);
+            String ticket = object.getString("ticket");
             Long expires = object.getLong("expires_in");
             cache.put(CachePrefix.WECHAT_JS_API_TOKEN.getPrefix() + clientTypeEnum.name(), ticket, expires);
             return ticket;

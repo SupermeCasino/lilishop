@@ -31,12 +31,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -61,6 +62,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
      * 商家流水
      */
     @Autowired
+    @Lazy
     private StoreFlowService storeFlowService;
 
     @Override

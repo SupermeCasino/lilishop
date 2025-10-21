@@ -8,12 +8,12 @@ import cn.lili.modules.file.entity.FileDirectory;
 import cn.lili.modules.file.entity.dto.FileDirectoryDTO;
 import cn.lili.modules.file.service.FileDirectoryService;
 import cn.lili.modules.file.service.FileService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020/11/26 15:41
  */
 @RestController
-@Api(tags = "文件目录管理接口")
+@Tag(name = "文件目录管理接口")
 @RequestMapping("/common/resource/fileDirectory")
 @RequiredArgsConstructor
 public class FileDirectoryController {
@@ -31,13 +31,13 @@ public class FileDirectoryController {
     private final FileDirectoryService fileDirectoryService;
     private final FileService fileService;
 
-    @ApiOperation(value = "获取文件目录列表")
+    @Operation(summary = "获取文件目录列表")
     @GetMapping
     public ResultMessage<List<FileDirectoryDTO>> getSceneFileList() {
         return ResultUtil.data(fileDirectoryService.getFileDirectoryList(UserContext.getCurrentUser().getId()));
     }
 
-    @ApiOperation(value = "添加文件目录")
+    @Operation(summary = "添加文件目录")
     @PostMapping
     public ResultMessage<FileDirectory> addSceneFileList(@RequestBody @Valid FileDirectory fileDirectory) {
         fileDirectory.setDirectoryType(UserContext.getCurrentUser().getRole().name());
@@ -46,7 +46,7 @@ public class FileDirectoryController {
         return ResultUtil.data(fileDirectory);
     }
 
-    @ApiOperation(value = "修改文件目录")
+    @Operation(summary = "修改文件目录")
     @PutMapping
     public ResultMessage<FileDirectory> editSceneFileList(@RequestBody @Valid FileDirectory fileDirectory) {
         fileDirectory.setDirectoryType(UserContext.getCurrentUser().getRole().name());
@@ -55,11 +55,11 @@ public class FileDirectoryController {
         return ResultUtil.data(fileDirectory);
     }
 
-    @ApiOperation(value = "删除文件目录")
+    @Operation(summary = "删除文件目录")
     @DeleteMapping("/{id}")
     public ResultMessage<Object> deleteSceneFileList(@PathVariable String id) {
         //检测文件夹下是否包含图片
-        if(fileService.countByDirectory(id)){
+        if (fileService.countByDirectory(id)) {
             return ResultUtil.error(ResultCode.FILE_DIRECTORY_NOT_EMPTY);
         }
         //删除目录

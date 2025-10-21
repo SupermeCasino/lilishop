@@ -8,14 +8,16 @@ import cn.lili.modules.system.service.AppVersionService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 
 /**
  * 买家端,APP版本
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021/5/21 11:15 上午
  */
 @RestController
-@Api(tags = "买家端,APP版本")
+@Tag(name = "买家端,APP版本接口")
 @RequestMapping("/buyer/other/appVersion")
 public class AppVersionBuyerController {
 
@@ -32,15 +34,15 @@ public class AppVersionBuyerController {
     private AppVersionService appVersionService;
 
 
-    @ApiOperation(value = "获取版本号")
-    @ApiImplicitParam(name = "appType", value = "app类型", required = true, paramType = "path")
+    @Operation(description = "获取版本号")
+    @Parameter(name = "appType", description = "app类型", required = true)
     @GetMapping("/{appType}")
     public ResultMessage<Object> getAppVersion(@PathVariable String appType) {
         return ResultUtil.data(appVersionService.getAppVersion(appType));
     }
 
-    @ApiOperation(value = "获取版本号列表")
-    @ApiImplicitParam(name = "appType", value = "app类型", required = true, paramType = "path")
+    @Operation(summary = "获取版本号列表")
+    @Parameter(name = "appType", description = "app类型", required = true)
     @GetMapping("/appVersion/{appType}")
     public ResultMessage<IPage<AppVersion>> appVersion(@PathVariable String appType, PageVO pageVO) {
 

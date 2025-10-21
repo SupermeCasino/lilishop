@@ -19,9 +19,9 @@ import cn.lili.modules.system.entity.dto.payment.WechatPaymentSetting;
 import cn.lili.modules.system.entity.dto.payment.dto.PaymentSupportForm;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +34,7 @@ import java.util.Collections;
  * @since 2020/11/26 15:53
  */
 @RestController
-@Api(tags = "管理端,系统设置接口")
+@Tag(name = "管理端,系统设置接口")
 @RequestMapping("/manager/setting/setting")
 public class SettingManagerController {
     @Autowired
@@ -47,14 +47,10 @@ public class SettingManagerController {
 
 
     @DemoSite
-    @ApiOperation(value = "更新配置")
-    @PutMapping(value = "/put/{key}")
-    @ApiImplicitParam(name = "key", value = "配置key", paramType = "path",
-            allowableValues = "BASE_SETTING,EMAIL_SETTING,GOODS_SETTING,KUAIDI_SETTING,ORDER_SETTING,OSS_SETTING,POINT_SETTING," +
-                    "WECHAT_PC_CONNECT,WECHAT_WAP_CONNECT,WECHAT_APP_CONNECT,WECHAT_MP_CONNECT," +
-                    "QQ_WEB_CONNECT,QQ_APP_CONNECT," +
-                    "QQ_WEB_CONNECT,QQ_APP_CONNECT,WEIBO_CONNECT,ALIPAY_CONNECT," +
-                    "PAYMENT_SUPPORT,ALIPAY_PAYMENT,WECHAT_PAYMENT,SECKILL_SETTING,EXPERIENCE_SETTING,IM,CONNECT_SETTING")
+    @Operation(summary = "更新配置")
+    @Parameter(name = "key", description = "配置key", required = true)
+    @Parameter(name = "configValue", description = "配置值", required = true)
+    @PutMapping( "/put/{key}")
     public ResultMessage saveConfig(@PathVariable String key, @RequestBody String configValue) {
         SettingEnum settingEnum = SettingEnum.valueOf(key);
         //获取系统配置
@@ -73,15 +69,9 @@ public class SettingManagerController {
 
 
     @DemoSite
-    @ApiOperation(value = "查看配置")
-    @GetMapping(value = "/get/{key}")
-    @ApiImplicitParam(name = "key", value = "配置key", paramType = "path"
-            , allowableValues = "BASE_SETTING,EMAIL_SETTING,GOODS_SETTING,KUAIDI_SETTING,ORDER_SETTING,OSS_SETTING,POINT_SETTING," +
-            "WECHAT_PC_CONNECT,WECHAT_WAP_CONNECT,WECHAT_APP_CONNECT,WECHAT_MP_CONNECT," +
-            "QQ_WEB_CONNECT,QQ_APP_CONNECT," +
-            "QQ_WEB_CONNECT,QQ_APP_CONNECT,WEIBO_CONNECT,ALIPAY_CONNECT," +
-            "PAYMENT_SUPPORT,ALIPAY_PAYMENT,WECHAT_PAYMENT,SECKILL_SETTING,EXPERIENCE_SETTING,IM"
-    )
+    @Operation(summary = "查看配置")
+    @Parameter(name = "key", description = "配置key", required = true)
+    @GetMapping( "/get/{key}")
     public ResultMessage settingGet(@PathVariable String key) {
         return createSetting(key);
     }

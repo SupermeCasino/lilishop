@@ -3,8 +3,9 @@ package cn.lili.modules.goods.entity.dto;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.modules.goods.entity.enums.DraftGoodsSaveType;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 草稿商品搜索对象
@@ -13,6 +14,7 @@ import lombok.Data;
  * @since 2020/12/21
  **/
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class DraftGoodsSearchParams extends GoodsSearchParams {
 
     private static final long serialVersionUID = -1057830772267228050L;
@@ -20,7 +22,7 @@ public class DraftGoodsSearchParams extends GoodsSearchParams {
     /**
      * @see DraftGoodsSaveType
      */
-    @ApiModelProperty(value = "草稿商品保存类型")
+    @Schema(description = "草稿商品保存类型")
     private String saveType;
 
     @Override

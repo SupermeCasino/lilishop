@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,8 +20,9 @@ import java.util.Date;
  */
 @Data
 @TableName("li_connect")
-@ApiModel(value = "联合登陆")
+@Schema(description = "联合登陆")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Connect extends BaseIdEntity {
 
     private static final long serialVersionUID = 1L;
@@ -29,26 +30,26 @@ public class Connect extends BaseIdEntity {
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty("用户id")
+    @Schema(description = "用户id")
     private String userId;
 
-    @ApiModelProperty("联合登录id")
+    @Schema(description = "联合登录id")
     private String unionId;
 
     /**
      * @see cn.lili.modules.connect.entity.enums.ConnectEnum
      */
-    @ApiModelProperty(value = "联合登录类型")
+    @Schema(description = "联合登录类型")
     private String unionType;
 
 

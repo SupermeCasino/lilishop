@@ -6,7 +6,7 @@ import cn.lili.common.security.sensitive.enums.SensitiveStrategy;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.member.entity.dos.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,75 +24,75 @@ public class MemberVO implements Serializable {
 
     private static final long serialVersionUID = 1810890757303309436L;
 
-    @ApiModelProperty(value = "唯一标识", hidden = true)
+    @Schema(description = "唯一标识", hidden = true)
     private String id;
 
-    @ApiModelProperty(value = "会员用户名")
+    @Schema(description = "会员用户名")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String username;
 
-    @ApiModelProperty(value = "昵称")
+    @Schema(description = "昵称")
 
     private String nickName;
 
-    @ApiModelProperty(value = "会员性别,1为男，0为女")
+    @Schema(description = "会员性别,1为男，0为女")
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "会员生日")
+    @Schema(description = "会员生日")
     private Date birthday;
 
-    @ApiModelProperty(value = "会员地址ID")
+    @Schema(description = "会员地址ID")
     private String regionId;
 
-    @ApiModelProperty(value = "会员地址")
+    @Schema(description = "会员地址")
     private String region;
 
-    @ApiModelProperty(value = "手机号码", required = true)
+    @Schema(description = "手机号码", required = true)
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String mobile;
 
-    @ApiModelProperty(value = "积分数量")
+    @Schema(description = "积分数量")
     private Long point;
 
-    @ApiModelProperty(value = "积分总数量")
+    @Schema(description = "积分总数量")
     private Long totalPoint;
 
-    @ApiModelProperty(value = "会员头像")
+    @Schema(description = "会员头像")
     private String face;
 
-    @ApiModelProperty(value = "会员状态")
+    @Schema(description = "会员状态")
     private Boolean disabled;
 
-    @ApiModelProperty(value = "是否开通店铺")
+    @Schema(description = "是否开通店铺")
     private Boolean haveStore;
 
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
-    @ApiModelProperty(value = "openId")
+    @Schema(description = "openId")
     private String openId;
 
     /**
      * @see ClientTypeEnum
      */
-    @ApiModelProperty(value = "客户端")
+    @Schema(description = "客户端")
     private String clientEnum;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "最后一次登录时间")
+    @Schema(description = "最后一次登录时间")
     private Date lastLoginDate;
 
-    @ApiModelProperty(value = "会员等级ID")
+    @Schema(description = "会员等级ID")
     private String gradeId;
 
-    @ApiModelProperty(value = "经验值数量")
+    @Schema(description = "经验值数量")
     private Long experience;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
     public MemberVO(Member member) {
@@ -109,10 +109,11 @@ public class MemberVO implements Serializable {
 
     /**
      * JSON转换中的null 会转成 "null"
+     *
      * @param value
      * @return
      */
-    private String getDefaultValue(String value){
+    private String getDefaultValue(String value) {
         return (value == null || "null".equals(value)) ? "" : value;
     }
 }

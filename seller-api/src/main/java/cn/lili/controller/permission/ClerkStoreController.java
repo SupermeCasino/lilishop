@@ -18,17 +18,16 @@ import cn.lili.modules.member.entity.vo.ClerkVO;
 import cn.lili.modules.member.service.ClerkService;
 import cn.lili.modules.member.service.MemberService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "店员")
+@Tag(name = "店员")
 @RequestMapping("/store/clerk")
 @Transactional(rollbackFor = Exception.class)
 @Validated
@@ -54,7 +53,9 @@ public class ClerkStoreController {
 
 
     @GetMapping
-    @ApiOperation(value = "分页获取店员列表")
+    @Operation(description = "分页获取店员列表")
+    @Parameter(name = "clerkQueryDTO", description = "店员查询参数", required = false)
+    @Parameter(name = "pageVo", description = "分页参数", required = false)
     public ResultMessage<IPage<ClerkVO>> page(ClerkQueryDTO clerkQueryDTO,
                                               PageVO pageVo) {
 
@@ -63,7 +64,8 @@ public class ClerkStoreController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "获取店员详细")
+    @Operation(description = "获取店员详细")
+    @Parameter(name = "id", description = "店员ID", required = true)
     public ResultMessage<ClerkVO> get(@PathVariable String id) {
 
         return ResultUtil.data(clerkService.get(id));
@@ -71,14 +73,16 @@ public class ClerkStoreController {
 
 
     @PostMapping("/{mobile}/check")
-    @ApiOperation(value = "检测手机号码有效性")
+    @Operation(description = "检测手机号码有效性")
+    @Parameter(name = "mobile", description = "手机号码", required = true)
     public ResultMessage<Object> check(@PathVariable @Phone(message = "手机号码格式不正确") String mobile) {
         return ResultUtil.data(clerkService.checkClerk(mobile));
     }
 
 
     @PostMapping
-    @ApiOperation(value = "添加店员")
+    @Operation(description = "添加店员")
+    @Parameter(name = "clerkAddDTO", description = "店员添加参数", required = true)
     public ResultMessage<Object> add(@Valid ClerkAddDTO clerkAddDTO) {
         int rolesMaxSize = 10;
         try {
@@ -124,34 +128,39 @@ public class ClerkStoreController {
 
 
     @PutMapping("/{id}")
-    @ApiImplicitParam(name = "id", value = "店员id", required = true, paramType = "path")
-    @ApiOperation(value = "修改店员")
+    @Operation(description = "修改店员")
+    @Parameter(name = "id", description = "店员id", required = true)
+    @Parameter(name = "clerkEditDTO", description = "店员修改参数", required = true)
     public ResultMessage<Clerk> edit(@PathVariable String id, @Valid ClerkEditDTO clerkEditDTO) {
         clerkEditDTO.setId(id);
         return ResultUtil.data(clerkService.updateClerk(clerkEditDTO));
     }
 
-    @PutMapping(value = "/enable/{clerkId}")
-    @ApiOperation(value = "禁/启 用 店员")
+    @PutMapping("/enable/{clerkId}")
+    @Operation(description = "禁/启 用 店员")
+    @Parameter(name = "clerkId", description = "店员ID", required = true)
+    @Parameter(name = "status", description = "状态", required = true)
     @DemoSite
-    public ResultMessage<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String clerkId, Boolean status) {
+    public ResultMessage<Object> disable(@PathVariable String clerkId, Boolean status) {
         clerkService.disable(clerkId, status);
         return ResultUtil.success();
     }
 
 
-    @DeleteMapping(value = "/delByIds/{ids}")
-    @ApiOperation(value = "删除店员")
+    @DeleteMapping("/delByIds/{ids}")
+    @Operation(description = "删除店员")
+    @Parameter(name = "ids", description = "店员ID列表", required = true)
     public ResultMessage<Object> deleteClerk(@PathVariable List<String> ids) {
         clerkService.deleteClerk(ids);
         return ResultUtil.success();
     }
 
 
-    @PostMapping(value = "/resetPassword/{ids}")
-    @ApiOperation(value = "重置密码")
+    @PostMapping("/resetPassword/{ids}")
+    @Operation(description = "重置密码")
+    @Parameter(name = "ids", description = "店员ID列表", required = true)
     @DemoSite
-    public ResultMessage<Object> resetPassword(@PathVariable List ids) {
+    public ResultMessage<Object> resetPassword(@PathVariable List<String> ids) {
         clerkService.resetPassword(ids);
         return ResultUtil.success(ResultCode.USER_EDIT_SUCCESS);
     }

@@ -3,8 +3,9 @@ package cn.lili.modules.distribution.entity.vos;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 分销佣金查询信息
@@ -13,23 +14,24 @@ import lombok.Data;
  * @since 2020-03-26 09:04:53
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class DistributionCashSearchParams extends PageVO {
 
     /**
      * 编号
      */
-    @ApiModelProperty(value = "编号")
+    @Schema(description = "编号")
     private String sn;
     /**
      * 会员名称
      */
-    @ApiModelProperty(value = "会员名称")
+    @Schema(description = "会员名称")
     private String memberName;
 
     /**
      * 分销员提现状态
      */
-    @ApiModelProperty(value = "分销员提现状态",allowableValues = "APPLY,PASS,REFUSE")
+    @Schema(description = "分销员提现状态", allowableValues = "APPLY,PASS,REFUSE")
     private String distributionCashStatus;
 
     public <T> QueryWrapper<T> queryWrapper() {

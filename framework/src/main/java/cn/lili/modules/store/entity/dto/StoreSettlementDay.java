@@ -1,6 +1,6 @@
 package cn.lili.modules.store.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,9 +14,9 @@ import java.util.Date;
 @Data
 public class StoreSettlementDay {
 
-    @ApiModelProperty(value = "店铺ID")
+    @Schema(description = "店铺ID")
     private String storeId;
 
-    @ApiModelProperty(value = "结算日")
+    @Schema(description = "结算日")
     private Date settlementDay;
 }

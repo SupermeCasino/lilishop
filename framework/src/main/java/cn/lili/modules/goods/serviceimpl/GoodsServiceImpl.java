@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.ResultCode;
@@ -53,6 +53,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +74,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      * 分类
      */
     @Autowired
+    @Lazy
     private CategoryService categoryService;
     /**
      * 设置
@@ -88,6 +90,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      * 商品规格
      */
     @Autowired
+    @Lazy
     private GoodsSkuService goodsSkuService;
     /**
      * 店铺详情
@@ -98,6 +101,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      * 会员评价
      */
     @Autowired
+    @Lazy
     private MemberEvaluationService memberEvaluationService;
     /**
      * rocketMq
@@ -138,7 +142,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.updateGoodsMarketAbleByStoreId(storeId, GoodsStatusEnum.DOWN, "店铺关闭");
 
         applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("下架商品",
-                rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DOWN.name(), JSONUtil.toJsonStr(list)));
+                rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DOWN.name(), JSON.toJSONString(list)));
 
     }
 
@@ -179,7 +183,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         //添加商品参数
         if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
             //给商品参数填充值
-            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
+            goods.setParams(JSON.toJSONString(goodsOperationDTO.getGoodsParamsDTOList()));
         }
         //添加商品
         this.save(goods);
@@ -205,7 +209,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.setGoodsGalleryParam(goodsOperationDTO.getGoodsGalleryList().get(0), goods);
         //添加商品参数
         if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
-            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
+            goods.setParams(JSON.toJSONString(goodsOperationDTO.getGoodsParamsDTOList()));
         }
         //修改商品
         this.updateById(goods);
@@ -265,7 +269,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         //参数非空则填写参数
         if (CharSequenceUtil.isNotEmpty(goods.getParams())) {
-            goodsVO.setGoodsParamsDTOList(JSONUtil.toList(goods.getParams(), GoodsParamsDTO.class));
+            goodsVO.setGoodsParamsDTOList(JSON.parseArray(goods.getParams(), GoodsParamsDTO.class));
         }
 
         List<Wholesale> wholesaleList = wholesaleService.findByGoodsId(goodsId);
@@ -343,7 +347,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             //商品审核消息
             String destination = rocketmqCustomProperties.getGoodsTopic() + ":" + GoodsTagsEnum.GOODS_AUDIT.name();
             //发送mq消息
-            rocketMQTemplate.asyncSend(destination, JSONUtil.toJsonStr(goods), RocketmqSendCallbackBuilder.commonCallback());
+            rocketMQTemplate.asyncSend(destination, JSON.toJSONString(goods), RocketmqSendCallbackBuilder.commonCallback());
         }
         cache.multiDel(goodsCacheKeys);
         return result;
@@ -524,7 +528,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.goodsSkuService.updateGoodsSkuGrade(goodsId, grade, goods.getCommentNum());
 
         Map<String, Object> updateIndexFieldsMap = EsIndexUtil.getUpdateIndexFieldsMap(MapUtil.builder(new HashMap<String, Object>()).put("goodsId", goodsId).build(), MapUtil.builder(new HashMap<String, Object>()).put("commentNum", goods.getCommentNum()).put("highPraiseNum", highPraiseNum).put("grade", grade).build());
-        applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("更新商品索引信息", rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.UPDATE_GOODS_INDEX_FIELD.name(), JSONUtil.toJsonStr(updateIndexFieldsMap)));
+        applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("更新商品索引信息", rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.UPDATE_GOODS_INDEX_FIELD.name(), JSON.toJSONString(updateIndexFieldsMap)));
     }
 
     /**
@@ -601,7 +605,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         //下架商品发送消息
         if (goodsStatusEnum.equals(GoodsStatusEnum.DOWN)) {
             applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("下架商品",
-                    rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DOWN.name(), JSONUtil.toJsonStr(goodsIds)));
+                    rocketmqCustomProperties.getGoodsTopic(), GoodsTagsEnum.DOWN.name(), JSON.toJSONString(goodsIds)));
         }
     }
 
@@ -639,7 +643,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Transactional
     public void deleteEsGoods(List<String> goodsIds) {
         applicationEventPublisher.publishEvent(new TransactionCommitSendMQEvent("删除商品", rocketmqCustomProperties.getGoodsTopic(),
-                GoodsTagsEnum.GOODS_DELETE.name(), JSONUtil.toJsonStr(goodsIds)));
+                GoodsTagsEnum.GOODS_DELETE.name(), JSON.toJSONString(goodsIds)));
     }
 
     /**
@@ -697,7 +701,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         //获取商品系统配置决定是否审核
         Setting setting = settingService.get(SettingEnum.GOODS_SETTING.name());
-        GoodsSetting goodsSetting = JSONUtil.toBean(setting.getSettingValue(), GoodsSetting.class);
+        GoodsSetting goodsSetting = JSON.parseObject(setting.getSettingValue(), GoodsSetting.class);
         //是否需要审核
         goods.setAuthFlag(Boolean.TRUE.equals(goodsSetting.getGoodsCheck()) ? GoodsAuthEnum.TOBEAUDITED.name() : GoodsAuthEnum.PASS.name());
         //判断当前用户是否为店铺

@@ -18,8 +18,8 @@ import cn.lili.modules.file.service.FileService;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +36,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
-@Api(tags = "文件上传接口")
+@Tag(name = "文件上传接口")
 @RequestMapping("/common/common/upload")
 public class UploadController {
 
@@ -49,8 +49,8 @@ public class UploadController {
     @Autowired
     private Cache cache;
 
-    @ApiOperation(value = "文件上传")
-    @PostMapping(value = "/file")
+    @Operation(summary = "文件上传")
+    @PostMapping("/file")
     public ResultMessage<Object> upload(MultipartFile file,
                                         String base64,
                                         @RequestHeader String accessToken, @RequestParam String directoryPath) {

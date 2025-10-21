@@ -10,8 +10,8 @@ import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.service.StoreService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:57
  */
 @RestController
-@Api(tags = "店铺端,管理员接口")
+@Tag(name = "店铺端,管理员接口")
 @RequestMapping("/store/member/user")
 public class StoreUserController {
     @Autowired
@@ -35,8 +35,8 @@ public class StoreUserController {
     private StoreService storeService;
 
 
-    @GetMapping(value = "/info")
-    @ApiOperation(value = "获取当前登录用户接口")
+    @GetMapping("/info")
+    @Operation(summary = "获取当前登录用户接口")
     public ResultMessage<Member> getUserInfo() {
         AuthUser tokenUser = UserContext.getCurrentUser();
         if (tokenUser != null) {
@@ -47,8 +47,8 @@ public class StoreUserController {
         throw new ServiceException(ResultCode.USER_NOT_LOGIN);
     }
 
-    @GetMapping(value = "")
-    @ApiOperation(value = "获取当前登录店铺接口")
+    @GetMapping("")
+    @Operation(summary = "获取当前登录店铺接口")
     public ResultMessage<Store> getStoreInfo() {
         AuthUser tokenUser = UserContext.getCurrentUser();
         if (tokenUser != null) {

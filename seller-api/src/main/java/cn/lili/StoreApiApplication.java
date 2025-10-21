@@ -30,6 +30,7 @@ public class StoreApiApplication {
     public static void main(String[] args) {
         System.setProperty("rocketmq.client.logUseSlf4j","true");
         System.setProperty("es.set.netty.runtime.available.processors", "false");
+        System.setProperty("spring.profiles.active", "default");
         SpringApplication.run(StoreApiApplication.class, args);
     }
 

@@ -2,8 +2,6 @@ package cn.lili.modules.order.cart.render.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -32,6 +30,8 @@ import cn.lili.modules.promotion.entity.dos.Pintuan;
 import cn.lili.modules.promotion.entity.dos.PointsGoods;
 import cn.lili.modules.promotion.entity.vos.CouponVO;
 import cn.lili.modules.promotion.service.PromotionGoodsService;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,8 +182,7 @@ public class CheckDataRender implements CartRenderStep {
                         //筛选属于当前店铺的优惠券
                         storeCart.getValue().forEach(i -> i.getPromotionMap().forEach((key, value) -> {
                             if (key.contains(PromotionTypeEnum.COUPON.name())) {
-                                JSONObject promotionsObj = JSONUtil.parseObj(value);
-                                Coupon coupon = JSONUtil.toBean(promotionsObj, Coupon.class);
+                                Coupon coupon = JSON.parseObject(value.toString(), Coupon.class);
                                 if (key.contains(PromotionTypeEnum.COUPON.name()) && coupon.getStoreId().equals(storeCart.getKey())) {
                                     cartVO.getCanReceiveCoupon().add(new CouponVO(coupon));
                                 }
@@ -198,6 +197,7 @@ public class CheckDataRender implements CartRenderStep {
             }
             tradeDTO.setCartList(cartList);
         }
+
 
     }
 
@@ -225,8 +225,8 @@ public class CheckDataRender implements CartRenderStep {
             if (tradeDTO.getSkuList().get(0).getPromotionMap() != null && !tradeDTO.getSkuList().get(0).getPromotionMap().isEmpty()) {
                 Optional<Map.Entry<String, Object>> pintuanPromotions = tradeDTO.getSkuList().get(0).getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.PINTUAN.name())).findFirst();
                 if (pintuanPromotions.isPresent()) {
-                    JSONObject promotionsObj = JSONUtil.parseObj(pintuanPromotions.get().getValue());
-                    Pintuan pintuan = promotionsObj.toBean(Pintuan.class);
+                    JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(pintuanPromotions.get().getValue()));
+                    Pintuan pintuan = JSON.parseObject(JSON.toJSONString(pintuanPromotions.get().getValue()), Pintuan.class);
                     Integer limitNum = pintuan.getLimitNum();
                     for (CartSkuVO cartSkuVO : tradeDTO.getSkuList()) {
                         if (limitNum != 0 && cartSkuVO.getNum() > limitNum) {
@@ -240,8 +240,8 @@ public class CheckDataRender implements CartRenderStep {
             //获取积分商品VO
             Optional<Map.Entry<String, Object>> pointsPromotions = tradeDTO.getSkuList().get(0).getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.POINTS_GOODS.name())).findFirst();
             if (pointsPromotions.isPresent()) {
-                JSONObject promotionsObj = JSONUtil.parseObj(pointsPromotions.get().getValue());
-                PointsGoods pointsGoods = promotionsObj.toBean(PointsGoods.class);
+                JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(pointsPromotions.get().getValue()));
+                PointsGoods pointsGoods = JSON.parseObject(JSON.toJSONString(pointsPromotions.get().getValue()), PointsGoods.class);
                 if (pointsGoods == null) {
                     throw new ServiceException(ResultCode.POINT_GOODS_ERROR);
                 }
@@ -252,6 +252,7 @@ public class CheckDataRender implements CartRenderStep {
             }
 
         }
+
 
     }
 

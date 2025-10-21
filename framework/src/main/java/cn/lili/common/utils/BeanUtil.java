@@ -60,8 +60,8 @@ public class BeanUtil {
             String firstLetter = fieldName.substring(0, 1).toUpperCase();
             String getter = "get" + firstLetter + fieldName.substring(1);
             Method method = o.getClass().getMethod(getter, new Class[]{});
-            Object value = method.invoke(o, new Object[]{});
-            return value;
+            Object description = method.invoke(o, new Object[]{});
+            return description;
         } catch (Exception e) {
             return null;
         }
@@ -89,9 +89,9 @@ public class BeanUtil {
             //获取属性的名字
             String key = fieldNames[j];
             //获取值
-            Object value = BeanUtil.getFieldValueByName(key, object);
-            assert value != null;
-            stringBuffer.append(key).append("=").append(value.toString());
+            Object description = BeanUtil.getFieldValueByName(key, object);
+            assert description != null;
+            stringBuffer.append(key).append("=").append(description.toString());
         }
         return stringBuffer.toString();
     }

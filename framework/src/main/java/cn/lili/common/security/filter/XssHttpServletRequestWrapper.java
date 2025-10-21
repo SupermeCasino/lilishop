@@ -1,17 +1,16 @@
 package cn.lili.common.security.filter;
 
-
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.http.HtmlUtil;
 import cn.hutool.json.JSONUtil;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -77,11 +76,11 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public String getParameter(String name) {
-        String value = super.getParameter(name);
-        if (value == null) {
+        String description = super.getParameter(name);
+        if (description == null) {
             return null;
         }
-        return filterXss(name, value);
+        return filterXss(name, description);
     }
 
     /**
@@ -89,11 +88,11 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public Object getAttribute(String name) {
-        Object value = super.getAttribute(name);
-        if (value instanceof String) {
-            value = filterXss(name, (String) value);
+        Object description = super.getAttribute(name);
+        if (description instanceof String) {
+            description = filterXss(name, (String) description);
         }
-        return value;
+        return description;
     }
 
     /**
@@ -101,11 +100,11 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     @Override
     public String getHeader(String name) {
-        String value = super.getHeader(name);
-        if (value == null) {
+        String description = super.getHeader(name);
+        if (description == null) {
             return null;
         }
-        return filterXss(name, value);
+        return filterXss(name, description);
     }
 
     @Override
@@ -121,10 +120,10 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
                 String[] values = entry.getValue();
                 //遍历数组
                 for (int i = 0; i < values.length; i++) {
-                    String value = values[i];
-                    value = filterXss(entry.getKey(), value);
+                    String description = values[i];
+                    description = filterXss(entry.getKey(), description);
                     //将转义后的数据放回数组中
-                    values[i] = value;
+                    values[i] = description;
                 }
 
                 //将转义后的数组put到linkMap当中

@@ -2,12 +2,11 @@ package cn.lili.modules.im.entity.dos;
 
 import cn.lili.mybatis.BaseTenantEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotEmpty;
 
 /**
  * 坐席
@@ -18,30 +17,31 @@ import javax.validation.constraints.NotEmpty;
  */
 @Data
 @TableName("li_seat")
-@ApiModel(value = "坐席")
+@Schema(description = "坐席")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Seat extends BaseTenantEntity {
 
-    @ApiModelProperty(value = "租户id")
+    @Schema(description = "租户id")
     private String tenantId;
 
-    @ApiModelProperty(value = "坐席用户名")
+    @Schema(description = "坐席用户名")
     private String username;
 
-    @ApiModelProperty(value = "会员头像")
+    @Schema(description = "会员头像")
     private String face;
 
-    @ApiModelProperty(value = "坐席密码")
+    @Schema(description = "坐席密码")
     private String password;
 
-    @ApiModelProperty(value = "昵称")
+    @Schema(description = "昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "坐席状态")
+    @Schema(description = "坐席状态")
     private Boolean disabled;
 
     @NotEmpty(message = "手机号码不能为空")
-    @ApiModelProperty(value = "手机号码", required = true)
+    @Schema(description = "手机号码", required = true)
     private String mobile;
 
 }

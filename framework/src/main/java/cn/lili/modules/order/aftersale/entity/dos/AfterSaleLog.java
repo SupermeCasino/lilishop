@@ -1,14 +1,14 @@
 package cn.lili.modules.order.aftersale.entity.dos;
 
 import cn.lili.common.security.enums.UserEnums;
-import cn.lili.mybatis.BaseIdEntity;
+import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,40 +23,41 @@ import java.util.Date;
  * @since 2020-03-25 2:30 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("li_after_sale_log")
-@ApiModel(value = "售后日志")
+@Schema(description = "售后日志")
 @NoArgsConstructor
-public class AfterSaleLog extends BaseIdEntity {
+public class AfterSaleLog extends BaseEntity {
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者", hidden = true)
+    @Schema(description = "创建者", hidden = true)
     private String createBy;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间", hidden = true)
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @ApiModelProperty(value = "售后服务单号")
+    @Schema(description = "售后服务单号")
     private String sn;
 
-    @ApiModelProperty(value = "操作者id(可以是卖家)")
+    @Schema(description = "操作者id(可以是卖家)")
     private String operatorId;
 
     /**
      * @see UserEnums
      */
-    @ApiModelProperty(value = "操作者类型")
+    @Schema(description = "操作者类型")
     private String operatorType;
 
 
-    @ApiModelProperty(value = "操作者名称")
+    @Schema(description = "操作者名称")
     private String operatorName;
 
-    @ApiModelProperty(value = "日志信息")
+    @Schema(description = "日志信息")
     private String message;
 
     public AfterSaleLog(String sn, String operatorId, String operatorType, String operatorName, String message) {

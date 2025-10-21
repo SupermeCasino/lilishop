@@ -2,7 +2,7 @@ package cn.lili.modules.order.aftersale.entity.vo;
 
 import cn.lili.modules.order.aftersale.entity.dos.AfterSale;
 import cn.lili.modules.order.trade.entity.enums.AfterSaleStatusEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -14,22 +14,22 @@ import lombok.Data;
 @Data
 public class AfterSaleAllowOperation {
 
-    @ApiModelProperty(value = "可以确认售后")
+    @Schema(description = "可以确认售后")
     private Boolean confirm = false;
 
-    @ApiModelProperty(value = "可以回寄物流")
+    @Schema(description = "可以回寄物流")
     private Boolean returnGoods = false;
 
-    @ApiModelProperty(value = "可以收货")
+    @Schema(description = "可以收货")
     private Boolean rog = false;
 
-    @ApiModelProperty(value = "可以退款")
+    @Schema(description = "可以退款")
     private Boolean refund = false;
 
-    @ApiModelProperty(value = "买家确认收货")
+    @Schema(description = "买家确认收货")
     private Boolean buyerConfirm;
 
-    @ApiModelProperty(value = "可以取消")
+    @Schema(description = "可以取消")
     private Boolean cancel;
 
 
@@ -64,7 +64,7 @@ public class AfterSaleAllowOperation {
 
         //待平台线下退款
         if (serviceStatus.equals(AfterSaleStatusEnum.APPLY.name())
-                ||serviceStatus.equals(AfterSaleStatusEnum.PASS.name())) {
+                || serviceStatus.equals(AfterSaleStatusEnum.PASS.name())) {
             cancel = true;
         }
 

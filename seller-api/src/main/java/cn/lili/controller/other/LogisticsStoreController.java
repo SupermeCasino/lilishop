@@ -11,16 +11,14 @@ import cn.lili.modules.member.service.StoreLogisticsService;
 import cn.lili.modules.store.entity.dos.StoreLogistics;
 import cn.lili.modules.store.entity.dto.StoreLogisticsCustomerDTO;
 import cn.lili.modules.system.entity.dos.Setting;
-import cn.lili.modules.system.entity.dto.ImSetting;
 import cn.lili.modules.system.entity.dto.LogisticsSetting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.entity.vo.StoreLogisticsVO;
 import cn.lili.modules.system.service.SettingService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +32,7 @@ import java.util.Objects;
  * @since 2020/11/22 14:23
  */
 @RestController
-@Api(tags = "店铺端,物流公司接口")
+@Tag(name = "店铺端,物流公司接口")
 @RequestMapping("/store/other/logistics")
 public class LogisticsStoreController {
 
@@ -47,7 +45,7 @@ public class LogisticsStoreController {
     @Autowired
     private SettingService settingService;
 
-    @ApiOperation(value = "获取商家物流公司列表，如果已选择则checked有值")
+    @Operation(description = "获取商家物流公司列表，如果已选择则checked有值")
     @GetMapping
     public ResultMessage<List<StoreLogisticsVO>> get() {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -59,17 +57,15 @@ public class LogisticsStoreController {
         return ResultUtil.data(storeLogistics);
     }
 
-    @ApiOperation(value = "获取商家已选择物流公司列表")
+    @Operation(description = "获取商家已选择物流公司列表")
     @GetMapping("/getChecked")
     public ResultMessage<List<StoreLogisticsVO>> getChecked() {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         return ResultUtil.data(storeLogisticsService.getStoreSelectedLogistics(storeId));
     }
 
-    @ApiOperation(value = "选择物流公司")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司ID", required = true, paramType = "path"),
-    })
+    @Operation(description = "选择物流公司")
+    @Parameter(name = "logisticsId", description = "物流公司ID", required = true)
     @PostMapping("/{logisticsId}")
     public ResultMessage<StoreLogistics> checked(@PathVariable String logisticsId,@RequestBody StoreLogisticsCustomerDTO storeLogisticsCustomerDTO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -77,40 +73,38 @@ public class LogisticsStoreController {
     }
 
 
-    @ApiOperation(value = "取消选择物流公司")
-    @ApiImplicitParam(name = "id", value = "物流公司ID", required = true, paramType = "path")
-    @DeleteMapping(value = "/{id}")
+    @Operation(description = "取消选择物流公司")
+    @Parameter(name = "id", description = "物流公司ID", required = true)
+    @DeleteMapping("/{id}")
     public ResultMessage<Object> cancel(@PathVariable String id) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         boolean remove = storeLogisticsService.remove(new LambdaQueryWrapper<StoreLogistics>().eq(StoreLogistics::getLogisticsId, id).eq(StoreLogistics::getStoreId, storeId));
         return ResultUtil.data(remove);
     }
 
-    @ApiOperation(value = "修改电子面单参数")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logisticsId", value = "物流公司ID", required = true, paramType = "path"),
-    })
+    @Operation(description = "修改电子面单参数")
+    @Parameter(name = "logisticsId", description = "物流公司ID", required = true)
     @PutMapping("/{logisticsId}/updateStoreLogistics")
     public ResultMessage<StoreLogistics> updateStoreLogistics(@PathVariable String logisticsId,StoreLogisticsCustomerDTO storeLogisticsCustomerDTO){
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         return ResultUtil.data(storeLogisticsService.update(logisticsId, storeId,storeLogisticsCustomerDTO));
     }
 
-    @ApiOperation(value = "获取商家已选择物流公司并且使用电子面单列表")
+    @Operation(description = "获取商家已选择物流公司并且使用电子面单列表")
     @GetMapping("/getCheckedFaceSheet")
     public ResultMessage<List<StoreLogisticsVO>> getCheckedFaceSheet() {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         return ResultUtil.data(storeLogisticsService.getStoreSelectedLogisticsUseFaceSheet(storeId));
     }
 
-    @ApiOperation(value = "获取店铺-物流公司详细信息")
-    @ApiImplicitParam(name = "logisticsId", value = "物流公司ID", required = true, paramType = "path")
+    @Operation(description = "获取店铺-物流公司详细信息")
+    @Parameter(name = "logisticsId", description = "物流公司ID", required = true)
     @GetMapping("/{logisticsId}/getStoreLogistics")
     public ResultMessage<StoreLogistics> getStoreLogistics(@PathVariable String logisticsId){
         return ResultUtil.data(storeLogisticsService.getStoreLogisticsInfo(logisticsId));
     }
 
-    @ApiOperation(value = "获取IM接口前缀")
+    @Operation(description = "获取IM接口前缀")
     @GetMapping("/setting")
     public ResultMessage<String> getUrl() {
         String logisticsType;

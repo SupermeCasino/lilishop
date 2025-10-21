@@ -22,15 +22,15 @@ import java.util.List;
 @Component
 public class TimedTaskJobHandler {
 
-    @Autowired(required = false)
+    @Autowired
     private List<EveryMinuteExecute> everyMinuteExecutes;
 
 
-    @Autowired(required = false)
+    @Autowired
     private List<EveryHourExecute> everyHourExecutes;
 
 
-    @Autowired(required = false)
+    @Autowired
     private List<EveryDayExecute> everyDayExecutes;
 
     /**

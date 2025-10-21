@@ -1,7 +1,7 @@
 package cn.lili.modules.statistics.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Date;
@@ -17,16 +17,16 @@ import java.util.Objects;
 public class PlatformViewVO {
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "展示时间")
+    @Schema(description = "展示时间")
     private Date date;
 
-    @ApiModelProperty(value = "pv数量")
+    @Schema(description = "pv数量")
     private Long pvNum;
 
-    @ApiModelProperty(value = "uv数量")
+    @Schema(description = "uv数量")
     private Long uvNum;
 
-    @ApiModelProperty(value = "店铺id")
+    @Schema(description = "店铺id")
     private String storeId = "-1";
 
 
@@ -37,14 +37,14 @@ public class PlatformViewVO {
     }
 
     public Long getPvNum() {
-        if(Objects.isNull(pvNum)){
+        if (Objects.isNull(pvNum)) {
             return 0L;
         }
         return pvNum;
     }
 
     public Long getUvNum() {
-        if(Objects.isNull(uvNum)){
+        if (Objects.isNull(uvNum)) {
             return 0L;
         }
         return uvNum;

@@ -1,7 +1,7 @@
 package cn.lili.modules.order.order.entity.dos;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.utils.SnowFlake;
@@ -16,10 +16,10 @@ import cn.lili.modules.order.order.entity.enums.RefundStatusEnum;
 import cn.lili.modules.promotion.entity.vos.PromotionSkuVO;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.stream.Collectors;
@@ -32,101 +32,102 @@ import java.util.stream.Collectors;
  */
 @Data
 @TableName("li_order_item")
-@ApiModel(value = "子订单")
+@Schema(description = "子订单")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OrderItem extends BaseEntity {
 
     private static final long serialVersionUID = 2108971190191410182L;
 
-    @ApiModelProperty(value = "订单编号")
+    @Schema(description = "订单编号")
     private String orderSn;
 
-    @ApiModelProperty(value = "子订单编号")
+    @Schema(description = "子订单编号")
     private String sn;
 
-    @ApiModelProperty(value = "单价")
+    @Schema(description = "单价")
     private Double unitPrice;
 
-    @ApiModelProperty(value = "小记")
+    @Schema(description = "小记")
     private Double subTotal;
 
-    @ApiModelProperty(value = "商品ID")
+    @Schema(description = "商品ID")
     private String goodsId;
 
-    @ApiModelProperty(value = "货品ID")
+    @Schema(description = "货品ID")
     private String skuId;
 
-    @ApiModelProperty(value = "销售量")
+    @Schema(description = "销售量")
     private Integer num;
 
-    @ApiModelProperty(value = "交易编号")
+    @Schema(description = "交易编号")
     private String tradeSn;
 
-    @ApiModelProperty(value = "图片")
+    @Schema(description = "图片")
     private String image;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "分类ID")
+    @Schema(description = "分类ID")
     private String categoryId;
 
-    @ApiModelProperty(value = "快照id")
+    @Schema(description = "快照id")
     private String snapshotId;
 
-    @ApiModelProperty(value = "规格json")
+    @Schema(description = "规格json")
     private String specs;
 
-    @ApiModelProperty(value = "促销类型")
+    @Schema(description = "促销类型")
     private String promotionType;
 
-    @ApiModelProperty(value = "促销id")
+    @Schema(description = "促销id")
     private String promotionId;
 
-    @ApiModelProperty(value = "销售金额")
+    @Schema(description = "销售金额")
     private Double goodsPrice;
 
-    @ApiModelProperty(value = "实际金额")
+    @Schema(description = "实际金额")
     private Double flowPrice;
 
     /**
      * @see CommentStatusEnum
      */
-    @ApiModelProperty(value = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
+    @Schema(description = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
     private String commentStatus;
 
     /**
      * @see OrderItemAfterSaleStatusEnum
      */
-    @ApiModelProperty(value = "售后状态")
+    @Schema(description = "售后状态")
     private String afterSaleStatus;
 
-    @ApiModelProperty(value = "价格详情")
+    @Schema(description = "价格详情")
     private String priceDetail;
 
     /**
      * @see OrderComplaintStatusEnum
      */
-    @ApiModelProperty(value = "投诉状态")
+    @Schema(description = "投诉状态")
     private String complainStatus;
 
-    @ApiModelProperty(value = "交易投诉id")
+    @Schema(description = "交易投诉id")
     private String complainId;
 
-    @ApiModelProperty(value = "退货商品数量")
+    @Schema(description = "退货商品数量")
     private Integer returnGoodsNumber;
 
     /**
      * @see cn.lili.modules.order.order.entity.enums.RefundStatusEnum
      */
-    @ApiModelProperty(value = "退款状态")
+    @Schema(description = "退款状态")
     private String isRefund;
 
-    @ApiModelProperty(value = "退款金额")
+    @Schema(description = "退款金额")
     private Double refundPrice;
 
-    @ApiModelProperty(value = "已发货数量")
+    @Schema(description = "已发货数量")
     private Integer deliverNumber;
 
     public Integer getDeliverNumber() {
@@ -181,11 +182,11 @@ public class OrderItem extends BaseEntity {
     }
 
     public PriceDetailDTO getPriceDetailDTO() {
-        return JSONUtil.toBean(priceDetail, PriceDetailDTO.class);
+        return JSON.parseObject(priceDetail, PriceDetailDTO.class);
     }
 
     public void setPriceDetailDTO(PriceDetailDTO priceDetail) {
-        this.priceDetail = JSONUtil.toJsonStr(priceDetail);
+        this.priceDetail = JSON.toJSONString(priceDetail);
     }
 
     public String getAfterSaleStatus() {

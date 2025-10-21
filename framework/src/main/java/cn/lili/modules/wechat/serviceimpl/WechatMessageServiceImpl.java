@@ -1,8 +1,6 @@
 package cn.lili.modules.wechat.serviceimpl;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
@@ -14,6 +12,8 @@ import cn.lili.modules.wechat.mapper.WechatMessageMapper;
 import cn.lili.modules.wechat.service.WechatMessageService;
 import cn.lili.modules.wechat.util.WechatAccessTokenUtil;
 import cn.lili.modules.wechat.util.WechatMessageUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -76,15 +76,20 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
             log.info("设置模版请求{},设置行业响应：{}", setIndustryParams, context);
             //获取已有模版，删除
             context = HttpUtil.get(allMsgTpl + accessToken);
-            JSONObject jsonObject = new JSONObject(context);
+            JSONObject jsonObject = JSON.parseObject(context);
 
 
             log.info("获取全部模版：{}", context);
             WechatMessageUtil.wechatHandler(jsonObject);
             List<String> oldList = new ArrayList<>();
             if (jsonObject.containsKey("template_list")) {
+
                 jsonObject.getJSONArray("template_list").forEach(item -> {
-                    oldList.add(JSONUtil.parseObj(item).getStr("template_id"));
+                    if (item instanceof JSONObject) {
+                        oldList.add(((JSONObject) item).getString("template_id"));
+                    } else {
+                        oldList.add(JSON.parseObject(JSON.toJSONString(item)).getString("template_id"));
+                    }
                 });
             }
 /*            if (oldList.size() != 0) {
@@ -104,13 +109,12 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
                 params.put("template_id_short", tplData.getMsgId());
                 String message = HttpUtils.doPostWithJson(addTpl + accessToken, params);
                 log.info("添加模版请求:{},添加模版响应：{}", params, message);
-
-                JSONObject tplContent = new JSONObject(message);
+                JSONObject tplContent = JSON.parseObject(message);
                 WechatMessageUtil.wechatHandler(tplContent);
 
                 //如果包含模版id则进行操作，否则抛出异常
                 if (tplContent.containsKey("template_id")) {
-                    wechatMessage.setCode(tplContent.getStr("template_id"));
+                    wechatMessage.setCode(tplContent.getString("template_id"));
                 } else {
                     throw new ServiceException(ResultCode.WECHAT_MP_MESSAGE_TMPL_ERROR);
                 }

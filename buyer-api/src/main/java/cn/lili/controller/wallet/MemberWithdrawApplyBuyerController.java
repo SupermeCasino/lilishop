@@ -9,8 +9,9 @@ import cn.lili.modules.wallet.entity.dos.MemberWithdrawApply;
 import cn.lili.modules.wallet.entity.vo.MemberWithdrawApplyQueryVO;
 import cn.lili.modules.wallet.service.MemberWithdrawApplyService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "买家端,余额提现记录接口")
+@Tag(name = "买家端,余额提现记录接口")
 @RequestMapping("/buyer/member/withdrawApply")
 public class MemberWithdrawApplyBuyerController {
     @Autowired
     private MemberWithdrawApplyService memberWithdrawApplyService;
 
 
-    @ApiOperation(value = "分页获取提现记录")
+    @Operation(description = "分页获取提现记录")
+    @Parameter(name = "page", description = "分页参数")
+    @Parameter(name = "memberWithdrawApplyQueryVO", description = "查询参数")
     @GetMapping
     public ResultMessage<IPage<MemberWithdrawApply>> getByPage(PageVO page, MemberWithdrawApplyQueryVO memberWithdrawApplyQueryVO) {
         memberWithdrawApplyQueryVO.setMemberId(UserContext.getCurrentUser().getId());

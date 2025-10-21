@@ -13,10 +13,10 @@ import cn.lili.modules.connect.entity.dto.ConnectAuthUser;
 import cn.lili.modules.connect.entity.enums.AuthResponseStatus;
 import cn.lili.modules.connect.entity.enums.AuthUserGender;
 import cn.lili.modules.connect.entity.enums.ConnectEnum;
-import cn.lili.modules.connect.entity.enums.SourceEnum;
 import cn.lili.modules.connect.exception.AuthException;
 import cn.lili.modules.connect.util.GlobalAuthUtils;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 
 /**
  * 微信开放平台登录
@@ -45,7 +45,7 @@ public class BaseAuthWeChatRequest extends BaseAuthRequest {
         String openId = authToken.getOpenId();
 
         String response = doGetUserInfo(authToken);
-        JSONObject object = JSONObject.parseObject(response);
+        JSONObject object = JSON.parseObject(response);
 
         this.checkResponse(object);
 
@@ -67,6 +67,7 @@ public class BaseAuthWeChatRequest extends BaseAuthRequest {
                 .source(ConnectEnum.WECHAT)
                 .type(ClientTypeEnum.H5)
                 .build();
+
     }
 
     @Override
@@ -86,6 +87,7 @@ public class BaseAuthWeChatRequest extends BaseAuthRequest {
         if (object.containsKey("errcode")) {
             throw new AuthException(object.getIntValue("errcode"), object.getString("errmsg"));
         }
+
     }
 
     /**
@@ -96,7 +98,7 @@ public class BaseAuthWeChatRequest extends BaseAuthRequest {
      */
     private AuthToken getToken(String accessTokenUrl) {
         String response = new HttpUtils(config.getHttpConfig()).get(accessTokenUrl);
-        JSONObject accessTokenObject = JSONObject.parseObject(response);
+        JSONObject accessTokenObject = JSON.parseObject(response);
 
         this.checkResponse(accessTokenObject);
 
@@ -106,6 +108,7 @@ public class BaseAuthWeChatRequest extends BaseAuthRequest {
                 .expireIn(accessTokenObject.getIntValue("expires_in"))
                 .openId(accessTokenObject.getString("openid"))
                 .build();
+
     }
 
     /**

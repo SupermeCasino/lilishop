@@ -1,8 +1,9 @@
 package cn.lili.modules.goods.entity.vos;
 
 import cn.lili.modules.goods.entity.dos.Commodity;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 直播商品VO
@@ -11,11 +12,12 @@ import lombok.Data;
  * @since 2021/5/26 6:09 下午
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class CommodityVO extends Commodity {
 
-    @ApiModelProperty(value = "SKU库存")
+    @Schema(description = "SKU库存")
     private Integer quantity;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(description = "店铺名称")
     private String storeName;
 }

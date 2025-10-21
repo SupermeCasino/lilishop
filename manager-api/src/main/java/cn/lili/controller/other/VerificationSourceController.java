@@ -10,10 +10,11 @@ import cn.lili.modules.verification.service.VerificationService;
 import cn.lili.modules.verification.service.VerificationSourceService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Parameter;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * @since 2020/12/7 11:33
  */
 @RestController
-@Api(tags = "管理端,验证码资源维护接口")
+@Tag(name = "管理端,验证码资源维护接口")
 @RequestMapping("/manager/other/verificationSource")
 public class VerificationSourceController {
 
@@ -35,8 +36,8 @@ public class VerificationSourceController {
     @Autowired
     private VerificationService verificationService;
 
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "查看验证码资源维护详情")
+    @GetMapping("/{id}")
+    @Operation(summary = "查看验证码资源维护详情")
     public ResultMessage<VerificationSource> get(@PathVariable String id) {
 
         VerificationSource verificationSource = verificationSourceService.getById(id);
@@ -44,7 +45,7 @@ public class VerificationSourceController {
     }
 
     @GetMapping
-    @ApiOperation(value = "分页获取验证码资源维护")
+    @Operation(summary = "分页获取验证码资源维护")
     public ResultMessage<IPage<VerificationSource>> getByPage(VerificationSource entity,
                                                               SearchVO searchVo,
                                                               PageVO page) {
@@ -53,7 +54,8 @@ public class VerificationSourceController {
     }
 
     @PostMapping
-    @ApiOperation(value = "新增验证码资源维护")
+    @Operation(summary = "新增验证码资源维护")
+    @Parameter(description = "验证码资源信息", required = true)
     @DemoSite
     public ResultMessage<VerificationSource> save(VerificationSource verificationSource) {
 
@@ -64,9 +66,10 @@ public class VerificationSourceController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "更新验证码资源维护")
+    @Operation(summary = "更新验证码资源维护")
+
     @DemoSite
-    public ResultMessage<VerificationSource> update(@PathVariable String id, VerificationSource verificationSource) {
+    public ResultMessage<VerificationSource> update(@Parameter(description = "验证码资源ID", required = true) @PathVariable String id, VerificationSource verificationSource) {
         verificationSource.setId(id);
         verificationService.checkCreateVerification(verificationSource.getType(), verificationSource.getResource());
         verificationSourceService.updateById(verificationSource);
@@ -74,10 +77,11 @@ public class VerificationSourceController {
         return ResultUtil.data(verificationSource);
     }
 
-    @DeleteMapping(value = "/{ids}")
-    @ApiOperation(value = "删除验证码资源维护")
+    @DeleteMapping("/{ids}")
+    @Parameter(description = "验证码资源ID列表", required = true)
+    @Operation(summary = "删除验证码资源维护")
     @DemoSite
-    public ResultMessage<Object> delAllByIds(@PathVariable List ids) {
+    public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
 
         verificationSourceService.removeByIds(ids);
         verificationSourceService.initCache();

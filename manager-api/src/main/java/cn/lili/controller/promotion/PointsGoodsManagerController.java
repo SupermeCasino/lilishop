@@ -11,8 +11,9 @@ import cn.lili.modules.promotion.entity.dto.search.PointsGoodsSearchParams;
 import cn.lili.modules.promotion.entity.vos.PointsGoodsVO;
 import cn.lili.modules.promotion.service.PointsGoodsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +28,15 @@ import java.util.Objects;
  * @since 2021/1/14
  **/
 @RestController
-@Api(tags = "管理端,积分商品接口")
+@Tag(name = "管理端,积分商品接口")
 @RequestMapping("/manager/promotion/pointsGoods")
 public class PointsGoodsManagerController {
     @Autowired
     private PointsGoodsService pointsGoodsService;
 
+    @Operation(summary = "添加积分商品")
+    @Parameter(name = "pointsGoodsList", description = "积分商品列表", required = true)
     @PostMapping(consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "添加积分商品")
     public ResultMessage<Object> addPointsGoods(@RequestBody List<PointsGoods> pointsGoodsList) {
         if (pointsGoodsService.savePointsGoodsBatch(pointsGoodsList)) {
             return ResultUtil.success();
@@ -42,16 +44,20 @@ public class PointsGoodsManagerController {
         return ResultUtil.error(ResultCode.POINT_GOODS_ERROR);
     }
 
+    @Operation(summary = "修改积分商品")
+    @Parameter(name = "pointsGoods", description = "积分商品VO", required = true)
     @PutMapping(consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "修改积分商品")
     public ResultMessage<Object> updatePointsGoods(@RequestBody PointsGoodsVO pointsGoods) {
         Objects.requireNonNull(UserContext.getCurrentUser());
         pointsGoodsService.updatePromotions(pointsGoods);
         return ResultUtil.success();
     }
 
+    @Operation(summary = "修改积分商品状态")
+    @Parameter(name = "ids", description = "积分商品ID列表", required = true)
+    @Parameter(name = "startTime", description = "开始时间", required = true)
+    @Parameter(name = "endTime", description = "结束时间", required = true)
     @PutMapping("/status/{ids}")
-    @ApiOperation(value = "修改积分商品状态")
     public ResultMessage<Object> updatePointsGoodsStatus(@PathVariable String ids, Long startTime, Long endTime) {
         if (pointsGoodsService.updateStatus(Arrays.asList(ids.split(",")), startTime, endTime)) {
             return ResultUtil.success();
@@ -59,8 +65,9 @@ public class PointsGoodsManagerController {
         return ResultUtil.error(ResultCode.POINT_GOODS_ERROR);
     }
 
+    @Operation(summary = "删除积分商品")
+    @Parameter(name = "ids", description = "积分商品ID列表", required = true)
     @DeleteMapping("/{ids}")
-    @ApiOperation(value = "删除积分商品")
     public ResultMessage<Object> delete(@PathVariable String ids) {
         if (pointsGoodsService.removePromotions(Arrays.asList(ids.split(",")))) {
             return ResultUtil.success();
@@ -68,15 +75,18 @@ public class PointsGoodsManagerController {
         throw new ServiceException(ResultCode.POINT_GOODS_ERROR);
     }
 
+    @Operation(summary = "分页获取积分商品")
+    @Parameter(name = "searchParams", description = "积分商品查询参数", required = true)
+    @Parameter(name = "page", description = "分页参数", required = true)
     @GetMapping
-    @ApiOperation(value = "分页获取积分商品")
     public ResultMessage<IPage<PointsGoods>> getPointsGoodsPage(PointsGoodsSearchParams searchParams, PageVO page) {
         IPage<PointsGoods> pointsGoodsByPage = pointsGoodsService.pageFindAll(searchParams, page);
         return ResultUtil.data(pointsGoodsByPage);
     }
 
+    @Operation(summary = "获取积分商品详情")
+    @Parameter(name = "id", description = "积分商品ID", required = true)
     @GetMapping("/{id}")
-    @ApiOperation(value = "获取积分商品详情")
     public ResultMessage<Object> getPointsGoodsDetail(@PathVariable String id) {
         PointsGoodsVO pointsGoodsDetail = pointsGoodsService.getPointsGoodsDetail(id);
         return ResultUtil.data(pointsGoodsDetail);

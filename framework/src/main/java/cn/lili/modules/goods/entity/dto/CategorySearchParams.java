@@ -1,7 +1,7 @@
 package cn.lili.modules.goods.entity.dto;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,28 +15,28 @@ import java.math.BigDecimal;
 @Data
 public class CategorySearchParams {
 
-    @ApiModelProperty(value = "分类名称")
+    @Schema(description = "分类名称")
     private String name;
 
-    @ApiModelProperty(value = "父id")
+    @Schema(description = "父id")
     private String parentId;
 
-    @ApiModelProperty(value = "层级")
+    @Schema(description = "层级")
     private Integer level;
 
-    @ApiModelProperty(value = "排序值")
+    @Schema(description = "排序值")
     private BigDecimal sortOrder;
 
-    @ApiModelProperty(value = "佣金比例")
+    @Schema(description = "佣金比例")
     private BigDecimal commissionRate;
 
-    @ApiModelProperty(value = "父节点名称")
+    @Schema(description = "父节点名称")
     private String parentTitle;
 
-    @ApiModelProperty(value = "是否禁用")
+    @Schema(description = "是否禁用")
     private Boolean deleteFlag;
 
-    public <T > QueryWrapper<T> queryWrapper() {
+    public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(name != null, "name", name);
         queryWrapper.like(parentTitle != null, "parent_title", parentTitle);

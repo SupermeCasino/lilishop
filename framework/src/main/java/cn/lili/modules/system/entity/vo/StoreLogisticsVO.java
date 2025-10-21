@@ -1,9 +1,9 @@
 package cn.lili.modules.system.entity.vo;
 
 import cn.lili.mybatis.BaseEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 物流公司设置
@@ -13,18 +13,19 @@ import lombok.Data;
  */
 
 @Data
-@ApiModel(value = "物流公司VO")
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "物流公司VO")
 public class StoreLogisticsVO extends BaseEntity {
 
-    @ApiModelProperty(value = "物流公司ID")
+    @Schema(description = "物流公司ID")
     private String logisticsId;
 
-    @ApiModelProperty(value = "物流公司名称")
+    @Schema(description = "物流公司名称")
     private String name;
 
-    @ApiModelProperty(value = "已选择", notes = "如果已选择则有值，没有选择则无值")
+    @Schema(description = "已选择")
     private String selected;
 
-    @ApiModelProperty(value = "是否使用电子面单")
+    @Schema(description = "是否使用电子面单")
     private Boolean faceSheetFlag;
 }

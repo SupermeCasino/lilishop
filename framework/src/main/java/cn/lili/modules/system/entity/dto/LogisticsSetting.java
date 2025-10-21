@@ -1,6 +1,5 @@
 package cn.lili.modules.system.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import cn.lili.modules.logistics.entity.enums.LogisticsEnum;
 import lombok.Data;
 
@@ -18,6 +17,7 @@ public class LogisticsSetting implements Serializable {
 
     /**
      * 快递查询类型
+     *
      * @see LogisticsEnum
      */
     private String type;

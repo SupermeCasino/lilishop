@@ -3,9 +3,10 @@ package cn.lili.modules.file.entity.dto;
 import cn.lili.common.utils.DateUtil;
 import cn.lili.common.vo.PageVO;
 import com.alipay.api.internal.util.StringUtils;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
@@ -20,33 +21,34 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class FileOwnerDTO extends PageVO {
 
-    @ApiModelProperty(value = "拥有者id")
+    @Schema(description = "拥有者id")
     private String ownerId;
 
-    @ApiModelProperty(value = "拥有者名称")
+    @Schema(description = "拥有者名称")
     private String ownerName;
 
-    @ApiModelProperty(value = "用户类型")
+    @Schema(description = "用户类型")
     private String userEnums;
 
-    @ApiModelProperty(value = "原文件名")
+    @Schema(description = "原文件名")
     private String name;
 
-    @ApiModelProperty(value = "存储文件名")
+    @Schema(description = "存储文件名")
     private String fileKey;
 
-    @ApiModelProperty(value = "文件类型")
+    @Schema(description = "文件类型")
     private String fileType;
 
-    @ApiModelProperty(value = "文件夹ID")
+    @Schema(description = "文件夹ID")
     private String fileDirectoryId;
 
-    @ApiModelProperty(value = "起始日期")
+    @Schema(description = "起始日期")
     private String startDate;
 
-    @ApiModelProperty(value = "结束日期")
+    @Schema(description = "结束日期")
     private String endDate;
 
     public Date getConvertStartDate() {

@@ -8,10 +8,9 @@ import cn.lili.modules.goods.entity.vos.CategoryVO;
 import cn.lili.modules.goods.service.CategoryBrandService;
 import cn.lili.modules.goods.service.CategoryService;
 import cn.lili.modules.store.service.StoreDetailService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,7 @@ import java.util.Objects;
  * @since 2021/2/20 2:26 下午
  */
 @RestController
-@Api(tags = "店铺端,商品分类接口")
+@Tag(name = "店铺端,商品分类接口")
 @RequestMapping("/store/goods/category")
 @CacheConfig(cacheNames = "category")
 public class CategoryStoreController {
@@ -50,8 +49,8 @@ public class CategoryStoreController {
     @Autowired
     private StoreDetailService storeDetailService;
 
-    @ApiOperation(value = "获取店铺经营的分类")
-    @GetMapping(value = "/all")
+    @Operation(summary = "获取店铺经营的分类")
+    @GetMapping("/all")
     public ResultMessage<List<CategoryVO>> getListAll() {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         //获取店铺经营范围
@@ -59,11 +58,9 @@ public class CategoryStoreController {
         return ResultUtil.data(this.categoryService.getStoreCategory(goodsManagementCategory.split(",")));
     }
 
-    @ApiOperation(value = "获取所选分类关联的品牌信息")
-    @GetMapping(value = "/{categoryId}/brands")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "categoryId", value = "分类id", required = true, paramType = "path"),
-    })
+    @Operation(summary = "获取所选分类关联的品牌信息")
+    @GetMapping("/{categoryId}/brands")
+    @Parameter(name = "categoryId", description = "分类id", required = true)
     public List<CategoryBrandVO> queryBrands(@PathVariable String categoryId) {
         return this.categoryBrandService.getCategoryBrandList(categoryId);
     }

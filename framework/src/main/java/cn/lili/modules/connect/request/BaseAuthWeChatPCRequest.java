@@ -13,9 +13,9 @@ import cn.lili.modules.connect.entity.dto.ConnectAuthUser;
 import cn.lili.modules.connect.entity.enums.AuthResponseStatus;
 import cn.lili.modules.connect.entity.enums.AuthUserGender;
 import cn.lili.modules.connect.entity.enums.ConnectEnum;
-import cn.lili.modules.connect.entity.enums.SourceEnum;
 import cn.lili.modules.connect.exception.AuthException;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 
 /**
  * 微信公众平台登录
@@ -43,7 +43,7 @@ public class BaseAuthWeChatPCRequest extends BaseAuthRequest {
     @Override
     protected ConnectAuthUser getUserInfo(AuthToken authToken) {
         String response = doGetUserInfo(authToken);
-        JSONObject object = JSONObject.parseObject(response);
+        JSONObject object = JSON.parseObject(response);
 
         this.checkResponse(object);
 
@@ -94,7 +94,7 @@ public class BaseAuthWeChatPCRequest extends BaseAuthRequest {
      */
     private AuthToken getToken(String accessTokenUrl) {
         String response = new HttpUtils(config.getHttpConfig()).get(accessTokenUrl);
-        JSONObject accessTokenObject = JSONObject.parseObject(response);
+        JSONObject accessTokenObject = JSON.parseObject(response);
 
         this.checkResponse(accessTokenObject);
 

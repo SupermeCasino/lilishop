@@ -13,16 +13,16 @@ import cn.lili.modules.connect.request.AuthRequest;
 import cn.lili.modules.connect.service.ConnectService;
 import cn.lili.modules.connect.util.ConnectUtil;
 import cn.lili.modules.member.service.MemberService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-@Api(tags = "买家端,web联合登录")
+@Tag(name = "买家端,web联合登录")
 @RequestMapping("/buyer/passport/connect/connect")
 public class ConnectBuyerWebController {
 
@@ -40,17 +40,13 @@ public class ConnectBuyerWebController {
     private ConnectService connectService;
 
     @Autowired
-    private MemberService memberService;
-
-    @Autowired
     private ConnectUtil connectUtil;
 
 
     @GetMapping("/login/web/{type}")
-    @ApiOperation(value = "WEB信任登录授权,包含PC、WAP")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "登录方式:QQ,微信,微信_PC",
-                    allowableValues = "QQ,WECHAT,WECHAT_PC", paramType = "path")
+    @Operation(summary = "WEB信任登录授权,包含PC、WAP")
+    @Parameters({
+            @Parameter(name = "type", description = "登录方式:QQ,微信,微信_PC")
     })
     public ResultMessage<String> webAuthorize(@PathVariable String type, HttpServletResponse response) throws IOException {
         AuthRequest authRequest = connectUtil.getAuthRequest(type);
@@ -60,13 +56,13 @@ public class ConnectBuyerWebController {
     }
 
 
-    @ApiOperation(value = "信任登录统一回调地址", hidden = true)
+    @Operation(summary = "信任登录统一回调地址", hidden = true)
     @GetMapping("/callback/{type}")
     public void callBack(@PathVariable String type, AuthCallback callback, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         connectUtil.callback(type, callback, httpServletRequest, httpServletResponse);
     }
 
-    @ApiOperation(value = "信任登录响应结果获取")
+    @Operation(summary = "信任登录响应结果获取")
     @GetMapping("/result")
     public ResultMessage<Object> callBackResult(String state) {
         if (state == null) {
@@ -75,7 +71,7 @@ public class ConnectBuyerWebController {
         return connectUtil.getResult(state);
     }
 
-    @ApiOperation(value = "APP-unionID登录")
+    @Operation(summary = "APP-unionID登录")
     @PostMapping("/app/login")
     public ResultMessage<Token> unionLogin(@RequestBody ConnectAuthUser authUser, @RequestHeader("uuid") String uuid) {
         try {

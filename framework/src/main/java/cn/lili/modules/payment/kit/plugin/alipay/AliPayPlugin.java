@@ -25,7 +25,8 @@ import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
 import cn.lili.modules.wallet.entity.dos.MemberWithdrawApply;
 import cn.lili.modules.wallet.entity.dto.TransferResultDTO;
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONUtil;
+import cn.hutool.json.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.*;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -35,8 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -170,8 +171,8 @@ public class AliPayPlugin implements Payment {
                     AliPayRequest.tradePrecreatePayToResponse(payModel, notifyUrl(alipayPaymentSetting.getCallbackUrl(), PaymentMethodEnum.ALIPAY)).getBody();
 
             log.info("支付宝扫码交互返回：{}", resultStr);
-            JSONObject jsonObject = JSONObject.parseObject(resultStr);
-            return ResultUtil.data(jsonObject.getJSONObject("alipay_trade_precreate_response").getString("qr_code"));
+            JSONObject jsonObject = JSONUtil.parseObj(resultStr);
+            return ResultUtil.data(jsonObject.getJSONObject("alipay_trade_precreate_response").getStr("qr_code"));
         } catch (Exception e) {
             log.error("支付业务异常：", e);
             throw new ServiceException(ResultCode.PAY_ERROR);

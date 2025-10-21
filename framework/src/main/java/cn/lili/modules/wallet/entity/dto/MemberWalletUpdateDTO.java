@@ -1,6 +1,6 @@
 package cn.lili.modules.wallet.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,16 +15,16 @@ import lombok.Data;
 @AllArgsConstructor
 public class MemberWalletUpdateDTO {
 
-    @ApiModelProperty(value = "变动金额")
+    @Schema(description = "变动金额")
     private Double money;
-    @ApiModelProperty(value = "变动会员id")
+    @Schema(description = "变动会员id")
     private String memberId;
-    @ApiModelProperty(value = "日志详情")
+    @Schema(description = "日志详情")
     private String detail;
 
     /**
      * @see cn.lili.modules.wallet.entity.enums.DepositServiceTypeEnum
      */
-    @ApiModelProperty(value = "变动业务原因")
+    @Schema(description = "变动业务原因")
     private String serviceType;
 }

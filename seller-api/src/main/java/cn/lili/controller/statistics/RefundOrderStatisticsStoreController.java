@@ -8,8 +8,9 @@ import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.RefundOrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.RefundOrderStatisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * @author Bulbasaur
  * @since 2020/12/9 19:04
  */
-@Api(tags = "店铺端,退款统计接口")
+@Tag(name = "店铺端,退款统计接口")
 @RestController
 @RequestMapping("/store/statistics/refundOrder")
 public class RefundOrderStatisticsStoreController {
@@ -31,7 +32,9 @@ public class RefundOrderStatisticsStoreController {
     @Autowired
     private RefundOrderStatisticsService refundOrderStatisticsService;
 
-    @ApiOperation(value = "获取退款统计列表")
+    @Operation(description = "获取退款统计列表")
+    @Parameter(name = "pageVO", description = "分页参数", required = true)
+    @Parameter(name = "statisticsQueryParam", description = "退款统计查询参数", required = true)
     @GetMapping("/getByPage")
     public ResultMessage<IPage<RefundOrderStatisticsDataVO>> getByPage(PageVO pageVO, StatisticsQueryParam statisticsQueryParam) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
@@ -39,7 +42,8 @@ public class RefundOrderStatisticsStoreController {
         return ResultUtil.data(refundOrderStatisticsService.getRefundOrderStatisticsData(pageVO, statisticsQueryParam));
     }
 
-    @ApiOperation(value = "获取退款统计金额")
+    @Operation(description = "获取退款统计金额")
+    @Parameter(name = "statisticsQueryParam", description = "退款统计查询参数", required = true)
     @GetMapping("/getPrice")
     public ResultMessage<Object> getPrice(StatisticsQueryParam statisticsQueryParam) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();

@@ -18,16 +18,15 @@ import cn.lili.modules.order.order.service.OrderPackageService;
 import cn.lili.modules.order.order.service.OrderService;
 import cn.lili.modules.system.entity.vo.Traces;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -37,7 +36,7 @@ import java.util.Objects;
  * @since 2020/11/16 10:08 下午
  */
 @RestController
-@Api(tags = "买家端,订单接口")
+@Tag(name = "买家端,订单接口")
 @RequestMapping("/buyer/order/order")
 public class OrderBuyerController {
 
@@ -50,7 +49,7 @@ public class OrderBuyerController {
     @Autowired
     private OrderPackageService orderPackageService;
 
-    @ApiOperation(value = "查询会员订单列表")
+    @Operation(summary = "查询会员订单列表")
     @GetMapping
     public ResultMessage<IPage<OrderSimpleVO>> queryMineOrder(OrderSearchParams orderSearchParams) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -58,11 +57,11 @@ public class OrderBuyerController {
         return ResultUtil.data(orderService.queryByParams(orderSearchParams));
     }
 
-    @ApiOperation(value = "订单明细")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, paramType = "path")
+    @Operation(summary = "订单明细")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @GetMapping(value = "/{orderSn}")
+    @GetMapping("/{orderSn}")
     public ResultMessage<OrderDetailVO> detail(@NotNull(message = "订单编号不能为空") @PathVariable("orderSn") String orderSn) {
         OrderDetailVO orderDetailVO = orderService.queryDetail(orderSn);
         OperationalJudgment.judgment(orderDetailVO.getOrder());
@@ -70,11 +69,11 @@ public class OrderBuyerController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "确认收货")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, paramType = "path")
+    @Operation(summary = "确认收货")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @PostMapping(value = "/{orderSn}/receiving")
+    @PostMapping("/{orderSn}/receiving")
     public ResultMessage<Object> receiving(@NotNull(message = "订单编号不能为空") @PathVariable("orderSn") String orderSn) {
         Order order = orderService.getBySn(orderSn);
         if (order == null) {
@@ -89,44 +88,44 @@ public class OrderBuyerController {
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "取消订单")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "reason", value = "取消原因", required = true, dataType = "String", paramType = "query")
+    @Operation(summary = "取消订单")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true),
+            @Parameter(name = "reason", description = "取消原因", required = true)
     })
-    @PostMapping(value = "/{orderSn}/cancel")
-    public ResultMessage<Object> cancel(@ApiIgnore @PathVariable String orderSn, @RequestParam String reason) {
+    @PostMapping("/{orderSn}/cancel")
+    public ResultMessage<Object> cancel(@PathVariable String orderSn, @RequestParam String reason) {
         orderService.cancel(orderSn, reason);
         return ResultUtil.success();
     }
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "删除订单")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "删除订单")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @DeleteMapping(value = "/{orderSn}")
+    @DeleteMapping("/{orderSn}")
     public ResultMessage<Object> deleteOrder(@PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         orderService.deleteOrder(orderSn);
         return ResultUtil.success();
     }
 
-    @ApiOperation(value = "查询物流踪迹")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询物流踪迹")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @PostMapping(value = "/getTraces/{orderSn}")
+    @PostMapping("/getTraces/{orderSn}")
     public ResultMessage<Object> getTraces(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         return ResultUtil.data(orderService.getTraces(orderSn));
     }
 
-    @ApiOperation(value = "查询地图版物流踪迹")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询地图版物流踪迹")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @PostMapping(value = "/getMapTraces/{orderSn}")
+    @PostMapping("/getMapTraces/{orderSn}")
     public ResultMessage<Object> getMapTraces(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         return ResultUtil.data(orderService.getMapTraces(orderSn));
@@ -134,30 +133,30 @@ public class OrderBuyerController {
 
 
     @PreventDuplicateSubmissions
-    @ApiOperation(value = "开票")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "开票")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @PostMapping(value = "/receipt/{orderSn}")
+    @PostMapping("/receipt/{orderSn}")
     public ResultMessage<Object> invoice(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         OperationalJudgment.judgment(orderService.getBySn(orderSn));
         return ResultUtil.data(orderService.invoice(orderSn));
     }
 
-    @ApiOperation(value = "查询物流踪迹")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查询物流踪迹")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @GetMapping(value = "/getTracesList/{orderSn}")
+    @GetMapping("/getTracesList/{orderSn}")
     public ResultMessage<Object> getTracesList(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         return ResultUtil.data(orderPackageService.getOrderPackageVOList(orderSn));
     }
 
-    @ApiOperation(value = "查看包裹列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+    @Operation(summary = "查看包裹列表")
+    @Parameters({
+            @Parameter(name = "orderSn", description = "订单编号", required = true)
     })
-    @GetMapping(value = "/getPackage/{orderSn}")
+    @GetMapping("/getPackage/{orderSn}")
     public ResultMessage<Object> getPackage(@NotBlank(message = "订单编号不能为空") @PathVariable String orderSn) {
         return ResultUtil.data(orderPackageService.getOrderPackageVOList(orderSn));
     }

@@ -1,6 +1,6 @@
 package cn.lili.modules.order.order.entity.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
@@ -13,21 +13,21 @@ import lombok.Data;
 @Data
 public class ReceiptDTO {
 
-    @ApiModelProperty(value = "发票ID")
+    @Schema(description = "发票ID")
     private String receiptId;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(description = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "规格")
+    @Schema(description = "规格")
     private String specs;
 
-    @ApiModelProperty(value = "数量")
+    @Schema(description = "数量")
     private Integer num;
 
-    @ApiModelProperty(value = "单价")
+    @Schema(description = "单价")
     private Double goodPrice;
 
-    @ApiModelProperty(value = "小计")
+    @Schema(description = "小计")
     private Double subtotal;
 }

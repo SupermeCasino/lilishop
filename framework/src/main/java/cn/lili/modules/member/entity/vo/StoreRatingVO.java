@@ -1,6 +1,6 @@
 package cn.lili.modules.member.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 public class StoreRatingVO {
 
-    @ApiModelProperty(value = "物流评分")
+    @Schema(description = "物流评分")
     private String deliveryScore;
 
-    @ApiModelProperty(value = "服务评分")
+    @Schema(description = "服务评分")
     private String serviceScore;
 
-    @ApiModelProperty(value = "描述评分")
+    @Schema(description = "描述评分")
     private String descriptionScore;
 
 }

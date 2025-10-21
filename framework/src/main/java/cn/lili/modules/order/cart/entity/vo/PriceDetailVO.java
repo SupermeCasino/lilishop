@@ -1,7 +1,7 @@
 package cn.lili.modules.order.cart.entity.vo;
 
 import cn.lili.modules.order.order.entity.dto.PriceDetailDTO;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,19 +17,19 @@ public class PriceDetailVO implements Serializable {
 
     private static final long serialVersionUID = -960537582096338500L;
 
-    @ApiModelProperty(value = "商品原价")
+    @Schema(description = "商品原价")
     private Double originalPrice;
 
-    @ApiModelProperty(value = "配送费")
+    @Schema(description = "配送费")
     private Double freight;
 
-    @ApiModelProperty(value = "优惠金额")
+    @Schema(description = "优惠金额")
     private Double discountPrice;
 
-    @ApiModelProperty(value = "支付积分")
+    @Schema(description = "支付积分")
     private Long payPoint;
 
-    @ApiModelProperty(value = "最终成交金额")
+    @Schema(description = "最终成交金额")
     private Double finalePrice;
 
 
@@ -44,7 +44,7 @@ public class PriceDetailVO implements Serializable {
         this.originalPrice = dto.getGoodsPrice();
     }
 
-    public PriceDetailVO(){
+    public PriceDetailVO() {
 
     }
 }

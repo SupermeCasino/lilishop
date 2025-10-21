@@ -2,7 +2,7 @@ package cn.lili.modules.page.entity.dto;
 
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.modules.page.entity.enums.PageEnum;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,19 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PageDataDTO {
 
-    @ApiModelProperty(value = "值")
+    @Schema(description = "值")
     private String num;
 
     /**
      * @see PageEnum
      */
-    @ApiModelProperty(value = "页面类型", allowableValues = "INDEX,STORE,SPECIAL")
+    @Schema(description = "页面类型", allowableValues = "INDEX,STORE,SPECIAL")
     private String pageType;
 
     /**
      * @see ClientTypeEnum
      */
-    @ApiModelProperty(value = "客户端类型", allowableValues = "PC,H5,WECHAT_MP,APP")
+    @Schema(description = "客户端类型", allowableValues = "PC,H5,WECHAT_MP,APP")
     private String pageClientType;
 
     public PageDataDTO(String pageType) {

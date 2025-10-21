@@ -1,6 +1,6 @@
 package cn.lili.modules.order.cart.entity.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,13 +20,13 @@ public class TradeVO implements Serializable {
     /**
      * 购物车列表
      */
-    @ApiModelProperty(value = "购物车列表")
+    @Schema(description = "购物车列表")
     private List<CartVO> cartList;
 
     /**
      * 购物车计算后的总价
      */
-    @ApiModelProperty(value = "购物车车计算后的总价")
+    @Schema(description = "购物车车计算后的总价")
     private PriceDetailVO priceDetailVO;
 
     public TradeVO(List<CartVO> cartList, PriceDetailVO priceDetailVO) {

@@ -3,9 +3,10 @@ package cn.lili.modules.search.entity.dos;
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +24,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("li_hot_words_history")
+@EqualsAndHashCode(callSuper = false)
 public class HotWordsHistory extends BaseIdEntity implements Comparable<HotWordsHistory>, Serializable {
 
     /**
@@ -35,7 +37,7 @@ public class HotWordsHistory extends BaseIdEntity implements Comparable<HotWords
      */
     private Integer score;
 
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;

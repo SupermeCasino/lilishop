@@ -9,9 +9,9 @@ import cn.lili.modules.message.entity.enums.MessageStatusEnum;
 import cn.lili.modules.message.entity.vos.MemberMessageQueryVO;
 import cn.lili.modules.message.service.MemberMessageService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Api(tags = "买家端,会员站内消息接口")
+@Tag(name = "买家端,会员站内消息接口")
 @RequestMapping("/buyer/message/member")
 public class MemberMessageBuyerController {
 
@@ -32,22 +32,22 @@ public class MemberMessageBuyerController {
     @Autowired
     private MemberMessageService memberMessageService;
 
-    @ApiOperation(value = "分页获取会员站内消息")
+    @Operation(summary = "分页获取会员站内消息")
     @GetMapping
     public ResultMessage<IPage<MemberMessage>> page(MemberMessageQueryVO memberMessageQueryVO, PageVO page) {
         memberMessageQueryVO.setMemberId(UserContext.getCurrentUser().getId());
         return ResultUtil.data(memberMessageService.getPage(memberMessageQueryVO, page));
     }
 
-    @ApiOperation(value = "消息已读")
-    @ApiImplicitParam(name = "messageId", value = "会员消息id", required = true, paramType = "path")
+    @Operation(summary = "消息已读")
+    @Parameter(name = "messageId", description = "会员消息id", required = true)
     @PutMapping("/{message_id}")
     public ResultMessage<Boolean> read(@PathVariable("message_id") String messageId) {
         return ResultUtil.data(memberMessageService.editStatus(MessageStatusEnum.ALREADY_READY.name(), messageId));
     }
 
-    @ApiOperation(value = "消息放入回收站")
-    @ApiImplicitParam(name = "messageId", value = "会员消息id", required = true, paramType = "path")
+    @Operation(summary = "消息放入回收站")
+    @Parameter(name = "messageId", description = "会员消息id", required = true)
     @DeleteMapping("/{message_id}")
     public ResultMessage<Boolean> deleteMessage(@PathVariable("message_id") String messageId) {
         return ResultUtil.data(memberMessageService.editStatus(MessageStatusEnum.ALREADY_REMOVE.name(), messageId));

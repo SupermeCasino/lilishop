@@ -17,7 +17,8 @@ import cn.lili.modules.connect.entity.enums.AuthUserGender;
 import cn.lili.modules.connect.entity.enums.ConnectEnum;
 import cn.lili.modules.connect.exception.AuthException;
 import cn.lili.modules.connect.util.GlobalAuthUtils;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class BaseAuthQQRequest extends BaseAuthRequest {
     protected ConnectAuthUser getUserInfo(AuthToken authToken) {
         String openId = this.getOpenId(authToken);
         String response = doGetUserInfo(authToken);
-        JSONObject object = JSONObject.parseObject(response);
+        JSONObject object = JSON.parseObject(response);
         if (object.getIntValue("ret") != 0) {
             throw new AuthException(object.getString("msg"));
         }
@@ -72,6 +73,7 @@ public class BaseAuthQQRequest extends BaseAuthRequest {
                 .source(ConnectEnum.QQ)
                 .type(ClientTypeEnum.PC)
                 .build();
+
     }
 
     /**
@@ -89,7 +91,7 @@ public class BaseAuthQQRequest extends BaseAuthRequest {
         String removePrefix = response.replace("callback(", "");
         String removeSuffix = removePrefix.replace(");", "");
         String openId = removeSuffix.trim();
-        JSONObject object = JSONObject.parseObject(openId);
+        JSONObject object = JSON.parseObject(openId);
         if (object.containsKey("error")) {
             throw new AuthException(object.get("error") + ":" + object.get("error_description"));
         }
@@ -98,6 +100,7 @@ public class BaseAuthQQRequest extends BaseAuthRequest {
             authToken.setUnionId(object.getString("unionid"));
         }
         return StringUtils.isEmpty(authToken.getUnionId()) ? authToken.getOpenId() : authToken.getUnionId();
+
     }
 
     /**

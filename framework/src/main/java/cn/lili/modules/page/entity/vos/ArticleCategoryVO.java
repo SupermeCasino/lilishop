@@ -2,8 +2,9 @@ package cn.lili.modules.page.entity.vos;
 
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.page.entity.dos.ArticleCategory;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,9 +17,10 @@ import java.util.List;
  * @since 2021-03-26 11:32
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ArticleCategoryVO extends ArticleCategory {
 
-    @ApiModelProperty(value = "子菜单")
+    @Schema(description = "子菜单")
     private List<ArticleCategoryVO> children = new ArrayList<>();
 
     public ArticleCategoryVO() {
