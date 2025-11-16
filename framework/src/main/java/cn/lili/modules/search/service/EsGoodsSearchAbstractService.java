@@ -403,7 +403,7 @@ public class EsGoodsSearchAbstractService extends BaseElasticsearchService {
                     max = Integer.MAX_VALUE;
                 }
                 queries.add(
-                        QueryBuilders.range(a -> a.field("price").from(String.valueOf(min)).to(String.valueOf(max))));
+                        co.elastic.clients.elasticsearch._types.query_dsl.RangeQueryBuilders.number(n -> n.field("price").gte(min).lte(max))._toQuery());
             }
 
         }

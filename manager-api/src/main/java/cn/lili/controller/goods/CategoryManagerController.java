@@ -115,7 +115,7 @@ public class CategoryManagerController {
     @Operation(summary = "后台 禁用/启用 分类")
    @Parameter(name = "goodsId", description = "分类ID", required = true)
     @Parameter(name = "enableOperations", description = "是否启用", required = true)
-    @PutMapping("/{id}/disable")
+    @PutMapping("/disable/{id}")
     @DemoSite
     public ResultMessage<Object> disable(@PathVariable String id, @RequestParam Boolean enableOperations) {
 

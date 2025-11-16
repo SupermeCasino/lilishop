@@ -13,6 +13,9 @@ import lombok.Data;
 @Data
 public class MemberSearchVO {
 
+    @Schema(description = "ID")
+    private String id;
+
     @Schema(description = "用户名")
     private String username;
 

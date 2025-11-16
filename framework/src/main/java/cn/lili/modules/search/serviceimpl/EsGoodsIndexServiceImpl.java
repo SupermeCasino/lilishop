@@ -149,7 +149,8 @@ public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService i
                 pageVO.setOrder("asc");
 
                 NativeQueryBuilder searchQueryBuilder = esGoodsSearchService.createSearchQueryBuilder(goodsSearchParams, pageVO);
-                searchQueryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"_id"}, null));
+                // 仅返回 _source 中的文档字段 "id"，并启用 source 抓取；符合当前 FetchSourceFilter(Boolean, includes, excludes) 签名
+                searchQueryBuilder.withSourceFilter(new FetchSourceFilter(true, new String[]{"id"}, null));
 
                 Pageable pageable = PageRequest.of(0, 1000);
                 //分页

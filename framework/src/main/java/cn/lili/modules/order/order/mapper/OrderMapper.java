@@ -102,12 +102,12 @@ public interface OrderMapper extends BaseMapper<Order> {
             "COUNT(CASE WHEN order_status = 'PAID' THEN 1 END) as waitDeliveryNum,"+
             "COUNT(CASE WHEN order_status = 'UNDELIVERED' THEN 1 END) as waitShipNum,"+
             "COUNT(CASE WHEN order_status = 'PARTS_DELIVERED' THEN 1 END) as partsDeliveredNumNum,"+
-            "COUNT(CASE WHEN order_status = 'DELIVERED' THEN 1 END) as deliveredNum,"+
+            "COUNT(CASE WHEN order_status = 'DELIVERED' AND order_type='NORMAL' THEN 1 END) as deliveredNum,"+
             "COUNT(CASE WHEN order_status = 'TAKE' THEN 1 END) as waitCheckNum,"+
             "COUNT(CASE WHEN order_status = 'STAY_PICKED_UP' THEN 1 END) as waitSelfPickNum,"+
             "COUNT(CASE WHEN order_status = 'COMPLETED' THEN 1 END) as finishNum,"+
             "COUNT(CASE WHEN order_status = 'CANCELLED' THEN 1 END) as closeNum "+
-            " FROM li_order o LEFT JOIN li_order_item AS oi on o.sn = oi.order_sn ${ew.customSqlSegment} ")
+            " FROM li_order o ${ew.customSqlSegment} ")
     OrderNumVO getOrderNumVO(@Param(Constants.WRAPPER) Wrapper<OrderSimpleVO> queryWrapper);
     /**
      * 查询订单信息

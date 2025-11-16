@@ -98,7 +98,9 @@ public class SystemLogServiceImpl implements SystemLogService {
         }
 
         if (searchVo.getConvertStartDate() != null && searchVo.getConvertEndDate() != null) {
-            queries.add(QueryBuilders.range(m -> m.field("createTime").gte(JsonData.of(searchVo.getConvertStartDate())).lte(JsonData.of(searchVo.getConvertEndDate()))));
+            queries.add(co.elastic.clients.elasticsearch._types.query_dsl.RangeQueryBuilders.date(d -> d.field("createTime")
+                .gte(java.time.Instant.ofEpochMilli(searchVo.getConvertStartDate().getTime()).toString())
+                .lte(java.time.Instant.ofEpochMilli(searchVo.getConvertEndDate().getTime()).toString()))._toQuery());
         }
 
         if (!queries.isEmpty()) {

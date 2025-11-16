@@ -9,10 +9,7 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.MultiGetItem;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.query.ByQueryResponse;
-import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.data.elasticsearch.core.query.ScriptType;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +68,8 @@ public abstract class ElasticsearchIndexAbstractService extends BaseElasticsearc
                 ));
             }
             // 判断values是否为数组
-            if (entry.getValue() instanceof List list) {
+            if (entry.getValue() instanceof List) {
+                List<?> list = (List<?>) entry.getValue();
                 List<FieldValue> fieldValues = new ArrayList<>();
                 for (Object o : list) {
                     fieldValues.add(FieldValue.of(o.toString()));
@@ -191,7 +189,8 @@ public abstract class ElasticsearchIndexAbstractService extends BaseElasticsearc
         }
 
         try {
-            ByQueryResponse delete = client.delete(builder.build(), clazz);
+            DeleteQuery deleteQuery = DeleteQuery.builder(builder.build()).build();
+            ByQueryResponse delete = client.delete(deleteQuery, clazz);
             log.info("删除索引成功，删除数量：{}", delete.getDeleted());
             if (delete.getVersionConflicts() > 0) {
                 throw new RetryException("删除索引失败，es内容版本冲突");
@@ -224,7 +223,8 @@ public abstract class ElasticsearchIndexAbstractService extends BaseElasticsearc
      */
     public <T> void deleteIndexByIds(List<String> ids, Class<T> clazz) {
         try {
-            ByQueryResponse deleteResponse = this.client.delete(this.client.idsQuery(ids), clazz);
+            DeleteQuery dq = DeleteQuery.builder(this.client.idsQuery(ids)).build();
+            ByQueryResponse deleteResponse = this.client.delete(dq, clazz);
             if (!deleteResponse.getFailures().isEmpty()) {
                 log.error("删除索引出现错误：{}", deleteResponse.getFailures());
             }

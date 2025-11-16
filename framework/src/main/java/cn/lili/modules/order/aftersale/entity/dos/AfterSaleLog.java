@@ -1,7 +1,7 @@
 package cn.lili.modules.order.aftersale.entity.dos;
 
 import cn.lili.common.security.enums.UserEnums;
-import cn.lili.mybatis.BaseEntity;
+import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -27,7 +27,7 @@ import java.util.Date;
 @TableName("li_after_sale_log")
 @Schema(description = "售后日志")
 @NoArgsConstructor
-public class AfterSaleLog extends BaseEntity {
+public class AfterSaleLog extends BaseIdEntity {
 
     @CreatedBy
     @TableField(fill = FieldFill.INSERT)

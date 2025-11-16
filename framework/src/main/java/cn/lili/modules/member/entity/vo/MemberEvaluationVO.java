@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class MemberEvaluationVO extends BaseEntity {
+public class MemberEvaluationVO extends MemberEvaluation {
 
     private static final long serialVersionUID = 6696978796248845481L;
 

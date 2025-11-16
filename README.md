@@ -3,7 +3,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/hongyehuicheng/lilishop.svg?style=social&logo=github)](https://github.com/hongyehuicheng/lilishop)
 [![Gitee Stars](https://gitee.com/beijing_hongye_huicheng/lilishop/badge/star.svg?theme=dark)](https://gitee.com/beijing_hongye_huicheng/lilishop)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen)](https://spring.io/projects/spring-boot)
 [![Vue.js](https://img.shields.io/badge/Vue.js-2.x-green)](https://vuejs.org/)
 [![uni-app](https://img.shields.io/badge/uni--app-3.x-green)](https://uniapp.dcloud.io/)
 
@@ -11,7 +11,9 @@
 
 ### 1. 项目简介
 
-**Lilishop** 是一款功能完善的B2B2C多商户商城系统，采用前后端分离架构，全端代码开源。后端基于 **SpringBoot** 构建，具备高内聚、低耦合的特性，支持分布式部署。前端覆盖PC、H5、小程序和APP，基于 **Vue** 和 **uni-app** 开发。
+**Lilishop** 是一款功能完善的B2B2C多商户商城系统，采用前后端分离架构，全端代码开源。
+后端基于 **SpringBoot3** 构建，具备高内聚、低耦合的特性，支持分布式部署。
+前端覆盖PC、H5、小程序和APP，基于 **Vue** 和 **uni-app** 开发。
 
 -   **官方网站**: <https://pickmall.cn>
 -   **官方文档**: <https://docs.pickmall.cn>
@@ -68,25 +70,25 @@
 
 #### 5.2 后端技术栈
 
-| 技术            | 选型            | 备注/用途  |
-| :-------------- | :-------------- | :--------- |
-| 核心框架        | Spring Boot     | 简化应用开发 |
-| ORM框架         | Mybatis-Plus    | 数据持久化  |
-| 数据库          | MySQL           | 关系型数据存储 |
-| 消息队列        | RocketMQ        | 异步任务与解耦 |
-| 缓存            | Redis, MongoDB  | 数据缓存与存储 |
-| 搜索引擎        | Elasticsearch   | 商品搜索   |
-| 安全框架        | Spring Security | 认证与授权  |
-| 分库分表        | ShardingSphere  | 数据水平扩展 |
-| 定时任务        | XXL-Job         | 分布式任务调度 |
-| 认证方案        | JWT             | Token  |
+| 技术            | 选型            | 版本   | 备注/用途  |
+| :-------------- | :-------------- | :----- | :--------- |
+| 核心框架        | Spring Boot     | 3.5.6  | 简化应用开发 |
+| ORM框架         | MyBatis-Plus    | 3.5.8 | 数据持久化  |
+| 数据库          | MySQL (LTS)     | 8.3.0  | 关系型数据存储 |
+| 消息队列        | RocketMQ        | 2.3.4  | 异步任务与解耦 |
+| 缓存            | Redis           | -  | 数据缓存    |
+| 搜索引擎        | Elasticsearch   | -  | 商品搜索   |
+| 安全框架        | Spring Security | -  | 认证与授权  |
+| 分库分表        | ShardingSphere  | 4.0.0  | 数据水平扩展 |
+| 定时任务        | XXL-Job         | 2.3.0  | 分布式任务调度 |
+| 认证方案        | JWT             | -      | Token 方案 |
 
 #### 5.3 前端技术栈
 
 **管理端 (平台/商家)**
 
 | 技术       | 选型       | 备注/用途  |
- | :--------- | :--------- | :--------- |
+| :--------- | :--------- | :--------- |
 | JS框架     | Vue.js     | 核心框架   |
 | UI库       | iView      | 界面组件   |
 | 状态管理   | Vuex       | 全局状态管理 |

@@ -185,6 +185,23 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             //给商品参数填充值
             goods.setParams(JSON.toJSONString(goodsOperationDTO.getGoodsParamsDTOList()));
         }
+        
+        // 检查库存，如果总库存为0则设置为下架状态
+        int totalStock = 0;
+        if (goodsOperationDTO.getSkuList() != null && !goodsOperationDTO.getSkuList().isEmpty()) {
+            for (Map<String, Object> sku : goodsOperationDTO.getSkuList()) {
+                Object quantityObj = sku.get("quantity");
+                if (quantityObj != null) {
+                    totalStock += Integer.parseInt(quantityObj.toString());
+                }
+            }
+        }
+        
+        // 如果总库存为0，强制设置为下架状态
+        if (totalStock == 0) {
+            goods.setMarketEnable(GoodsStatusEnum.DOWN.name());
+        }
+        
         //添加商品
         this.save(goods);
         //添加商品sku信息
@@ -211,6 +228,23 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
             goods.setParams(JSON.toJSONString(goodsOperationDTO.getGoodsParamsDTOList()));
         }
+        
+        // 检查库存，如果总库存为0则设置为下架状态
+        int totalStock = 0;
+        if (goodsOperationDTO.getSkuList() != null && !goodsOperationDTO.getSkuList().isEmpty()) {
+            for (Map<String, Object> sku : goodsOperationDTO.getSkuList()) {
+                Object quantityObj = sku.get("quantity");
+                if (quantityObj != null) {
+                    totalStock += Integer.parseInt(quantityObj.toString());
+                }
+            }
+        }
+        
+        // 如果总库存为0，强制设置为下架状态
+        if (totalStock == 0) {
+            goods.setMarketEnable(GoodsStatusEnum.DOWN.name());
+        }
+        
         //修改商品
         this.updateById(goods);
         //修改商品sku信息
