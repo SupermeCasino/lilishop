@@ -87,19 +87,21 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        //获取用户信息，存入context
         UsernamePasswordAuthenticationToken authentication = getAuthentication(jwt, response);
-        //自定义权限过滤
         if (authentication != null) {
             try {
                 customAuthentication(request, response, authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (NoPermissionException e) {
-                // 已写响应并记录日志，终止链
                 return;
             }
+            chain.doFilter(request, response);
+        } else {
+            if (!response.isCommitted()) {
+                ResponseUtil.output(response, 403, ResponseUtil.resultMap(false, 403, "登录已失效，请重新登录"));
+            }
+            return;
         }
-        chain.doFilter(request, response);
     }
 
     /**
@@ -187,7 +189,7 @@ public class ManagerAuthenticationFilter extends BasicAuthenticationFilter {
             ResponseUtil.output(response, 403, ResponseUtil.resultMap(false, 403, "登录已失效，请重新登录"));
             return null;
         } catch (ExpiredJwtException e) {
-            log.debug("user analysis exception:", e);
+            ResponseUtil.output(response, 403, ResponseUtil.resultMap(false, 403, "登录已失效，请重新登录"));
         } catch (Exception e) {
             log.error("other exception:", e);
         }

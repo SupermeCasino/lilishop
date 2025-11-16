@@ -15,18 +15,14 @@ server:
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
 management:
-  #  health:
-  #    elasticsearch:
-  #      enabled: false
-  #    datasource:
-  #      enabled: false
+  health:
+    elasticsearch:
+      enabled: false
   endpoints:
     web:
       exposure:
         include: '*'
 spring:
-  profiles:
-    active: default
   application:
     name: consumer
 
@@ -36,7 +32,7 @@ spring:
   data:
     redis:
       host: 192.168.31.100
-      port: 6379
+      port: 30379
       password: lilishop
   # 文件大小上传配置
   servlet:
