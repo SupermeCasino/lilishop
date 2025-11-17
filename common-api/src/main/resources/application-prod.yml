@@ -18,3 +18,5 @@ lili:
   lbs:
     key: ${LBS_KEY:}
     sk: ${LBS_SK:}
+rocketmq:
+  name-server: 127.0.0.1:9876

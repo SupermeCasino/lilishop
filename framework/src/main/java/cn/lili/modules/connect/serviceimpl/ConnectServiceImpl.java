@@ -227,6 +227,21 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
      */
     @Override
     public void loginBindUser(String userId, String unionId, String type) {
+        Connect existedByUnionId = this.queryConnect(
+                ConnectQueryDTO.builder().unionId(unionId).build()
+        );
+        if (existedByUnionId != null) {
+            if (!existedByUnionId.getUserId().equals(userId)) {
+                this.removeById(existedByUnionId.getId());
+                this.save(new Connect(userId, unionId, type));
+            } else {
+                if (!Objects.equals(existedByUnionId.getUnionType(), type)) {
+                    existedByUnionId.setUnionType(type);
+                    this.updateById(existedByUnionId);
+                }
+            }
+            return;
+        }
         Connect connect = this.queryConnect(
                 ConnectQueryDTO.builder().unionId(unionId).unionType(type).build()
         );

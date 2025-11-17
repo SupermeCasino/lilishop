@@ -47,7 +47,9 @@ public class MemberExecute implements MemberLoginEvent, MemberConnectLoginEvent 
         //保存OpenID
         if (StrUtil.isNotBlank(authUser.getUuid())) {
             SourceEnum sourceEnum = SourceEnum.getSourceEnum(authUser.getSource(), authUser.getType());
-            connectService.loginBindUser(member.getId(), authUser.getUuid(), sourceEnum.name());
+            if (!StrUtil.equals(authUser.getUuid(), authUser.getToken().getUnionId())) {
+                connectService.loginBindUser(member.getId(), authUser.getUuid(), sourceEnum.name());
+            }
         }
         //保存手机号，判断用户是否存手机号，如果不存在则保存手机号
         if (StrUtil.isNotBlank(authUser.getPhone())&&StrUtil.isBlank(member.getMobile())) {
