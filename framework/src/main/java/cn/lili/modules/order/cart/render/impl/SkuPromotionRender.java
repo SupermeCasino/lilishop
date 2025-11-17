@@ -199,7 +199,17 @@ public class SkuPromotionRender implements CartRenderStep {
                                 continue;
                             }
 
-                            JSONObject promotionsObj = JSON.parseObject((String) entry.getValue());
+                            Object v = entry.getValue();
+                            JSONObject promotionsObj;
+                            if (v instanceof String) {
+                                promotionsObj = JSON.parseObject((String) v);
+                            } else if (v instanceof JSONObject) {
+                                promotionsObj = (JSONObject) v;
+                            } else if (v instanceof Map) {
+                                promotionsObj = JSON.parseObject(JSON.toJSONString(v));
+                            } else {
+                                promotionsObj = JSON.parseObject(JSON.toJSONString(v));
+                            }
                             PromotionSkuVO promotionSkuVO = new PromotionSkuVO(entry.getKey().split("-")[0], promotionsObj.getString("id"));
                             cartSkuVO.setSubTotal(CurrencyUtil.mul(cartSkuVO.getPurchasePrice(), cartSkuVO.getNum()));
                             cartSkuVO.getPriceDetailDTO().setGoodsPrice(cartSkuVO.getSubTotal());
