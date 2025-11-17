@@ -127,8 +127,8 @@ ignored:
     - /buyer/promotion/seckill/**
     - /buyer/promotion/pointsGoods/**
     - /buyer/promotion/coupon
-    - /buyer/member/evaluation/**/goodsEvaluation
-    - /buyer/member/evaluation/**/evaluationNumber
+    - /buyer/member/evaluation/*/goodsEvaluation
+    - /buyer/member/evaluation/*/evaluationNumber
     - /buyer/other/appVersion/**
     - /buyer/broadcast/studio/**
     - /druid/**
