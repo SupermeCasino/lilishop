@@ -13,3 +13,5 @@ lili:
     elasticsearch:
       cluster-nodes: 192.168.31.100:9200
       schema: http
+    logstash:
+      server: 127.0.0.1:4560
