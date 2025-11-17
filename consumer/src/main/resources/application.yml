@@ -110,7 +110,6 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator**
     - /actuator/**
     - /source/**
     - /druid/**
@@ -122,10 +121,6 @@ ignored:
     - /v2/api-docs
     - /configuration/ui
     - /boot-admin
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml

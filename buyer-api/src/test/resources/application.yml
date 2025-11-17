@@ -109,28 +109,28 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator**
     - /actuator/**
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
-    - /buyer/mini-program/**
-    - /buyer/cashier/**
-    - /buyer/pageData/**
-    - /buyer/article/**
+    - /buyer/payment/cashier/**
+    - /buyer/payment/cashierRefund/**
+    - /buyer/other/pageData/**
+    - /buyer/other/article/**
     - /buyer/goods/**
-    - /buyer/category/**
     - /buyer/store/**
-    - /buyer/connect/**
+    - /buyer/passport/connect/**
     - /buyer/members/**
+    - /buyer/passport/member/**
+    - /buyer/passport/member/refresh/**
     - /buyer/promotion/pintuan/**
     - /buyer/promotion/seckill/**
     - /buyer/promotion/pointsGoods/**
-    - /buyer/memberEvaluation/**/goodsEvaluation
-    - /buyer/memberEvaluation/**/evaluationNumber
-    - /store/login/**
-    - /manager/user/login
-    - /manager/user/refresh/**
+    - /buyer/promotion/coupon
+    - /buyer/member/evaluation/**/goodsEvaluation
+    - /buyer/member/evaluation/**/evaluationNumber
+    - /buyer/other/appVersion/**
+    - /buyer/broadcast/studio/**
     - /druid/**
     - /swagger-ui.html
     - /doc.html
@@ -140,10 +140,6 @@ ignored:
     - /v2/api-docs
     - /configuration/ui
     - /boot-admin
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
 
 # Swagger界面内容配置
 swagger:

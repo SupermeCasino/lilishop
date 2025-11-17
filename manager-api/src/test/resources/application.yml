@@ -106,50 +106,25 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator**
     - /actuator/**
-    - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
-    - /store/passport/login/**
-    - /store/passport/login/refresh/**
-    - /common/common/slider/**
-    - /common/common/sms/**
-    - /buyer/payment/cashier/**
-    - /buyer/other/pageData/**
-    - /buyer/other/article/**
-    - /buyer/goods/**
-    - /buyer/store/**
-    - /buyer/passport/connect/**
-    - /buyer/members/**
-    - /buyer/passport/member/**
-    - /buyer/passport/member/refresh/**
-    - /buyer/promotion/pintuan/**
-    - /buyer/promotion/seckill/**
-    - /buyer/promotion/pointsGoods/**
-    - /buyer/promotion/coupon
-    - /buyer/member/evaluation/**/goodsEvaluation
-    - /buyer/member/evaluation/**/evaluationNumber
-    - /buyer/other/appVersion/**
-    - /buyer/broadcast/studio/**
     - /manager/passport/user/login
     - /manager/passport/user/refresh/**
     - /manager/other/elasticsearch
     - /manager/other/customWords
     - /druid/**
-    - /swagger-ui.html
     - /doc.html
-    - /swagger-resources/**
-    - /swagger/**
+    - /v3/api-docs/**
+    - /swagger-ui/**
     - /webjars/**
-    - /v2/api-docs**
     - /configuration/ui
     - /boot-admin
-    - /manager/promotion/seckill/init
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
+    - /favicon.ico
+    - /static/**
+    - /public/**
+    - /resources/**
+    - /META-INF/resources/**
 
 # Swagger界面内容配置
 swagger:

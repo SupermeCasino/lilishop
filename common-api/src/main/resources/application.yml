@@ -103,7 +103,6 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator**
     - /actuator/**
     - /source/**
     - /common/common/slider/**
@@ -119,10 +118,6 @@ ignored:
     - /v2/api-docs
     - /configuration/ui
     - /boot-admin
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
 
 # Mybatis-plus
 mybatis-plus:

@@ -17,3 +17,6 @@ lili:
       server: 127.0.0.1:4560
 rocketmq:
   name-server: 192.168.31.100:9876
+  producer:
+    group: lili_group
+    send-message-timeout: 30000

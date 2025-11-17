@@ -15,8 +15,8 @@ lili:
       schema: http
     logstash:
       server: 127.0.0.1:4560
-  lbs:
-    key: ${LBS_KEY:}
-    sk: ${LBS_SK:}
 rocketmq:
   name-server: 127.0.0.1:9876
+  producer:
+    group: lili_group
+    send-message-timeout: 30000
