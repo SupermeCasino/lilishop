@@ -13,3 +13,6 @@ lili:
     elasticsearch:
       cluster-nodes: 127.0.0.1:9200
       schema: http
+  lbs:
+    key: ${LBS_KEY:}
+    sk: ${LBS_SK:}
