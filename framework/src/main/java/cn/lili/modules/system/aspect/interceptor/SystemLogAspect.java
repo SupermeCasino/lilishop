@@ -3,13 +3,13 @@ package cn.lili.modules.system.aspect.interceptor;
 import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
-import cn.lili.common.utils.IpHelper;
 import cn.lili.common.utils.IpUtils;
 import cn.lili.common.utils.SpelUtil;
 import cn.lili.common.utils.ThreadPoolUtil;
 import cn.lili.modules.permission.entity.vo.SystemLogVO;
 import cn.lili.modules.permission.service.SystemLogService;
 import cn.lili.modules.system.aspect.annotation.SystemLogPoint;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +46,8 @@ public class SystemLogAspect {
     @Autowired
     private HttpServletRequest request;
 
-    @Autowired
-    private IpHelper ipHelper;
+//    @Autowired
+//    private IpHelper ipHelper;
 
     /**
      * Controller层切点,注解方式
@@ -113,7 +112,7 @@ public class SystemLogAspect {
             //请求IP
             systemLogVO.setIp(IpUtils.getIpAddress(request));
             //IP地址
-            systemLogVO.setIpInfo(ipHelper.getIpCity(request));
+//            systemLogVO.setIpInfo(ipHelper.getIpCity(request));
             //写入自定义日志内容
             systemLogVO.setCustomerLog(customerLog);
             //请求开始时间
