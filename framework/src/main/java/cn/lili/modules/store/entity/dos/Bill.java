@@ -2,6 +2,7 @@ package cn.lili.modules.store.entity.dos;
 
 import cn.lili.modules.store.entity.enums.BillStatusEnum;
 import cn.lili.mybatis.BaseEntity;
+import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_bill")
 @Schema(description = "结算单")
-public class Bill extends BaseEntity {
+public class Bill extends BaseIdEntity {
 
     private static final long serialVersionUID = 1L;
 
