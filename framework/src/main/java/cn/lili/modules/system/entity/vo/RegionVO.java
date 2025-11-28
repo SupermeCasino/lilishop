@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class RegionVO extends BaseEntity {
+public class RegionVO extends Region {
 
     /**
      * 子信息
