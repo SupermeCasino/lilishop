@@ -37,7 +37,7 @@ public class LogisticsManagerController {
     }
 
     @Operation(summary = "分页获取物流公司")
-    @GetMapping
+    @GetMapping(value = "/getByPage")
     public ResultMessage<IPage<Logistics>> getByPage(PageVO page) {
         return ResultUtil.data(logisticsService.page(PageUtil.initPage(page)));
     }

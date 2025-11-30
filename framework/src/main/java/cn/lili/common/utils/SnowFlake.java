@@ -4,8 +4,6 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
-
 /**
  * 雪花分布式id获取
  *
@@ -46,7 +44,7 @@ public class SnowFlake {
      * @return
      */
     public static String createStr(String prefix) {
-        return prefix + DateUtil.toString(new Date(), "yyyyMMdd") + SnowFlake.getId();
+        return prefix + SnowFlake.getId();
     }
 
     public static String getIdStr() {
