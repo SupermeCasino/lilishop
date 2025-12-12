@@ -107,11 +107,14 @@ ignored:
     - /store/passport/login/refresh/**
     - /druid/**
     - /swagger-ui.html
+    - /swagger-ui/**
     - /doc.html
     - /swagger-resources/**
     - /swagger/**
     - /webjars/**
     - /v2/api-docs
+    - /v3/api-docs
+    - /v3/api-docs/**
     - /configuration/ui
     - /boot-admin
 
@@ -135,6 +138,15 @@ logging:
   file:
     # 指定路径
     path: lili-logs
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui/index.html
+  packages-to-scan: cn.lili.controller
+  paths-to-match: /store/**
+  override-with-generic-response: false
   logback:
     rollingpolicy:
       # 最大保存天数
