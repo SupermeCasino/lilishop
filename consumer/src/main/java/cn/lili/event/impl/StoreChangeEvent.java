@@ -3,7 +3,6 @@ package cn.lili.event.impl;
 import cn.lili.event.StoreSettingChangeEvent;
 import cn.lili.modules.distribution.service.DistributionGoodsService;
 import cn.lili.modules.distribution.service.DistributionOrderService;
-import cn.lili.modules.goods.service.DraftGoodsService;
 import cn.lili.modules.member.service.MemberEvaluationService;
 import cn.lili.modules.message.service.StoreMessageService;
 import cn.lili.modules.order.aftersale.service.AfterSaleService;
@@ -141,12 +140,6 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
     @Autowired
     private DistributionOrderService distributionOrderService;
 
-    /**
-     * 草稿商品
-     */
-    @Autowired
-    private DraftGoodsService draftGoodsService;
-
 
     /**
      * 店铺名称修改 同步更新相关店铺名称
@@ -200,7 +193,5 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
         distributionOrderService.update(updateWrapper);
         //修改分销商品中店铺名称
         distributionGoodsService.update(updateWrapper);
-        //修改草稿商品中店铺名称
-        draftGoodsService.update(updateWrapper);
     }
 }
