@@ -1,6 +1,7 @@
 package cn.lili.modules.goods.serviceimpl;
 
 import cn.lili.modules.goods.entity.dos.CategoryBrand;
+import cn.lili.modules.goods.entity.dos.Category;
 import cn.lili.modules.goods.entity.vos.CategoryBrandVO;
 import cn.lili.modules.goods.mapper.CategoryBrandMapper;
 import cn.lili.modules.goods.service.CategoryBrandService;
@@ -33,6 +34,16 @@ public class CategoryBrandServiceImpl extends ServiceImpl<CategoryBrandMapper, C
     }
 
     @Override
+    public List<Category> getBrandCategoryList(String brandId) {
+        return this.baseMapper.getBrandCategoryList(brandId);
+    }
+
+    @Override
+    public void deleteByBrandId(String brandId) {
+        this.baseMapper.delete(new LambdaUpdateWrapper<CategoryBrand>().eq(CategoryBrand::getBrandId, brandId));
+    }
+
+    @Override
     public List<CategoryBrand> getCategoryBrandListByBrandId(List<String> brandId) {
         return this.list(new LambdaQueryWrapper<CategoryBrand>().in(CategoryBrand::getBrandId, brandId));
     }
@@ -46,6 +57,19 @@ public class CategoryBrandServiceImpl extends ServiceImpl<CategoryBrandMapper, C
         if (!brandIds.isEmpty()) {
             List<CategoryBrand> categoryBrands = new ArrayList<>();
             for (String brandId : brandIds) {
+                categoryBrands.add(new CategoryBrand(categoryId, brandId));
+            }
+            this.saveBatch(categoryBrands);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveBrandCategoryList(String brandId, List<String> categoryIds) {
+        this.deleteByBrandId(brandId);
+        if (!categoryIds.isEmpty()) {
+            List<CategoryBrand> categoryBrands = new ArrayList<>();
+            for (String categoryId : categoryIds) {
                 categoryBrands.add(new CategoryBrand(categoryId, brandId));
             }
             this.saveBatch(categoryBrands);
