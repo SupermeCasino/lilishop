@@ -5,7 +5,7 @@ import cn.lili.modules.order.order.entity.dto.OrderMessage;
 import cn.lili.modules.wechat.service.WechatMPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service ;
+import org.springframework.stereotype.Service;
 
 /**
  * 微信小程序执行器
@@ -37,6 +37,13 @@ public class WechatMPExecute implements OrderStatusChangeEvent {
                     wechatMPService.uploadShippingInfo(orderMessage.getOrderSn());
                 } catch (Exception e) {
                     log.error("发货信息录入失败", e);
+                }
+                break;
+            case COMPLETED:
+                try {
+                    wechatMPService.notifyConfirmReceive(orderMessage.getOrderSn());
+                } catch (Exception e) {
+                    log.error("微信消息发送失败", e);
                 }
                 break;
             default:

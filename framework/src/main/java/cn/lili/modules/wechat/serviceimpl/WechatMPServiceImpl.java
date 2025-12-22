@@ -1,10 +1,7 @@
 package cn.lili.modules.wechat.serviceimpl;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.exception.ServiceException;
-import cn.lili.common.security.context.UserContext;
 import cn.lili.common.utils.HttpUtils;
 import cn.lili.modules.connect.entity.Connect;
 import cn.lili.modules.connect.entity.enums.SourceEnum;
@@ -22,6 +19,8 @@ import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
 import cn.lili.modules.wechat.service.WechatMPService;
 import cn.lili.modules.wechat.util.WechatAccessTokenUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -68,6 +67,11 @@ public class WechatMPServiceImpl implements WechatMPService {
      * 是否开通发货信息管理
      */
     String isTradeManagedUrl = "https://api.weixin.qq.com/wxa/sec/order/is_trade_managed?access_token=";
+
+    /**
+     * 确认收货提醒接口
+     */
+    String confirmReceiveUrl = "https://api.weixin.qq.com/wxa/sec/order/notify_confirm_receive?access_token=";
 
     /**
      * 发货信息录入
@@ -149,6 +153,38 @@ public class WechatMPServiceImpl implements WechatMPService {
     }
 
     /**
+     * 订单确认收货
+     * https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/order-shipping/order-shipping.html#%E4%BA%94%E3%80%81%E7%A1%AE%E8%AE%A4%E6%94%B6%E8%B4%A7%E6%8F%90%E9%86%92%E6%8E%A5%E5%8F%A3
+     *
+     * @param orderSn 订单号
+     */
+    @Override
+    public void notifyConfirmReceive(String orderSn) {
+        Order order = orderService.getBySn(orderSn);
+
+        //是否是微信小程序订单 && 微信支付
+        if (!order.getClientType().equals(ClientTypeEnum.WECHAT_MP.name())
+                || !order.getPaymentMethod().equals(PaymentMethodEnum.WECHAT.name())) {
+            return;
+        }
+        //是否开通发货信息管理
+        if (!isTradeManaged()) {
+            return;
+        }
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("transaction_id", order.getReceivableNo());
+        map.put("merchant_trade_no", order.getPayOrderNo());
+        map.put("merchant_id", order.getPayOrderNo());
+
+        Setting systemSetting = settingService.get(SettingEnum.WECHAT_PAYMENT.name());
+        WechatPaymentSetting wechatPaymentSetting = JSON.parseObject(systemSetting.getSettingValue(), WechatPaymentSetting.class);
+        map.put("merchant_id", wechatPaymentSetting.getMchId());
+        //快递签收时间，时间戳形式
+        map.put("received_time", System.currentTimeMillis() / 1000); // 微信要求的是秒级时间戳
+        this.doPostWithJson(confirmReceiveUrl, map);
+    }
+
+    /**
      * 是否已开通发货信息管理服务
      * https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/order-shipping/order-shipping.html#%E4%B8%83%E3%80%81%E6%9F%A5%E8%AF%A2%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%98%AF%E5%90%A6%E5%B7%B2%E5%BC%80%E9%80%9A%E5%8F%91%E8%B4%A7%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1
      */
@@ -160,7 +196,7 @@ public class WechatMPServiceImpl implements WechatMPService {
         Map<String, Object> map = new HashMap<>(2);
         map.put("appid", wechatPaymentSetting.getMpAppId());
         JSONObject jsonObject = this.doPostWithJson(isTradeManagedUrl, map);
-return jsonObject.getBooleanValue("is_trade_managed");
+        return jsonObject.getBooleanValue("is_trade_managed");
     }
 
     /**

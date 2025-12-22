@@ -11,4 +11,10 @@ public interface WechatMPService {
      * @param orderSn
      */
     void uploadShippingInfo(String orderSn);
+
+    /**
+     * 订单确认收货
+     * @param orderSn
+     */
+    void notifyConfirmReceive(String orderSn);
 }
