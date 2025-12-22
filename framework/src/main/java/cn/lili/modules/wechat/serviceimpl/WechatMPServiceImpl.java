@@ -91,12 +91,13 @@ public class WechatMPServiceImpl implements WechatMPService {
         if (!isTradeManaged()) {
             return;
         }
-
+        Setting systemSetting = settingService.get(SettingEnum.WECHAT_PAYMENT.name());
+        WechatPaymentSetting wechatPaymentSetting = JSON.parseObject(systemSetting.getSettingValue(), WechatPaymentSetting.class);
         Map<String, Object> map = new HashMap<>(2);
 
         //发货信息录入
         //订单，需要上传物流信息的订单
-        map.put("order_key", new OrderKey(order));
+        map.put("order_key", new OrderKey(order,wechatPaymentSetting.getMchId()));
 
 
         if (order.getOrderStatus().equals(OrderStatusEnum.TAKE.name())) {
@@ -298,10 +299,11 @@ public class WechatMPServiceImpl implements WechatMPService {
          */
         private String out_trade_no;
 
-        public OrderKey(Order order) {
+        public OrderKey(Order order,String mchid) {
             this.order_number_type = 1;
             this.out_trade_no = order.getPayOrderNo();
             this.transaction_id = order.getReceivableNo();
+            this.mchid = mchid;
         }
     }
 
