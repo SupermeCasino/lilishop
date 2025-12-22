@@ -3,6 +3,7 @@ package cn.lili.modules.goods.entity.vos;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.Wholesale;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ public class GoodsVO extends Goods {
     private List<String> categoryName;
 
     @Schema(description = "商品参数")
-    private List<GoodsParamsDTO> goodsParamsDTOList;
+    private List<GoodsParamsItemDTO> goodsParamsDTOList;
 
     @Schema(description = "商品图片")
     private List<String> goodsGalleryList;

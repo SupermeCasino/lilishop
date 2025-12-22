@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ClassLoaderUtil;
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import cn.lili.common.aop.annotation.RetryOperation;
@@ -410,7 +411,7 @@ public class GoodsMessageListener implements RocketMQListener<MessageExt> {
     private EsGoodsIndex settingUpGoodsIndexData(Goods goods, GoodsSku goodsSku) {
         EsGoodsIndex goodsIndex = new EsGoodsIndex(goodsSku);
         if (goods.getParams() != null && !goods.getParams().isEmpty()) {
-            List<GoodsParamsDTO> goodsParamDTOS = JSON.parseArray(goods.getParams(), GoodsParamsDTO.class);
+            List<GoodsParamsItemDTO> goodsParamDTOS = JSON.parseArray(goods.getParams(), GoodsParamsItemDTO.class);
             goodsIndex = new EsGoodsIndex(goodsSku, goodsParamDTOS);
         }
         goodsIndex.setAuthFlag(goods.getAuthFlag());

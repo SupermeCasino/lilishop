@@ -12,7 +12,7 @@ import cn.lili.modules.goods.entity.dto.CategorySearchParams;
 import cn.lili.modules.goods.entity.vos.CategoryVO;
 import cn.lili.modules.goods.mapper.CategoryMapper;
 import cn.lili.modules.goods.service.CategoryBrandService;
-import cn.lili.modules.goods.service.CategoryParameterGroupService;
+import cn.lili.modules.goods.service.CategoryParameterService;
 import cn.lili.modules.goods.service.CategoryService;
 import cn.lili.modules.goods.service.CategorySpecificationService;
 import cn.lili.rocketmq.tags.GoodsTagsEnum;
@@ -28,7 +28,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +56,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     private CategoryBrandService categoryBrandService;
 
     @Autowired
-    @Lazy
-    private CategoryParameterGroupService categoryParameterGroupService;
+    private CategoryParameterService categoryParameterService;
 
     @Autowired
     private CategorySpecificationService categorySpecificationService;
@@ -279,7 +277,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         removeCache();
         //删除关联关系
         categoryBrandService.deleteByCategoryId(id);
-        categoryParameterGroupService.deleteByCategoryId(id);
+        categoryParameterService.deleteByCategoryId(id);
         categorySpecificationService.deleteByCategoryId(id);
     }
 

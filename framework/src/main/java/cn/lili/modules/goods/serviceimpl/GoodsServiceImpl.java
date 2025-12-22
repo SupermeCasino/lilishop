@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import com.alibaba.fastjson2.JSON;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
@@ -303,7 +304,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         //参数非空则填写参数
         if (CharSequenceUtil.isNotEmpty(goods.getParams())) {
-            goodsVO.setGoodsParamsDTOList(JSON.parseArray(goods.getParams(), GoodsParamsDTO.class));
+            goodsVO.setGoodsParamsDTOList(JSON.parseArray(goods.getParams(), GoodsParamsItemDTO.class));
         }
 
         List<Wholesale> wholesaleList = wholesaleService.findByGoodsId(goodsId);

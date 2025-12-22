@@ -1,5 +1,6 @@
 package cn.lili.modules.search.entity.dos;
 
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.elasticsearch.EsSuffix;
@@ -320,32 +321,25 @@ public class EsGoodsIndex implements Serializable {
      * @param sku            商品sku信息
      * @param goodsParamDTOS 商品参数信息
      */
-    public EsGoodsIndex(GoodsSku sku, List<GoodsParamsDTO> goodsParamDTOS) {
+    public EsGoodsIndex(GoodsSku sku, List<GoodsParamsItemDTO> goodsParamDTOS) {
         this(sku);
         //如果参数不为空
         if (goodsParamDTOS != null && !goodsParamDTOS.isEmpty()) {
             //接受不了参数索引
             List<EsGoodsAttribute> attributes = new ArrayList<>();
-            //循环参数分组
-            goodsParamDTOS.forEach(goodsParamGroup -> {
-                //如果参数有配置，则增加索引
-                if (goodsParamGroup.getGoodsParamsItemDTOList() != null && !goodsParamGroup.getGoodsParamsItemDTOList().isEmpty()) {
-                    //循环分组的内容
-                    goodsParamGroup.getGoodsParamsItemDTOList().forEach(goodsParam -> {
-                                //如果字段需要索引，则增加索引字段
-                                if (goodsParam.getIsIndex() != null && goodsParam.getIsIndex() == 1) {
-                                    EsGoodsAttribute attribute = new EsGoodsAttribute();
-                                    attribute.setType(1);
-                                    attribute.setName(goodsParam.getParamName());
-                                    attribute.setValue(goodsParam.getParamValue());
-                                    attribute.setSort(goodsParam.getSort());
-                                    attributes.add(attribute);
-                                }
-                            }
-                    );
-                }
-
-            });
+            //循环分组的内容
+            goodsParamDTOS.forEach(goodsParam -> {
+                        //如果字段需要索引，则增加索引字段
+                        if (goodsParam.getIsIndex() != null && goodsParam.getIsIndex() == 1) {
+                            EsGoodsAttribute attribute = new EsGoodsAttribute();
+                            attribute.setType(1);
+                            attribute.setName(goodsParam.getParamName());
+                            attribute.setValue(goodsParam.getParamValue());
+                            attribute.setSort(goodsParam.getSort());
+                            attributes.add(attribute);
+                        }
+                    }
+            );
             this.attrList = attributes;
         }
     }

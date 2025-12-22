@@ -73,7 +73,7 @@ public class GoodsOperationDTO implements Serializable {
     private Boolean recommend;
 
     @Schema(description = "商品参数")
-    private List<GoodsParamsDTO> goodsParamsDTOList;
+    private List<GoodsParamsItemDTO> goodsParamsDTOList;
 
     @Schema(description = "商品图片")
     private List<String> goodsGalleryList;

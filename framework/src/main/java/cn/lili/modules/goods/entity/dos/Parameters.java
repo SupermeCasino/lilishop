@@ -1,6 +1,6 @@
 package cn.lili.modules.goods.entity.dos;
 
-import cn.lili.mybatis.BaseIdEntity;
+import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @TableName("li_parameters")
 @Schema(description = "商品参数")
-public class Parameters extends BaseIdEntity {
+public class Parameters extends BaseEntity {
 
 
     private static final long serialVersionUID = -566510714456317006L;
@@ -48,13 +48,6 @@ public class Parameters extends BaseIdEntity {
     @Min(value = 0, message = "是否必填传值不正确")
     @Max(value = 1, message = "是否必填传值不正确")
     private Integer required;
-
-    @Schema(description = "参数分组id", required = true)
-    @NotNull(message = "所属参数组不能为空")
-    private String groupId;
-
-    @Schema(description = "分类id", hidden = true)
-    private String categoryId;
 
     @Schema(description = "排序", hidden = true)
     @NotNull(message = "请输入排序值")
