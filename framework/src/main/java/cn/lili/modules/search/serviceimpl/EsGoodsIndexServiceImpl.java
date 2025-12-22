@@ -17,6 +17,7 @@ import cn.lili.elasticsearch.ElasticsearchIndexAbstractService;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
 import cn.lili.modules.goods.entity.dto.GoodsSkuDTO;
 import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
@@ -991,7 +992,7 @@ public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService i
         EsGoodsIndex index;
         if (CharSequenceUtil.isNotEmpty(goodsSku.getParams())) {
             try {
-                List<GoodsParamsDTO> goodsParamDTOS = JSON.parseArray(goodsSku.getParams(), GoodsParamsDTO.class);
+                List<GoodsParamsItemDTO> goodsParamDTOS = JSON.parseArray(goodsSku.getParams(), GoodsParamsItemDTO.class);
                 index = CollUtil.isNotEmpty(goodsParamDTOS) ? new EsGoodsIndex(goodsSku, goodsParamDTOS) : new EsGoodsIndex(goodsSku);
             } catch (Exception parseEx) {
                 // 参数 JSON 非预期时，回退为基础索引，避免构建中断
