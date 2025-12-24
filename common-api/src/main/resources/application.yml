@@ -103,7 +103,6 @@ springdoc:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /source/**
     - /common/common/slider/**
     - /common/common/sms/**
@@ -111,13 +110,6 @@ ignored:
     - /common/common/site
     - /druid/**
     - /swagger-ui.html
-    - /doc.html
-    - /swagger-resources/**
-    - /swagger/**
-    - /webjars/**
-    - /v2/api-docs
-    - /configuration/ui
-    - /boot-admin
 
 # Mybatis-plus
 mybatis-plus:

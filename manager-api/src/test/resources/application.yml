@@ -106,7 +106,6 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /weixin/**
     - /source/**
     - /manager/passport/user/login
@@ -114,12 +113,8 @@ ignored:
     - /manager/other/elasticsearch
     - /manager/other/customWords
     - /druid/**
-    - /doc.html
     - /v3/api-docs/**
     - /swagger-ui/**
-    - /webjars/**
-    - /configuration/ui
-    - /boot-admin
     - /favicon.ico
     - /static/**
     - /public/**

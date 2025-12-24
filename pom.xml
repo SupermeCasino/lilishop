@@ -44,7 +44,6 @@
         <simple-http-version>1.0.3</simple-http-version>
         <antlr4-version>4.7.2</antlr4-version>
         <antlr4-runtime-version>4.7.2</antlr4-runtime-version>
-        <knife4j.version>4.4.0</knife4j.version>
 
         <userAgentUtils>1.21</userAgentUtils>
         <poi-version>5.2.3</poi-version>

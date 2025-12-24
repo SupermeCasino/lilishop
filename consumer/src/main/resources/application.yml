@@ -110,17 +110,9 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /source/**
     - /druid/**
     - /swagger-ui.html
-    - /doc.html
-    - /swagger-resources/**
-    - /swagger/**
-    - /webjars/**
-    - /v2/api-docs
-    - /configuration/ui
-    - /boot-admin
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml

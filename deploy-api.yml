@@ -217,8 +217,6 @@ data:
     ignored:
       urls:
         - /editor-app/**
-        - /actuator/**
-        - /actuator/**
         - /MP_verify_qSyvBPhDsPdxvOhC.txt
         - /weixin/**
         - /source/**
@@ -249,13 +247,7 @@ data:
         - /manager/other/customWords
         - /druid/**
         - /swagger-ui.html
-        - /doc.html
-        - /swagger-resources/**
-        - /swagger/**
-        - /webjars/**
         - /v3/api-docs/**
-        - /configuration/ui
-        - /boot-admin
         - /manager/promotion/seckill/init
         - /static/**
         - /public/**

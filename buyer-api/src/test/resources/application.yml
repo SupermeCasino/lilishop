@@ -110,7 +110,6 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
@@ -134,13 +133,6 @@ ignored:
     - /buyer/broadcast/studio/**
     - /druid/**
     - /swagger-ui.html
-    - /doc.html
-    - /swagger-resources/**
-    - /swagger/**
-    - /webjars/**
-    - /v2/api-docs
-    - /configuration/ui
-    - /boot-admin
 
 # Swagger界面内容配置
 swagger:
