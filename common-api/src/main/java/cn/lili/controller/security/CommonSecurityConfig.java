@@ -1,6 +1,7 @@
 package cn.lili.controller.security;
 
 import cn.lili.common.properties.IgnoredUrlsProperties;
+import cn.lili.common.security.CustomAccessDeniedHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+/**
+ * 统一安全配置 - 通用接口
+ * 通用服务默认放行，保留统一异常处理与CORS配置
+ * 若后续接口需鉴权，请按模块前缀与角色规范接入
+ */
 public class CommonSecurityConfig {
 
     @Autowired
@@ -22,6 +28,9 @@ public class CommonSecurityConfig {
 
     @Autowired
     private IgnoredUrlsProperties ignoredUrlsProperties;
+
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +46,17 @@ public class CommonSecurityConfig {
                 auth.anyRequest().permitAll();
             })
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            .csrf(csrf -> csrf.disable());
+            .csrf(csrf -> csrf.disable())
+            // 统一异常处理与禁用交互式登录方式
+            .exceptionHandling(eh -> eh
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint((req, res, ex) ->
+                    cn.lili.common.utils.ResponseUtil.output(res, 401,
+                        cn.lili.common.utils.ResponseUtil.resultMap(false, 401, "未登录或token失效"))
+                )
+            )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
         return http.build();
     }
 

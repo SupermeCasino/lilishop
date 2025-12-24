@@ -101,12 +101,13 @@ spring:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /source/**
     - /store/passport/login/**
     - /store/passport/login/refresh/**
     - /druid/**
     - /swagger-ui.html
+    - /swagger-ui
+    - /swagger-ui/
     - /swagger-ui/**
     - /doc.html
     - /swagger-resources/**
@@ -143,7 +144,7 @@ springdoc:
   api-docs:
     enabled: true
   swagger-ui:
-    path: /swagger-ui/index.html
+    path: /swagger-ui.html
   packages-to-scan: cn.lili.controller
   paths-to-match: /store/**
   override-with-generic-response: false

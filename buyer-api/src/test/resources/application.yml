@@ -27,20 +27,21 @@ spring:
   #  rabbitmq:
   #    host: 192.168.0.116
   # Redis
-  redis:
-    host: 192.168.0.116
-    port: 30379
-    password: lilishop
-    lettuce:
-      pool:
-        # 连接池最大连接数（使用负值表示没有限制） 默认 8
-        max-active: 200
-        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
-        max-wait: 20
-        # 连接池中的最大空闲连接 默认 8
-        max-idle: 10
-        # 连接池中的最小空闲连接 默认 8
-        min-idle: 8
+  data:
+    redis:
+      host: 192.168.31.100
+      port: 30379
+      password: lilishop
+      lettuce:
+        pool:
+          # 连接池最大连接数（使用负值表示没有限制） 默认 8
+          max-active: 200
+          # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+          max-wait: 20s
+          # 连接池中的最大空闲连接 默认 8
+          max-idle: 10
+          # 连接池中的最小空闲连接 默认 8
+          min-idle: 8
   # 文件大小上传配置
   servlet:
     multipart:

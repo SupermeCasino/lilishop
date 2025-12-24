@@ -94,7 +94,6 @@ management:
 ignored:
   urls:
     - /editor-app/**
-    - /actuator/**
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
@@ -126,11 +125,17 @@ ignored:
     - /manager/other/customWords
     - /druid/**
     - /swagger-ui.html
+    - /swagger-ui
+    - /swagger-ui/
     - /doc.html
+    - /swagger-ui/**
     - /swagger-resources/**
     - /swagger/**
     - /webjars/**
+    - /v2/api-docs
     - /v2/api-docs/**
+    - /v3/api-docs
+    - /v3/api-docs/**
     - /configuration/ui
     - /boot-admin
     - /manager/promotion/seckill/init
@@ -150,6 +155,10 @@ swagger:
     name: lili
     url: https://pickmall.cn
     email: admin@pickmall.com
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 # Mybatis-plus
 mybatis-plus:

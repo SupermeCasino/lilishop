@@ -3,7 +3,6 @@ package cn.lili.security;
 import cn.lili.cache.Cache;
 import cn.lili.common.properties.IgnoredUrlsProperties;
 import cn.lili.common.security.CustomAccessDeniedHandler;
-import cn.lili.common.utils.SpringContextUtil;
 import cn.lili.modules.member.service.ClerkService;
 import cn.lili.modules.member.service.StoreMenuRoleService;
 import cn.lili.modules.member.token.StoreTokenGenerate;
@@ -17,11 +16,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Objects;
+
 /**
- * spring Security 核心配置类 Store安全配置中心
+ * 统一安全配置 - 商家端
+ * 认证机制：JWT 无状态
+ * 异常处理：401 未认证、403 权限不足，统一 JSON 返回
+ * CORS：统一由全局 CorsConfigurationSource 控制
+ * 会话：STATELESS，禁用表单登录与 Basic
  *
  * @author Chopper
  * @since 2020/11/14 16:20
@@ -56,14 +62,26 @@ public class StoreSecurityConfig {
     @Autowired
     private ClerkService clerkService;
 
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        String[] ignoredUrls = ignoredUrlsProperties.getUrls().stream()
+                .filter(Objects::nonNull)
+                .toArray(String[]::new);
+        return web -> web.ignoring().requestMatchers(ignoredUrls);
+    }
+
     /**
      * 配置安全过滤器链
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // 配置不需要授权的URL
-        String[] ignoredUrls = ignoredUrlsProperties.getUrls().toArray(new String[0]);
-        
+        String[] ignoredUrls = ignoredUrlsProperties.getUrls().stream()
+                .filter(Objects::nonNull)
+                .toArray(String[]::new);
+
         http
             // 配置授权规则
             .authorizeHttpRequests(authz -> authz
@@ -77,13 +95,22 @@ public class StoreSecurityConfig {
             // 配置登出
             .logout(logout -> logout.permitAll())
             // 允许跨域
-            .cors(cors -> cors.configurationSource((CorsConfigurationSource) SpringContextUtil.getBean("corsConfigurationSource")))
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             // 关闭跨站请求防护
             .csrf(csrf -> csrf.disable())
             // 前后端分离采用JWT，不需要session
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // 自定义权限拒绝处理类
-            .exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint((req, res, ex) ->
+                        cn.lili.common.utils.ResponseUtil.output(res, 401,
+                                cn.lili.common.utils.ResponseUtil.resultMap(false, 401, "未登录或token失效"))
+                )
+            )
+            // 禁用表单与Basic认证
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
             // 添加JWT认证过滤器
             .addFilter(new StoreAuthenticationFilter(authenticationManager(authenticationConfiguration()), storeTokenGenerate, storeMenuRoleService, clerkService, cache));
 

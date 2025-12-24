@@ -12,18 +12,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 /**
- * spring Security 核心配置类 Manager安全配置中心
+ * 统一安全配置 - 管理端
+ * 认证机制：JWT 无状态，仅匹配 /manager/**
+ * 异常处理：401 未认证、403 权限不足，统一 JSON 返回
+ * CORS：统一由全局 CorsConfigurationSource 控制
+ * 会话：STATELESS，禁用表单登录与 Basic
  *
  * @author Chopper
  * @since 2020/11/14 16:20
  */
 @Slf4j
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class ManagerSecurityConfig {
 
@@ -51,16 +57,16 @@ public class ManagerSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 仅对管理端接口路径生效，避免影响文档静态资源
-        http.securityMatcher("/manager/**")
-            // 禁止网页 iframe
-            .headers(h -> h.frameOptions(f -> f.disable()))
+        // 禁止网页 iframe
+        http.headers(h -> h.frameOptions(f -> f.disable()))
             .authorizeHttpRequests(auth -> {
                 for (String url : ignoredUrlsProperties.getUrls()) {
                     auth.requestMatchers(url).permitAll();
                 }
                 auth.anyRequest().authenticated();
             })
+            // 配置登出
+            .logout(logout -> logout.permitAll())
             // 允许跨域
             .cors(c -> c.configurationSource(corsConfigurationSource))
             // 关闭 CSRF（前后端分离）
