@@ -1,21 +1,18 @@
 package cn.lili.modules.search.entity.dos;
 
-import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
-import com.alibaba.fastjson2.JSON;
 import cn.lili.common.enums.PromotionTypeEnum;
 import cn.lili.elasticsearch.EsSuffix;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
-import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
+import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
 import cn.lili.modules.promotion.tools.PromotionTools;
+import com.alibaba.fastjson2.JSON;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -105,15 +102,15 @@ public class EsGoodsIndex implements Serializable {
     /**
      * 品牌名称
      */
-    @Field(type = FieldType.Text, fielddata = true)
-    @Schema(description = "品牌名称")
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
+    @Schema(title = "品牌名称")
     private String brandName;
 
     /**
      * 品牌图片地址
      */
-    @Field(type = FieldType.Text, fielddata = true)
-    @Schema(description = "品牌图片地址")
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
+    @Schema(title = "品牌图片地址")
     private String brandUrl;
 
     /**
@@ -126,8 +123,8 @@ public class EsGoodsIndex implements Serializable {
     /**
      * 分类名称path
      */
-    @Field(type = FieldType.Text, fielddata = true)
-    @Schema(description = "分类名称path")
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
+    @Schema(title = "分类名称path")
     private String categoryNamePath;
 
     /**
@@ -140,8 +137,8 @@ public class EsGoodsIndex implements Serializable {
     /**
      * 店铺分类名称
      */
-    @Field(type = FieldType.Keyword)
-    @Schema(description = "店铺分类名称")
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
+    @Schema(title = "店铺分类名称")
     private String storeCategoryNamePath;
 
     /**
@@ -233,7 +230,7 @@ public class EsGoodsIndex implements Serializable {
     /**
      * 卖点
      */
-    @Field(type = FieldType.Text)
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     @Schema(description = "卖点")
     private String sellingPoint;
 
