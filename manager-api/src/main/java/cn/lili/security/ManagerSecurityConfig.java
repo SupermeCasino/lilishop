@@ -77,8 +77,8 @@ public class ManagerSecurityConfig {
             .exceptionHandling(eh -> eh
                     .accessDeniedHandler(accessDeniedHandler)
                     .authenticationEntryPoint((req, res, ex) ->
-                            cn.lili.common.utils.ResponseUtil.output(res, 401,
-                                    cn.lili.common.utils.ResponseUtil.resultMap(false, 401, "未登录或token失效"))
+                            cn.lili.common.utils.ResponseUtil.output(res, 403,
+                                    cn.lili.common.utils.ResponseUtil.resultMap(false, 403, "未登录或token失效"))
                     )
             )
             .formLogin(form -> form.disable())
