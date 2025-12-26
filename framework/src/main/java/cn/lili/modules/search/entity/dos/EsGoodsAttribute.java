@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.InnerField;
+import org.springframework.data.elasticsearch.annotations.MultiField;
 
 import java.io.Serializable;
 
@@ -33,7 +35,7 @@ public class EsGoodsAttribute implements Serializable {
     /**
      * 属性名称
      */
-    @Field(type = FieldType.Text, fielddata = true)
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String name;
 
     /**
@@ -45,7 +47,7 @@ public class EsGoodsAttribute implements Serializable {
     /**
      * 属性值
      */
-    @Field(type = FieldType.Text, fielddata = true)
+    @MultiField(mainField = @Field(type = FieldType.Text, fielddata = true), otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String value;
 
 

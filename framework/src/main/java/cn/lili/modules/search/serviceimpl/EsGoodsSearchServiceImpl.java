@@ -20,10 +20,10 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregatio
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.*;
 import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
-import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,8 +42,8 @@ import java.util.stream.Collectors;
 public class EsGoodsSearchServiceImpl extends EsGoodsSearchAbstractService implements EsGoodsSearchService {
 
     private static final String ATTR_PATH = "attrList";
-    private static final String ATTR_VALUE = "attrList.value";
-    private static final String ATTR_NAME = "attrList.name";
+    private static final String ATTR_VALUE = "attrList.value.keyword";
+    private static final String ATTR_NAME = "attrList.name.keyword";
     private static final String ATTR_SORT = "attrList.sort";
     /**
      * ES
