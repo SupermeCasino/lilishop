@@ -48,15 +48,15 @@ public class EsGoodsSearchAbstractService extends BaseElasticsearchService {
     public static final String ATTR_BRAND_ID_FIELD = "brandId";
     public static final String ATTR_BRAND_NAME_AGG = "brandNameAgg";
     // 修正：聚合字段不使用 .keyword 子字段
-    public static final String ATTR_BRAND_NAME_FIELD = "brandName";
+    public static final String ATTR_BRAND_NAME_FIELD = "brandName.keyword";
     public static final String ATTR_BRAND_URL_AGG = "brandUrlAgg";
     // 修正：聚合字段不使用 .keyword 子字段
-    public static final String ATTR_BRAND_URL_FIELD = "brandUrl";
+    public static final String ATTR_BRAND_URL_FIELD = "brandUrl.keyword";
     public static final String ATTR_NAME_KEY = "nameList";
     public static final String ATTR_VALUE_KEY = "valueList";
     public static final String ATTR_CATEGORY_NAME_AGG = "categoryNameAgg";
     // 修正：聚合字段不使用 .keyword 子字段
-    public static final String ATTR_CATEGORY_NAME_FIELD = "categoryNamePath";
+    public static final String ATTR_CATEGORY_NAME_FIELD = "categoryNamePath.keyword";
     public static final String ATTR_CATEGORY_PATH_AGG = "categoryPathAgg";
     public static final String ATTR_CATEGORY_PATH_FIELD = "categoryPath";
     public static final String GOODS_NAME = "goodsName";
