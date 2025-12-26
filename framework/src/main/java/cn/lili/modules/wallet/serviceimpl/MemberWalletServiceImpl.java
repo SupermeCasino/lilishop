@@ -103,7 +103,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean increaseWithdrawal(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款讯息是否存在，如果不存在则新建
+        //检测会员预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //余额变动
         memberWallet.setMemberWallet(CurrencyUtil.add(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney()));
@@ -118,7 +118,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean increase(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款讯息是否存在，如果不存在则新建
+        //检测会员预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //新增预存款
         memberWallet.setMemberWallet(CurrencyUtil.add(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney()));
@@ -133,7 +133,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduce(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款讯息是否存在，如果不存在则新建
+        //检测会员预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //减少预存款，需要校验 如果不够扣减预存款
         if (0 > CurrencyUtil.sub(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney())) {
@@ -152,7 +152,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduceWithdrawal(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款讯息是否存在，如果不存在则新建
+        //检测会员预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //减少预存款，需要校验 如果不够扣减预存款
         if (0 > CurrencyUtil.sub(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney())) {
@@ -172,7 +172,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduceFrozen(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款讯息是否存在，如果不存在则新建
+        //检测会员预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //校验此金额是否超过冻结金额
         if (0 > CurrencyUtil.sub(memberWallet.getMemberFrozenWallet(), memberWalletUpdateDTO.getMoney())) {

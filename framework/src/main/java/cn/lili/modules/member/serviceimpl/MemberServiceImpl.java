@@ -505,17 +505,17 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     public IPage<MemberVO> getMemberPage(MemberSearchVO memberSearchVO, PageVO page) {
         QueryWrapper<Member> queryWrapper = Wrappers.query();
         //用户名查询
-        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getUsername()), "username", memberSearchVO.getUsername());
+        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getUsername()), "m.username", memberSearchVO.getUsername());
         //用户名查询
-        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getNickName()), "nick_name", memberSearchVO.getNickName());
+        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getNickName()), "m.nick_name", memberSearchVO.getNickName());
         //按照电话号码查询
-        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getMobile()), "mobile", memberSearchVO.getMobile());
+        queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getMobile()), "m.mobile", memberSearchVO.getMobile());
         //按照ID查询
-        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getId()), "id", memberSearchVO.getId());
+        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getId()), "m.id", memberSearchVO.getId());
         //按照会员状态查询
-        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled()), "disabled",
+        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled()), "m.disabled",
                 memberSearchVO.getDisabled().equals(SwitchEnum.OPEN.name()) ? 1 : 0);
-        queryWrapper.orderByDesc("create_time");
+        queryWrapper.orderByDesc("m.create_time");
         return this.baseMapper.pageByMemberVO(PageUtil.initPage(page), queryWrapper);
     }
 

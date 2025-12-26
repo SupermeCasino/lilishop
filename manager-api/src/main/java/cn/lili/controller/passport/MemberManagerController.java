@@ -8,10 +8,13 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.entity.dto.ManagerMemberEditDTO;
 import cn.lili.modules.member.entity.dto.MemberAddDTO;
+import cn.lili.modules.member.entity.enums.PointTypeEnum;
 import cn.lili.modules.member.entity.vo.MemberSearchVO;
 import cn.lili.modules.member.entity.vo.MemberVO;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.system.aspect.annotation.SystemLogPoint;
+import cn.lili.modules.wallet.entity.dto.MemberWalletUpdateDTO;
+import cn.lili.modules.wallet.entity.enums.DepositServiceTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -88,6 +91,27 @@ public class MemberManagerController {
     @GetMapping("/num")
     public ResultMessage<Long> getByPage(MemberSearchVO memberSearchVO) {
         return ResultUtil.data(memberService.getMemberNum(memberSearchVO));
+    }
+
+
+
+
+    @PutMapping("/updateMemberPoint")
+    @Operation(summary = "增加用户余额")
+    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Parameter(name = "point", description = "积分", required = true)
+    @Parameter(name = "type", description = "类型", required = true)
+    public ResultMessage<Object> updateMemberPoint(String memberId ,Long point,String type) {
+        String content="";
+        if (type.equals(PointTypeEnum.INCREASE.name())) {
+            content="运营后台手动增加积分:"+point;
+        }else{
+            content="运营后台手动减少积分:"+point;
+        }
+        if(memberService.updateMemberPoint(point, type, memberId, content)){
+            return ResultUtil.success();
+        }
+        return ResultUtil.error();
     }
 
 }

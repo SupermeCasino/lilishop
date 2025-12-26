@@ -56,6 +56,9 @@ public class MemberVO implements Serializable {
     @Schema(description = "积分数量")
     private Long point;
 
+    @Schema(description = "会员预存款")
+    private Double memberWallet;
+
     @Schema(description = "积分总数量")
     private Long totalPoint;
 
