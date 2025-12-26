@@ -5,6 +5,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.MemberPointsHistory;
 import cn.lili.modules.member.entity.vo.MemberPointsHistoryVO;
+import cn.lili.modules.member.entity.vo.MemberPointsStatisticsVO;
 import cn.lili.modules.member.service.MemberPointsHistoryService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,14 @@ public class MemberPointsHistoryManagerController {
     public ResultMessage<MemberPointsHistoryVO> getMemberPointsHistoryVO(String memberId) {
         return ResultUtil.data(memberPointsHistoryService.getMemberPointsHistoryVO(memberId));
     }
+
+    @Operation(description = "获取积分统计")
+    @GetMapping("/queryMemberPointsStatistics")
+    public ResultMessage<MemberPointsStatisticsVO> queryMemberPointsStatistics() {
+        return ResultUtil.data(memberPointsHistoryService.queryMemberPointsStatistics());
+    }
+
+
 
 
 }

@@ -2,6 +2,7 @@ package cn.lili.modules.member.mapper;
 
 
 import cn.lili.modules.member.entity.dos.Member;
+import cn.lili.modules.member.entity.vo.MemberPointsStatisticsVO;
 import cn.lili.modules.member.entity.vo.MemberVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -24,9 +25,13 @@ public interface MemberMapper extends BaseMapper<Member> {
      * 获取所有的会员手机号
      * @return 会员手机号
      */
-    @Select("select m.mobile from li_member m")
+    @Select("SELECT m.mobile FROM li_member m")
     List<String> getAllMemberMobile();
 
-    @Select("select m.*,mw.member_wallet from li_member m INNER JOIN li_member_wallet mw ON m.id=mw.member_id ${ew.customSqlSegment}")
+    @Select("SELECT m.*,mw.member_wallet FROM li_member m INNER JOIN li_member_wallet mw ON m.id=mw.member_id ${ew.customSqlSegment}")
     IPage<MemberVO> pageByMemberVO(IPage<MemberVO> page, @Param(Constants.WRAPPER) Wrapper<Member> queryWrapper);
+
+    @Select("SELECT SUM( total_point ) AS totalPoint,SUM( point ) AS unUsedPoint FROM li_member")
+    MemberPointsStatisticsVO queryMemberPointsStatistics();
+
 }
