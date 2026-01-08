@@ -15,13 +15,8 @@ import cn.lili.modules.im.entity.vo.MessageVO;
 import cn.lili.modules.im.service.ImMessageService;
 import cn.lili.modules.im.service.ImTalkService;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author liushuai
@@ -97,8 +95,13 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(@PathParam("accessToken") String accessToken, String msg) {
         log.info("发送消息：{}", msg);
-        MessageOperation messageOperation = JSONUtil.toBean(msg, MessageOperation.class);
-        operation(accessToken, messageOperation);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            MessageOperation messageOperation = objectMapper.readValue(msg, MessageOperation.class);
+            operation(accessToken, messageOperation);
+        } catch (Exception e) {
+            log.error("消息解析失败: {}", msg, e);
+        }
     }
 
     /**
