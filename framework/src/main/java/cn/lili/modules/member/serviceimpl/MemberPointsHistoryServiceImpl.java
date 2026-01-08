@@ -6,6 +6,8 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.entity.dos.MemberPointsHistory;
 import cn.lili.modules.member.entity.vo.MemberPointsHistoryVO;
+import cn.lili.modules.member.entity.vo.MemberPointsStatisticsVO;
+import cn.lili.modules.member.mapper.MemberMapper;
 import cn.lili.modules.member.mapper.MemberPointsHistoryMapper;
 import cn.lili.modules.member.service.MemberPointsHistoryService;
 import cn.lili.modules.member.service.MemberService;
@@ -28,6 +30,8 @@ public class MemberPointsHistoryServiceImpl extends ServiceImpl<MemberPointsHist
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberMapper memberMapper;
 
     @Override
     public MemberPointsHistoryVO getMemberPointsHistoryVO(String memberId) {
@@ -53,6 +57,11 @@ public class MemberPointsHistoryServiceImpl extends ServiceImpl<MemberPointsHist
             page.setOrder("desc");
         }
         return this.page(PageUtil.initPage(page), lambdaQueryWrapper);
+    }
+
+    @Override
+    public MemberPointsStatisticsVO queryMemberPointsStatistics() {
+        return memberMapper.queryMemberPointsStatistics();
     }
 
 }

@@ -3,6 +3,7 @@ package cn.lili.security;
 import cn.lili.cache.Cache;
 import cn.lili.common.properties.IgnoredUrlsProperties;
 import cn.lili.common.security.CustomAccessDeniedHandler;
+import cn.lili.common.utils.SpringContextUtil;
 import cn.lili.modules.member.service.ClerkService;
 import cn.lili.modules.member.service.StoreMenuRoleService;
 import cn.lili.modules.member.token.StoreTokenGenerate;
@@ -62,17 +63,6 @@ public class StoreSecurityConfig {
     @Autowired
     private ClerkService clerkService;
 
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        String[] ignoredUrls = ignoredUrlsProperties.getUrls().stream()
-                .filter(Objects::nonNull)
-                .toArray(String[]::new);
-        return web -> web.ignoring().requestMatchers(ignoredUrls);
-    }
-
     /**
      * 配置安全过滤器链
      */
@@ -95,7 +85,7 @@ public class StoreSecurityConfig {
             // 配置登出
             .logout(logout -> logout.permitAll())
             // 允许跨域
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            .cors(cors -> cors.configurationSource((CorsConfigurationSource) SpringContextUtil.getBean("corsConfigurationSource")))
             // 关闭跨站请求防护
             .csrf(csrf -> csrf.disable())
             // 前后端分离采用JWT，不需要session
@@ -104,8 +94,8 @@ public class StoreSecurityConfig {
             .exceptionHandling(exception -> exception
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint((req, res, ex) ->
-                        cn.lili.common.utils.ResponseUtil.output(res, 401,
-                                cn.lili.common.utils.ResponseUtil.resultMap(false, 401, "未登录或token失效"))
+                        cn.lili.common.utils.ResponseUtil.output(res, 403,
+                                cn.lili.common.utils.ResponseUtil.resultMap(false, 403, "未登录或token失效"))
                 )
             )
             // 禁用表单与Basic认证

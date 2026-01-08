@@ -3,6 +3,7 @@ package cn.lili.modules.member.service;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dos.MemberPointsHistory;
 import cn.lili.modules.member.entity.vo.MemberPointsHistoryVO;
+import cn.lili.modules.member.entity.vo.MemberPointsStatisticsVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -31,5 +32,8 @@ public interface MemberPointsHistoryService extends IService<MemberPointsHistory
      * @return 积分历史分页
      */
     IPage<MemberPointsHistory> MemberPointsHistoryList(PageVO page, String memberId, String memberName);
+
+
+    MemberPointsStatisticsVO queryMemberPointsStatistics();
 
 }
