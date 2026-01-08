@@ -76,6 +76,9 @@ public class GoodsStoreController {
     @Operation(summary = "获取商品数量")
     @GetMapping("/goodsNumber")
     public ResultMessage<GoodsNumVO> getGoodsNumVO(GoodsSearchParams goodsSearchParams) {
+        //获取当前登录商家账号
+        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+        goodsSearchParams.setStoreId(storeId);
         return ResultUtil.data(goodsService.getGoodsNumVO(goodsSearchParams));
     }
 
