@@ -9,7 +9,7 @@ server:
       max: 1000
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
-management:
+spring:
   #  health:
   #    elasticsearch:
   #      enabled: false
@@ -30,7 +30,7 @@ management:
       password: lilishop
       # SpringBoot3兼容性：添加超时配置
       timeout: 10s
-      # SpringBoot3兼容性：添加连接超时配置  
+      # SpringBoot3兼容性：添加连接超时配置
       connect-timeout: 10s
       lettuce:
         pool:
