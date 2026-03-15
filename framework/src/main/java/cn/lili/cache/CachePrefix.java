@@ -519,7 +519,8 @@ public enum CachePrefix {
      * @param str
      * @return
      */
-    QR_CODE_LOGIN_SESSION;
+    QR_CODE_LOGIN_SESSION,
+    WX_CHANNELS_THIRD_CATEGORY;
 
 
     public static String removePrefix(String str) {

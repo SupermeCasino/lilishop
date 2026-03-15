@@ -2,16 +2,21 @@ package cn.lili.modules.wxchannels.serviceimpl;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
+import cn.lili.modules.wxchannels.entity.dto.WxChannelsCategoryDTO;
 import cn.lili.modules.wxchannels.entity.dto.WxChannelsSetting;
 import cn.lili.modules.wxchannels.service.WxChannelsApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,6 +50,40 @@ public class WxChannelsApiServiceImpl implements WxChannelsApiService {
                 .put("status", status)
                 .build();
         HttpUtil.post(url, JSONUtil.toJsonStr(body));
+    }
+
+    @Override
+    public List<WxChannelsCategoryDTO> getThirdCategories() {
+        WxChannelsSetting setting = getSetting();
+        String token = getToken(setting);
+        String url = setting.getApiBase() + "/cat/get_children_cateogry?access_token=" + token;
+        String resp = HttpUtil.get(url);
+        JSONObject obj = JSONUtil.parseObj(resp);
+        Integer errcode = obj.getInt("errcode", 0);
+        if (errcode != null && errcode != 0) {
+            return new ArrayList<>();
+        }
+        JSONArray arr = obj.getJSONArray("third_cat_list");
+        List<WxChannelsCategoryDTO> list = new ArrayList<>();
+        if (arr == null) {
+            return list;
+        }
+        for (Object o : arr) {
+            JSONObject it = JSONUtil.parseObj(o);
+            WxChannelsCategoryDTO dto = new WxChannelsCategoryDTO();
+            dto.setThirdCatId(it.getLong("third_cat_id"));
+            dto.setThirdCatName(it.getStr("third_cat_name"));
+            dto.setQualification(it.getStr("qualification"));
+            dto.setQualificationType(it.getInt("qualification_type"));
+            dto.setProductQualification(it.getStr("product_qualification"));
+            dto.setProductQualificationType(it.getInt("product_qualification_type"));
+            dto.setSecondCatId(it.getLong("second_cat_id"));
+            dto.setSecondCatName(it.getStr("second_cat_name"));
+            dto.setFirstCatId(it.getLong("first_cat_id"));
+            dto.setFirstCatName(it.getStr("first_cat_name"));
+            list.add(dto);
+        }
+        return list;
     }
 
     private WxChannelsSetting getSetting() {

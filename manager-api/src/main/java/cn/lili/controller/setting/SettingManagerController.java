@@ -19,6 +19,7 @@ import cn.lili.modules.system.entity.dto.payment.WechatPaymentSetting;
 import cn.lili.modules.system.entity.dto.payment.dto.PaymentSupportForm;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
+import cn.lili.modules.wxchannels.entity.dto.WxChannelsSetting;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -195,6 +196,10 @@ public class SettingManagerController {
                 return setting == null ?
                         ResultUtil.data(new HotWordsSetting()) :
                         ResultUtil.data(JSONUtil.toBean(setting.getSettingValue(), HotWordsSetting.class));
+            case WX_CHANNELS:
+                return setting == null ?
+                        ResultUtil.data(new WxChannelsSetting()) :
+                        ResultUtil.data(JSONUtil.toBean(setting.getSettingValue(), WxChannelsSetting.class));
             default:
                 throw new ServiceException(ResultCode.SETTING_NOT_TO_SET);
         }
