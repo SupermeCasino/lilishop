@@ -207,4 +207,14 @@ public interface GoodsService extends IService<Goods> {
      * @param goodsId    商品ID
      */
     void addGoodsCommentNum(Integer commentNum, String goodsId);
+
+    /**
+     * 定时上/下架商品
+     *
+     * @param goodsIds    商品ID集合
+     * @param status      上下架状态
+     * @param triggerTime 触发时间（到秒，Date 类型）
+     * @param reason      原因
+     */
+    void scheduleGoodsMarket(List<String> goodsIds, GoodsStatusEnum status, java.util.Date triggerTime, String reason);
 }

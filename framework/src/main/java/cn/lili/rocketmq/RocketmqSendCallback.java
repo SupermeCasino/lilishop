@@ -18,6 +18,11 @@ public class RocketmqSendCallback implements SendCallback {
 
     @Override
     public void onException(Throwable throwable) {
-        log.error("async onException Throwable", throwable);
+        String msg = throwable == null ? null : throwable.getMessage();
+        if (msg != null && (msg.contains("No route info of this topic") || msg.contains("No route info"))) {
+            log.error("async onException: topic route missing or topic not found. Verify NameServer and create topic on broker", throwable);
+        } else {
+            log.error("async onException Throwable", throwable);
+        }
     }
 }

@@ -25,8 +25,8 @@ spring:
   # Redis
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: 192.168.31.100
+      port: 30379
       password: lilishop
       # SpringBoot3兼容性：添加超时配置
       timeout: 10s
@@ -60,7 +60,7 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://192.168.31.100:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
         maxActive: 20
@@ -241,7 +241,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 127.0.0.1:9200
+      cluster-nodes: 192.168.31.100:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -252,28 +252,30 @@ lili:
     #        password: LiLiShopES
 
     logstash:
-      server: 127.0.0.1:4560
+      server: 192.168.31.100:4560
     rocketmq:
-      promotion-topic: shop_lili_promotion_topic
-      promotion-group: shop_lili_promotion_group
-      msg-ext-topic: shop_lili_msg_topic
-      msg-ext-group: shop_lili_msg_group
-      goods-topic: shop_lili_goods_topic
-      goods-group: shop_lili_goods_group
-      order-topic: shop_lili_order_topic
-      order-group: shop_lili_order_group
-      member-topic: shop_lili_member_topic
-      member-group: shop_lili_member_group
-      other-topic: shop_lili_other_topic
-      other-group: shop_lili_other_group
-      notice-topic: shop_lili_notice_topic
-      notice-group: shop_lili_notice_group
-      notice-send-topic: shop_lili_send_notice_topic
-      notice-send-group: shop_lili_send_notice_group
-      after-sale-topic: shop_lili_after_sale_topic
-      after-sale-group: shop_lili_after_sale_group
+      promotion-topic: lili_promotion_topic
+      promotion-group: lili_promotion_group
+      msg-ext-topic: lili_msg_topic
+      msg-ext-group: lili_msg_group
+      goods-topic: lili_goods_topic
+      goods-group: lili_goods_group
+      order-topic: lili_order_topic
+      order-group: lili_order_group
+      member-topic: lili_member_topic
+      member-group: lili_member_group
+      store-topic: lili_store_topic
+      store-group: lili_store_group
+      other-topic: lili_other_topic
+      other-group: lili_other_group
+      notice-topic: lili_notice_topic
+      notice-group: lili_notice_group
+      notice-send-topic: lili_send_notice_topic
+      notice-send-group: lili_send_notice_group
+      after-sale-topic: lili_after_sale_topic
+      after-sale-group: lili_after_sale_group
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: 192.168.31.100:9876
   isVIPChannel: false
   producer:
     group: lili_group
@@ -282,7 +284,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://127.0.0.1:9001/xxl-job-admin
+      addresses: http://192.168.31.100:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

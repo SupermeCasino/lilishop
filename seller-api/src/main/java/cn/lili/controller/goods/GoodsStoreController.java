@@ -11,6 +11,7 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsOperationDTO;
+import cn.lili.modules.goods.entity.dto.GoodsMarketScheduleDTO;
 import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
 import cn.lili.modules.goods.entity.dto.GoodsSkuStockDTO;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
@@ -202,6 +203,14 @@ public class GoodsStoreController {
         List<String> filterGoodsSkuIds = goodsSkuList.stream().map(GoodsSku::getId).collect(Collectors.toList());
         List<GoodsSkuStockDTO> collect = updateStockList.stream().filter(i -> filterGoodsSkuIds.contains(i.getSkuId())).collect(Collectors.toList());
         goodsSkuService.updateStocks(collect);
+        return ResultUtil.success();
+    }
+
+    @Operation(summary = "定时上下架商品", description = "触发时间为到秒的Date类型，建议格式：yyyy-MM-dd HH:mm:ss")
+    @PostMapping(value = "/schedule/market", consumes = "application/json")
+    public ResultMessage<Object> scheduleMarket(@RequestBody @Valid GoodsMarketScheduleDTO dto) {
+        GoodsStatusEnum status = GoodsStatusEnum.valueOf(dto.getStatus());
+        goodsService.scheduleGoodsMarket(dto.getGoodsIds(), status, dto.getTriggerTime(), dto.getReason());
         return ResultUtil.success();
     }
 

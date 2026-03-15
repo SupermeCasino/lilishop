@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -119,6 +120,18 @@ public class Goods extends BaseEntity {
 
     @Schema(description = "下架原因")
     private String underMessage;
+
+    @Schema(description = "计划上架时间（到秒，yyyy-MM-dd HH:mm:ss）")
+    private Date scheduledUpperTime;
+
+    @Schema(description = "计划上架原因")
+    private String scheduledUpperReason;
+
+    @Schema(description = "计划下架时间（到秒，yyyy-MM-dd HH:mm:ss）")
+    private Date scheduledDownTime;
+
+    @Schema(description = "计划下架原因")
+    private String scheduledDownReason;
 
     @Schema(description = "是否自营")
     private Boolean selfOperated;

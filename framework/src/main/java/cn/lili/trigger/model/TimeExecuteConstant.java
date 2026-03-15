@@ -22,4 +22,14 @@ public interface TimeExecuteConstant {
      * 促销延迟加载执行器
      */
     public static final String COUPON_ACTIVITY_EXECUTOR = "couponActivityExecutor";
+    
+    /**
+     * 商品定时上架执行器
+     */
+    public static final String GOODS_UPPER_EXECUTOR = "goodsUpperTimeTriggerExecutor";
+    
+    /**
+     * 商品定时下架执行器
+     */
+    public static final String GOODS_DOWN_EXECUTOR = "goodsDownTimeTriggerExecutor";
 }

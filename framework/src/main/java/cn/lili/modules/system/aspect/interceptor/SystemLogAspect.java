@@ -20,6 +20,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -75,15 +77,21 @@ public class SystemLogAspect {
     public void after(JoinPoint joinPoint, Object rvt) {
         try {
 
-            if (request == null || rvt == null) {
+            if (rvt == null) {
                 return;
             }
+
+            ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attrs == null) {
+                return;
+            }
+            HttpServletRequest currentRequest = attrs.getRequest();
 
             Map<String, String> map = spelFormat(joinPoint, rvt);
             String description = map.get("description").toString();
             String customerLog = map.get("customerLog").toString();
 
-            Map<String, String[]> logParams = request.getParameterMap();
+            Map<String, String[]> logParams = currentRequest.getParameterMap();
             AuthUser authUser = UserContext.getCurrentUser();
             SystemLogVO systemLogVO = new SystemLogVO();
 
@@ -102,15 +110,15 @@ public class SystemLogAspect {
             //日志标题
             systemLogVO.setName(description);
             //日志请求url
-            systemLogVO.setRequestUrl(request.getRequestURI());
+            systemLogVO.setRequestUrl(currentRequest.getRequestURI());
             //请求方式
-            systemLogVO.setRequestType(request.getMethod());
+            systemLogVO.setRequestType(currentRequest.getMethod());
             //请求参数
             systemLogVO.setMapToParams(logParams);
             //响应参数 此处数据太大了，所以先注释掉
 //           systemLogVO.setResponseBody(JSONUtil.toJsonStr(rvt));
             //请求IP
-            systemLogVO.setIp(IpUtils.getIpAddress(request));
+            systemLogVO.setIp(IpUtils.getIpAddress(currentRequest));
             //IP地址
 //            systemLogVO.setIpInfo(ipHelper.getIpCity(request));
             //写入自定义日志内容

@@ -24,7 +24,12 @@ public enum DelayTypeEnums {
     /**
      * 直播
      */
-    BROADCAST("直播");
+    BROADCAST("直播"),
+
+    /**
+     * 商品（上下架）
+     */
+    GOODS("商品");
 
     private String description;
 

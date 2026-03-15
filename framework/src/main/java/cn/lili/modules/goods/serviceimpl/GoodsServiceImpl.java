@@ -5,6 +5,11 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.lili.modules.goods.entity.dto.GoodsParamsItemDTO;
+import cn.lili.trigger.enums.DelayTypeEnums;
+import cn.lili.trigger.message.GoodsMarketMessage;
+import cn.lili.trigger.model.TimeExecuteConstant;
+import cn.lili.trigger.model.TimeTriggerMsg;
+import cn.lili.trigger.util.DelayQueueTools;
 import com.alibaba.fastjson2.JSON;
 import cn.lili.cache.Cache;
 import cn.lili.cache.CachePrefix;
@@ -115,6 +120,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Autowired
     private RocketmqCustomProperties rocketmqCustomProperties;
 
+    @Autowired
+    private cn.lili.trigger.interfaces.TimeTrigger timeTrigger;
+    
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
@@ -402,6 +410,13 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         LambdaUpdateWrapper<Goods> updateWrapper = this.getUpdateWrapperByStoreAuthority();
         updateWrapper.set(Goods::getMarketEnable, goodsStatusEnum.name());
         updateWrapper.set(Goods::getUnderMessage, underReason);
+        if (GoodsStatusEnum.UPPER.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledUpperTime, null);
+            updateWrapper.set(Goods::getScheduledUpperReason, null);
+        } else if (GoodsStatusEnum.DOWN.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledDownTime, null);
+            updateWrapper.set(Goods::getScheduledDownReason, null);
+        }
         updateWrapper.in(Goods::getId, goodsIds);
         result = this.update(updateWrapper);
 
@@ -429,6 +444,13 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         LambdaUpdateWrapper<Goods> updateWrapper = this.getUpdateWrapperByStoreAuthority();
         updateWrapper.set(Goods::getMarketEnable, goodsStatusEnum.name());
         updateWrapper.set(Goods::getUnderMessage, underReason);
+        if (GoodsStatusEnum.UPPER.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledUpperTime, null);
+            updateWrapper.set(Goods::getScheduledUpperReason, null);
+        } else if (GoodsStatusEnum.DOWN.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledDownTime, null);
+            updateWrapper.set(Goods::getScheduledDownReason, null);
+        }
         updateWrapper.eq(Goods::getStoreId, storeId);
         boolean result = this.update(updateWrapper);
 
@@ -455,6 +477,13 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         LambdaUpdateWrapper<Goods> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.set(Goods::getMarketEnable, goodsStatusEnum.name());
         updateWrapper.set(Goods::getUnderMessage, underReason);
+        if (GoodsStatusEnum.UPPER.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledUpperTime, null);
+            updateWrapper.set(Goods::getScheduledUpperReason, null);
+        } else if (GoodsStatusEnum.DOWN.equals(goodsStatusEnum)) {
+            updateWrapper.set(Goods::getScheduledDownTime, null);
+            updateWrapper.set(Goods::getScheduledDownReason, null);
+        }
         updateWrapper.in(Goods::getId, goodsIds);
         result = this.update(updateWrapper);
 
@@ -588,6 +617,44 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 .set("self_operated", store.getSelfOperated());
         this.update(updateWrapper);
         goodsSkuService.update(updateWrapper);
+    }
+
+    /**
+     * 定时上/下架商品
+     *
+     * @param goodsIds    商品ID集合
+     * @param status      上下架状态
+     * @param triggerTime 触发时间（到秒，Date 类型）
+     * @param reason      原因
+     */
+    @Override
+    public void scheduleGoodsMarket(List<String> goodsIds, GoodsStatusEnum status, java.util.Date triggerTime, String reason) {
+        if (goodsIds == null || goodsIds.isEmpty() || triggerTime == null) {
+            return;
+        }
+        String executor = GoodsStatusEnum.UPPER.equals(status)
+                ? TimeExecuteConstant.GOODS_UPPER_EXECUTOR
+                : TimeExecuteConstant.GOODS_DOWN_EXECUTOR;
+        LambdaUpdateWrapper<Goods> uw = new LambdaUpdateWrapper<>();
+        uw.in(Goods::getId, goodsIds);
+        long normalizedMs = (triggerTime.getTime() / 1000L) * 1000L;
+        java.util.Date scheduledDate = new java.util.Date(normalizedMs);
+        if (GoodsStatusEnum.UPPER.equals(status)) {
+            uw.set(Goods::getScheduledUpperTime, scheduledDate);
+            uw.set(Goods::getScheduledUpperReason, reason);
+        } else {
+            uw.set(Goods::getScheduledDownTime, scheduledDate);
+            uw.set(Goods::getScheduledDownReason, reason);
+        }
+        this.update(uw);
+        for (String goodsId : goodsIds) {
+            GoodsMarketMessage payload = new GoodsMarketMessage(Collections.singletonList(goodsId), reason);
+            String uniqueKey = DelayQueueTools.wrapperUniqueKey(DelayTypeEnums.GOODS, goodsId);
+            TimeTriggerMsg timeTriggerMsg = new TimeTriggerMsg(executor, normalizedMs, payload, uniqueKey,
+                    rocketmqCustomProperties.getPromotionTopic());
+            timeTrigger.addDelay(timeTriggerMsg);
+
+        }
     }
 
     @Override

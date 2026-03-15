@@ -52,5 +52,6 @@ public enum SettingEnum {
     //银联支付设置
     UNIONPAY_PAYMENT,
     //热词设置
-    HOT_WORDS
+    HOT_WORDS,
+    WX_CHANNELS
 }
