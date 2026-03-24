@@ -16,6 +16,9 @@ public class MemberSearchVO {
     @Schema(description = "ID")
     private String id;
 
+    @Schema(description = "会员分组ID")
+    private String groupId;
+
     @Schema(description = "用户名")
     private String username;
 

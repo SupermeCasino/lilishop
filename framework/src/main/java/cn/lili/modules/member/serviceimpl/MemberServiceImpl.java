@@ -515,6 +515,10 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         //按照会员状态查询
         queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled()), "m.disabled",
                 memberSearchVO.getDisabled().equals(SwitchEnum.OPEN.name()) ? 1 : 0);
+        //按照会员分组查询
+        if (CharSequenceUtil.isNotBlank(memberSearchVO.getGroupId())) {
+            queryWrapper.inSql("m.id", "SELECT member_id FROM li_member_group_user WHERE group_id = '" + memberSearchVO.getGroupId() + "' AND delete_flag = false");
+        }
         queryWrapper.orderByDesc("m.create_time");
         return this.baseMapper.pageByMemberVO(PageUtil.initPage(page), queryWrapper);
     }
