@@ -1,3 +1,7 @@
+/**
+ * 作者：mike
+ * 日期：2026-03-30
+ */
 package cn.lili.modules.goods.serviceimpl;
 
 import cn.lili.modules.goods.entity.dos.GoodsGroupGoods;
@@ -11,9 +15,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 商品分组-商品关联业务服务实现类。
+ * <p>
+ * 提供对分组与商品关联关系的批量更新能力。
+ * </p>
+ *
+ * @author mike
+ * @date 2026-03-30
+ */
 @Service
 public class GoodsGroupGoodsServiceImpl extends ServiceImpl<GoodsGroupGoodsMapper, GoodsGroupGoods> implements GoodsGroupGoodsService {
 
+    /**
+     * 批量设置某分组下的商品关联关系。
+     * <p>
+     * 当 {@code goodsIds} 为空或清理后为空时，不进行写入，直接返回 {@code true}。
+     * </p>
+     *
+     * @param groupId 分组ID
+     * @param goodsIds 商品ID列表
+     * @return 操作是否成功
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateGroupGoods(String groupId, List<String> goodsIds) {

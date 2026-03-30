@@ -1,3 +1,7 @@
+/**
+ * 作者：mike
+ * 日期：2026-03-30
+ */
 package cn.lili.controller.goods;
 
 import cn.hutool.core.text.CharSequenceUtil;
@@ -27,6 +31,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 管理端：商品分组接口。
+ * <p>
+ * 提供分组的增删改查，以及对分组与商品关联关系的维护与查询。
+ * </p>
+ *
+ * @author mike
+ * @date 2026-03-30
+ */
 @RestController
 @Tag(name = "管理端,商品分组接口")
 @RequestMapping("/manager/goods/goodsGroup")
@@ -41,6 +54,12 @@ public class GoodsGroupManagerController {
     @Autowired
     private GoodsService goodsService;
 
+    /**
+     * 通过ID获取商品分组。
+     *
+     * @param id 商品分组ID
+     * @return 商品分组详情
+     */
     @Operation(description = "通过id获取商品分组")
     @Parameter(name = "id", description = "商品分组ID", required = true)
     @GetMapping("/get/{id}")
@@ -116,6 +135,12 @@ public class GoodsGroupManagerController {
         return ResultUtil.data(goodsService.queryByParams(goodsSearchParams));
     }
 
+    /**
+     * 将逗号分隔的字符串解析为商品ID列表。
+     *
+     * @param ids 逗号分隔的ID字符串（如：1,2,3）
+     * @return 去重后的ID列表；空白输入返回空列表
+     */
     private List<String> parseIds(String ids) {
         if (CharSequenceUtil.isBlank(ids)) {
             return Collections.emptyList();
