@@ -95,6 +95,9 @@ public class GoodsSearchParams extends PageVO {
     @Schema(description = "销售模式", required = true)
     private String salesModel;
 
+    @Schema(description = "商品分组ID")
+    private String groupId;
+
     @Schema(description = "预警库存")
     private Boolean alertQuantity;
 
@@ -170,6 +173,12 @@ public class GoodsSearchParams extends PageVO {
         }
         if (CharSequenceUtil.isNotEmpty(salesModel)) {
             queryWrapper.eq("sales_model", salesModel);
+        }
+        if (CharSequenceUtil.isNotEmpty(groupId)) {
+            queryWrapper.apply(
+                    "EXISTS (SELECT 1 FROM li_goods_group_goods ggg WHERE ggg.goods_id = li_goods.id AND ggg.group_id = {0} AND ggg.delete_flag = 0)",
+                    groupId
+            );
         }
 
         if (Objects.nonNull(alertQuantity) && alertQuantity) {
