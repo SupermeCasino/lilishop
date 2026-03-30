@@ -58,4 +58,56 @@ CREATE TABLE IF NOT EXISTS `li_goods_group_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='商品分组商品关联';
 
 SET FOREIGN_KEY_CHECKS = 1;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 在 商品 -> 关联管理/关联商品 下新增子菜单：商品分组
+-- parent_id = 1367044657296441344 （二级目录 association / Main）
+-- 若已存在同 parent 且同 path 节点，则不会重复插入
+INSERT INTO `li_menu` (
+  `id`,
+  `create_by`,
+  `create_time`,
+  `delete_flag`,
+  `update_by`,
+  `update_time`,
+  `description`,
+  `front_route`,
+  `icon`,
+  `level`,
+  `name`,
+  `parent_id`,
+  `path`,
+  `sort_order`,
+  `title`,
+  `front_component`,
+  `permission`
+)
+SELECT
+  200401020001000001,
+  'admin',
+  NOW(),
+  b'0',
+  'admin',
+  NOW(),
+  '商品-关联商品子菜单-商品分组',
+  'goods/group/index',
+  'md-list',
+  2,
+  'managerGoodsGroup',
+  '1367044657296441344',
+  'goods-group',
+  3.00,
+  '商品分组',
+  NULL,
+  '/manager/goods/goodsGroup*'
+FROM DUAL
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM `li_menu`
+  WHERE `parent_id` = '1367044657296441344'
+    AND `path` = 'goods-group'
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
 
