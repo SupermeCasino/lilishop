@@ -6,6 +6,7 @@ import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchClients;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
@@ -19,6 +20,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
  **/
 @Slf4j
 @Configuration
+@ConditionalOnProperty(value = "lili.data.elasticsearch.enabled", havingValue = "true", matchIfMissing = true)
 @EnableElasticsearchRepositories(basePackages = "cn.lili.modules.*.repository")
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
 
