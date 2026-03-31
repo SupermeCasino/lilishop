@@ -25,6 +25,7 @@ import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
+@ConditionalOnProperty(value = "lili.data.elasticsearch.enabled", havingValue = "true", matchIfMissing = true)
 public class EsGoodsSearchServiceImpl extends EsGoodsSearchAbstractService implements EsGoodsSearchService {
 
     private static final String ATTR_PATH = "attrList";

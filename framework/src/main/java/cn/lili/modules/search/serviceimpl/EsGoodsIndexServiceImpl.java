@@ -63,6 +63,7 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -77,6 +78,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
+@ConditionalOnProperty(value = "lili.data.elasticsearch.enabled", havingValue = "true", matchIfMissing = true)
 public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService implements EsGoodsIndexService {
 
     public static final String PROMOTION_PRICE = "promotionPrice";

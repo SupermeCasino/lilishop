@@ -11,6 +11,7 @@ spring:
 lili:
   data:
     elasticsearch:
+      enabled: false
       cluster-nodes: 127.0.0.1:9200
       schema: http
     logstash:
