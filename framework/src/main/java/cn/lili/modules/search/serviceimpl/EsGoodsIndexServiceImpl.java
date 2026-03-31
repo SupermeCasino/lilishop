@@ -221,8 +221,11 @@ public class EsGoodsIndexServiceImpl extends ElasticsearchIndexAbstractService i
                 IPage<GoodsSkuDTO> skuIPage = new Page<>();
                 searchParams.setPageSize(1000);
                 searchParams.setPageNumber(i);
-                skuIPage = goodsSkuService.getGoodsSkuDTOByPage(PageUtil.initPage(searchParams),
-                        searchParams.queryWrapper());
+                QueryWrapper<GoodsSkuDTO> skuQueryWrapper = new QueryWrapper<>();
+                skuQueryWrapper.eq("gs.auth_flag", GoodsAuthEnum.PASS.name());
+                skuQueryWrapper.eq("gs.market_enable", GoodsStatusEnum.UPPER.name());
+                skuQueryWrapper.eq("gs.delete_flag", false);
+                skuIPage = goodsSkuService.getGoodsSkuDTOByPage(PageUtil.initPage(searchParams), skuQueryWrapper);
 
                 if (skuIPage == null || CollUtil.isEmpty(skuIPage.getRecords())) {
                     break;
