@@ -40,4 +40,7 @@ public class WechatMPMessage extends BaseEntity {
 
     @Schema(description = "订单状态")
     private String orderStatus;
+
+    @Schema(description = "业务场景编码，与 li_notice_message.scene_code 一致")
+    private String sceneCode;
 }

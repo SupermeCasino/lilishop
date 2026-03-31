@@ -1,5 +1,7 @@
 package cn.lili.modules.message.entity.enums;
 
+import cn.hutool.core.text.CharSequenceUtil;
+
 /**
  * 消息编码枚举
  *
@@ -65,5 +67,20 @@ public enum NoticeMessageNodeEnum {
         return description;
     }
 
+    /**
+     * 将库中 {@code notice_node} 文案解析为枚举名，供 {@code scene_code} 与微信模板关联。
+     */
+    public static NoticeMessageNodeEnum fromNoticeNodeLabel(String noticeNode) {
+        if (CharSequenceUtil.isBlank(noticeNode)) {
+            return null;
+        }
+        String t = noticeNode.replace("\r", "").replace("\n", "").trim();
+        for (NoticeMessageNodeEnum e : values()) {
+            if (e.getDescription().equals(t)) {
+                return e;
+            }
+        }
+        return null;
+    }
 
 }

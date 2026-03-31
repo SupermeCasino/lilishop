@@ -50,5 +50,18 @@ public class NoticeMessage extends BaseEntity {
     @NotEmpty(message = "站内信状态不能为空")
     private String variable;
 
+    @Schema(description = "业务场景编码，与 NoticeMessageNodeEnum.name 一致，用于关联微信模板")
+    @Length(max = 64, message = "场景编码过长")
+    private String sceneCode;
+
+    /**
+     * @see cn.lili.common.enums.SwitchEnum
+     */
+    @Schema(description = "邮箱渠道是否开启")
+    private String emailStatus;
+
+    @Schema(description = "邮箱模板正文，为空时可与站内信同文")
+    @Length(max = 2000, message = "邮箱模板内容过长")
+    private String emailContent;
 
 }

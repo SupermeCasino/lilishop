@@ -115,4 +115,19 @@ public class NoticeMessageManagerController {
         throw new ServiceException(ResultCode.NOTICE_NOT_EXIST.message());
     }
 
+    @Operation(summary = "修改邮箱渠道状态")
+    @PutMapping("/{id}/email/{status}")
+    public ResultMessage<NoticeMessage> emailStatus(@PathVariable String id, @PathVariable String status) {
+        NoticeMessage messageTemplate = noticeMessageService.getById(id);
+        if (messageTemplate != null) {
+            if (EnumUtils.isValidEnum(SwitchEnum.class, status)) {
+                messageTemplate.setEmailStatus(status);
+                noticeMessageService.updateById(messageTemplate);
+                return ResultUtil.data(messageTemplate);
+            }
+            throw new ServiceException(ResultCode.NOTICE_ERROR);
+        }
+        throw new ServiceException(ResultCode.NOTICE_NOT_EXIST.message());
+    }
+
 }
