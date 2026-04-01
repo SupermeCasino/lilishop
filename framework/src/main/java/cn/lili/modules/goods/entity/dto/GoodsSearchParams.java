@@ -32,8 +32,20 @@ public class GoodsSearchParams extends PageVO {
     @Schema(description = "商品编号")
     private String goodsId;
 
+    @Schema(description = "商品规格ID")
+    private String skuId;
+
+    @Schema(description = "商品规格ID集合")
+    private List<String> skuIds;
+
     @Schema(description = "商品名称")
     private String goodsName;
+
+    @Schema(description = "商品规格货号")
+    private String sn;
+
+    @Schema(description = "规格简短信息")
+    private String simpleSpecs;
 
     @Schema(description = "商品编号")
     private String id;
@@ -108,8 +120,20 @@ public class GoodsSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(goodsId)) {
             queryWrapper.eq("goods_id", goodsId);
         }
+        if (CharSequenceUtil.isNotEmpty(skuId)) {
+            queryWrapper.eq("id", skuId);
+        }
+        if (CollUtil.isNotEmpty(skuIds)) {
+            queryWrapper.in("id", skuIds);
+        }
         if (CharSequenceUtil.isNotEmpty(goodsName)) {
             queryWrapper.like("goods_name", goodsName);
+        }
+        if (CharSequenceUtil.isNotEmpty(sn)) {
+            queryWrapper.like("sn", sn);
+        }
+        if (CharSequenceUtil.isNotEmpty(simpleSpecs)) {
+            queryWrapper.like("simple_specs", simpleSpecs);
         }
         if (CharSequenceUtil.isNotEmpty(id)) {
             queryWrapper.in("id", Arrays.asList(id.split(",")));

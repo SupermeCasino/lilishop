@@ -111,3 +111,58 @@ WHERE NOT EXISTS (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 在 商品 -> 关联管理/关联商品 下新增子菜单：虚拟销量
+-- parent_id = 1367044657296441344 （二级目录 association / Main）
+-- 若已存在同 parent 且同 path 节点，则不会重复插入
+INSERT INTO `li_menu` (
+  `id`,
+  `create_by`,
+  `create_time`,
+  `delete_flag`,
+  `update_by`,
+  `update_time`,
+  `description`,
+  `front_route`,
+  `icon`,
+  `level`,
+  `name`,
+  `parent_id`,
+  `path`,
+  `sort_order`,
+  `title`,
+  `front_component`,
+  `permission`
+)
+SELECT
+  200401020001000002,
+  'admin',
+  NOW(),
+  b'0',
+  'admin',
+  NOW(),
+  '商品-关联商品子菜单-虚拟销量',
+  'goods/virtual-sales/index',
+  'md-stats',
+  2,
+  'goods-virtual-sales',
+  '1367044657296441344',
+  'goods-virtual-sales',
+  3.50,
+  '虚拟销量',
+  NULL,
+  '/manager/goods/goods/list*,/manager/goods/goods/get*'
+FROM DUAL
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM `li_menu`
+  WHERE `parent_id` = '1367044657296441344'
+    AND `path` = 'goods-virtual-sales'
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE `li_goods_sku`
+ADD COLUMN `virtual_sales` INT DEFAULT 0 COMMENT '虚拟销量' AFTER `buy_count`;

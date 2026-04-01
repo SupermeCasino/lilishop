@@ -281,6 +281,22 @@ public interface GoodsSkuService extends IService<GoodsSku> {
     void updateGoodsSkuBuyCount(String skuId, int buyCount);
 
     /**
+     * 更新商品sku虚拟销量
+     *
+     * @param skuId        skuId
+     * @param virtualSales 虚拟销量
+     */
+    void updateGoodsSkuVirtualSales(String skuId, int virtualSales);
+
+    /**
+     * 批量更新商品sku虚拟销量
+     *
+     * @param skuIds       skuId集合
+     * @param virtualSales 虚拟销量
+     */
+    void batchUpdateGoodsSkuVirtualSales(List<String> skuIds, int virtualSales);
+
+    /**
      * 更新商品sku评分
      *
      * @param goodsId goodsId

@@ -9,6 +9,7 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
+import cn.lili.modules.goods.entity.dto.GoodsVirtualSalesDTO;
 import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import cn.lili.modules.goods.entity.vos.GoodsNumVO;
@@ -19,8 +20,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +38,7 @@ import java.util.List;
  * @since 2020-02-23 15:18:56
  */
 @RestController
+@Validated
 @Tag(name = "管理端,商品管理接口")
 @RequestMapping("/manager/goods/goods")
 public class GoodsManagerController {
@@ -60,10 +67,12 @@ public class GoodsManagerController {
         return ResultUtil.data(goodsService.getGoodsNumVO(goodsSearchParams));
     }
 
-    @Operation(summary = "分页获取商品列表")
+    @Operation(summary = "分页获取规格列表")
     @Parameter(name = "goodsSearchParams", description = "商品查询参数")
     @GetMapping("/sku/list")
     public ResultMessage<IPage<GoodsSku>> getSkuByPage(GoodsSearchParams goodsSearchParams) {
+        goodsSearchParams.setSort("create_time");
+        goodsSearchParams.setOrder("desc");
         return ResultUtil.data(goodsSkuService.getGoodsSkuByPage(goodsSearchParams));
     }
 
@@ -122,6 +131,28 @@ public class GoodsManagerController {
     public ResultMessage<GoodsVO> get(@PathVariable String id) {
         GoodsVO goods = goodsService.getGoodsVO(id);
         return ResultUtil.data(goods);
+    }
+
+    @PreventDuplicateSubmissions
+    @Operation(description = "设置商品虚拟销量")
+    @Parameter(name = "skuId", description = "商品规格ID", required = true)
+    @Parameter(name = "virtualSales", description = "虚拟销量", required = true)
+    @PutMapping("/virtualSales/{skuId}")
+    public ResultMessage<Object> updateVirtualSales(@PathVariable String skuId,
+                                                    @NotNull(message = "虚拟销量不能为空")
+                                                    @Min(value = 0, message = "虚拟销量不能小于0")
+                                                    @Max(value = 99999999, message = "虚拟销量不能超过99999999")
+                                                    @RequestParam Integer virtualSales) {
+        goodsSkuService.updateGoodsSkuVirtualSales(skuId, virtualSales);
+        return ResultUtil.success();
+    }
+
+    @PreventDuplicateSubmissions
+    @Operation(description = "批量设置商品虚拟销量")
+    @PutMapping("/virtualSales")
+    public ResultMessage<Object> batchUpdateVirtualSales(@Valid @RequestBody GoodsVirtualSalesDTO goodsVirtualSalesDTO) {
+        goodsSkuService.batchUpdateGoodsSkuVirtualSales(goodsVirtualSalesDTO.getSkuIds(), goodsVirtualSalesDTO.getVirtualSales());
+        return ResultUtil.success();
     }
 
 }

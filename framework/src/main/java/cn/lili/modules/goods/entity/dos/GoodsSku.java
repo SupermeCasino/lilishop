@@ -91,6 +91,9 @@ public class GoodsSku extends BaseEntity {
     @Schema(description = "购买数量")
     private Integer buyCount;
 
+    @Schema(description = "虚拟销量")
+    private Integer virtualSales;
+
     @Max(value = 99999999, message = "库存不能超过99999999")
     @Schema(description = "库存")
     private Integer quantity;
@@ -208,6 +211,7 @@ public class GoodsSku extends BaseEntity {
         this.goodsUnit = goods.getGoodsUnit();
         this.grade = 100D;
         this.alertQuantity = 0;
+        this.virtualSales = 0;
         //商品状态
         this.authFlag = goods.getAuthFlag();
         this.salesModel = goods.getSalesModel();
