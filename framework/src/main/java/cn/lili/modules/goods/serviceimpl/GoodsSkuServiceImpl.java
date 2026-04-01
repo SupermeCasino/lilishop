@@ -870,6 +870,32 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
     }
 
     @Override
+    public void updateGoodsSkuVirtualSales(String skuId, int virtualSales) {
+        GoodsSku sku = this.getById(skuId);
+        if (sku == null) {
+            throw new ServiceException(ResultCode.GOODS_NOT_EXIST);
+        }
+        LambdaUpdateWrapper<GoodsSku> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(GoodsSku::getId, skuId);
+        updateWrapper.set(GoodsSku::getVirtualSales, virtualSales);
+        this.update(updateWrapper);
+        sku.setVirtualSales(virtualSales);
+        this.clearCache(skuId);
+        goodsIndexService.getResetEsGoodsIndex(sku);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchUpdateGoodsSkuVirtualSales(List<String> skuIds, int virtualSales) {
+        if (skuIds == null || skuIds.isEmpty()) {
+            return;
+        }
+        for (String skuId : skuIds) {
+            this.updateGoodsSkuVirtualSales(skuId, virtualSales);
+        }
+    }
+
+    @Override
     public void updateGoodsSkuGrade(String goodsId, double grade, int commentNum) {
         LambdaUpdateWrapper<GoodsSku> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(GoodsSku::getGoodsId, goodsId);
@@ -928,6 +954,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
                 goodsSku.setCommentNum(oldSku.getCommentNum());
                 goodsSku.setViewCount(oldSku.getViewCount());
                 goodsSku.setBuyCount(oldSku.getBuyCount());
+                goodsSku.setVirtualSales(oldSku.getVirtualSales());
                 goodsSku.setGrade(oldSku.getGrade());
             }
         }

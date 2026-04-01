@@ -293,7 +293,8 @@ public class EsGoodsIndex implements Serializable {
             this.categoryPath = sku.getCategoryPath();
             this.goodsVideo = sku.getGoodsVideo();
             this.mobileIntro = sku.getMobileIntro();
-            this.buyCount = sku.getBuyCount() != null ? sku.getBuyCount() : 0;
+            this.buyCount = (sku.getBuyCount() != null ? sku.getBuyCount() : 0)
+                    + (sku.getVirtualSales() != null ? sku.getVirtualSales() : 0);
             this.commentNum = sku.getCommentNum();
             this.small = sku.getSmall();
             this.brandId = sku.getBrandId();
@@ -358,7 +359,8 @@ public class EsGoodsIndex implements Serializable {
             this.categoryPath = sku.getCategoryPath();
             this.goodsVideo = sku.getGoodsVideo();
             this.mobileIntro = sku.getMobileIntro();
-            this.buyCount = sku.getBuyCount();
+            this.buyCount = (sku.getBuyCount() != null ? sku.getBuyCount() : 0)
+                    + (sku.getVirtualSales() != null ? sku.getVirtualSales() : 0);
             this.commentNum = sku.getCommentNum();
             this.small = sku.getSmall();
             this.brandId = sku.getBrandId();
