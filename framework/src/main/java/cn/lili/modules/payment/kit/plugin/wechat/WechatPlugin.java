@@ -20,10 +20,8 @@ import cn.lili.modules.payment.entity.RefundLog;
 import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
 import cn.lili.modules.payment.kit.CashierSupport;
 import cn.lili.modules.payment.kit.Payment;
-import cn.lili.modules.payment.kit.core.enums.SignType;
 import cn.lili.modules.payment.kit.core.kit.HttpKit;
 import cn.lili.modules.payment.kit.core.kit.IpKit;
-import cn.lili.modules.payment.kit.core.kit.WxPayKit;
 import cn.lili.modules.payment.kit.core.utils.DateTimeZoneUtil;
 import cn.lili.modules.payment.kit.dto.PayParam;
 import cn.lili.modules.payment.kit.dto.PaymentSuccessParams;
@@ -49,11 +47,11 @@ import com.wechat.pay.java.core.exception.ValidationException;
 import com.wechat.pay.java.core.notification.NotificationConfig;
 import com.wechat.pay.java.core.notification.NotificationParser;
 import com.wechat.pay.java.core.notification.RequestParam;
-import com.wechat.pay.java.service.payments.app.AppService;
+import com.wechat.pay.java.service.payments.app.AppServiceExtension;
 import com.wechat.pay.java.service.payments.h5.H5Service;
 import com.wechat.pay.java.service.payments.h5.model.H5Info;
 import com.wechat.pay.java.service.payments.h5.model.SceneInfo;
-import com.wechat.pay.java.service.payments.jsapi.JsapiService;
+import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.model.Transaction;
 import com.wechat.pay.java.service.payments.nativepay.NativePayService;
 import com.wechat.pay.java.service.payments.nativepay.model.Amount;
@@ -223,8 +221,8 @@ public class WechatPlugin implements Payment {
             } else {
                 config = this.getPublicKeyConfig(setting);
             }
-            // 构建service
-            JsapiService service = new JsapiService.Builder().config(config).build();
+            // 使用官方扩展类生成前端调起支付参数，避免自行签名
+            JsapiServiceExtension service = new JsapiServiceExtension.Builder().config(config).build();
 
             com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest prepayRequest = new com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest();
             com.wechat.pay.java.service.payments.jsapi.model.Amount amount = new com.wechat.pay.java.service.payments.jsapi.model.Amount();
@@ -241,11 +239,11 @@ public class WechatPlugin implements Payment {
             prepayRequest.setTimeExpire(timeExpire);
             prepayRequest.setOutTradeNo(outOrderNo);
             prepayRequest.setPayer(payer);
-            // 调用下单方法，得到应答
-            com.wechat.pay.java.service.payments.jsapi.model.PrepayResponse response = service.prepay(prepayRequest);
+            com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse response =
+                    service.prepayWithRequestPayment(prepayRequest);
             updateOrderPayNo(payParam, outOrderNo);
 
-            Map<String, String> map = WxPayKit.jsApiCreateSign(appid, response.getPrepayId(), setting.getApiclientKey());
+            Map<String, String> map = WechatRequestPaymentParamConverter.fromJsapiResponse(response);
             log.info("唤起支付参数:{}", map);
             return ResultUtil.data(map);
         } catch (Exception e) {
@@ -272,7 +270,7 @@ public class WechatPlugin implements Payment {
             String attach = java.net.URLEncoder.encode(JSONUtil.toJsonStr(payParam), StandardCharsets.UTF_8.name());
 
             WechatPaymentSetting setting = wechatPaymentSetting();
-            String appid = setting.getJsapiAppId();
+            String appid = setting.getAppAppId();
             if (appid == null) {
                 throw new ServiceException(ResultCode.WECHAT_PAYMENT_NOT_SETTING);
             }
@@ -283,8 +281,8 @@ public class WechatPlugin implements Payment {
             } else {
                 config = this.getPublicKeyConfig(setting);
             }
-            // 构建service
-            AppService service = new AppService.Builder().config(config).build();
+            // 使用官方扩展类生成前端调起支付参数，避免自行签名
+            AppServiceExtension service = new AppServiceExtension.Builder().config(config).build();
 
             com.wechat.pay.java.service.payments.app.model.PrepayRequest prepayRequest = new com.wechat.pay.java.service.payments.app.model.PrepayRequest();
             com.wechat.pay.java.service.payments.app.model.Amount amount = new com.wechat.pay.java.service.payments.app.model.Amount();
@@ -298,16 +296,11 @@ public class WechatPlugin implements Payment {
             prepayRequest.setTimeExpire(timeExpire);
             prepayRequest.setOutTradeNo(outOrderNo);
 
-            // 调用下单方法，得到应答
-            com.wechat.pay.java.service.payments.app.model.PrepayResponse response = service.prepay(prepayRequest);
+            com.wechat.pay.java.service.payments.app.model.PrepayWithRequestPaymentResponse response =
+                    service.prepayWithRequestPayment(prepayRequest);
             updateOrderPayNo(payParam, outOrderNo);
-            Map<String, String> map = WxPayKit.appPrepayIdCreateSign(appid,
-                    setting.getMchId(),
-                    response.getPrepayId(),
-                    setting.getApiclientKey(), SignType.MD5);
+            Map<String, String> map = WechatRequestPaymentParamConverter.fromAppResponse(response);
             log.info("唤起支付参数:{}", map);
-            //修改付款单号
-            updateOrderPayNo(payParam, outOrderNo);
             return ResultUtil.data(map);
         } catch (Exception e) {
             log.error("支付异常", e);
@@ -415,8 +408,8 @@ public class WechatPlugin implements Payment {
             } else {
                 config = this.getPublicKeyConfig(setting);
             }
-            // 构建service
-            JsapiService service = new JsapiService.Builder().config(config).build();
+            // 使用官方扩展类生成前端调起支付参数，避免自行签名
+            JsapiServiceExtension service = new JsapiServiceExtension.Builder().config(config).build();
 
             com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest prepayRequest = new com.wechat.pay.java.service.payments.jsapi.model.PrepayRequest();
             com.wechat.pay.java.service.payments.jsapi.model.Amount amount = new com.wechat.pay.java.service.payments.jsapi.model.Amount();
@@ -430,11 +423,11 @@ public class WechatPlugin implements Payment {
             prepayRequest.setTimeExpire(timeExpire);
             prepayRequest.setOutTradeNo(outOrderNo);
             prepayRequest.setPayer(payer);
-            // 调用下单方法，得到应答
-            com.wechat.pay.java.service.payments.jsapi.model.PrepayResponse response = service.prepay(prepayRequest);
+            com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse response =
+                    service.prepayWithRequestPayment(prepayRequest);
             updateOrderPayNo(payParam, outOrderNo);
 
-            Map<String, String> map = WxPayKit.jsApiCreateSign(appid, response.getPrepayId(), setting.getApiclientKey());
+            Map<String, String> map = WechatRequestPaymentParamConverter.fromJsapiResponse(response);
             log.info("唤起支付参数:{}", map);
 
             return ResultUtil.data(map);
