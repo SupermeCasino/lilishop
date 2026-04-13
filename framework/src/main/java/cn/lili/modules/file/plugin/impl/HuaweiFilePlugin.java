@@ -10,6 +10,7 @@ import com.obs.services.exception.ObsException;
 import com.obs.services.model.DeleteObjectsRequest;
 import com.obs.services.model.DeleteObjectsResult;
 import com.obs.services.model.ListVersionsResult;
+import com.obs.services.model.ObjectMetadata;
 import com.obs.services.model.PutObjectRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,10 +70,13 @@ public class HuaweiFilePlugin implements FilePlugin {
     }
 
     @Override
-    public String inputStreamUpload(InputStream inputStream, String key) {
+    public String inputStreamUpload(InputStream inputStream, String key, String contentType) {
         ObsClient obsClient = getObsClient();
         try {
             PutObjectRequest putObjectRequest = new PutObjectRequest(ossSetting.getHuaweicloudOBSBucketName(), key, inputStream);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(contentType);
+            putObjectRequest.setMetadata(objectMetadata);
             obsClient.putObject(putObjectRequest);
         } catch (ObsException obsException) {
             obsException.printStackTrace();

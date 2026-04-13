@@ -34,7 +34,19 @@ public interface FilePlugin {
      * @param key
      * @return
      */
-    String inputStreamUpload(InputStream inputStream, String key);
+    default String inputStreamUpload(InputStream inputStream, String key) {
+        return inputStreamUpload(inputStream, key, "application/octet-stream");
+    }
+
+    /**
+     * 文件流上传（携带内容类型）
+     *
+     * @param inputStream 文件流
+     * @param key         文件key
+     * @param contentType 文件类型
+     * @return 文件访问地址
+     */
+    String inputStreamUpload(InputStream inputStream, String key, String contentType);
 
 
     /**

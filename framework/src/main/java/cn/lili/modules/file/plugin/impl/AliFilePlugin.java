@@ -89,11 +89,11 @@ public class AliFilePlugin implements FilePlugin {
     }
 
     @Override
-    public String inputStreamUpload(InputStream inputStream, String key) {
+    public String inputStreamUpload(InputStream inputStream, String key, String contentType) {
         OSS ossClient = getOssClient();
         try {
             ObjectMetadata meta = new ObjectMetadata();
-            meta.setContentType("image/jpg");
+            meta.setContentType(contentType);
             ossClient.putObject(ossSetting.getAliyunOSSBucketName(), key, inputStream, meta);
         } catch (OSSException oe) {
             log.error("Caught an OSSException, which means your request made it to OSS, "
