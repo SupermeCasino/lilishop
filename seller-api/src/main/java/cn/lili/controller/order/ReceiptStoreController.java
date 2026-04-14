@@ -7,6 +7,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.order.order.entity.dos.Receipt;
 import cn.lili.modules.order.order.entity.dto.OrderReceiptDTO;
+import cn.lili.modules.order.order.entity.dto.ReceiptInvoicingDTO;
 import cn.lili.modules.order.order.entity.dto.ReceiptSearchParams;
 import cn.lili.modules.order.order.service.OrderService;
 import cn.lili.modules.order.order.service.ReceiptService;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.Objects;
 
@@ -56,9 +58,9 @@ public class ReceiptStoreController {
     @Operation(description = "开发票")
     @Parameter(name = "id", description = "发票ID", required = true)
     @PostMapping("/{id}/invoicing")
-    public ResultMessage<Receipt> invoicing(@PathVariable String id) {
+    public ResultMessage<Receipt> invoicing(@PathVariable String id, @Valid ReceiptInvoicingDTO receiptInvoicingDTO) {
         OperationalJudgment.judgment(receiptService.getById(id));
-        return ResultUtil.data(receiptService.invoicing(id));
+        return ResultUtil.data(receiptService.invoicing(id, receiptInvoicingDTO));
     }
 
     @Operation(description = "通过订单编号获取")

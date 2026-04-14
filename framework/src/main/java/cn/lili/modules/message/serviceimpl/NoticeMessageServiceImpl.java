@@ -5,20 +5,29 @@ import cn.lili.common.enums.SwitchEnum;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.message.entity.dos.MemberMessage;
 import cn.lili.modules.message.entity.dos.NoticeMessage;
+import cn.lili.modules.message.entity.dto.MessageTemplateAggregateDTO;
 import cn.lili.modules.message.entity.dto.NoticeMessageDTO;
 import cn.lili.modules.message.entity.enums.MessageStatusEnum;
+import cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum;
 import cn.lili.modules.message.entity.enums.NoticeMessageParameterEnum;
 import cn.lili.modules.message.mapper.NoticeMessageTemplateMapper;
 import cn.lili.modules.message.service.MemberMessageService;
 import cn.lili.modules.message.service.NoticeMessageService;
+import cn.lili.modules.wechat.entity.dos.WechatMPMessage;
+import cn.lili.modules.wechat.entity.dos.WechatMessage;
+import cn.lili.modules.wechat.service.WechatMPMessageService;
+import cn.lili.modules.wechat.service.WechatMessageService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +41,10 @@ public class NoticeMessageServiceImpl extends ServiceImpl<NoticeMessageTemplateM
 
     @Autowired
     private MemberMessageService memberMessageService;
+    @Autowired
+    private WechatMessageService wechatMessageService;
+    @Autowired
+    private WechatMPMessageService wechatMPMessageService;
 
     @Override
     public IPage<NoticeMessage> getMessageTemplate(PageVO pageVO, String type) {
@@ -94,5 +107,35 @@ public class NoticeMessageServiceImpl extends ServiceImpl<NoticeMessageTemplateM
         return noticeContent;
     }
 
+    @Override
+    public IPage<MessageTemplateAggregateDTO> getMessageTemplateAggregatePage(PageVO pageVO, String type) {
+        IPage<NoticeMessage> noticePage = this.getMessageTemplate(pageVO, type);
+        List<MessageTemplateAggregateDTO> rows = new ArrayList<>(noticePage.getRecords().size());
+        for (NoticeMessage notice : noticePage.getRecords()) {
+            MessageTemplateAggregateDTO dto = new MessageTemplateAggregateDTO();
+            dto.setNotice(notice);
+            String scene = resolveSceneCode(notice);
+            if (CharSequenceUtil.isNotBlank(scene)) {
+                dto.setWechatOa(wechatMessageService.getOne(
+                        new LambdaQueryWrapper<WechatMessage>().eq(WechatMessage::getSceneCode, scene).last("LIMIT 1"),
+                        false));
+                dto.setWechatMp(wechatMPMessageService.getOne(
+                        new LambdaQueryWrapper<WechatMPMessage>().eq(WechatMPMessage::getSceneCode, scene).last("LIMIT 1"),
+                        false));
+            }
+            rows.add(dto);
+        }
+        Page<MessageTemplateAggregateDTO> out = new Page<>(noticePage.getCurrent(), noticePage.getSize(), noticePage.getTotal());
+        out.setRecords(rows);
+        return out;
+    }
+
+    private String resolveSceneCode(NoticeMessage notice) {
+        if (CharSequenceUtil.isNotBlank(notice.getSceneCode())) {
+            return notice.getSceneCode();
+        }
+        NoticeMessageNodeEnum en = NoticeMessageNodeEnum.fromNoticeNodeLabel(notice.getNoticeNode());
+        return en != null ? en.name() : null;
+    }
 
 }

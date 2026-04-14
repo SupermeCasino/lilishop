@@ -48,5 +48,7 @@ public class WechatMessage extends BaseEntity {
     @Schema(description = "模版备注（位于最下方）")
     private String remark;
 
+    @Schema(description = "业务场景编码，与 li_notice_message.scene_code 一致")
+    private String sceneCode;
 
 }

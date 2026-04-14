@@ -5,6 +5,7 @@ import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.HttpUtils;
+import cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.wechat.entity.dos.WechatMPMessage;
 import cn.lili.modules.wechat.entity.enums.WechatMessageItemEnums;
@@ -138,6 +139,7 @@ public class WechatMPMessageServiceImpl extends ServiceImpl<WechatMPMessageMappe
                 wechatMPMessage.setKeywordsText(JSON.toJSONString(kidTexts));
                 wechatMPMessage.setEnable(true);
                 wechatMPMessage.setOrderStatus(tplData.getOrderStatus().name());
+                wechatMPMessage.setSceneCode(tplData.getSceneCode());
                 this.save(wechatMPMessage);
             });
         } catch (Exception e) {
@@ -159,7 +161,8 @@ public class WechatMPMessageServiceImpl extends ServiceImpl<WechatMPMessageMappe
         msg.add(new WechatMPMessageData(
                 "订单支付成功,准备发货",
                 "487", PAIDkeyWord,
-                OrderStatusEnum.UNDELIVERED));
+                OrderStatusEnum.UNDELIVERED,
+                NoticeMessageNodeEnum.ORDER_PAY_SUCCESS.name()));
         //发货提醒
 
         List<WechatMessageItemEnums> deliverdKeyWord = new ArrayList<>();
@@ -170,7 +173,8 @@ public class WechatMPMessageServiceImpl extends ServiceImpl<WechatMPMessageMappe
         msg.add(new WechatMPMessageData(
                 "订单发货成功",
                 "374", deliverdKeyWord,
-                OrderStatusEnum.DELIVERED));
+                OrderStatusEnum.DELIVERED,
+                NoticeMessageNodeEnum.ORDER_DELIVER.name()));
 
 
         //已完成
@@ -181,7 +185,8 @@ public class WechatMPMessageServiceImpl extends ServiceImpl<WechatMPMessageMappe
         msg.add(new WechatMPMessageData(
                 "订单完成",
                 "3606", completeKeyWord,
-                OrderStatusEnum.COMPLETED));
+                OrderStatusEnum.COMPLETED,
+                NoticeMessageNodeEnum.ORDER_COMPLETE.name()));
 
         return msg;
 
@@ -213,6 +218,11 @@ class WechatMPMessageData {
      * 处于什么状态发送
      */
     OrderStatusEnum orderStatus;
+
+    /**
+     * 与站内信场景一致，对应 {@link cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum#name()}
+     */
+    String sceneCode;
 }
 
 @Data

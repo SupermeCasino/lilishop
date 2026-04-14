@@ -76,7 +76,7 @@ public class UploadController {
         }
 
 
-        if (!CharSequenceUtil.containsAny(Objects.requireNonNull(file.getContentType()).toLowerCase(), "image", "video")) {
+        if (!CharSequenceUtil.containsAny(Objects.requireNonNull(file.getContentType()).toLowerCase(), "image", "video", "pdf")) {
             throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
         }
 
@@ -90,13 +90,10 @@ public class UploadController {
         try {
             InputStream inputStream = file.getInputStream();
             //上传至第三方云服务或服务器
-            String scene = UserContext.getCurrentUser().getRole().name();
-            if (StrUtil.equalsAny(UserContext.getCurrentUser().getRole().name(), UserEnums.MEMBER.name(), UserEnums.STORE.name(), UserEnums.SEAT.name())) {
-                scene = scene + "/" + authUser.getId();
-            }
+            String scene = this.buildUploadScene(authUser);
             fileKey = scene + "/" + directoryPath + "/" + fileKey;
             //上传至第三方云服务或服务器
-            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey, file.getContentType());
             //保存数据信息至数据库
             newFile.setName(file.getOriginalFilename());
             newFile.setFileSize(file.getSize());
@@ -128,5 +125,19 @@ public class UploadController {
             throw new ServiceException(ResultCode.OSS_EXCEPTION_ERROR);
         }
         return ResultUtil.data(result);
+    }
+
+    /**
+     * 根据上传角色构造文件场景路径，便于按角色隔离和检索。
+     */
+    private String buildUploadScene(AuthUser authUser) {
+        String scene = authUser.getRole().name();
+        if (UserEnums.STORE.equals(authUser.getRole()) && StrUtil.isNotBlank(authUser.getStoreId())) {
+            return scene + "/" + authUser.getStoreId();
+        }
+        if (StrUtil.equalsAny(scene, UserEnums.MEMBER.name(), UserEnums.SEAT.name())) {
+            return scene + "/" + authUser.getId();
+        }
+        return scene;
     }
 }

@@ -96,6 +96,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         queryWrapper.like(CharSequenceUtil.isNotEmpty(fileOwnerDTO.getName()), File::getName, fileOwnerDTO.getName())
             .like(CharSequenceUtil.isNotEmpty(fileOwnerDTO.getOwnerName()), File::getOwnerName,
                 fileOwnerDTO.getOwnerName())
+            .eq(CharSequenceUtil.isNotEmpty(fileOwnerDTO.getUserEnums()), File::getUserEnums,
+                fileOwnerDTO.getUserEnums())
             .eq(CharSequenceUtil.isNotEmpty(fileOwnerDTO.getFileDirectoryId()), File::getFileDirectoryId,
                 fileOwnerDTO.getFileDirectoryId())
             .like(CharSequenceUtil.isNotEmpty(fileOwnerDTO.getFileKey()), File::getFileKey, fileOwnerDTO.getFileKey())

@@ -71,7 +71,7 @@ public class MinioFilePlugin implements FilePlugin {
     }
 
     @Override
-    public String inputStreamUpload(InputStream inputStream, String key) {
+    public String inputStreamUpload(InputStream inputStream, String key, String contentType) {
         String bucket = "";
         try {
             MinioClient client = getOssClient();
@@ -79,7 +79,7 @@ public class MinioFilePlugin implements FilePlugin {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
                     .bucket(bucket).stream(inputStream, inputStream.available(), 5 * 1024 * 1024)
                     .object(key)
-                    .contentType("image/png" )
+                    .contentType(contentType)
                     .build();
             client.putObject(putObjectArgs);
         } catch (Exception e) {

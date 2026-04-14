@@ -84,11 +84,11 @@ public class TencentFilePlugin implements FilePlugin {
     }
 
     @Override
-    public String inputStreamUpload(InputStream inputStream, String key) {
+    public String inputStreamUpload(InputStream inputStream, String key, String contentType) {
         COSClient cosClient = getCOSClient();
         try {
             ObjectMetadata meta = new ObjectMetadata();
-            meta.setContentType("image/jpg");
+            meta.setContentType(contentType);
             cosClient.putObject(ossSetting.getTencentCOSBucket(), key, inputStream, meta);
         } catch (CosServiceException oe) {
             throw new ServiceException(ResultCode.OSS_EXCEPTION_ERROR);

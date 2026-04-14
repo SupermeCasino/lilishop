@@ -5,6 +5,7 @@ import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.HttpUtils;
+import cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.wechat.entity.dos.WechatMessage;
 import cn.lili.modules.wechat.entity.enums.WechatMessageItemEnums;
@@ -125,6 +126,7 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
                 wechatMessage.setKeywords(tplData.getKeyWord());
                 wechatMessage.setEnable(true);
                 wechatMessage.setOrderStatus(tplData.getOrderStatus().name());
+                wechatMessage.setSceneCode(tplData.getSceneCode());
                 this.save(wechatMessage);
             });
         } catch (Exception e) {
@@ -148,7 +150,8 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
                 "OPENTM207498902",
                 WechatMessageItemEnums.MEMBER_NAME.name() + "," + WechatMessageItemEnums.ORDER_SN.name() + "," +
                         WechatMessageItemEnums.PRICE.name() + "," + WechatMessageItemEnums.GOODS_INFO.name(),
-                OrderStatusEnum.UNDELIVERED));
+                OrderStatusEnum.UNDELIVERED,
+                NoticeMessageNodeEnum.ORDER_PAY_SUCCESS.name()));
         //已发货
         msg.add(new WechatMessageData(
                 "订单发货",
@@ -157,7 +160,8 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
                 "OPENTM200565259",
                 WechatMessageItemEnums.ORDER_SN.name() + "," +
                         WechatMessageItemEnums.LOGISTICS_NAME.name() + "," + WechatMessageItemEnums.LOGISTICS_NO.name(),
-                OrderStatusEnum.DELIVERED));
+                OrderStatusEnum.DELIVERED,
+                NoticeMessageNodeEnum.ORDER_DELIVER.name()));
 
         //已完成
         msg.add(new WechatMessageData(
@@ -167,7 +171,8 @@ public class WechatMessageServiceImpl extends ServiceImpl<WechatMessageMapper, W
                 "OPENTM416131050",
                 WechatMessageItemEnums.MEMBER_NAME.name() + "," + WechatMessageItemEnums.ORDER_SN.name() + "," +
                         WechatMessageItemEnums.PRICE.name() + "," + WechatMessageItemEnums.GOODS_INFO.name(),
-                OrderStatusEnum.COMPLETED));
+                OrderStatusEnum.COMPLETED,
+                NoticeMessageNodeEnum.ORDER_COMPLETE.name()));
 
         return msg;
     }
@@ -206,5 +211,9 @@ class WechatMessageData {
      */
     OrderStatusEnum orderStatus;
 
+    /**
+     * 与站内信场景一致，对应 {@link cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum#name()}
+     */
+    String sceneCode;
 
 }

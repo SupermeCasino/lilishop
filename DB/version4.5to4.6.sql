@@ -166,3 +166,21 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ALTER TABLE `li_goods_sku`
 ADD COLUMN `virtual_sales` INT DEFAULT 0 COMMENT '虚拟销量' AFTER `buy_count`;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 扩展发票信息字段（买家发票详情/订单发票信息使用）
+ALTER TABLE `li_receipt`
+  ADD COLUMN `receipt_type` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '发票类型：电子普通发票/增值税专用发票' AFTER `receipt_title`,
+  ADD COLUMN `receipt_phone` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '收票人手机号' AFTER `taxpayer_id`,
+  ADD COLUMN `receipt_email` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '收票人邮箱' AFTER `receipt_phone`,
+  ADD COLUMN `company_address` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '单位地址' AFTER `receipt_email`,
+  ADD COLUMN `company_phone` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '单位电话' AFTER `company_address`,
+  ADD COLUMN `bank_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '开户银行' AFTER `company_phone`,
+  ADD COLUMN `bank_account` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '银行账户' AFTER `bank_name`,
+  ADD COLUMN `personal_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '个人名称' AFTER `receipt_title`,
+  ADD COLUMN `company_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '单位名称' AFTER `personal_name`,
+ ADD COLUMN `invoice_address` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '发票地址(URL)' AFTER `company_name`;
+
+
+

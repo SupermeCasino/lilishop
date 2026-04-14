@@ -6,6 +6,7 @@ import cn.lili.mybatis.util.PageUtil;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.order.order.entity.dos.Receipt;
 import cn.lili.modules.order.order.entity.dto.OrderReceiptDTO;
+import cn.lili.modules.order.order.entity.dto.ReceiptInvoicingDTO;
 import cn.lili.modules.order.order.entity.dto.ReceiptSearchParams;
 import cn.lili.modules.order.order.mapper.ReceiptMapper;
 import cn.lili.modules.order.order.service.ReceiptService;
@@ -57,10 +58,14 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, Receipt> impl
     }
 
     @Override
-    public Receipt invoicing(String receiptId) {
+    public Receipt invoicing(String receiptId, ReceiptInvoicingDTO receiptInvoicingDTO) {
         //根据id查询发票信息
         Receipt receipt = this.getById(receiptId);
         if (receipt != null) {
+            if (receiptInvoicingDTO == null || receiptInvoicingDTO.getInvoiceAddress() == null || receiptInvoicingDTO.getInvoiceAddress().trim().isEmpty()) {
+                throw new ServiceException(ResultCode.PARAMS_ERROR);
+            }
+            receipt.setInvoiceAddress(receiptInvoicingDTO.getInvoiceAddress().trim());
             receipt.setReceiptStatus(1);
             this.saveOrUpdate(receipt);
             return receipt;
