@@ -510,11 +510,15 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getNickName()), "m.nick_name", memberSearchVO.getNickName());
         //按照电话号码查询
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getMobile()), "m.mobile", memberSearchVO.getMobile());
+        //按照积分范围查询
+        queryWrapper.ge(memberSearchVO.getMinPoint() != null, "m.point", memberSearchVO.getMinPoint());
+        queryWrapper.le(memberSearchVO.getMaxPoint() != null, "m.point", memberSearchVO.getMaxPoint());
         //按照ID查询
         queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getId()), "m.id", memberSearchVO.getId());
         //按照会员状态查询
-        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled()), "m.disabled",
-                memberSearchVO.getDisabled().equals(SwitchEnum.OPEN.name()) ? 1 : 0);
+        if (CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled())) {
+            queryWrapper.eq("m.disabled", SwitchEnum.OPEN.name().equals(memberSearchVO.getDisabled()) ? 1 : 0);
+        }
         //按照会员分组查询
         if (CharSequenceUtil.isNotBlank(memberSearchVO.getGroupId())) {
             queryWrapper.inSql("m.id", "SELECT member_id FROM li_member_group_user WHERE group_id = '" + memberSearchVO.getGroupId() + "' AND delete_flag = false");
@@ -686,9 +690,13 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getUsername()), "username", memberSearchVO.getUsername());
         //按照电话号码查询
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getMobile()), "mobile", memberSearchVO.getMobile());
+        //按照积分范围查询
+        queryWrapper.ge(memberSearchVO.getMinPoint() != null, "point", memberSearchVO.getMinPoint());
+        queryWrapper.le(memberSearchVO.getMaxPoint() != null, "point", memberSearchVO.getMaxPoint());
         //按照状态查询
-        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled()), "disabled",
-                memberSearchVO.getDisabled().equals(SwitchEnum.OPEN.name()) ? 1 : 0);
+        if (CharSequenceUtil.isNotBlank(memberSearchVO.getDisabled())) {
+            queryWrapper.eq("disabled", SwitchEnum.OPEN.name().equals(memberSearchVO.getDisabled()) ? 1 : 0);
+        }
         queryWrapper.orderByDesc("create_time");
         return this.count(queryWrapper);
     }

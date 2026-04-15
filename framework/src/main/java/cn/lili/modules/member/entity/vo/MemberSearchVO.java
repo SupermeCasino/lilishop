@@ -28,6 +28,12 @@ public class MemberSearchVO {
     @Schema(description = "用户手机号码")
     private String mobile;
 
+    @Schema(description = "最小积分值")
+    private Long minPoint;
+
+    @Schema(description = "最大积分值")
+    private Long maxPoint;
+
     /**
      * @see SwitchEnum
      */
