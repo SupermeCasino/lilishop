@@ -168,6 +168,37 @@ public class MemberEvaluationServiceImpl extends ServiceImpl<MemberEvaluationMap
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateTop(String id, Boolean top) {
+        // 取消置顶时，只更新当前评论。
+        if (!Boolean.TRUE.equals(top)) {
+            LambdaUpdateWrapper<MemberEvaluation> updateWrapper = Wrappers.lambdaUpdate();
+            updateWrapper.eq(MemberEvaluation::getId, id);
+            updateWrapper.set(MemberEvaluation::getTop, false);
+            return this.update(updateWrapper);
+        }
+
+        MemberEvaluation memberEvaluation = this.getById(id);
+        if (memberEvaluation == null) {
+            return false;
+        }
+
+        // 同一商品只能保留一条置顶评论，先清空其他评论的置顶状态。
+        LambdaUpdateWrapper<MemberEvaluation> cancelTopWrapper = Wrappers.lambdaUpdate();
+        cancelTopWrapper.eq(MemberEvaluation::getGoodsId, memberEvaluation.getGoodsId());
+        cancelTopWrapper.eq(MemberEvaluation::getDeleteFlag, false);
+        cancelTopWrapper.ne(MemberEvaluation::getId, id);
+        cancelTopWrapper.set(MemberEvaluation::getTop, false);
+        this.update(cancelTopWrapper);
+
+        // 最后再将当前评论设为置顶。
+        LambdaUpdateWrapper<MemberEvaluation> topWrapper = Wrappers.lambdaUpdate();
+        topWrapper.eq(MemberEvaluation::getId, id);
+        topWrapper.set(MemberEvaluation::getTop, true);
+        return this.update(topWrapper);
+    }
+
+    @Override
     public boolean delete(String id) {
         LambdaUpdateWrapper<MemberEvaluation> updateWrapper = Wrappers.lambdaUpdate();
         updateWrapper.set(MemberEvaluation::getDeleteFlag, true);

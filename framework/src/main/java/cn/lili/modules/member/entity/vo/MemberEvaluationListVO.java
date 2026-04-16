@@ -25,6 +25,9 @@ public class MemberEvaluationListVO {
     @Schema(description = "商品名称")
     private String goodsName;
 
+    @Schema(description = "商品ID")
+    private String goodsId;
+
     @Schema(description = "好中差评", allowableValues = "GOOD,NEUTRAL,BAD")
     private String grade;
 
@@ -36,6 +39,9 @@ public class MemberEvaluationListVO {
 
     @Schema(description = "回复状态")
     private Boolean replyStatus;
+
+    @Schema(description = "是否置顶")
+    private Boolean top;
 
     @Schema(description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

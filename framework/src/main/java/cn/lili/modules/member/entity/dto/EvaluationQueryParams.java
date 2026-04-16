@@ -99,6 +99,7 @@ public class EvaluationQueryParams extends PageVO {
             queryWrapper.eq("status", status);
         }
         queryWrapper.eq("delete_flag", false);
+        queryWrapper.orderByDesc("top");
         queryWrapper.orderByDesc("create_time");
         return queryWrapper;
     }

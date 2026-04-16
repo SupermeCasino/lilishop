@@ -182,5 +182,7 @@ ALTER TABLE `li_receipt`
   ADD COLUMN `company_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '单位名称' AFTER `personal_name`,
  ADD COLUMN `invoice_address` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '发票地址(URL)' AFTER `company_name`;
 
+ALTER TABLE `li_member_evaluation`
+    ADD COLUMN `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶' AFTER `reply_status`;
 
 

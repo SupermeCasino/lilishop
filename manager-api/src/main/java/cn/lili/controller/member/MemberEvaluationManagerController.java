@@ -58,6 +58,16 @@ public class MemberEvaluationManagerController {
         return ResultUtil.success();
     }
 
+    @PreventDuplicateSubmissions
+    @Operation(description = "修改评价置顶状态")
+    @Parameter(name = "id", description = "评价ID", required = true)
+    @Parameter(name = "top", description = "是否置顶", required = true)
+    @PutMapping("/updateTop/{id}")
+    public ResultMessage<Object> updateTop(@PathVariable String id, @NotNull Boolean top) {
+        memberEvaluationService.updateTop(id, top);
+        return ResultUtil.success();
+    }
+
     @Operation(description = "删除评论")
     @Parameter(name = "id", description = "评价ID", required = true)
     @PutMapping("/delete/{id}")

@@ -101,6 +101,9 @@ public class MemberEvaluation extends BaseEntity {
     @Schema(description = "回复状态")
     private boolean replyStatus;
 
+    @Schema(description = "是否置顶")
+    private Boolean top;
+
     @Schema(description = "物流评分")
     private Integer deliveryScore;
 
@@ -134,5 +137,7 @@ public class MemberEvaluation extends BaseEntity {
         this.haveImage = CharSequenceUtil.isNotEmpty(memberEvaluationDTO.getImages());
         //默认开启评价
         this.status = SwitchEnum.OPEN.name();
+        //默认不置顶
+        this.top = false;
     }
 }

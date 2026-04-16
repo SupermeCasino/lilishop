@@ -69,6 +69,15 @@ public interface MemberEvaluationService extends IService<MemberEvaluation> {
     boolean updateStatus(String id, String status);
 
     /**
+     * 更改评论置顶状态
+     *
+     * @param id  评价ID
+     * @param top 是否置顶
+     * @return 操作状态
+     */
+    boolean updateTop(String id, Boolean top);
+
+    /**
      * 删除评论
      *
      * @param id 评论ID
