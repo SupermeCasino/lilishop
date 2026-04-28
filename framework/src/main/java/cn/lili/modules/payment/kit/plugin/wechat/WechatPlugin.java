@@ -469,28 +469,16 @@ public class WechatPlugin implements Payment {
             //获取提现设置
             WithdrawalSetting withdrawalSetting = new Gson().fromJson(settingService.get(SettingEnum.WITHDRAWAL_SETTING.name()).getSettingValue(),
                     WithdrawalSetting.class);
+            if (withdrawalSetting == null || StringUtils.isEmpty(withdrawalSetting.getWechatAppId())) {
+                return TransferResultDTO.builder().result(false).response("微信提现配置缺失：wechatAppId").build();
+            }
 
             //获取用户OPENID
             WechatConnectSetting wechatConnectSetting = new Gson().fromJson(settingService.get(SettingEnum.WECHAT_CONNECT.name()).getSettingValue()
                     , WechatConnectSetting.class);
-            String source = "";
-            for (WechatConnectSettingItem wechatConnectSettingItem : wechatConnectSetting.getWechatConnectSettingItems()) {
-                if (wechatConnectSettingItem.getAppId().equals(withdrawalSetting.getWechatAppId())) {
-                    switch (wechatConnectSettingItem.getClientType()) {
-                        case "PC":
-                            source = SourceEnum.WECHAT_PC_OPEN_ID.name();
-                            break;
-                        case "H5":
-                            source = SourceEnum.WECHAT_OFFIACCOUNT_OPEN_ID.name();
-                            break;
-                        case "MP":
-                            source = SourceEnum.WECHAT_MP_OPEN_ID.name();
-                            break;
-                        case "APP":
-                            source = SourceEnum.WECHAT_APP_OPEN_ID.name();
-                            break;
-                    }
-                }
+            String source = resolveWechatOpenIdUnionType(withdrawalSetting, wechatConnectSetting);
+            if (StringUtils.isEmpty(source)) {
+                return TransferResultDTO.builder().result(false).response("微信提现配置缺失：无法识别 openId 渠道").build();
             }
 
 
@@ -499,6 +487,9 @@ public class WechatPlugin implements Payment {
                     ConnectQueryDTO.builder().userId(memberWithdrawApply.getMemberId())
                             .unionType(source).build()
             );
+            if (connect == null || StringUtils.isEmpty(connect.getUnionId())) {
+                return TransferResultDTO.builder().result(false).response("未获取到用户微信OpenId").build();
+            }
             //获取微信设置
             WechatPaymentSetting setting = wechatPaymentSetting();
 
@@ -513,10 +504,15 @@ public class WechatPlugin implements Payment {
 
             InitiateBatchTransferRequest request = new InitiateBatchTransferRequest();
             request.setAppid(withdrawalSetting.getWechatAppId());
-            request.setOutBatchNo(SnowFlake.createStr("T"));
+            String outBatchNo = SnowFlake.createStr("T");
+            request.setOutBatchNo(outBatchNo);
             request.setBatchName("用户提现");
             request.setBatchRemark("用户提现");
-            request.setTotalAmount(CurrencyUtil.getFenLong(memberWithdrawApply.getApplyMoney()));
+            Long amountFen = CurrencyUtil.getFenLong(memberWithdrawApply.getApplyMoney());
+            if (amountFen == null || amountFen <= 0) {
+                return TransferResultDTO.builder().result(false).response("提现金额异常").build();
+            }
+            request.setTotalAmount(amountFen);
             request.setTotalNum(1);
             request.setTransferSceneId("1000");
 
@@ -524,25 +520,75 @@ public class WechatPlugin implements Payment {
             {
                 TransferDetailInput transferDetailInput = new TransferDetailInput();
                 transferDetailInput.setOutDetailNo(SnowFlake.createStr("TD"));
-                transferDetailInput.setTransferAmount(CurrencyUtil.getFenLong(memberWithdrawApply.getApplyMoney()));
+                transferDetailInput.setTransferAmount(amountFen);
                 transferDetailInput.setTransferRemark("用户提现");
                 transferDetailInput.setOpenid(connect.getUnionId());
+                if (amountFen >= 200000 && StringUtils.isEmpty(memberWithdrawApply.getRealName())) {
+                    return TransferResultDTO.builder().result(false).response("微信提现金额>=2000元需填写真实姓名").build();
+                }
+                if (amountFen >= 30 && !StringUtils.isEmpty(memberWithdrawApply.getRealName())) {
+                    transferDetailInput.setUserName(memberWithdrawApply.getRealName());
+                }
                 transferDetailListList.add(transferDetailInput);
             }
             request.setTransferDetailList(transferDetailListList);
 
             // 调用下单方法，得到应答
             InitiateBatchTransferResponse response = service.initiateBatchTransfer(request);
-            log.info("微信提现响应 {}", response);
+            log.info("微信提现响应 outBatchNo={}, response={}", outBatchNo, response);
 
 
-            return TransferResultDTO.builder().result(response.getBatchId() != null).build();
+            boolean accepted = response != null && !StringUtils.isEmpty(response.getBatchId());
+            return TransferResultDTO.builder().result(accepted).response(accepted ? null : JSONUtil.toJsonStr(response)).build();
             //根据自身业务进行接下来的任务处理
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("用户微信提现异常", e);
             return TransferResultDTO.builder().result(false).response(e.getMessage()).build();
         }
 
+    }
+
+    private String resolveWechatOpenIdUnionType(WithdrawalSetting withdrawalSetting, WechatConnectSetting wechatConnectSetting) {
+        if (withdrawalSetting != null && !StringUtils.isEmpty(withdrawalSetting.getWechatAppIdSource())) {
+            String wechatAppIdSource = withdrawalSetting.getWechatAppIdSource();
+            switch (wechatAppIdSource) {
+                case "PC":
+                    return SourceEnum.WECHAT_PC_OPEN_ID.name();
+                case "H5":
+                    return SourceEnum.WECHAT_OFFIACCOUNT_OPEN_ID.name();
+                case "MP":
+                    return SourceEnum.WECHAT_MP_OPEN_ID.name();
+                case "APP":
+                    return SourceEnum.WECHAT_APP_OPEN_ID.name();
+                default:
+                    return "";
+            }
+        }
+        if (wechatConnectSetting == null || wechatConnectSetting.getWechatConnectSettingItems() == null) {
+            return "";
+        }
+        for (WechatConnectSettingItem wechatConnectSettingItem : wechatConnectSetting.getWechatConnectSettingItems()) {
+            if (wechatConnectSettingItem == null) {
+                continue;
+            }
+            if (!withdrawalSetting.getWechatAppId().equals(wechatConnectSettingItem.getAppId())) {
+                continue;
+            }
+            String clientType = wechatConnectSettingItem.getClientType();
+            switch (clientType) {
+                case "PC":
+                    return SourceEnum.WECHAT_PC_OPEN_ID.name();
+                case "H5":
+                    return SourceEnum.WECHAT_OFFIACCOUNT_OPEN_ID.name();
+                case "MP":
+                    return SourceEnum.WECHAT_MP_OPEN_ID.name();
+                case "APP":
+                    return SourceEnum.WECHAT_APP_OPEN_ID.name();
+                default:
+                    return "";
+            }
+        }
+        return "";
     }
 
     /**
