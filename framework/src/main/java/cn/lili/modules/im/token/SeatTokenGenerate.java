@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 会员token生成
+ * 客户token生成
  *
  * @author Chopper
  * @version v4.0

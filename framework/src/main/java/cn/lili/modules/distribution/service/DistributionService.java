@@ -26,7 +26,7 @@ public interface DistributionService extends IService<Distribution> {
     IPage<Distribution> distributionPage(DistributionSearchParams distributionSearchParams, PageVO page);
 
     /**
-     * 获取当前登录的会员的分销员信息
+     * 获取当前登录的客户的分销员信息
      *
      * @return
      */
@@ -66,7 +66,7 @@ public interface DistributionService extends IService<Distribution> {
     boolean resume(String id);
 
     /**
-     * 绑定会员的分销员关系
+     * 绑定客户的分销员关系
      *
      * @param distributionId 分销员ID
      */

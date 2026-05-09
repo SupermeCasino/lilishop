@@ -14,29 +14,29 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 买家端,会员收藏接口
+ * 买家端,客户收藏接口
  *
  * @author Chopper
  * @since 2020/11/17 2:32 下午
  */
 @RestController
-@Tag(name = "买家端,会员店铺收藏接口")
+@Tag(name = "买家端,客户店铺收藏接口")
 @RequestMapping("/buyer/member/storeCollection")
 public class MemberCollectionStoreController {
 
     /**
-     * 会员店铺
+     * 客户店铺
      */
     @Autowired
     private StoreCollectionService storeCollectionService;
 
-    @Operation(summary = "查询会员收藏列表")
+    @Operation(summary = "查询客户收藏列表")
     @GetMapping("/STORE")
     public ResultMessage<Object> goodsList(PageVO page) {
         return ResultUtil.data(storeCollectionService.storeCollection(page));
     }
 
-    @Operation(summary = "添加会员收藏")
+    @Operation(summary = "添加客户收藏")
     @Parameters({
             @Parameter(name = "num", description = "值")
     })
@@ -46,7 +46,7 @@ public class MemberCollectionStoreController {
 
     }
 
-    @Operation(summary = "删除会员收藏")
+    @Operation(summary = "删除客户收藏")
     @Parameters({
             @Parameter(name = "num", description = "值")
     })
@@ -55,7 +55,7 @@ public class MemberCollectionStoreController {
         return ResultUtil.data(storeCollectionService.deleteStoreCollection(id));
     }
 
-    @Operation(summary = "查询会员是否收藏")
+    @Operation(summary = "查询客户是否收藏")
     @Parameters({
             @Parameter(name = "id", description = "值")
     })

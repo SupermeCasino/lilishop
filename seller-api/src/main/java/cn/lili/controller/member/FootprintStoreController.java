@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FootprintStoreController {
 
     /**
-     * 会员足迹
+     * 客户足迹
      */
     @Autowired
     private FootprintService footprintService;

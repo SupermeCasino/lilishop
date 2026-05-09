@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员分布VO
+ * 客户分布VO
  *
  * @author Chopper
  * @since 2021-02-26 17:25

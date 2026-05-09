@@ -11,7 +11,7 @@ public enum UserEnums {
     /**
      * 角色
      */
-    MEMBER("会员"),
+    MEMBER("客户"),
     STORE("商家"),
     MANAGER("管理员"),
     SYSTEM("系统"),

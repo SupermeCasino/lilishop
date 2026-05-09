@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * 会员地址DTO
+ * 客户地址DTO
  *
  * @author Bulbasaur
  * @since 2020/12/14 16:31

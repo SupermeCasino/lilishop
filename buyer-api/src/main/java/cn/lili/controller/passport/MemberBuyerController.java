@@ -32,14 +32,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 买家端,会员接口
+ * 买家端,客户接口
  *
  * @author Chopper
  * @since 2020/11/16 10:07 下午
  */
 @Slf4j
 @RestController
-@Tag(name = "买家端,会员接口")
+@Tag(name = "买家端,客户接口")
 @RequestMapping("/buyer/passport/member")
 public class MemberBuyerController {
 
@@ -232,7 +232,7 @@ public class MemberBuyerController {
                                                @RequestHeader String uuid) {
         //校验短信验证码是否正确
         if (smsUtil.verifyCode(mobile, VerificationEnums.FIND_USER, uuid, code)) {
-            //校验是否通过手机号可获取会员,存在则将会员信息存入缓存，有效时间3分钟
+            //校验是否通过手机号可获取客户,存在则将客户信息存入缓存，有效时间3分钟
             memberService.findByMobile(uuid, mobile);
             return ResultUtil.success();
         } else {

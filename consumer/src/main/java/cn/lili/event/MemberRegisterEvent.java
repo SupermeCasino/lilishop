@@ -3,7 +3,7 @@ package cn.lili.event;
 import cn.lili.modules.member.entity.dos.Member;
 
 /**
- * 会员注册消息
+ * 客户注册消息
  *
  * @author Chopper
  * @since 2020/11/17 7:13 下午
@@ -11,9 +11,9 @@ import cn.lili.modules.member.entity.dos.Member;
 public interface MemberRegisterEvent {
 
     /**
-     * 会员注册
+     * 客户注册
      *
-     * @param member 会员
+     * @param member 客户
      */
     void memberRegister(Member member);
 }

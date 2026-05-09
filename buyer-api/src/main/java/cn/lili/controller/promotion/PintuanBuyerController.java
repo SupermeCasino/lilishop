@@ -49,7 +49,7 @@ public class PintuanBuyerController {
     }
 
 
-    @Operation(summary = "获取当前拼团活动的未成团的会员")
+    @Operation(summary = "获取当前拼团活动的未成团的客户")
     @GetMapping("/{pintuanId}/members")
     public ResultMessage<List<PintuanMemberVO>> getPintuanMember(@PathVariable String pintuanId) {
         return ResultUtil.data(pintuanService.getPintuanMember(pintuanId));

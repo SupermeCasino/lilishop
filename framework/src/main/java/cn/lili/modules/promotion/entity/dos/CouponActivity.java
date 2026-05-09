@@ -34,7 +34,7 @@ public class CouponActivity extends BasePromotions {
      */
     //目前仅在自动赠券模式下该参数会生效，日后如果完善发送测略则调整这里即可
     @NotNull(message = "请选择活动范围")
-    @Schema(description = "活动范围", allowableValues = "ALL:全部会员,DESIGNATED：指定会员")
+    @Schema(description = "活动范围", allowableValues = "ALL:全部客户,DESIGNATED：指定客户")
     private String activityScope;
     /**
      * @see CouponFrequencyEnum

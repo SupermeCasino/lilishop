@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员钱包创建
+ * 客户钱包创建
  *
  * @author Chopper
  * @since 2020-07-03 11:20

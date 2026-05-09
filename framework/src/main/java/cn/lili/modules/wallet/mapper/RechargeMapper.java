@@ -18,9 +18,9 @@ public interface RechargeMapper extends BaseMapper<Recharge> {
 
 
     /**
-     * 获取会员预存款
+     * 获取客户预存款
      *
-     * @return 会员预存款
+     * @return 客户预存款
      */
     @Select("SELECT COALESCE(SUM(recharge_money), 0) FROM li_recharge ${ew.customSqlSegment}")
     Double getRecharge(@Param(Constants.WRAPPER) Wrapper<Recharge> queryWrapper);

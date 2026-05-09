@@ -103,8 +103,8 @@ public class CouponManagerController {
         return ResultUtil.success();
     }
 
-    @Operation(description = "会员优惠券作废")
-    @Parameter(name = "id", description = "会员优惠券ID", required = true)
+    @Operation(description = "客户优惠券作废")
+    @Parameter(name = "id", description = "客户优惠券ID", required = true)
     @PutMapping("/member/cancellation/{id}")
     public ResultMessage<Object> cancellation(@PathVariable String id) {
         AuthUser currentUser =  Objects.requireNonNull(UserContext.getCurrentUser());
@@ -112,7 +112,7 @@ public class CouponManagerController {
         return ResultUtil.success(ResultCode.COUPON_CANCELLATION_SUCCESS);
     }
 
-    @Operation(description = "根据优惠券id券分页获取会员领详情")
+    @Operation(description = "根据优惠券id券分页获取客户领详情")
     @Parameter(name = "id", description = "优惠券ID", required = true)
     @Parameter(name = "page", description = "分页参数", required = true)
     @GetMapping("/member/{id}")

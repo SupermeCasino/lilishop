@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 会员消息
+ * 客户消息
  *
  * @author paulG
  * @since 2020/12/9
@@ -31,28 +31,28 @@ import java.util.List;
 public class MemberMessageListener implements RocketMQListener<MessageExt> {
 
     /**
-     * 会员签到
+     * 客户签到
      */
     @Autowired
     private MemberSignService memberSignService;
     /**
-     * 会员积分变化
+     * 客户积分变化
      */
     @Autowired
     private List<MemberPointChangeEvent> memberPointChangeEvents;
     /**
-     * 会员提现
+     * 客户提现
      */
     @Autowired
     private List<MemberWithdrawalEvent> memberWithdrawalEvents;
     /**
-     * 会员注册
+     * 客户注册
      */
     @Autowired
     private List<MemberRegisterEvent> memberSignEvents;
 
     /**
-     * 会员注册
+     * 客户注册
      */
     @Autowired
     private List<MemberLoginEvent> memberLoginEvents;
@@ -64,14 +64,14 @@ public class MemberMessageListener implements RocketMQListener<MessageExt> {
     @Override
     public void onMessage(MessageExt messageExt) {
         switch (MemberTagsEnum.valueOf(messageExt.getTags())) {
-            //会员注册
+            //客户注册
             case MEMBER_REGISTER:
                 for (MemberRegisterEvent memberRegisterEvent : memberSignEvents) {
                     try {
                         Member member = JSONUtil.toBean(new String(messageExt.getBody()), Member.class);
                         memberRegisterEvent.memberRegister(member);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，状态修改事件执行异常",
+                        log.error("客户{},在{}业务中，状态修改事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberRegisterEvent.getClass().getName(),
                                 e);
@@ -86,54 +86,54 @@ public class MemberMessageListener implements RocketMQListener<MessageExt> {
                         Member member = JSONUtil.toBean(new String(messageExt.getBody()), Member.class);
                         memberLoginEvent.memberLogin(member);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，状态修改事件执行异常",
+                        log.error("客户{},在{}业务中，状态修改事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberLoginEvent.getClass().getName(),
                                 e);
                     }
                 }
                 break;
-            //会员签到
+            //客户签到
             case MEMBER_SING:
                 MemberSign memberSign = JSONUtil.toBean(new String(messageExt.getBody()), MemberSign.class);
                 memberSignService.memberSignSendPoint(memberSign.getMemberId(), memberSign.getSignDay());
                 break;
-            //会员积分变动
+            //客户积分变动
             case MEMBER_POINT_CHANGE:
                 for (MemberPointChangeEvent memberPointChangeEvent : memberPointChangeEvents) {
                     try {
                         MemberPointMessage memberPointMessage = JSONUtil.toBean(new String(messageExt.getBody()), MemberPointMessage.class);
                         memberPointChangeEvent.memberPointChange(memberPointMessage);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，状态修改事件执行异常",
+                        log.error("客户{},在{}业务中，状态修改事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberPointChangeEvent.getClass().getName(),
                                 e);
                     }
                 }
                 break;
-            //会员信息更改
+            //客户信息更改
             case MEMBER_INFO_EDIT:
                 for (MemberInfoChangeEvent memberInfoChangeEvent : memberInfoChangeEvents) {
                     try {
                         Member member = JSONUtil.toBean(new String(messageExt.getBody()), Member.class);
                         memberInfoChangeEvent.memberInfoChange(member);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，提现事件执行异常",
+                        log.error("客户{},在{}业务中，提现事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberInfoChangeEvent.getClass().getName(),
                                 e);
                     }
                 }
                 break;
-            //会员提现
+            //客户提现
             case MEMBER_WITHDRAWAL:
                 for (MemberWithdrawalEvent memberWithdrawalEvent : memberWithdrawalEvents) {
                     try {
                         MemberWithdrawalMessage memberWithdrawalMessage = JSONUtil.toBean(new String(messageExt.getBody()), MemberWithdrawalMessage.class);
                         memberWithdrawalEvent.memberWithdrawal(memberWithdrawalMessage);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，提现事件执行异常",
+                        log.error("客户{},在{}业务中，提现事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberWithdrawalEvent.getClass().getName(),
                                 e);
@@ -147,7 +147,7 @@ public class MemberMessageListener implements RocketMQListener<MessageExt> {
                         MemberConnectLoginMessage memberConnectLoginMessage = JSONUtil.toBean(new String(messageExt.getBody()), MemberConnectLoginMessage.class);
                         memberConnectLoginEvent.memberConnectLogin(memberConnectLoginMessage.getMember(), memberConnectLoginMessage.getConnectAuthUser());
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，状态修改事件执行异常",
+                        log.error("客户{},在{}业务中，状态修改事件执行异常",
                                 new String(messageExt.getBody()),
                                 memberConnectLoginEvent.getClass().getName(),
                                 e);

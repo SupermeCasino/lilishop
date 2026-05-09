@@ -61,7 +61,7 @@ import java.util.Objects;
 public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     @Lazy
@@ -145,7 +145,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
         storeDetailService.save(storeDetail);
 
-        //设置会员-店铺信息
+        //设置客户-店铺信息
         memberService.update(new LambdaUpdateWrapper<Member>()
                 .eq(Member::getId, member.getId())
                 .set(Member::getHaveStore, true)
@@ -215,7 +215,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         }
         if (passed == 0) {
             store.setStoreDisable(StoreStatusEnum.OPEN.value());
-            //修改会员 表示已有店铺
+            //修改客户 表示已有店铺
             Member member = memberService.getById(store.getMemberId());
             member.setHaveStore(true);
             member.setStoreId(id);
@@ -283,7 +283,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         if (store == null) {
             AuthUser authUser = Objects.requireNonNull(UserContext.getCurrentUser());
             Member member = memberService.getById(authUser.getId());
-            //根据会员创建店铺
+            //根据客户创建店铺
             store = new Store(member);
             BeanUtil.copyProperties(storeCompanyDTO, store);
             this.save(store);

@@ -18,10 +18,10 @@ public class WxChannelRefund extends BaseEntity {
     @Schema(description = "视频号订单编号")
     private String channelOrderSn;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员昵称")
+    @Schema(description = "客户昵称")
     private String memberNickName;
 
     @Schema(description = "退款金额")

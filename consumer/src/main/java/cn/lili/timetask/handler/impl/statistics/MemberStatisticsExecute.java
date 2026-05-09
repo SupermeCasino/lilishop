@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * 会员数据统计
+ * 客户数据统计
  *
  * @author Chopper
  * @since 2021-03-02 14:56
@@ -21,7 +21,7 @@ import java.util.Date;
 public class MemberStatisticsExecute implements EveryDayExecute {
 
     /**
-     * 会员统计
+     * 客户统计
      */
     @Autowired
     private MemberStatisticsService memberStatisticsService;
@@ -49,7 +49,7 @@ public class MemberStatisticsExecute implements EveryDayExecute {
             memberStatisticsData.setNewlyAdded(memberStatisticsService.newlyAdded(startTime, endTime));
             memberStatisticsService.save(memberStatisticsData);
         } catch (Exception e) {
-            log.error("每日会员统计功能异常：", e);
+            log.error("每日客户统计功能异常：", e);
         }
     }
 }

@@ -27,7 +27,7 @@ public class MemberVO implements Serializable {
     @Schema(description = "唯一标识", hidden = true)
     private String id;
 
-    @Schema(description = "会员用户名")
+    @Schema(description = "客户用户名")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String username;
 
@@ -35,18 +35,18 @@ public class MemberVO implements Serializable {
 
     private String nickName;
 
-    @Schema(description = "会员性别,1为男，0为女")
+    @Schema(description = "客户性别,1为男，0为女")
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "会员生日")
+    @Schema(description = "客户生日")
     private Date birthday;
 
-    @Schema(description = "会员地址ID")
+    @Schema(description = "客户地址ID")
     private String regionId;
 
-    @Schema(description = "会员地址")
+    @Schema(description = "客户地址")
     private String region;
 
     @Schema(description = "手机号码", required = true)
@@ -56,16 +56,16 @@ public class MemberVO implements Serializable {
     @Schema(description = "积分数量")
     private Long point;
 
-    @Schema(description = "会员预存款")
+    @Schema(description = "客户预存款")
     private Double memberWallet;
 
     @Schema(description = "积分总数量")
     private Long totalPoint;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 
-    @Schema(description = "会员状态")
+    @Schema(description = "客户状态")
     private Boolean disabled;
 
     @Schema(description = "是否开通店铺")
@@ -87,7 +87,7 @@ public class MemberVO implements Serializable {
     @Schema(description = "最后一次登录时间")
     private Date lastLoginDate;
 
-    @Schema(description = "会员等级ID")
+    @Schema(description = "客户等级ID")
     private String gradeId;
 
     @Schema(description = "经验值数量")

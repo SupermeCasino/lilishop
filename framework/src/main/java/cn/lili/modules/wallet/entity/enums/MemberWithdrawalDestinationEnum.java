@@ -1,7 +1,7 @@
 package cn.lili.modules.wallet.entity.enums;
 
 /**
- * 会员提现到哪里 枚举
+ * 客户提现到哪里 枚举
  *
  * @author Chopper
  * @since 2021/3/20 10:44

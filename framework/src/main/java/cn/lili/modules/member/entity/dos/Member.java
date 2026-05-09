@@ -18,42 +18,42 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员
+ * 客户
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member")
-@Schema(description = "会员")
+@Schema(description = "客户")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Member extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员用户名")
+    @Schema(description = "客户用户名")
     private String username;
 
-    @Schema(description = "会员密码")
+    @Schema(description = "客户密码")
     private String password;
 
     @Schema(description = "昵称")
     private String nickName;
 
-    @Min(message = "会员性别参数错误", value = 0)
-    @Schema(description = "会员性别,1为男，0为女")
+    @Min(message = "客户性别参数错误", value = 0)
+    @Schema(description = "客户性别,1为男，0为女")
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "会员生日")
+    @Schema(description = "客户生日")
     private Date birthday;
 
-    @Schema(description = "会员地址ID")
+    @Schema(description = "客户地址ID")
     private String regionId;
 
-    @Schema(description = "会员地址")
+    @Schema(description = "客户地址")
     private String region;
 
     @NotEmpty(message = "手机号码不能为空")
@@ -69,10 +69,10 @@ public class Member extends BaseEntity {
     @Schema(description = "积分总数量")
     private Long totalPoint;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 
-    @Schema(description = "会员状态")
+    @Schema(description = "客户状态")
     private Boolean disabled;
 
     @Schema(description = "是否开通店铺")
@@ -91,7 +91,7 @@ public class Member extends BaseEntity {
     @Schema(description = "最后一次登录时间")
     private Date lastLoginDate;
 
-    @Schema(description = "会员等级ID")
+    @Schema(description = "客户等级ID")
     private String gradeId;
 
     @Min(message = "必须为数字", value = 0)

@@ -33,7 +33,7 @@ public class AfterSaleSearchParams extends PageVO {
     @Schema(description = "订单编号")
     private String orderSn;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "商家名称")

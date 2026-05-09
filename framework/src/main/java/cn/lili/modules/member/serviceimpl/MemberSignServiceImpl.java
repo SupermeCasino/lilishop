@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 会员签到业务层实现
+ * 客户签到业务层实现
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -54,7 +54,7 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
     @Autowired
     private SettingService settingService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -62,7 +62,7 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
 
     @Override
     public Boolean memberSign() {
-        //获取当前会员信息
+        //获取当前客户信息
         AuthUser authUser = UserContext.getCurrentUser();
         if (ObjectUtil.isNotNull(authUser)) {
             //获取当前用户当日签到日信息
@@ -105,7 +105,7 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
 
     @Override
     public List<MemberSign> getMonthSignDay(String time) {
-        //获取当前会员
+        //获取当前客户
         AuthUser authUser = UserContext.getCurrentUser();
         if (authUser != null) {
             return this.baseMapper.getMonthMemberSign(authUser.getId(), time);
@@ -128,20 +128,20 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
                     for (PointSettingItem item : pointSettingItems) {
                         if (item.getDay().equals(day)) {
                             point = item.getPoint().longValue();
-                            content = "会员连续签到" + day + "天，赠送积分" + point + "分";
+                            content = "客户连续签到" + day + "天，赠送积分" + point + "分";
                         }
                     }
                 }
                 //如果他不处于连续赠送阶段，则只赠送签到积分数
                 if (point == null && pointSetting.getSignIn() != null) {
                     point = Long.valueOf(pointSetting.getSignIn().toString());
-                    content = "会员签到第" + day + "天，赠送积分" + point + "分";
+                    content = "客户签到第" + day + "天，赠送积分" + point + "分";
                 }
-                //赠送会员积分
+                //赠送客户积分
                 memberService.updateMemberPoint(point, PointTypeEnum.INCREASE.name(), memberId, content);
             }
         } catch (Exception e) {
-            log.error("会员签到错误", e);
+            log.error("客户签到错误", e);
         }
     }
 

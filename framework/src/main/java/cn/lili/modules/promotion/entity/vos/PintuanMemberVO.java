@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 拼图会员视图对象
+ * 拼图客户视图对象
  *
  * @author paulG
  * @since 2021/3/3
@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PintuanMemberVO {
 
-    @Schema(description = "会员编号")
+    @Schema(description = "客户编号")
     private String memberId;
 
-    @Schema(description = "会员用户名")
+    @Schema(description = "客户用户名")
     private String memberName;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 
     @Schema(description = "昵称")

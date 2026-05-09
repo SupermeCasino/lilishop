@@ -6,13 +6,13 @@ import lombok.Data;
 
 
 /**
- * 会员接收消息查询vo
+ * 客户接收消息查询vo
  *
  * @author Chopper
  * @since 2020/12/2 17:50
  */
 @Data
-@Schema(description = "会员接收消息查询vo")
+@Schema(description = "客户接收消息查询vo")
 public class MemberMessageQueryVO {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class MemberMessageQueryVO {
     @Schema(description = "消息标题")
     private String title;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
 }

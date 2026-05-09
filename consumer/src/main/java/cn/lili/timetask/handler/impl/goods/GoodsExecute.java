@@ -21,7 +21,7 @@ import java.util.Map;
 @Component
 public class GoodsExecute implements EveryDayExecute {
     /**
-     * 会员评价
+     * 客户评价
      */
     @Autowired
     private MemberEvaluationService memberEvaluationService;

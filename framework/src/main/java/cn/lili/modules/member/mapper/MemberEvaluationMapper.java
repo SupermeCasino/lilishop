@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员商品评价数据处理层
+ * 客户商品评价数据处理层
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -23,11 +23,11 @@ public interface MemberEvaluationMapper extends BaseMapper<MemberEvaluation> {
 
 
     /**
-     * 会员评价分页
+     * 客户评价分页
      *
      * @param page         分页
      * @param queryWrapper 查询条件
-     * @return 会员评价分页
+     * @return 客户评价分页
      */
     @Select("select me.* from li_member_evaluation as me ${ew.customSqlSegment}")
     IPage<MemberEvaluationListVO> getMemberEvaluationList(IPage<MemberEvaluationListVO> page, @Param(Constants.WRAPPER) Wrapper<MemberEvaluationListVO> queryWrapper);
@@ -36,7 +36,7 @@ public interface MemberEvaluationMapper extends BaseMapper<MemberEvaluation> {
      * 评价数量
      *
      * @param goodsId 商品ID
-     * @return 会员评价
+     * @return 客户评价
      */
     @Select("select grade,count(1) as num from li_member_evaluation Where goods_id=#{goodsId} and status='OPEN' and delete_flag = false GROUP BY grade")
     List<Map<String, Object>> getEvaluationNumber(String goodsId);
@@ -54,7 +54,7 @@ public interface MemberEvaluationMapper extends BaseMapper<MemberEvaluation> {
     StoreRatingVO getStoreRatingVO(@Param(Constants.WRAPPER) Wrapper<MemberEvaluation> queryWrapper);
 
     /**
-     * 商品会员评价数量
+     * 商品客户评价数量
      *
      * @param queryWrapper 查询条件
      * @return 评价数量

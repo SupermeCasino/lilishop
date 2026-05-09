@@ -106,7 +106,7 @@ public class KanjiaActivityServiceImpl extends ServiceImpl<KanJiaActivityMapper,
             throw new ServiceException(ResultCode.PROMOTION_STATUS_END);
         }
         KanjiaActivityLog kanjiaActivityLog = new KanjiaActivityLog();
-        //获取会员信息
+        //获取客户信息
         Member member = memberService.getById(authUser.getId());
         //校验此活动是否已经发起过
         QueryWrapper<KanjiaActivity> queryWrapper = new QueryWrapper<>();
@@ -145,7 +145,7 @@ public class KanjiaActivityServiceImpl extends ServiceImpl<KanJiaActivityMapper,
     @Override
     public KanjiaActivityLog helpKanJia(String kanjiaActivityId) {
         AuthUser authUser = Objects.requireNonNull(UserContext.getCurrentUser());
-        //获取会员信息
+        //获取客户信息
         Member member = memberService.getById(authUser.getId());
         //根据砍价发起活动id查询砍价活动信息
         KanjiaActivity kanjiaActivity = this.getById(kanjiaActivityId);

@@ -39,7 +39,7 @@ import java.util.Objects;
 public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> implements RechargeService {
 
     /**
-     * 会员预存款
+     * 客户预存款
      */
     @Autowired
     @Lazy
@@ -52,7 +52,7 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
             throw new ServiceException(ResultCode.RECHARGE_PRICE_ERROR);
         }
 
-        //获取当前登录的会员
+        //获取当前登录的客户
         AuthUser authUser = UserContext.getCurrentUser();
         //构建sn
         String sn = "Y" + SnowFlake.getId();
@@ -68,11 +68,11 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
     public IPage<Recharge> rechargePage(PageVO page, RechargeQueryVO rechargeQueryVO) {
         //构建查询条件
         QueryWrapper<Recharge> queryWrapper = new QueryWrapper<>();
-        //会员名称
+        //客户名称
         queryWrapper.like(!CharSequenceUtil.isEmpty(rechargeQueryVO.getMemberName()), "member_name", rechargeQueryVO.getMemberName());
         //充值订单号
         queryWrapper.eq(!CharSequenceUtil.isEmpty(rechargeQueryVO.getRechargeSn()), "recharge_sn", rechargeQueryVO.getRechargeSn());
-        //会员id
+        //客户id
         queryWrapper.eq(!CharSequenceUtil.isEmpty(rechargeQueryVO.getMemberId()), "member_id", rechargeQueryVO.getMemberId());
         //支付时间 开始时间和结束时间
         if (!CharSequenceUtil.isEmpty(rechargeQueryVO.getStartDate()) && !CharSequenceUtil.isEmpty(rechargeQueryVO.getEndDate())) {
@@ -99,7 +99,7 @@ public class RechargeServiceImpl extends ServiceImpl<RechargeMapper, Recharge> i
             //执行保存操作
             this.updateById(recharge);
             //增加预存款余额
-            memberWalletService.increase(new MemberWalletUpdateDTO(recharge.getRechargeMoney(), recharge.getMemberId(), "会员余额充值，充值单号为：" + recharge.getRechargeSn(), DepositServiceTypeEnum.WALLET_RECHARGE.name()));
+            memberWalletService.increase(new MemberWalletUpdateDTO(recharge.getRechargeMoney(), recharge.getMemberId(), "客户余额充值，充值单号为：" + recharge.getRechargeSn(), DepositServiceTypeEnum.WALLET_RECHARGE.name()));
         }
     }
 

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 
 /**
- * 会员积分历史数据处理层
+ * 客户积分历史数据处理层
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -25,7 +25,7 @@ public interface MemberPointsHistoryMapper extends BaseMapper<MemberPointsHistor
      * 获取用户的积分数量
      *
      * @param pointType 积分类型
-     * @param memberId  会员ID
+     * @param memberId  客户ID
      * @return 积分数量
      */
     @Select("SELECT SUM( variable_point ) FROM li_member_points_history WHERE point_type = #{pointType} AND member_id=#{memberId}")

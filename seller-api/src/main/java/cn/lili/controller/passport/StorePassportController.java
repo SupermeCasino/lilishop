@@ -36,7 +36,7 @@ import jakarta.validation.constraints.NotNull;
 public class StorePassportController {
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -90,7 +90,7 @@ public class StorePassportController {
                                                @RequestHeader String uuid) {
         //校验短信验证码是否正确
         if (smsUtil.verifyCode(mobile, VerificationEnums.FIND_USER, uuid, code)) {
-            //校验是否通过手机号可获取会员,存在则将会员信息存入缓存，有效时间3分钟
+            //校验是否通过手机号可获取客户,存在则将客户信息存入缓存，有效时间3分钟
             memberService.findByMobile(uuid, mobile);
             return ResultUtil.success();
         } else {

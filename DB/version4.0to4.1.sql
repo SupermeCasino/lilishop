@@ -2,7 +2,7 @@
 ALTER TABLE li_article DROP COLUMN open_status;
 ALTER TABLE li_article ADD open_status bit ( 1 );
 UPDATE li_article SET open_status = 1;
-/** 增加会员等级会员经验值**/
+/** 增加客户等级客户经验值**/
 ALTER TABLE li_member ADD grade_id VARCHAR ( 32 );
 ALTER TABLE li_member ADD experience BIGINT;
 /**去除商品运费承担**/

@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员积分历史
+ * 客户积分历史
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -26,7 +26,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_points_history")
-@Schema(description = "会员积分历史")
+@Schema(description = "客户积分历史")
 public class MemberPointsHistory extends BaseIdEntity {
 
     private static final long serialVersionUID = 1L;
@@ -43,12 +43,12 @@ public class MemberPointsHistory extends BaseIdEntity {
     @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
 
     @Sensitive(strategy = SensitiveStrategy.PHONE)
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "当前积分")

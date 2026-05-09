@@ -5,13 +5,13 @@ import lombok.Data;
 
 
 /**
- * 会员发票添加VO
+ * 客户发票添加VO
  *
  * @author Chopper
  * @since 2021-03-29 14:10:16
  */
 @Data
-@Schema(description = "会员发票")
+@Schema(description = "客户发票")
 public class MemberReceiptAddVO {
 
     private static final long serialVersionUID = -8267092982915677995L;

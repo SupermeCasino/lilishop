@@ -8,8 +8,8 @@ package cn.lili.modules.message.entity.enums;
  */
 public enum MessageTemplateType {
 
-    //会员消息
-    MEMBER("会员消息"),
+    //客户消息
+    MEMBER("客户消息"),
     //店铺消息
     STORE("店铺消息"),
     //其他消息

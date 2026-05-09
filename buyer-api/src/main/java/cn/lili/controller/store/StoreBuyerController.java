@@ -117,7 +117,7 @@ public class StoreBuyerController {
         return ResultUtil.success();
     }
 
-    @Operation(summary = "获取当前登录会员的店铺信息-入驻店铺")
+    @Operation(summary = "获取当前登录客户的店铺信息-入驻店铺")
     @GetMapping("/apply")
     public ResultMessage<StoreDetailVO> apply() {
         return ResultUtil.data(storeDetailService.getStoreDetailVOByMemberId(UserContext.getCurrentUser().getId()));

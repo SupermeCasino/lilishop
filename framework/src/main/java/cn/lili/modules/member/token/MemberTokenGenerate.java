@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 会员token生成
+ * 客户token生成
  *
  * @author Chopper
  * @version v4.0

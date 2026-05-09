@@ -33,7 +33,7 @@ public class Clerk extends BaseEntity {
     @Schema(description = "店员名称")
     private String clerkName;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "店铺ID")

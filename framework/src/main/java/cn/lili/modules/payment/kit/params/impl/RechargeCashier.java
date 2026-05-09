@@ -51,7 +51,7 @@ public class RechargeCashier implements CashierExecute {
         PayParam payParam = paymentSuccessParams.getPayParam();
         if (payParam.getOrderType().equals(CashierEnum.RECHARGE.name())) {
             rechargeService.paySuccess(payParam.getSn(), paymentSuccessParams.getReceivableNo(),paymentSuccessParams.getPaymentMethod());
-            log.info("会员充值-订单号{},第三方流水：{}", payParam.getSn(), paymentSuccessParams.getReceivableNo());
+            log.info("客户充值-订单号{},第三方流水：{}", payParam.getSn(), paymentSuccessParams.getReceivableNo());
         }
     }
 

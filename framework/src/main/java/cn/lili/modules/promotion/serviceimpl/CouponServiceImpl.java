@@ -64,7 +64,7 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
     @Lazy
     private PromotionGoodsService promotionGoodsService;
     /**
-     * 会员优惠券
+     * 客户优惠券
      */
     @Autowired
     private MemberCouponService memberCouponService;
@@ -182,7 +182,7 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
             this.update(updateWrapper);
         }
 
-        // 关闭优惠券，删除相关会员优惠券和券活动
+        // 关闭优惠券，删除相关客户优惠券和券活动
         if (startTime == null && endTime == null) {
             //删除优惠券信息
             this.memberCouponService.closeMemberCoupon(ids);

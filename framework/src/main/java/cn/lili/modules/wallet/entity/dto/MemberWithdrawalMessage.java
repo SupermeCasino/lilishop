@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员提现消息
+ * 客户提现消息
  *
  * @author Bulbasaur
  * @since 2020/12/14 16:31
@@ -18,7 +18,7 @@ public class MemberWithdrawalMessage {
     @Schema(description = "金额")
     private Double price;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     @Schema(description = "提现状态")

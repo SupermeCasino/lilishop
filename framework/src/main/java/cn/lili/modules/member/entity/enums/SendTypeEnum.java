@@ -12,7 +12,7 @@ public enum SendTypeEnum {
      * 消息类型
      */
     ALL("全部"),
-    SELECT("指定会员");
+    SELECT("指定客户");
 
     private String description;
 

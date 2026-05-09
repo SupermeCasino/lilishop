@@ -142,7 +142,7 @@ ALTER TABLE `li_order`
 
 
 ALTER TABLE `li_distribution_cash`
-    ADD COLUMN `name` varchar(255) NULL COMMENT '会员姓名';
+    ADD COLUMN `name` varchar(255) NULL COMMENT '客户姓名';
 ALTER TABLE `li_distribution_cash`
     ADD COLUMN `id_number` varchar(255) NULL COMMENT '身份证号' ;
 ALTER TABLE `li_distribution_cash`

@@ -33,24 +33,24 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * 买家端,会员余额接口
+ * 买家端,客户余额接口
  *
  * @author pikachu
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Tag(name = "买家端,会员余额接口")
+@Tag(name = "买家端,客户余额接口")
 @RequestMapping("/buyer/wallet/wallet")
 @Validated
 public class MemberWalletBuyerController {
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
     /**
-     * 会员余额
+     * 客户余额
      */
     @Autowired
     private MemberWalletService memberWalletService;
@@ -64,7 +64,7 @@ public class MemberWalletBuyerController {
     private SettingService settingService;
 
     @GetMapping
-    @Operation(description = "查询会员预存款余额")
+    @Operation(description = "查询客户预存款余额")
     public ResultMessage<MemberWalletVO> get() {
         AuthUser authUser = UserContext.getCurrentUser();
         if (authUser != null) {
@@ -88,7 +88,7 @@ public class MemberWalletBuyerController {
 
     @PreventDuplicateSubmissions
     @PostMapping("/withdrawal")
-    @Operation(description = "会员中心余额提现")
+    @Operation(description = "客户中心余额提现")
     @Parameter(name = "price", description = "提现金额", required = true)
     @Parameter(name = "realName", description = "真实姓名", required = true)
     @Parameter(name = "connectNumber", description = "第三方登录账号", required = true)
@@ -144,7 +144,7 @@ public class MemberWalletBuyerController {
 
 
     @GetMapping("/check")
-    @Operation(description = "检测会员是否设置过支付密码,会员中心设置或者修改密码时使用")
+    @Operation(description = "检测客户是否设置过支付密码,客户中心设置或者修改密码时使用")
     public ResultMessage<Boolean> checkPassword() {
         return ResultUtil.data(memberWalletService.checkPassword());
     }

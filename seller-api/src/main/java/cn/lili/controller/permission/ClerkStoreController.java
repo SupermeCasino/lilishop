@@ -89,21 +89,21 @@ public class ClerkStoreController {
             if (clerkAddDTO.getRoles() != null && clerkAddDTO.getRoles().size() >= rolesMaxSize) {
                 throw new ServiceException(ResultCode.PERMISSION_BEYOND_TEN);
             }
-            //校验是否已经是会员
+            //校验是否已经是客户
             Member member = memberService.findByMobile(clerkAddDTO.getMobile());
             if (member == null) {
-                //添加会员
+                //添加客户
                 MemberAddDTO memberAddDTO = new MemberAddDTO();
                 memberAddDTO.setMobile(clerkAddDTO.getMobile());
                 memberAddDTO.setPassword(clerkAddDTO.getPassword());
                 memberAddDTO.setUsername(clerkAddDTO.getUsername());
                 member = memberService.addMember(memberAddDTO);
             } else {
-                //校验要添加的会员是否已经是店主
+                //校验要添加的客户是否已经是店主
                 if (Boolean.TRUE.equals(member.getHaveStore())) {
                     throw new ServiceException(ResultCode.STORE_APPLY_DOUBLE_ERROR);
                 }
-                //校验会员的有效性
+                //校验客户的有效性
                 if (Boolean.FALSE.equals(member.getDisabled())) {
                     throw new ServiceException(ResultCode.USER_STATUS_ERROR);
                 }
@@ -113,7 +113,7 @@ public class ClerkStoreController {
             clerkAddDTO.setShopkeeper(false);
             clerkAddDTO.setStoreId(UserContext.getCurrentUser().getStoreId());
             clerkService.saveClerk(clerkAddDTO);
-            //修改此会员拥有店铺
+            //修改此客户拥有店铺
             List<String> ids = new ArrayList<>();
             ids.add(member.getId());
             memberService.updateHaveShop(true, UserContext.getCurrentUser().getStoreId(), ids);

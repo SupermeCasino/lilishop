@@ -12,7 +12,7 @@ public interface GoodsCommentCompleteEvent {
 
     /**
      * 商品评价
-     * @param memberEvaluation 会员评价
+     * @param memberEvaluation 客户评价
      */
     void goodsComment(MemberEvaluation memberEvaluation);
 }

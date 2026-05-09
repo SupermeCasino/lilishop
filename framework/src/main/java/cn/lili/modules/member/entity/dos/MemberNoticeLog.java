@@ -11,14 +11,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员消息
+ * 客户消息
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_notice_log")
-@Schema(description = "会员消息")
+@Schema(description = "客户消息")
 @EqualsAndHashCode(callSuper = false)
 public class MemberNoticeLog extends BaseEntity {
 
@@ -30,7 +30,7 @@ public class MemberNoticeLog extends BaseEntity {
     @Schema(description = "消息内容")
     private String content;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberIds;
 
     @Schema(description = "管理员id")
@@ -44,7 +44,7 @@ public class MemberNoticeLog extends BaseEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date sendTime;
 
-    @Schema(description = "发送类型,0全站，1指定会员")
+    @Schema(description = "发送类型,0全站，1指定客户")
     private Integer sendType;
 
 

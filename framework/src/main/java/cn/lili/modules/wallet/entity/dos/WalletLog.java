@@ -35,10 +35,10 @@ public class WalletLog extends BaseIdEntity {
 
     private static final long serialVersionUID = -1599270544927161096L;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
@@ -70,7 +70,7 @@ public class WalletLog extends BaseIdEntity {
     /**
      * 构建新的预存款日志对象
      *
-     * @param memberName            会员名称
+     * @param memberName            客户名称
      * @param memberWalletUpdateDTO 变动模型
      */
     public WalletLog(String memberName, MemberWalletUpdateDTO memberWalletUpdateDTO) {
@@ -84,7 +84,7 @@ public class WalletLog extends BaseIdEntity {
     /**
      * 构建新的预存款日志对象
      *
-     * @param memberName            会员名称
+     * @param memberName            客户名称
      * @param memberWalletUpdateDTO 变动模型
      * @param isReduce              是否是消费
      */

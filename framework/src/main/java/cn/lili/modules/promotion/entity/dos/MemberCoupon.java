@@ -18,7 +18,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.Date;
 
 /**
- * 会员优惠券实体类
+ * 客户优惠券实体类
  *
  * @author Chopper
  * @since 2020-03-19 10:44 上午
@@ -26,7 +26,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_member_coupon")
-@Schema(description = "会员优惠券")
+@Schema(description = "客户优惠券")
 public class MemberCoupon extends BaseEntity {
 
     private static final long serialVersionUID = -7290310311125273760L;
@@ -49,10 +49,10 @@ public class MemberCoupon extends BaseEntity {
     @Schema(description = "消费门槛")
     private Double consumeThreshold;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     /**
@@ -102,7 +102,7 @@ public class MemberCoupon extends BaseEntity {
     /**
      * @see MemberCouponStatusEnum
      */
-    @Schema(description = "会员优惠券状态")
+    @Schema(description = "客户优惠券状态")
     private String memberCouponStatus;
 
     public MemberCoupon() {

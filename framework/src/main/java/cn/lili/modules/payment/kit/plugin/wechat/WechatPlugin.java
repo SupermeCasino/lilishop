@@ -461,7 +461,7 @@ public class WechatPlugin implements Payment {
      * 微信提现
      * 文档地址：https://pay.weixin.qq.com/docs/merchant/apis/batch-transfer-to-balance/transfer-batch/initiate-batch-transfer.html
      *
-     * @param memberWithdrawApply 会员提现申请
+     * @param memberWithdrawApply 客户提现申请
      */
     @Override
     public TransferResultDTO transfer(MemberWithdrawApply memberWithdrawApply) {

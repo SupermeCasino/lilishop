@@ -49,7 +49,7 @@ public class AdminUserManagerController {
     @Autowired
     private AdminUserService adminUserService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;

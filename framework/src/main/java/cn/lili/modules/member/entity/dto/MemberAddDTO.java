@@ -8,19 +8,19 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * 添加会员DTO
+ * 添加客户DTO
  *
  * @author Bulbasaur
  * @since 2020/12/14 16:31
  */
 @Data
 public class MemberAddDTO {
-    @NotEmpty(message = "会员用户名必填")
-    @Size(max = 30,message = "会员用户名最长30位")
-    @Schema(description = "会员用户名")
+    @NotEmpty(message = "客户用户名必填")
+    @Size(max = 30,message = "客户用户名最长30位")
+    @Schema(description = "客户用户名")
     private String username;
 
-    @Schema(description = "会员密码")
+    @Schema(description = "客户密码")
     private String password;
 
     @NotEmpty(message = "手机号码不能为空")

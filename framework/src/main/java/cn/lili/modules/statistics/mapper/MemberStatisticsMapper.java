@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 会员统计数据处理层
+ * 客户统计数据处理层
  *
  * @author Bulbasaur
  * @since 2020/11/17 7:34 下午
@@ -19,18 +19,18 @@ import java.util.List;
 public interface MemberStatisticsMapper extends BaseMapper<MemberStatisticsData> {
 
     /**
-     * 获取会员统计数量
+     * 获取客户统计数量
      *
      * @param queryWrapper 查询条件
-     * @return 会员统计数量
+     * @return 客户统计数量
      */
     @Select("SELECT  COUNT(0)  FROM li_member  ${ew.customSqlSegment}")
     long customSqlQuery(@Param(Constants.WRAPPER) Wrapper queryWrapper);
 
 
     /**
-     * 获取会员分布列表
-     * @return 会员分布列表
+     * 获取客户分布列表
+     * @return 客户分布列表
      */
     @Select("select client_enum,count(0) as num from li_member group by client_enum")
     List<MemberDistributionVO> distribution();

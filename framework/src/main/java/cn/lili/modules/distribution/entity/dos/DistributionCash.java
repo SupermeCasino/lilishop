@@ -53,7 +53,7 @@ public class DistributionCash extends BaseEntity {
     private String distributionCashStatus;
 
 
-    @Schema(description = "会员姓名")
+    @Schema(description = "客户姓名")
     private String name;
     @Schema(description = "身份证号")
     private String idNumber;

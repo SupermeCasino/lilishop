@@ -26,7 +26,7 @@ public class FootPrint extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "店铺Id")

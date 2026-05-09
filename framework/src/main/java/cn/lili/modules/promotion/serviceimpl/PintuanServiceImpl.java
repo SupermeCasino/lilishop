@@ -57,7 +57,7 @@ public class PintuanServiceImpl extends AbstractPromotionsServiceImpl<PintuanMap
     @Autowired
     private GoodsSkuService goodsSkuService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -80,10 +80,10 @@ public class PintuanServiceImpl extends AbstractPromotionsServiceImpl<PintuanMap
     private RocketmqCustomProperties rocketmqCustomProperties;
 
     /**
-     * 获取当前拼团的会员
+     * 获取当前拼团的客户
      *
      * @param pintuanId 拼图id
-     * @return 当前拼团的会员列表
+     * @return 当前拼团的客户列表
      */
     @Override
     public List<PintuanMemberVO> getPintuanMember(String pintuanId) {

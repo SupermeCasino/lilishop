@@ -26,20 +26,20 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 /**
- * 管理端,会员接口
+ * 管理端,客户接口
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Tag(name = "管理端,会员接口")
+@Tag(name = "管理端,客户接口")
 @RequestMapping("/manager/passport/member")
 public class MemberManagerController {
     @Autowired
     private MemberService memberService;
 
-    @Operation(description = "会员分页列表")
-    @Parameter(name = "memberSearchVO", description = "会员查询参数", required = false)
+    @Operation(description = "客户分页列表")
+    @Parameter(name = "memberSearchVO", description = "客户查询参数", required = false)
     @Parameter(name = "page", description = "分页参数", required = false)
     @GetMapping
     public ResultMessage<IPage<MemberVO>> getByPage(MemberSearchVO memberSearchVO, PageVO page) {
@@ -47,16 +47,16 @@ public class MemberManagerController {
     }
 
 
-    @Operation(description = "通过ID获取会员信息")
-    @Parameter(name = "id", description = "会员ID", required = true)
+    @Operation(description = "通过ID获取客户信息")
+    @Parameter(name = "id", description = "客户ID", required = true)
     @GetMapping("/{id}")
     public ResultMessage<MemberVO> get(@PathVariable String id) {
 
         return ResultUtil.data(memberService.getMember(id));
     }
 
-    @Operation(description = "添加会员")
-    @SystemLogPoint(description = "添加会员", customerLog = "'新增用户名称: ['+#member.username+']'")
+    @Operation(description = "添加客户")
+    @SystemLogPoint(description = "添加客户", customerLog = "'新增用户名称: ['+#member.username+']'")
     @PostMapping
     public ResultMessage<Member> save(@Valid MemberAddDTO member) {
 
@@ -65,9 +65,9 @@ public class MemberManagerController {
 
     @DemoSite
     @PreventDuplicateSubmissions
-    @SystemLogPoint(description = "修改会员信息", customerLog = "'修改的用户名称: ['+#managerMemberEditDTO.username+']'")
-    @Operation(description = "修改会员基本信息")
-    @Parameter(name = "managerMemberEditDTO", description = "会员修改参数", required = true)
+    @SystemLogPoint(description = "修改客户信息", customerLog = "'修改的用户名称: ['+#managerMemberEditDTO.username+']'")
+    @Operation(description = "修改客户基本信息")
+    @Parameter(name = "managerMemberEditDTO", description = "客户修改参数", required = true)
     @PutMapping
     public ResultMessage<Member> update(@Valid ManagerMemberEditDTO managerMemberEditDTO) {
         return ResultUtil.data(memberService.updateMember(managerMemberEditDTO));
@@ -75,9 +75,9 @@ public class MemberManagerController {
 
     @DemoSite
     @PreventDuplicateSubmissions
-    @SystemLogPoint(description = "修改会员状态", customerLog = "'修改的会员名称: ['+#memberIds+']，是否开启: ['+#disabled+']'")
-    @Operation(description = "修改会员状态,开启关闭会员")
-    @Parameter(name = "memberIds", description = "会员ID", required = true)
+    @SystemLogPoint(description = "修改客户状态", customerLog = "'修改的客户名称: ['+#memberIds+']，是否开启: ['+#disabled+']'")
+    @Operation(description = "修改客户状态,开启关闭客户")
+    @Parameter(name = "memberIds", description = "客户ID", required = true)
     @Parameter(name = "disabled", description = "是否开启", required = true)
     @PutMapping("/updateMemberStatus")
     public ResultMessage<Object> updateMemberStatus(@RequestParam List<String> memberIds, @RequestParam Boolean disabled) {
@@ -86,8 +86,8 @@ public class MemberManagerController {
     }
 
 
-    @Operation(description = "根据条件查询会员总数")
-    @Parameter(name = "memberSearchVO", description = "会员查询参数", required = false)
+    @Operation(description = "根据条件查询客户总数")
+    @Parameter(name = "memberSearchVO", description = "客户查询参数", required = false)
     @GetMapping("/num")
     public ResultMessage<Long> getByPage(MemberSearchVO memberSearchVO) {
         return ResultUtil.data(memberService.getMemberNum(memberSearchVO));
@@ -98,7 +98,7 @@ public class MemberManagerController {
 
     @PutMapping("/updateMemberPoint")
     @Operation(summary = "增加用户余额")
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     @Parameter(name = "point", description = "积分", required = true)
     @Parameter(name = "type", description = "类型", required = true)
     public ResultMessage<Object> updateMemberPoint(String memberId ,Long point,String type) {

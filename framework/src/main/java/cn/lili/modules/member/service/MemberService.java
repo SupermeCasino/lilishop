@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员业务层
+ * 客户业务层
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -34,7 +34,7 @@ public interface MemberService extends IService<Member> {
     /**
      * 获取当前登录的用户信息
      *
-     * @return 会员信息
+     * @return 客户信息
      */
     Member getUserInfo();
 
@@ -52,7 +52,7 @@ public interface MemberService extends IService<Member> {
      * 通过用户名获取用户
      *
      * @param username 用户名
-     * @return 会员信息
+     * @return 客户信息
      */
     Member findByUsername(String username);
 
@@ -91,10 +91,10 @@ public interface MemberService extends IService<Member> {
     Token mobilePhoneLogin(String mobilePhone);
 
     /**
-     * 修改会员信息
+     * 修改客户信息
      *
-     * @param memberEditDTO 会员修改信息
-     * @return 修改后的会员
+     * @param memberEditDTO 客户修改信息
+     * @return 修改后的客户
      */
     Member editOwn(MemberEditDTO memberEditDTO);
 
@@ -108,9 +108,9 @@ public interface MemberService extends IService<Member> {
     Member modifyPass(String oldPassword, String newPassword);
 
     /**
-     * 注册会员
+     * 注册客户
      *
-     * @param userName    会员
+     * @param userName    客户
      * @param password    密码
      * @param mobilePhone mobilePhone
      * @return 处理结果
@@ -139,7 +139,7 @@ public interface MemberService extends IService<Member> {
      */
     void cancellation();
     /**
-     * 修改当前会员的手机号
+     * 修改当前客户的手机号
      *
      * @param mobile 手机号
      * @return 操作结果
@@ -148,7 +148,7 @@ public interface MemberService extends IService<Member> {
 
     /**
      * 修改用户手机号
-     * @param memberId 会员ID
+     * @param memberId 客户ID
      * @param mobile 手机号
      * @return
      */
@@ -165,40 +165,40 @@ public interface MemberService extends IService<Member> {
     boolean resetByMobile(String mobile, String password);
 
     /**
-     * 后台-添加会员
+     * 后台-添加客户
      *
-     * @param memberAddDTO 会员
-     * @return 会员
+     * @param memberAddDTO 客户
+     * @return 客户
      */
     Member addMember(MemberAddDTO memberAddDTO);
 
     /**
-     * 后台-修改会员
+     * 后台-修改客户
      *
-     * @param managerMemberEditDTO 后台修改会员参数
-     * @return 会员
+     * @param managerMemberEditDTO 后台修改客户参数
+     * @return 客户
      */
     Member updateMember(ManagerMemberEditDTO managerMemberEditDTO);
 
     /**
-     * 获取会员分页
+     * 获取客户分页
      *
-     * @param memberSearchVO 会员搜索VO
+     * @param memberSearchVO 客户搜索VO
      * @param page           分页
-     * @return 会员分页
+     * @return 客户分页
      */
     IPage<MemberVO> getMemberPage(MemberSearchVO memberSearchVO, PageVO page);
 
 
 //    /**
-//     * 一键注册会员
+//     * 一键注册客户
 //     *
 //     * @return
 //     */
 //    Token autoRegister();
 
     /**
-     * 一键注册会员
+     * 一键注册客户
      *
      * @param authUser 联合登录用户
      * @return Token
@@ -222,11 +222,11 @@ public interface MemberService extends IService<Member> {
     Token refreshStoreToken(String refreshToken);
 
     /**
-     * 会员积分变动
+     * 客户积分变动
      *
      * @param point    变动积分
      * @param type     是否增加积分 INCREASE 增加  REDUCE 扣减
-     * @param memberId 会员id
+     * @param memberId 客户id
      * @param content  变动日志
      * @return 操作结果
      */
@@ -234,28 +234,28 @@ public interface MemberService extends IService<Member> {
 
 
     /**
-     * 修改会员状态
+     * 修改客户状态
      *
-     * @param memberIds 会员id集合
+     * @param memberIds 客户id集合
      * @param status    状态
      * @return 修改结果
      */
     Boolean updateMemberStatus(List<String> memberIds, Boolean status);
 
     /**
-     * 根据条件查询会员总数
+     * 根据条件查询客户总数
      *
      * @param memberSearchVO
-     * @return 会员总数
+     * @return 客户总数
      */
     long getMemberNum(MemberSearchVO memberSearchVO);
 
     /**
-     * 获取指定会员数据
+     * 获取指定客户数据
      *
      * @param columns   指定获取的列
-     * @param memberIds 会员ids
-     * @return 指定会员数据
+     * @param memberIds 客户ids
+     * @return 指定客户数据
      */
     List<Map<String, Object>> listFieldsByMemberIds(String columns, List<String> memberIds);
 
@@ -274,40 +274,40 @@ public interface MemberService extends IService<Member> {
     void logout(String userId);
 
     /**
-     * 修改会员是否拥有店铺
+     * 修改客户是否拥有店铺
      *
      * @param haveStore 是否拥有店铺
      * @param storeId   店铺id
-     * @param memberIds 会员id
+     * @param memberIds 客户id
      * @return
      */
     void updateHaveShop(Boolean haveStore, String storeId, List<String> memberIds);
 
     /**
-     * 重置会员密码为123456
+     * 重置客户密码为123456
      *
-     * @param ids 会员id
+     * @param ids 客户id
      */
     void resetPassword(List<String> ids);
 
     /**
-     * 获取所有会员的手机号
+     * 获取所有客户的手机号
      *
-     * @return 所有会员的手机号
+     * @return 所有客户的手机号
      */
     List<String> getAllMemberMobile();
 
     /**
-     * 更新会员登录时间为最新时间
+     * 更新客户登录时间为最新时间
      *
-     * @param memberId 会员id
+     * @param memberId 客户id
      * @return 是否更新成功
      */
     boolean updateMemberLoginTime(String memberId);
 
     /**
      * 获取用户VO
-     * @param id 会员id
+     * @param id 客户id
      * @return 用户VO
      */
     MemberVO getMember(String id);

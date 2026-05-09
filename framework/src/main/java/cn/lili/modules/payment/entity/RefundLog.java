@@ -28,7 +28,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class RefundLog extends BaseIdEntity {
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "退单编号")

@@ -55,7 +55,7 @@ public class KanjiaGoodsActivityBuyerController {
     @GetMapping
     @Operation(summary = "分页获取砍价商品")
     public ResultMessage<IPage<KanjiaActivityGoodsListVO>> kanjiaActivityGoodsPage(KanjiaActivityGoodsParams kanjiaActivityGoodsParams, PageVO page) {
-        // 会员端查询到的肯定是已经开始的活动商品
+        // 客户端查询到的肯定是已经开始的活动商品
         kanjiaActivityGoodsParams.setPromotionStatus(PromotionsStatusEnum.START.name());
 //        kanjiaActivityGoodsParams.setStartTime(System.currentTimeMillis());
 //        kanjiaActivityGoodsParams.setEndTime(System.currentTimeMillis());
@@ -78,7 +78,7 @@ public class KanjiaGoodsActivityBuyerController {
     @PostMapping("/getKanjiaActivity")
     @Operation(summary = "获取砍价活动")
     public ResultMessage<KanjiaActivityVO> getKanJiaActivity(KanjiaActivitySearchParams kanjiaActivitySearchParams) {
-        //如果是非被邀请关系则填写会员ID
+        //如果是非被邀请关系则填写客户ID
         if (CharSequenceUtil.isEmpty(kanjiaActivitySearchParams.getKanjiaActivityId())) {
             kanjiaActivitySearchParams.setMemberId(UserContext.getCurrentUser().getId());
         }
@@ -104,7 +104,7 @@ public class KanjiaGoodsActivityBuyerController {
     @GetMapping("/kanjiaActivity/mine/")
     @Operation(summary = "分页获取已参与的砍价活动")
     public ResultMessage<IPage<KanjiaActivity>> getPointsGoodsPage(KanjiaActivityQuery kanjiaActivityQuery, PageVO page) {
-        // 会员端查询到的肯定是已经开始的活动商品
+        // 客户端查询到的肯定是已经开始的活动商品
         kanjiaActivityQuery.setMemberId(UserContext.getCurrentUser().getId());
         IPage<KanjiaActivity> kanjiaActivity = kanJiaActivityService.getForPage(kanjiaActivityQuery, page);
         return ResultUtil.data(kanjiaActivity);

@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 
 /**
- * 会员站内信
+ * 客户站内信
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16
@@ -16,12 +16,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_notice")
-@Schema(description = "会员站内信")
+@Schema(description = "客户站内信")
 public class MemberNotice extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     @Schema(description = "是否已读")

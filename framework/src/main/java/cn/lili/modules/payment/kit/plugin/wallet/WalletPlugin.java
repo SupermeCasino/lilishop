@@ -49,7 +49,7 @@ public class WalletPlugin implements Payment {
     @Autowired
     private RefundLogService refundLogService;
     /**
-     * 会员余额
+     * 客户余额
      */
     @Autowired
     private MemberWalletService memberWalletService;
@@ -102,7 +102,7 @@ public class WalletPlugin implements Payment {
      * @param payParam 支付参数
      */
     private void savePaymentLog(PayParam payParam) {
-        //同一个会员如果在不同的客户端使用预存款支付，会存在同时支付，无法保证预存款的正确性，所以对会员加锁
+        //同一个客户如果在不同的客户端使用预存款支付，会存在同时支付，无法保证预存款的正确性，所以对客户加锁
         RLock lock = redisson.getLock(UserContext.getCurrentUser().getId() + "");
         lock.lock();
         try {

@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员优惠券实体类
+ * 客户优惠券实体类
  *
  * @author Chopper
  * @since 2020-03-19 10:44 上午
@@ -24,13 +24,13 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("li_member_coupon_sign")
-@Schema(description = "会员优惠券领取标记")
+@Schema(description = "客户优惠券领取标记")
 public class MemberCouponSign extends BaseIdEntity {
 
     @Schema(description = "优惠券活动ID")
     private String couponActivityId;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "失效时间，到达失效时间后自动删除，用户可以再次领取")

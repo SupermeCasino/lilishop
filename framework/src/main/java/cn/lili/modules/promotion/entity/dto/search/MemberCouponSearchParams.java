@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 会员优惠券查询通用类
+ * 客户优惠券查询通用类
  *
  * @author paulG
  * @since 2020/8/14
@@ -33,10 +33,10 @@ public class MemberCouponSearchParams extends BasePromotionsSearchParams impleme
     @Schema(description = "优惠券名称")
     private String couponName;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     /**
@@ -63,7 +63,7 @@ public class MemberCouponSearchParams extends BasePromotionsSearchParams impleme
     /**
      * @see MemberCouponStatusEnum
      */
-    @Schema(description = "会员优惠券状态")
+    @Schema(description = "客户优惠券状态")
     private String memberCouponStatus;
     @Schema(description = "消费门槛")
     private Double consumeThreshold;

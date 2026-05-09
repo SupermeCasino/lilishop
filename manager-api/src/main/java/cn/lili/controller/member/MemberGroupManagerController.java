@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@Tag(name = "管理端,会员分组接口")
+@Tag(name = "管理端,客户分组接口")
 @RequestMapping("/manager/member/memberGroup")
 public class MemberGroupManagerController {
 
@@ -32,22 +32,22 @@ public class MemberGroupManagerController {
     @Autowired
     private MemberGroupUserService memberGroupUserService;
 
-    @Operation(description = "通过id获取会员分组")
-    @Parameter(name = "id", description = "会员分组ID", required = true)
+    @Operation(description = "通过id获取客户分组")
+    @Parameter(name = "id", description = "客户分组ID", required = true)
     @GetMapping("/get/{id}")
     public ResultMessage<MemberGroup> get(@PathVariable String id) {
         return ResultUtil.data(memberGroupService.getById(id));
     }
 
-    @Operation(description = "获取会员分组分页")
+    @Operation(description = "获取客户分组分页")
     @Parameter(name = "page", description = "分页参数")
     @GetMapping("/getByPage")
     public ResultMessage<IPage<MemberGroup>> getByPage(PageVO page) {
         return ResultUtil.data(memberGroupService.page(PageUtil.initPage(page)));
     }
 
-    @Operation(description = "添加会员分组")
-    @Parameter(name = "memberGroup", description = "会员分组")
+    @Operation(description = "添加客户分组")
+    @Parameter(name = "memberGroup", description = "客户分组")
     @PostMapping
     public ResultMessage<Object> add(@Validated MemberGroup memberGroup) {
         if (memberGroupService.save(memberGroup)) {
@@ -56,9 +56,9 @@ public class MemberGroupManagerController {
         return ResultUtil.error(ResultCode.ERROR);
     }
 
-    @Operation(description = "修改会员分组")
-    @Parameter(name = "id", description = "会员分组ID", required = true)
-    @Parameter(name = "memberGroup", description = "会员分组")
+    @Operation(description = "修改客户分组")
+    @Parameter(name = "id", description = "客户分组ID", required = true)
+    @Parameter(name = "memberGroup", description = "客户分组")
     @PutMapping("/update/{id}")
     public ResultMessage<Object> update(@PathVariable String id, MemberGroup memberGroup) {
         if (memberGroupService.updateById(memberGroup)) {
@@ -67,8 +67,8 @@ public class MemberGroupManagerController {
         return ResultUtil.error(ResultCode.ERROR);
     }
 
-    @Operation(description = "删除会员分组")
-    @Parameter(name = "id", description = "会员分组ID", required = true)
+    @Operation(description = "删除客户分组")
+    @Parameter(name = "id", description = "客户分组ID", required = true)
     @DeleteMapping("/delete/{id}")
     public ResultMessage<Object> delete(@PathVariable String id) {
         QueryWrapper<MemberGroupUser> wrapper = new QueryWrapper<>();
@@ -83,9 +83,9 @@ public class MemberGroupManagerController {
         return ResultUtil.error(ResultCode.ERROR);
     }
 
-    @Operation(description = "给分组添加会员")
-    @Parameter(name = "groupId", description = "会员分组ID", required = true)
-    @Parameter(name = "memberIds", description = "会员ID列表", required = true)
+    @Operation(description = "给分组添加客户")
+    @Parameter(name = "groupId", description = "客户分组ID", required = true)
+    @Parameter(name = "memberIds", description = "客户ID列表", required = true)
     @PostMapping("/{groupId}/users")
     public ResultMessage<Object> addUsers(@PathVariable String groupId, @RequestParam List<String> memberIds) {
         if (memberGroupUserService.updateGroupUsers(groupId, memberIds)) {
@@ -94,8 +94,8 @@ public class MemberGroupManagerController {
         return ResultUtil.error(ResultCode.ERROR);
     }
 
-    @Operation(description = "获取分组下会员分页")
-    @Parameter(name = "groupId", description = "会员分组ID", required = true)
+    @Operation(description = "获取分组下客户分页")
+    @Parameter(name = "groupId", description = "客户分组ID", required = true)
     @Parameter(name = "page", description = "分页参数")
     @GetMapping("/{groupId}/users")
     public ResultMessage<IPage<MemberGroupUser>> getGroupUsers(@PathVariable String groupId, PageVO page) {
@@ -104,9 +104,9 @@ public class MemberGroupManagerController {
         return ResultUtil.data(memberGroupUserService.page(PageUtil.initPage(page), wrapper));
     }
 
-    @Operation(description = "移除分组中的会员")
-    @Parameter(name = "groupId", description = "会员分组ID", required = true)
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Operation(description = "移除分组中的客户")
+    @Parameter(name = "groupId", description = "客户分组ID", required = true)
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     @DeleteMapping("/{groupId}/user/{memberId}")
     public ResultMessage<Object> removeUser(@PathVariable String groupId, @PathVariable String memberId) {
         QueryWrapper<MemberGroupUser> wrapper = new QueryWrapper<>();
@@ -117,8 +117,8 @@ public class MemberGroupManagerController {
         return ResultUtil.error(ResultCode.ERROR);
     }
 
-    @Operation(description = "给会员设定分组")
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Operation(description = "给客户设定分组")
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     @Parameter(name = "groupIds", description = "分组ID列表", required = true)
     @PostMapping("/user/{memberId}/groups")
     public ResultMessage<Object> setUserGroups(@PathVariable String memberId, @RequestParam List<String> groupIds) {

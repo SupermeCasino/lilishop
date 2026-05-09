@@ -16,7 +16,7 @@ public class WxChannelRefundSearchParams extends PageVO {
     @Schema(description = "订单编号")
     private String channelOrderSn;
 
-    @Schema(description = "会员昵称")
+    @Schema(description = "客户昵称")
     private String memberNickName;
 
     @Schema(description = "商品名称")

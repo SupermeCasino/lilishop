@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class DistributionServiceImpl extends ServiceImpl<DistributionMapper, Distribution> implements DistributionService {
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;

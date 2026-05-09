@@ -63,7 +63,7 @@ public interface ConnectService extends IService<Connect> {
 
     /**
      * 联合登录缓存key生成
-     * 这个方法返回的key从缓存中可以获取到redis中记录到会员信息，有效时间30分钟
+     * 这个方法返回的key从缓存中可以获取到redis中记录到客户信息，有效时间30分钟
      *
      * @param type 联合登陆类型
      * @param uuid 联合登陆uuid
@@ -92,9 +92,9 @@ public interface ConnectService extends IService<Connect> {
     Connect queryConnect(ConnectQueryDTO connectQueryDTO);
 
     /**
-     * 根据会员id删除记录
+     * 根据客户id删除记录
      *
-     * @param userId 会员id
+     * @param userId 客户id
      */
     void deleteByMemberId(String userId);
 

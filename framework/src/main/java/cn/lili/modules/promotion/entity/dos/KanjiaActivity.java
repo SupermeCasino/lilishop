@@ -26,10 +26,10 @@ public class KanjiaActivity extends BaseEntity {
     @Schema(description = "砍价商品id")
     private String kanjiaActivityGoodsId;
 
-    @Schema(description = "发起砍价活动会员id")
+    @Schema(description = "发起砍价活动客户id")
     private String memberId;
 
-    @Schema(description = "发起砍价活动会员名称")
+    @Schema(description = "发起砍价活动客户名称")
     private String memberName;
 
     @Schema(description = "剩余购买金额")

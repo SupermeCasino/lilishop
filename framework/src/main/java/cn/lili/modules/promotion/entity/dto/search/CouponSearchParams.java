@@ -26,7 +26,7 @@ public class CouponSearchParams extends BasePromotionsSearchParams implements Se
     private static final String PRICE_COLUMN = "price";
     private static final String RANGE_DAY_TYPE_COLUMN = "range_day_type";
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     @Schema(description = "优惠券名称")

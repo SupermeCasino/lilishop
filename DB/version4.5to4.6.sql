@@ -20,7 +20,7 @@ CREATE TABLE `li_member_group_user` (
                                         `update_by` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
                                         `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
                                         `group_id` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '分组ID',
-                                        `member_id` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '会员ID',
+                                        `member_id` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '客户ID',
                                         PRIMARY KEY (`id`),
                                         UNIQUE KEY `uniq_group_member` (`group_id`,`member_id`),
                                         KEY `idx_group_id` (`group_id`),

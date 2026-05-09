@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员积分历史业务层实现
+ * 客户积分历史业务层实现
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -35,7 +35,7 @@ public class MemberPointsHistoryServiceImpl extends ServiceImpl<MemberPointsHist
 
     @Override
     public MemberPointsHistoryVO getMemberPointsHistoryVO(String memberId) {
-        //获取会员积分历史
+        //获取客户积分历史
         Member member = memberService.getById(memberId);
         MemberPointsHistoryVO memberPointsHistoryVO = new MemberPointsHistoryVO();
         if (member != null) {

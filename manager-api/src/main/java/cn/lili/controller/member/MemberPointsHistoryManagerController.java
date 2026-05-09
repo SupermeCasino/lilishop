@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 管理端,会员积分历史接口
+ * 管理端,客户积分历史接口
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Tag(name = "管理端,会员积分历史接口")
+@Tag(name = "管理端,客户积分历史接口")
 @RequestMapping("/manager/member/memberPointsHistory")
 public class MemberPointsHistoryManagerController {
     @Autowired
@@ -31,15 +31,15 @@ public class MemberPointsHistoryManagerController {
 
     @Operation(description = "分页获取")
     @Parameter(name = "page", description = "分页参数")
-    @Parameter(name = "memberId", description = "会员ID")
-    @Parameter(name = "memberName", description = "会员名称")
+    @Parameter(name = "memberId", description = "客户ID")
+    @Parameter(name = "memberName", description = "客户名称")
     @GetMapping("/getByPage")
     public ResultMessage<IPage<MemberPointsHistory>> getByPage(PageVO page, String memberId, String memberName) {
         return ResultUtil.data(memberPointsHistoryService.MemberPointsHistoryList(page, memberId, memberName));
     }
 
-    @Operation(description = "获取会员积分VO")
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Operation(description = "获取客户积分VO")
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     @GetMapping("/getMemberPointsHistoryVO")
     public ResultMessage<MemberPointsHistoryVO> getMemberPointsHistoryVO(String memberId) {
         return ResultUtil.data(memberPointsHistoryService.getMemberPointsHistoryVO(memberId));

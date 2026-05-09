@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员商品收藏
+ * 客户商品收藏
  *
  * @author Chopper
  * @since 2020/11/18 3:31 下午
@@ -23,7 +23,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@Schema(description = "会员商品收藏")
+@Schema(description = "客户商品收藏")
 @TableName("li_goods_collection")
 public class GoodsCollection extends BaseIdEntity {
 
@@ -34,7 +34,7 @@ public class GoodsCollection extends BaseIdEntity {
     @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     @Schema(description = "商品id")

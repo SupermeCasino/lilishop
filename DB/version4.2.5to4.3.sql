@@ -1,11 +1,11 @@
 
 /** 优惠券活动增加领取周期字段 **/
 ALTER TABLE li_coupon_activity ADD coupon_frequency_enum varchar(255) COMMENT '领取周期';
--- 会员优惠券标识
+-- 客户优惠券标识
 CREATE TABLE `li_member_coupon_sign`  (
                                      `id` bigint NOT NULL,
                                      `coupon_activity_Id` bigint NULL DEFAULT NULL COMMENT '优惠券活动id',
-                                     `member_id` bigint NULL DEFAULT NULL COMMENT '会员id',
+                                     `member_id` bigint NULL DEFAULT NULL COMMENT '客户id',
                                      `invalid_time` datetime NULL DEFAULT NULL COMMENT '过期时间',
                                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                      PRIMARY KEY (`id`) USING BTREE

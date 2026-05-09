@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import cn.lili.modules.member.entity.dos.MemberNoticeLog;
 
 /**
- * 会员消息业务层
+ * 客户消息业务层
  *
  * @author Chopper
  * @since 2020/11/17 3:44 下午

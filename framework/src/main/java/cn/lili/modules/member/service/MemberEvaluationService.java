@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员商品评价业务层
+ * 客户商品评价业务层
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -23,7 +23,7 @@ import java.util.Map;
 public interface MemberEvaluationService extends IService<MemberEvaluation> {
 
     /**
-     * 查询会员的评价分页列表
+     * 查询客户的评价分页列表
      *
      * @param evaluationQueryParams 评价查询
      * @return 评价分页
@@ -39,7 +39,7 @@ public interface MemberEvaluationService extends IService<MemberEvaluation> {
     IPage<MemberEvaluationListVO> queryPage(EvaluationQueryParams evaluationQueryParams);
 
     /**
-     * 添加会员评价
+     * 添加客户评价
      * 1.检测用户是否重复评价
      * 2.获取评价相关信息添加评价
      * 3.修改子订单为已评价状态
@@ -52,10 +52,10 @@ public interface MemberEvaluationService extends IService<MemberEvaluation> {
     MemberEvaluationDTO addMemberEvaluation(MemberEvaluationDTO memberEvaluationDTO, Boolean isSelf);
 
     /**
-     * 根据ID查询会员评价
+     * 根据ID查询客户评价
      *
      * @param id 评价ID
-     * @return 会员评价
+     * @return 客户评价
      */
     MemberEvaluationVO queryById(String id);
 
@@ -64,7 +64,7 @@ public interface MemberEvaluationService extends IService<MemberEvaluation> {
      *
      * @param id     评价ID
      * @param status 状态
-     * @return 会员评价
+     * @return 客户评价
      */
     boolean updateStatus(String id, String status);
 

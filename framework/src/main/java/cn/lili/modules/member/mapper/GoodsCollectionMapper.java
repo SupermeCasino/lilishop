@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
- * 会员收藏数据处理层
+ * 客户收藏数据处理层
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16

@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 管理端,店铺消息消息管理接口
+ * 管理端,店铺消息管理接口
  *
  * @author pikachu
  * @since 2020/12/6 16:09
  */
 @RestController
-@Tag(name = "管理端,店铺消息消息管理接口")
+@Tag(name = "管理端,店铺消息管理接口")
 @RequestMapping("/manager/other/storeMessage")
 public class StoreMessageManagerController {
 

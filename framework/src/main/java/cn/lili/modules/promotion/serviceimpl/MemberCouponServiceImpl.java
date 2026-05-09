@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 /**
- * 会员优惠券业务层实现
+ * 客户优惠券业务层实现
  *
  * @author Chopper
  * @since 2020/8/21
@@ -82,8 +82,8 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
      * 领取优惠券
      *
      * @param couponId   优惠券编号
-     * @param memberId   会员
-     * @param memberName 会员名称
+     * @param memberId   客户
+     * @param memberName 客户名称
      */
     @Override
     @CacheEvict(key = "#memberId")
@@ -124,10 +124,10 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 获取会员优惠券列表
+     * 获取客户优惠券列表
      *
      * @param param 查询参数
-     * @return 会员优惠券列表
+     * @return 客户优惠券列表
      */
     @Override
     public List<MemberCoupon> getMemberCoupons(MemberCouponSearchParams param) {
@@ -142,8 +142,8 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     /**
      * 获取当前用户的优惠券列表（优先读取缓存）
      *
-     * @param memberId 会员id
-     * @return 会员优惠券列表
+     * @param memberId 客户id
+     * @return 客户优惠券列表
      */
     @Override
     @Cacheable(key = "#memberId")
@@ -156,11 +156,11 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 获取会员优惠券列表
+     * 获取客户优惠券列表
      *
      * @param param  查询参数
      * @param pageVo 分页参数
-     * @return 会员优惠券列表
+     * @return 客户优惠券列表
      */
     @Override
     public IPage<MemberCoupon> getMemberCouponsByCanUse(MemberCouponSearchParams param, Double totalPrice, PageVO pageVo) {
@@ -179,11 +179,11 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 获取当前会员当前商品可用的会员优惠券
+     * 获取当前客户当前商品可用的客户优惠券
      *
-     * @param memberId  会员Id
+     * @param memberId  客户Id
      * @param couponIds 优惠券id列表
-     * @return 会员优惠券列表
+     * @return 客户优惠券列表
      */
     @Override
     public List<MemberCoupon> getCurrentGoodsCanUse(String memberId, List<String> couponIds, Double totalPrice) {
@@ -198,11 +198,11 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 获取当前会员全品类优惠券
+     * 获取当前客户全品类优惠券
      *
-     * @param memberId 会员Id
+     * @param memberId 客户Id
      * @param storeId  店铺id
-     * @return 会员优惠券列表
+     * @return 客户优惠券列表
      */
     @Override
     public List<MemberCoupon> getAllScopeMemberCoupon(String memberId, List<String> storeId) {
@@ -215,10 +215,10 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 获取当前会员全品类优惠券
+     * 获取当前客户全品类优惠券
      *
      * @param param 查询参数
-     * @return 会员优惠券列表
+     * @return 客户优惠券列表
      */
     @Override
     public MemberCoupon getMemberCoupon(MemberCouponSearchParams param) {
@@ -261,7 +261,7 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 作废当前会员优惠券
+     * 作废当前客户优惠券
      *
      * @param id id
      */
@@ -276,7 +276,7 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 关闭会员优惠券
+     * 关闭客户优惠券
      *
      * @param couponIds 优惠券id集合
      */
@@ -338,7 +338,7 @@ public class MemberCouponServiceImpl extends ServiceImpl<MemberCouponMapper, Mem
     }
 
     /**
-     * 清除无效的会员优惠券
+     * 清除无效的客户优惠券
      *
      * @return 是否操作成功
      */

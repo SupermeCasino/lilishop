@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * 会员消息发送业务层
+ * 客户消息发送业务层
  *
  * @author Chopper
  * @since 2020/11/17 3:44 下午
@@ -17,16 +17,16 @@ import java.util.List;
 public interface MemberMessageService extends IService<MemberMessage> {
 
     /**
-     * 会员消息查询接口
+     * 客户消息查询接口
      *
-     * @param memberMessageQueryVO 会员查询条件
+     * @param memberMessageQueryVO 客户查询条件
      * @param pageVO               分页条件
-     * @return 会员消息分页
+     * @return 客户消息分页
      */
     IPage<MemberMessage> getPage(MemberMessageQueryVO memberMessageQueryVO, PageVO pageVO);
 
     /**
-     * 修改会员消息状态
+     * 修改客户消息状态
      *
      * @param status    状态
      * @param messageId 消息id

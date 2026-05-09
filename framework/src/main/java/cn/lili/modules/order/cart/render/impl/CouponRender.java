@@ -78,7 +78,7 @@ public class CouponRender implements CartRenderStep {
      * 检查使用中的优惠券是否存在与用户的优惠券中
      *
      * @param tradeDTO         交易dto
-     * @param memberCouponList 会员优惠券列表
+     * @param memberCouponList 客户优惠券列表
      */
     private void checkMemberExistCoupon(TradeDTO tradeDTO, List<MemberCoupon> memberCouponList) {
         if (tradeDTO.getPlatformCoupon() != null && tradeDTO.getPlatformCoupon().getMemberCoupon() != null) {
@@ -100,7 +100,7 @@ public class CouponRender implements CartRenderStep {
      * 判定优惠券是否可用
      *
      * @param tradeDTO     交易dto
-     * @param memberCoupon 会员优惠券
+     * @param memberCoupon 客户优惠券
      */
     private void available(TradeDTO tradeDTO, MemberCoupon memberCoupon) {
         if (memberCoupon == null) {
@@ -134,7 +134,7 @@ public class CouponRender implements CartRenderStep {
      * 过滤购物车商品信息，按照优惠券的适用范围过滤
      *
      * @param cartSkuVOS   购物车中的产品列表
-     * @param memberCoupon 会员优惠券
+     * @param memberCoupon 客户优惠券
      * @return 按照优惠券的适用范围过滤的购物车商品信息
      */
     private List<CartSkuVO> filterSkuVo(List<CartSkuVO> cartSkuVOS, MemberCoupon memberCoupon) {
@@ -184,7 +184,7 @@ public class CouponRender implements CartRenderStep {
      * 优惠券按照店铺分类过滤
      *
      * @param filterSku    过滤的购物车商品信息
-     * @param memberCoupon 会员优惠
+     * @param memberCoupon 客户优惠
      * @return 优惠券按照店铺分类过滤的购物车商品信息
      */
     private List<CartSkuVO> filterPromotionShopCategory(List<CartSkuVO> filterSku, MemberCoupon memberCoupon) {

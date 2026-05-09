@@ -30,7 +30,7 @@ public class EvaluationQueryParams extends PageVO {
     @Schema(description = "skuID")
     private String skuId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "卖家名称")

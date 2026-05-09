@@ -45,7 +45,7 @@ public class OrderSearchParams extends PageVO {
     @Schema(description = "商家ID")
     private String storeId;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "收货人")

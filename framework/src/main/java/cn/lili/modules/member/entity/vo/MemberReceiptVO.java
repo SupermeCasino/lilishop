@@ -8,21 +8,21 @@ import lombok.Data;
 
 
 /**
- * 会员发票查询VO
+ * 客户发票查询VO
  *
  * @author Chopper
  * @since 2021-03-29 14:10:16
  */
 @Data
-@Schema(description = "会员发票")
+@Schema(description = "客户发票")
 public class MemberReceiptVO {
 
     private static final long serialVersionUID = -8210927982915677995L;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     /**
@@ -34,15 +34,15 @@ public class MemberReceiptVO {
     public LambdaQueryWrapper<MemberReceipt> lambdaQueryWrapper() {
         LambdaQueryWrapper<MemberReceipt> queryWrapper = new LambdaQueryWrapper<>();
 
-        //会员名称查询
+        //客户名称查询
         if (StringUtils.isNotEmpty(memberName)) {
             queryWrapper.like(MemberReceipt::getMemberName, memberName);
         }
-        //会员id查询
+        //客户id查询
         if (StringUtils.isNotEmpty(memberId)) {
             queryWrapper.eq(MemberReceipt::getMemberId, memberId);
         }
-        //会员id查询
+        //客户id查询
         if (StringUtils.isNotEmpty(receiptType)) {
             queryWrapper.eq(MemberReceipt::getReceiptType, receiptType);
         }

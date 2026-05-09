@@ -92,10 +92,10 @@ public class OrderComplaint extends BaseEntity {
     @Schema(description = "商家名称")
     private String storeName;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 

@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * 会员修改
+ * 客户修改
  * 用于后台的用户信息修改
  *
  * @author Bulbasaur
@@ -24,15 +24,15 @@ public class ManagerMemberEditDTO {
     @NotNull(message = "用户ID不能为空")
     private String id;
 
-//    @Schema(description = "会员用户名,用户名不能进行修改", requiredMode = Schema.RequiredMode.REQUIRED)
-//    @NotNull(message = "会员用户名不能为空")
+//    @Schema(description = "客户用户名,用户名不能进行修改", requiredMode = Schema.RequiredMode.REQUIRED)
+//    @NotNull(message = "客户用户名不能为空")
 //    private String username;
 
-    @Schema(description = "会员密码")
+    @Schema(description = "客户密码")
     private String password;
 
     @Schema(description = "昵称")
-    @Length(min = 2, max = 20, message = "会员昵称必须为2到20位之间")
+    @Length(min = 2, max = 20, message = "客户昵称必须为2到20位之间")
     private String nickName;
 
     @Schema(description = "地区")
@@ -43,15 +43,15 @@ public class ManagerMemberEditDTO {
 
     @Min(message = "必须为数字且1为男,0为女", value = 0)
     @Max(message = "必须为数字且1为男,0为女", value = 1)
-    @NotNull(message = "会员性别不能为空")
-    @Schema(description = "会员性别,1为男，0为女")
+    @NotNull(message = "客户性别不能为空")
+    @Schema(description = "客户性别,1为男，0为女")
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "会员生日")
+    @Schema(description = "客户生日")
     private Date birthday;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 }

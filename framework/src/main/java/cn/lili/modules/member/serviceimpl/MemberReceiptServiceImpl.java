@@ -25,7 +25,7 @@ import java.util.List;
 
 
 /**
- * 会员发票业务层实现
+ * 客户发票业务层实现
  *
  * @author Chopper
  * @since 2021-03-29 14:10:16
@@ -54,14 +54,14 @@ public class MemberReceiptServiceImpl extends ServiceImpl<MemberReceiptMapper, M
         //参数封装
         MemberReceipt memberReceipt = new MemberReceipt();
         BeanUtil.copyProperties(memberReceiptAddVO, memberReceipt);
-        //根据会员信息查询会员
+        //根据客户信息查询客户
         Member member = memberService.getById(memberId);
         if (member != null) {
             memberReceipt.setMemberId(memberId);
             memberReceipt.setMemberName(member.getUsername());
             //设置发票默认
             List<MemberReceipt> list = this.baseMapper.selectList(new QueryWrapper<MemberReceipt>().eq("member_id", memberId));
-            //如果当前会员只有一个发票则默认为默认发票，反之需要校验参数默认值，做一些处理
+            //如果当前客户只有一个发票则默认为默认发票，反之需要校验参数默认值，做一些处理
             if (list.isEmpty()) {
                 memberReceipt.setIsDefault(1);
             } else {
@@ -82,7 +82,7 @@ public class MemberReceiptServiceImpl extends ServiceImpl<MemberReceiptMapper, M
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean editMemberReceipt(MemberReceiptAddVO memberReceiptAddVO, String memberId) {
-        //根据会员id查询发票信息
+        //根据客户id查询发票信息
         MemberReceipt memberReceiptDb = this.baseMapper.selectById(memberReceiptAddVO.getId());
         if (memberReceiptDb != null) {
             //检验是否有权限修改
@@ -110,10 +110,10 @@ public class MemberReceiptServiceImpl extends ServiceImpl<MemberReceiptMapper, M
 
     @Override
     public Boolean deleteMemberReceipt(String id) {
-        //根据会员id查询发票信息
+        //根据客户id查询发票信息
         MemberReceipt memberReceiptDb = this.baseMapper.selectById(id);
         if (memberReceiptDb != null) {
-            //如果会员发票信息不为空 则逻辑删除此发票信息
+            //如果客户发票信息不为空 则逻辑删除此发票信息
             memberReceiptDb.setDeleteFlag(false);
             this.baseMapper.updateById(memberReceiptDb);
         }

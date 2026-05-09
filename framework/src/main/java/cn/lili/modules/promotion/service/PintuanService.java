@@ -17,10 +17,10 @@ public interface PintuanService extends AbstractPromotionsService<Pintuan> {
 
 
     /**
-     * 获取当前拼团的会员
+     * 获取当前拼团的客户
      *
      * @param pintuanId 拼图id
-     * @return 当前拼团的会员列表
+     * @return 当前拼团的客户列表
      */
     List<PintuanMemberVO> getPintuanMember(String pintuanId);
 

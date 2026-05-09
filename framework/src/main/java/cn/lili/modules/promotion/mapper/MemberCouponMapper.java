@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
- * 会员优惠券数据处理层
+ * 客户优惠券数据处理层
  *
  * @author Chopper
  * @since 2020/8/21

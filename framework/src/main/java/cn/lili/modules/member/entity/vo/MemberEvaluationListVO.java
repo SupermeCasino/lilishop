@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员评价VO
+ * 客户评价VO
  *
  * @author Bulbasaur
  * @since 2020/11/30 15:00
@@ -19,7 +19,7 @@ public class MemberEvaluationListVO {
     @Schema(description = "评论ID")
     private String id;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "商品名称")

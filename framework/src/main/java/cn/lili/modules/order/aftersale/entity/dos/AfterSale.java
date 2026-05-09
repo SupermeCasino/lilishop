@@ -40,10 +40,10 @@ public class AfterSale extends BaseEntity {
     @Schema(description = "交易编号")
     private String tradeSn;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 

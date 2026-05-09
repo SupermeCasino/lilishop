@@ -9,23 +9,23 @@ import lombok.EqualsAndHashCode;
 
 
 /**
- * 会员接受消息对象
+ * 客户接受消息对象
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_message")
-@Schema(description = "会员消息")
+@Schema(description = "客户消息")
 @EqualsAndHashCode(callSuper = false)
 public class MemberMessage extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "消息标题")

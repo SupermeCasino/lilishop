@@ -34,7 +34,7 @@ public class RegisteredCouponActivityExecute implements MemberRegisterEvent {
      * 获取进行中的注册赠券的优惠券活动
      * 发送注册赠券
      *
-     * @param member 会员
+     * @param member 客户
      */
     @Override
     public void memberRegister(Member member) {

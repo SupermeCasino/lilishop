@@ -28,9 +28,9 @@ public interface StoreDetailService extends IService<StoreDetail> {
     StoreDetailVO getStoreDetailVO(String storeId);
 
     /**
-     * 根据会员ID获取店铺信息VO
+     * 根据客户ID获取店铺信息VO
      *
-     * @param memberId 会员ID
+     * @param memberId 客户ID
      * @return 店铺信息VO
      */
     StoreDetailVO getStoreDetailVOByMemberId(String memberId);

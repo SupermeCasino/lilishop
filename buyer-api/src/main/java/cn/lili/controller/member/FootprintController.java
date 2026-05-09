@@ -29,7 +29,7 @@ import java.util.List;
 public class FootprintController {
 
     /**
-     * 会员足迹
+     * 客户足迹
      */
     @Autowired
     private FootprintService footprintService;
@@ -57,7 +57,7 @@ public class FootprintController {
         return ResultUtil.success();
     }
 
-    @Operation(summary = "获取当前会员足迹数量")
+    @Operation(summary = "获取当前客户足迹数量")
     @GetMapping("/getFootprintNum")
     public ResultMessage<Object> getFootprintNum() {
         return ResultUtil.data(footprintService.getFootprintNum());
@@ -65,7 +65,7 @@ public class FootprintController {
 
 
     @GetMapping("/history")
-    @Operation(summary = "获取会员的历史足迹")
+    @Operation(summary = "获取客户的历史足迹")
     public ResultMessage<IPage<EsGoodsIndex>> getMemberHistory(FootPrintQueryParams params) {
         return ResultUtil.data(footprintService.footPrintPage(params));
     }

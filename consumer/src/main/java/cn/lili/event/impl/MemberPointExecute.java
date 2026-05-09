@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员积分
+ * 客户积分
  *
  * @author Bulbasaur
  * @since 2020-07-03 11:20
@@ -42,7 +42,7 @@ public class MemberPointExecute implements MemberRegisterEvent, GoodsCommentComp
     @Autowired
     private SettingService settingService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -53,29 +53,29 @@ public class MemberPointExecute implements MemberRegisterEvent, GoodsCommentComp
     private OrderService orderService;
 
     /**
-     * 会员注册赠送积分
+     * 客户注册赠送积分
      *
-     * @param member 会员
+     * @param member 客户
      */
     @Override
     public void memberRegister(Member member) {
         //获取积分设置
         PointSetting pointSetting = getPointSetting();
-        //赠送会员积分
-        memberService.updateMemberPoint(pointSetting.getRegister().longValue(), PointTypeEnum.INCREASE.name(), member.getId(), "会员注册，赠送积分" + pointSetting.getRegister() + "分");
+        //赠送客户积分
+        memberService.updateMemberPoint(pointSetting.getRegister().longValue(), PointTypeEnum.INCREASE.name(), member.getId(), "客户注册，赠送积分" + pointSetting.getRegister() + "分");
     }
 
     /**
-     * 会员评价赠送积分
+     * 客户评价赠送积分
      *
-     * @param memberEvaluation 会员评价
+     * @param memberEvaluation 客户评价
      */
     @Override
     public void goodsComment(MemberEvaluation memberEvaluation) {
         //获取积分设置
         PointSetting pointSetting = getPointSetting();
-        //赠送会员积分
-        memberService.updateMemberPoint(pointSetting.getComment().longValue(), PointTypeEnum.INCREASE.name(), memberEvaluation.getMemberId(), "会员评价，赠送积分" + pointSetting.getComment() + "分");
+        //赠送客户积分
+        memberService.updateMemberPoint(pointSetting.getComment().longValue(), PointTypeEnum.INCREASE.name(), memberEvaluation.getMemberId(), "客户评价，赠送积分" + pointSetting.getComment() + "分");
     }
 
     /**
@@ -98,7 +98,7 @@ public class MemberPointExecute implements MemberRegisterEvent, GoodsCommentComp
                     return;
                 }
                 String content = "订单取消，积分返还：" + point + "分";
-                //赠送会员积分
+                //赠送客户积分
                 memberService.updateMemberPoint(point, PointTypeEnum.INCREASE.name(), order.getMemberId(), content);
                 break;
             }
@@ -116,8 +116,8 @@ public class MemberPointExecute implements MemberRegisterEvent, GoodsCommentComp
                 }
                 //计算赠送积分数量
                 Double point = CurrencyUtil.mul(pointSetting.getConsumer(), order.getFlowPrice(), 0);
-                //赠送会员积分
-                memberService.updateMemberPoint(point.longValue(), PointTypeEnum.INCREASE.name(), order.getMemberId(), "会员下单，赠送积分" + point + "分");
+                //赠送客户积分
+                memberService.updateMemberPoint(point.longValue(), PointTypeEnum.INCREASE.name(), order.getMemberId(), "客户下单，赠送积分" + point + "分");
                 break;
             }
 
@@ -143,8 +143,8 @@ public class MemberPointExecute implements MemberRegisterEvent, GoodsCommentComp
             }
             //计算扣除积分数量
             Double point = CurrencyUtil.mul(pointSetting.getConsumer(), afterSale.getActualRefundPrice(), 0);
-            //扣除会员积分
-            memberService.updateMemberPoint(point.longValue(), PointTypeEnum.REDUCE.name(), afterSale.getMemberId(), "会员退款，回退消费赠送积分" + point + "分");
+            //扣除客户积分
+            memberService.updateMemberPoint(point.longValue(), PointTypeEnum.REDUCE.name(), afterSale.getMemberId(), "客户退款，回退消费赠送积分" + point + "分");
 
         }
     }

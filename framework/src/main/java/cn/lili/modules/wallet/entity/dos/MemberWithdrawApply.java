@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员提现申请
+ * 客户提现申请
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -24,7 +24,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_withdraw_apply")
-@Schema(description = "会员提现申请")
+@Schema(description = "客户提现申请")
 public class MemberWithdrawApply extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -38,10 +38,10 @@ public class MemberWithdrawApply extends BaseEntity {
     @Schema(description = "提现状态")
     private String applyStatus;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 

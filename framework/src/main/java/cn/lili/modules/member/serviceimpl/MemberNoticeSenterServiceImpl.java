@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 会员消息业务层实现
+ * 客户消息业务层实现
  *
  * @author Chopper
  * @since 2020/11/17 3:44 下午
@@ -31,12 +31,12 @@ import java.util.List;
 public class MemberNoticeSenterServiceImpl extends ServiceImpl<MemberNoticeSenterMapper, MemberNoticeSenter> implements MemberNoticeSenterService {
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
     /**
-     * 会员站内信
+     * 客户站内信
      */
     @Autowired
     private MemberNoticeService memberNoticeService;
@@ -47,7 +47,7 @@ public class MemberNoticeSenterServiceImpl extends ServiceImpl<MemberNoticeSente
 
         if (this.saveOrUpdate(memberNoticeSenter)) {
             List<MemberNotice> memberNotices = new ArrayList<>();
-            //如果是选中会员发送
+            //如果是选中客户发送
             if (memberNoticeSenter.getSendType().equals(SendTypeEnum.SELECT.name())) {
                 //判定消息是否有效
                 if (!CharSequenceUtil.isEmpty(memberNoticeSenter.getMemberIds())) {
@@ -64,7 +64,7 @@ public class MemberNoticeSenterServiceImpl extends ServiceImpl<MemberNoticeSente
                 } else {
                     return true;
                 }
-            } //否则是全部会员发送
+            } //否则是全部客户发送
             else {
                 List<Member> members = memberService.list();
                 MemberNotice memberNotice;
@@ -77,7 +77,7 @@ public class MemberNoticeSenterServiceImpl extends ServiceImpl<MemberNoticeSente
                     memberNotices.add(memberNotice);
                 }
             }
-            //防止没有会员导致报错
+            //防止没有客户导致报错
             if (!memberNotices.isEmpty()) {
                 //批量保存
                 if (memberNoticeService.saveBatch(memberNotices)) {

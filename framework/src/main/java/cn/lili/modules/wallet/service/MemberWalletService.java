@@ -8,7 +8,7 @@ import cn.lili.modules.wallet.entity.vo.MemberWalletVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * 会员预存款业务层
+ * 客户预存款业务层
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -16,10 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MemberWalletService extends IService<MemberWallet> {
 
     /**
-     * 查询会员的预存款
+     * 查询客户的预存款
      *
-     * @param memberId 会员id
-     * @return 会员预存款VO
+     * @param memberId 客户id
+     * @return 客户预存款VO
      */
     MemberWalletVO getMemberWallet(String memberId);
 
@@ -66,23 +66,23 @@ public interface MemberWalletService extends IService<MemberWallet> {
     /**
      * 设置支付密码
      *
-     * @param member   会员id
+     * @param member   客户id
      * @param password 支付密码
      */
     void setMemberWalletPassword(Member member, String password);
 
     /**
-     * 检查当前会员是否设置过预存款密码
+     * 检查当前客户是否设置过预存款密码
      *
      * @return 操作状态
      */
     Boolean checkPassword();
 
     /**
-     * 会员注册添加会员余额钱包
+     * 客户注册添加客户余额钱包
      *
-     * @param memberId   会员id
-     * @param memberName 会员名称
+     * @param memberId   客户id
+     * @param memberName 客户名称
      * @return 操作结果
      */
     MemberWallet save(String memberId, String memberName);
@@ -100,7 +100,7 @@ public interface MemberWalletService extends IService<MemberWallet> {
     /**
      * 提现公共方法
      *
-     * @param withdrawApplyId 会员零钱提现Id
+     * @param withdrawApplyId 客户零钱提现Id
      */
     void withdrawal(String withdrawApplyId);
 

@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * 会员店铺收藏
+ * 客户店铺收藏
  *
  * @author Chopper
  * @since 2020/11/18 3:32 下午
  */
 @Data
 @TableName("li_store_collection")
-@Schema(description = "会员收藏")
+@Schema(description = "客户收藏")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -25,7 +25,7 @@ public class StoreCollection extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
     @Schema(description = "店铺id")

@@ -27,13 +27,13 @@ public class ClerkAddDTO {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员用户名")
-    @NotEmpty(message = "会员用户名不能为空")
-    @Length(max = 30, message = "会员用户名不能超过20个字符")
+    @Schema(description = "客户用户名")
+    @NotEmpty(message = "客户用户名不能为空")
+    @Length(max = 30, message = "客户用户名不能超过20个字符")
     private String username;
 
-    @Schema(description = "会员密码")
-    @NotEmpty(message = "会员密码不能为空")
+    @Schema(description = "客户密码")
+    @NotEmpty(message = "客户密码不能为空")
     private String password;
 
     @NotEmpty(message = "手机号码不能为空")
@@ -50,7 +50,7 @@ public class ClerkAddDTO {
     @Schema(description = "角色")
     private List<String> roles;
 
-    @Schema(description = "会员id", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "客户id", requiredMode = Schema.RequiredMode.REQUIRED)
     private String memberId;
 
     @Schema(description = "是否是店主", hidden = true)

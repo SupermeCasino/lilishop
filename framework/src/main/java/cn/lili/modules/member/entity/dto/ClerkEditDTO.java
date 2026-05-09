@@ -27,7 +27,7 @@ public class ClerkEditDTO {
     @Schema(description = "店员id", hidden = true)
     private String id;
 
-    @Schema(description = "会员密码")
+    @Schema(description = "客户密码")
     private String password;
 
     @Schema(description = "状态")

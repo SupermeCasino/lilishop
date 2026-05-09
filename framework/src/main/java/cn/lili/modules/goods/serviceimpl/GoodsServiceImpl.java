@@ -104,7 +104,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Autowired
     private StoreService storeService;
     /**
-     * 会员评价
+     * 客户评价
      */
     @Autowired
     @Lazy
@@ -858,7 +858,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      */
     private AuthUser checkStoreAuthority() {
         AuthUser currentUser = UserContext.getCurrentUser();
-        //如果当前会员不为空，且为店铺角色
+        //如果当前客户不为空，且为店铺角色
         if (currentUser != null && (currentUser.getRole().equals(UserEnums.STORE) && currentUser.getStoreId() != null)) {
             return currentUser;
         }
@@ -872,7 +872,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      */
     private AuthUser checkManagerAuthority() {
         AuthUser currentUser = UserContext.getCurrentUser();
-        //如果当前会员不为空，且为店铺角色
+        //如果当前客户不为空，且为店铺角色
         if (currentUser != null && (currentUser.getRole().equals(UserEnums.MANAGER))) {
             return currentUser;
         } else {

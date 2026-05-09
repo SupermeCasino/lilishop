@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员积分VO
+ * 客户积分VO
  *
  * @author Chopper
  * @since 2021/2/25 9:52 上午
@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class MemberPointsHistoryVO {
 
-    @Schema(description = "当前会员积分")
+    @Schema(description = "当前客户积分")
     private Long point;
 
     @Schema(description = "累计获得积分")

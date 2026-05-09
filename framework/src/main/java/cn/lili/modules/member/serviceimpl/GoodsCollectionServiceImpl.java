@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 会员收藏业务层实现
+ * 客户收藏业务层实现
  *
  * @author Chopper
  * @since 2020/11/18 2:25 下午

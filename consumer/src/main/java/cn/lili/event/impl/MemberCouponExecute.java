@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员优惠券执行类
+ * 客户优惠券执行类
  *
  * @author paulG
  * @since 2022/8/12

@@ -30,7 +30,7 @@ import java.util.Date;
 
 
 /**
- * 会员提现申请业务层实现
+ * 客户提现申请业务层实现
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -44,7 +44,7 @@ public class MemberWithdrawApplyServiceImpl extends ServiceImpl<MemberWithdrawAp
     private RocketmqCustomProperties rocketmqCustomProperties;
 
     /**
-     * 会员余额
+     * 客户余额
      */
     @Autowired
     @Lazy
@@ -93,11 +93,11 @@ public class MemberWithdrawApplyServiceImpl extends ServiceImpl<MemberWithdrawAp
     public IPage<MemberWithdrawApply> getMemberWithdrawPage(PageVO pageVO, MemberWithdrawApplyQueryVO memberWithdrawApplyQueryVO) {
         //构建查询条件
         QueryWrapper<MemberWithdrawApply> queryWrapper = new QueryWrapper<>();
-        //会员名称
+        //客户名称
         queryWrapper.like(!StringUtils.isEmpty(memberWithdrawApplyQueryVO.getMemberName()), "member_name", memberWithdrawApplyQueryVO.getMemberName());
         //充值订单号
         queryWrapper.eq(!StringUtils.isEmpty(memberWithdrawApplyQueryVO.getSn()), "sn", memberWithdrawApplyQueryVO.getSn());
-        //会员id
+        //客户id
         queryWrapper.eq(!StringUtils.isEmpty(memberWithdrawApplyQueryVO.getMemberId()), "member_id", memberWithdrawApplyQueryVO.getMemberId());
         //已付款的充值订单
         queryWrapper.eq(!StringUtils.isEmpty(memberWithdrawApplyQueryVO.getApplyStatus()), "apply_status", memberWithdrawApplyQueryVO.getApplyStatus());

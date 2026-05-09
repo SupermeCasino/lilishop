@@ -118,8 +118,8 @@ public class StoreManagerController {
     }
 
 
-    @Operation(summary = "根据会员id查询店铺信息")
-    @Parameter(name = "memberId", description = "会员id", required = true)
+    @Operation(summary = "根据客户id查询店铺信息")
+    @Parameter(name = "memberId", description = "客户id", required = true)
     @GetMapping("/{memberId}/member")
     public ResultMessage<Store> getByMemberId(@Valid @PathVariable String memberId) {
         List<Store> list = storeService.list(new QueryWrapper<Store>().eq("member_id", memberId));

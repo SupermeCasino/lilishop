@@ -43,7 +43,7 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
     @Autowired
     private OrderStatisticsService orderStatisticsService;
     /**
-     * 会员统计
+     * 客户统计
      */
     @Autowired
     private MemberStatisticsService memberStatisticsService;
@@ -125,7 +125,7 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
 
         //获取总订单数量
         indexStatisticsVO.setOrderNum(orderStatisticsService.orderNum(null));
-        //获取总会员数量
+        //获取总客户数量
         indexStatisticsVO.setMemberNum(memberStatisticsService.getMemberCount());
         //获取总上架商品数量
         indexStatisticsVO.setGoodsNum(goodsStatisticsService.goodsNum(GoodsStatusEnum.UPPER, GoodsAuthEnum.PASS));
@@ -139,7 +139,7 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         //今日下单金额
         indexStatisticsVO.setTodayOrderPrice(map.get("price") == null ? 0D : Double.parseDouble(map.get("price").toString()));
 
-        //今日新增会员数量
+        //今日新增客户数量
         indexStatisticsVO.setTodayMemberNum(memberStatisticsService.todayMemberNum());
         //今日新增商品数量
         indexStatisticsVO.setTodayGoodsNum(goodsStatisticsService.todayUpperNum());

@@ -19,20 +19,20 @@ import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 /**
- * 管理端,会员站内信管理接口
+ * 管理端,客户站内信管理接口
  *
  * @author Chopper
  * @since 2020/11/17 4:31 下午
  */
 @RestController
-@Tag(name = "管理端,会员站内信管理API")
+@Tag(name = "管理端,客户站内信管理API")
 @RequestMapping("/manager/message/memberNotice")
 public class MemberNoticeManagerController {
     @Autowired
     private MemberNoticeService memberNoticeService;
 
     @Operation(summary = "获取详情")
-    @Parameter(name = "id", description = "会员站内信ID", required = true)
+    @Parameter(name = "id", description = "客户站内信ID", required = true)
     @GetMapping("/{id}")
     public ResultMessage<MemberNotice> get(@PathVariable String id) {
         MemberNotice memberNotice = memberNoticeService.getById(id);
@@ -49,7 +49,7 @@ public class MemberNoticeManagerController {
     }
 
     @Operation(summary = "阅读消息")
-    @Parameter(name = "ids", description = "会员站内信ID列表", required = true)
+    @Parameter(name = "ids", description = "客户站内信ID列表", required = true)
     @PostMapping("/read/{ids}")
     public ResultMessage<Object> read(@PathVariable List<String> ids) {
         UpdateWrapper<MemberNotice> updateWrapper = new UpdateWrapper<>();
@@ -70,7 +70,7 @@ public class MemberNoticeManagerController {
     }
 
     @Operation(summary = "批量删除")
-    @Parameter(name = "ids", description = "会员站内信ID列表", required = true)
+    @Parameter(name = "ids", description = "客户站内信ID列表", required = true)
     @DeleteMapping("/{ids}")
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         memberNoticeService.removeByIds(ids);

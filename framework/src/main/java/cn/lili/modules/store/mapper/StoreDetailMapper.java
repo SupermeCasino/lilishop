@@ -33,9 +33,9 @@ public interface StoreDetailMapper extends BaseMapper<StoreDetail> {
     StoreDetailVO getStoreDetail(String storeId);
 
     /**
-     * 根据会员ID获取店铺详情
+     * 根据客户ID获取店铺详情
      *
-     * @param memberId 会员ID
+     * @param memberId 客户ID
      * @return 店铺详情
      */
     @Select("select s.member_name,s.store_name,s.store_disable,s.self_operated,s.store_center,s.store_logo,s.store_desc,s.store_address_detail,s.store_address_path,s.store_address_id_path,d.* " +

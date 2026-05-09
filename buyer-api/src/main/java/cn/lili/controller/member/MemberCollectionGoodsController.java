@@ -14,29 +14,29 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 买家端,会员收藏接口
+ * 买家端,客户收藏接口
  *
  * @author Chopper
  * @since 2020/11/17 2:32 下午
  */
 @RestController
-@Tag(name = "买家端,会员商品收藏接口")
+@Tag(name = "买家端,客户商品收藏接口")
 @RequestMapping("/buyer/member/collection")
 public class MemberCollectionGoodsController {
 
     /**
-     * 会员商品收藏
+     * 客户商品收藏
      */
     @Autowired
     private GoodsCollectionService goodsCollectionService;
 
-    @Operation(summary = "查询会员收藏列表")
+    @Operation(summary = "查询客户收藏列表")
     @GetMapping("/GOODS")
     public ResultMessage<Object> goodsList(PageVO page) {
         return ResultUtil.data(goodsCollectionService.goodsCollection(page));
     }
 
-    @Operation(summary = "添加会员收藏")
+    @Operation(summary = "添加客户收藏")
     @Parameters({
             @Parameter(name = "num", description = "值")
     })
@@ -46,7 +46,7 @@ public class MemberCollectionGoodsController {
 
     }
 
-    @Operation(summary = "删除会员收藏")
+    @Operation(summary = "删除客户收藏")
     @Parameters({
             @Parameter(name = "type", description = "类型", example = "GOODS:商品,STORE:店铺"),
             @Parameter(name = "num", description = "值")
@@ -56,7 +56,7 @@ public class MemberCollectionGoodsController {
         return ResultUtil.data(goodsCollectionService.deleteGoodsCollection(id));
     }
 
-    @Operation(summary = "查询会员是否收藏")
+    @Operation(summary = "查询客户是否收藏")
     @Parameters({
             @Parameter(name = "type", description = "类型", example = "GOODS:商品,STORE:店铺"),
             @Parameter(name = "id", description = "值")

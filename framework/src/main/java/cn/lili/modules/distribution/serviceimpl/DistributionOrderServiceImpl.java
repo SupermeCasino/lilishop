@@ -105,7 +105,7 @@ public class DistributionOrderServiceImpl extends ServiceImpl<DistributionOrderM
                 //添加分销订单
                 this.save(distributionOrder);
 
-                //记录会员的分销总额
+                //记录客户的分销总额
                 if (rebate != 0.0) {
                     distributionService.addRebate(rebate, order.getDistributionId(), storeFlow.getFinalPrice());
                 }

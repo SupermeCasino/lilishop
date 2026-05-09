@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员等级业务层实现
+ * 客户等级业务层实现
  *
  * @author Bulbasaur
  * @since 2021/5/14 5:58 下午

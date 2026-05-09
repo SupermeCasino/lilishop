@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员积分
+ * 客户积分
  *
  * @author Bulbasaur
  * @since 2020/12/14 16:31
@@ -18,6 +18,6 @@ public class MemberPointMessage {
     @Schema(description = "是否增加积分")
     private String type;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 }

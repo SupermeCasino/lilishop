@@ -4,7 +4,7 @@ import cn.lili.modules.member.entity.dos.MemberEvaluation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * 会员商品评价统计
+ * 客户商品评价统计
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16

@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * 会员店铺收藏业务层实现
+ * 客户店铺收藏业务层实现
  *
  * @author Chopper
  * @since 2020/11/18 2:52 下午

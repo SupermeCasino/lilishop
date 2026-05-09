@@ -26,12 +26,12 @@ public enum CachePrefix {
 
 
     /**
-     * 会员分布数据
+     * 客户分布数据
      */
     MEMBER_DISTRIBUTION,
 
     /**
-     * 在线会员统计
+     * 在线客户统计
      */
     ONLINE_MEMBER,
 
@@ -241,7 +241,7 @@ public enum CachePrefix {
      */
     STORE_ID_EXCHANGE,
     /**
-     * 会员领取标记
+     * 客户领取标记
      */
     MEMBER_COUPON_SIGN,
 
@@ -355,12 +355,12 @@ public enum CachePrefix {
     HOT_WORD,
 
     /**
-     * 会员积分
+     * 客户积分
      */
     MEMBER_POINT,
 
     /**
-     * 会员积分
+     * 客户积分
      */
     POINT_ORDER,
 

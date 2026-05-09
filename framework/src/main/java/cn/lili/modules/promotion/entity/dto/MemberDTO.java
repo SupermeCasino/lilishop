@@ -3,7 +3,7 @@ package cn.lili.modules.promotion.entity.dto;
 import lombok.Data;
 
 /**
- * 会员dto
+ * 客户dto
  *
  * @author Chopper
  * @version v1.0
@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class MemberDTO {
     /**
-     * 会员昵称
+     * 客户昵称
      */
     private String nickName;
     /**

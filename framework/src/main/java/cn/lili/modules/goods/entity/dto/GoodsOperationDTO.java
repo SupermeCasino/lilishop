@@ -137,7 +137,7 @@ public class GoodsOperationDTO implements Serializable {
     private String needingAttention;
 
 
-    @Schema(description = "是否为年度会员专属")
+    @Schema(description = "是否为年度客户专属")
     private Boolean annualFeeExclusive;
 
     @Schema(description = "浏览权限")

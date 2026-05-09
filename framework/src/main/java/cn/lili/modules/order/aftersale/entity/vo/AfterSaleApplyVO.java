@@ -54,7 +54,7 @@ public class AfterSaleApplyVO {
     @Schema(description = "是否支持退款")
     private Boolean returnMoney;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
 

@@ -37,7 +37,7 @@ public class StoreMessageListener implements RocketMQListener<MessageExt> {
                         Store store = JSONUtil.toBean(new String(messageExt.getBody()), Store.class);
                         storeSettingChangeEvent.storeSettingChange(store);
                     } catch (Exception e) {
-                        log.error("会员{},在{}业务中，状态修改事件执行异常",
+                        log.error("客户{},在{}业务中，状态修改事件执行异常",
                                 new String(messageExt.getBody()),
                                 storeSettingChangeEvent.getClass().getName(),
                                 e);

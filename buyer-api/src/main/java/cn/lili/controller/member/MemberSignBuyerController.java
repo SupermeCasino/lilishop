@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 会员签到控制器
+ * 客户签到控制器
  *
  * @author pikachu
  * @since 2020/11/16 10:07 下午
  */
 @RestController
-@Tag(name = "买家端，会员签到API")
+@Tag(name = "买家端，客户签到API")
 @RequestMapping("/buyer/members/sign")
 public class MemberSignBuyerController {
     @Autowired
@@ -32,13 +32,13 @@ public class MemberSignBuyerController {
 
     @PreventDuplicateSubmissions
     @PostMapping
-    @Operation(summary = "会员签到")
+    @Operation(summary = "客户签到")
     public ResultMessage<Boolean> memberSign() {
         return ResultUtil.data(memberSignService.memberSign());
     }
 
     @GetMapping
-    @Operation(summary = "根据时间查询会员签到表，类型是YYYYmm")
+    @Operation(summary = "根据时间查询客户签到表，类型是YYYYmm")
     public ResultMessage<List<MemberSign>> memberSign(String time) {
         return ResultUtil.data(memberSignService.getMonthSignDay(time));
     }

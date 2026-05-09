@@ -9,9 +9,9 @@ import cn.lili.modules.member.entity.dos.Member;
 public interface MemberInfoChangeEvent {
 
     /**
-     * 会员信息更改消息
+     * 客户信息更改消息
      *
-     * @param member 会员信息
+     * @param member 客户信息
      */
     void memberInfoChange(Member member);
 }

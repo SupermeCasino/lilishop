@@ -14,14 +14,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员签到
+ * 客户签到
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_sign")
-@Schema(description = "会员签到")
+@Schema(description = "客户签到")
 @EqualsAndHashCode(callSuper = false)
 public class MemberSign extends BaseIdEntity {
 
@@ -34,10 +34,10 @@ public class MemberSign extends BaseIdEntity {
     @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @Schema(description = "会员用户名")
+    @Schema(description = "客户用户名")
     private String memberName;
 
-    @Schema(description = "会员用户ID")
+    @Schema(description = "客户用户ID")
     private String memberId;
 
     @Schema(description = "连续签到天数")

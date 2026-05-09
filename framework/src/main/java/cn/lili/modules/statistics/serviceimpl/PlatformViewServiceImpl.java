@@ -49,7 +49,7 @@ public class PlatformViewServiceImpl extends ServiceImpl<PlatformViewMapper, Pla
     @Autowired
     private StatisticsProperties statisticsProperties;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberStatisticsService memberStatisticsService;
@@ -112,7 +112,7 @@ public class PlatformViewServiceImpl extends ServiceImpl<PlatformViewMapper, Pla
     }
 
     /**
-     * 在线会员数据初始化
+     * 在线客户数据初始化
      *
      * @param source
      * @return

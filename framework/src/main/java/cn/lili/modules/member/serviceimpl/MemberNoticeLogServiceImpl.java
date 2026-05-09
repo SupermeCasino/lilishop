@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员消息业务层实现
+ * 客户消息业务层实现
  *
  * @author Chopper
  * @since 2020/11/17 3:44 下午

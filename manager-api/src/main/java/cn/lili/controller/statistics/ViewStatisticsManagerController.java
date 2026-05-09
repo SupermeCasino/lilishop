@@ -44,7 +44,7 @@ public class ViewStatisticsManagerController {
     }
 
 
-    @Operation(summary = "会员分布")
+    @Operation(summary = "客户分布")
     @GetMapping("/online/distribution")
     public ResultMessage<List<MemberDistributionVO>> memberDistribution() {
         return ResultUtil.data(platformViewService.memberDistribution());

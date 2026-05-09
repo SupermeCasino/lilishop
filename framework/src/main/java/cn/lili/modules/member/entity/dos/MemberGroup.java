@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_group")
-@Schema(description = "会员分组")
+@Schema(description = "客户分组")
 public class MemberGroup extends BaseEntity {
 
     @NotNull

@@ -12,20 +12,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 会员地址
+ * 客户地址
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_address")
-@Schema(description = "会员地址")
+@Schema(description = "客户地址")
 @EqualsAndHashCode(callSuper = false)
 public class MemberAddress extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员ID", hidden = true)
+    @Schema(description = "客户ID", hidden = true)
     private String memberId;
 
     @NotEmpty(message = "收货人姓名不能为空")

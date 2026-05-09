@@ -16,7 +16,7 @@ public class IndexStatisticsVO {
     private Long orderNum;
     @Schema(description = "商品总数量")
     private Long goodsNum;
-    @Schema(description = "会员总数量")
+    @Schema(description = "客户总数量")
     private Long memberNum;
     @Schema(description = "店铺总数量")
     private Long storeNum;
@@ -40,7 +40,7 @@ public class IndexStatisticsVO {
     private Long todayOrderNum;
     @Schema(description = "今日下单金额")
     private Double todayOrderPrice;
-    @Schema(description = "今日新增会员数量")
+    @Schema(description = "今日新增客户数量")
     private Long todayMemberNum;
     @Schema(description = "今日新增商品数量")
     private Long todayGoodsNum;

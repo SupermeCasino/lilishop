@@ -50,7 +50,7 @@ public class KanjiaActivityLogServiceImpl extends ServiceImpl<KanJiaActivityLogM
 
     @Override
     public KanjiaActivityLog addKanJiaActivityLog(KanjiaActivityDTO kanjiaActivityDTO) {
-        //校验当前会员是否已经参与过此次砍价
+        //校验当前客户是否已经参与过此次砍价
         LambdaQueryWrapper<KanjiaActivityLog> queryWrapper = new LambdaQueryWrapper<KanjiaActivityLog>();
         queryWrapper.eq(kanjiaActivityDTO.getKanjiaActivityId() != null, KanjiaActivityLog::getKanjiaActivityId, kanjiaActivityDTO.getKanjiaActivityId());
         queryWrapper.eq(KanjiaActivityLog::getKanjiaMemberId, UserContext.getCurrentUser().getId());

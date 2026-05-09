@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 会员优惠券领取标记
+ * 客户优惠券领取标记
  *
  * @author liushuai(liushuai711 @ gmail.com)
  * @version v4.0

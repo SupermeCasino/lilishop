@@ -126,8 +126,8 @@ public interface StoreService extends IService<Store> {
     void storeToClerk();
 
     /**
-     * 店铺获取该会员的访问记录
-     * @param memberId 会员Id
+     * 店铺获取该客户的访问记录
+     * @param memberId 客户Id
      * @return
      */
     List<GoodsSku> getToMemberHistory(String memberId);

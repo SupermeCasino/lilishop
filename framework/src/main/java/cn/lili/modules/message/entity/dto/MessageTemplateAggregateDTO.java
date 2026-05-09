@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员消息模板聚合：站内信与微信模板分表存储，通过 scene_code 关联展示（不合并表结构）。
+ * 客户消息模板聚合：站内信与微信模板分表存储，通过 scene_code 关联展示（不合并表结构）。
  */
 @Data
 @Schema(description = "消息模板聚合行")

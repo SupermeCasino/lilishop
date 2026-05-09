@@ -51,7 +51,7 @@ public class DistributionBuyerController {
         return ResultUtil.data(distributionOrderService.getDistributionOrderPage(distributionOrderSearchParams));
     }
 
-    @Operation(summary = "获取当前会员的分销员信息", description = "可根据分销员信息查询待提现金额以及冻结金额等信息")
+    @Operation(summary = "获取当前客户的分销员信息", description = "可根据分销员信息查询待提现金额以及冻结金额等信息")
     @GetMapping
     public ResultMessage<Distribution> getDistribution() {
         //检查分销开关

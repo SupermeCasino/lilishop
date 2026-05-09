@@ -49,7 +49,7 @@ public class OrderBuyerController {
     @Autowired
     private OrderPackageService orderPackageService;
 
-    @Operation(summary = "查询会员订单列表")
+    @Operation(summary = "查询客户订单列表")
     @GetMapping
     public ResultMessage<IPage<OrderSimpleVO>> queryMineOrder(OrderSearchParams orderSearchParams) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());

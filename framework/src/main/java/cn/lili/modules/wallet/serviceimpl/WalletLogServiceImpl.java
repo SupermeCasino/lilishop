@@ -27,9 +27,9 @@ public class WalletLogServiceImpl extends ServiceImpl<WalletLogMapper, WalletLog
     public IPage<WalletLog> depositLogPage(PageVO page, DepositQueryVO depositQueryVO) {
         //构建查询条件
         QueryWrapper<WalletLog> depositLogQueryWrapper = new QueryWrapper<>();
-        //会员名称
+        //客户名称
         depositLogQueryWrapper.like(!CharSequenceUtil.isEmpty(depositQueryVO.getMemberName()), "member_name", depositQueryVO.getMemberName());
-        //会员id
+        //客户id
         depositLogQueryWrapper.eq(!CharSequenceUtil.isEmpty(depositQueryVO.getMemberId()), "member_id", depositQueryVO.getMemberId());
         //开始时间和技术时间
         if (!CharSequenceUtil.isEmpty(depositQueryVO.getStartDate()) && !CharSequenceUtil.isEmpty(depositQueryVO.getEndDate())) {

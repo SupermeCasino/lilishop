@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员商品收藏VO
+ * 客户商品收藏VO
  *
  * @author Chopper
  * @since 2021/1/27 10:41 上午

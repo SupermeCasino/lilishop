@@ -21,6 +21,6 @@ public class CouponActivityDTO extends CouponActivity {
     @Schema(description = "优惠券列表")
     private List<CouponActivityItem> couponActivityItems;
 
-    @Schema(description = "会员列表")
+    @Schema(description = "客户列表")
     private List<MemberDTO> memberDTOS;
 }

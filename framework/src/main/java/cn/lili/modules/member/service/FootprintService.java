@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * 会员浏览历史业务层
+ * 客户浏览历史业务层
  *
  * @author Chopper
  * @since 2020/11/18 10:46 上午
@@ -26,14 +26,14 @@ public interface FootprintService extends IService<FootPrint> {
     FootPrint saveFootprint(FootPrint footPrint);
 
     /**
-     * 清空当前会员的足迹
+     * 清空当前客户的足迹
      *
      * @return 处理结果
      */
     boolean clean();
 
     /**
-     * 根据ID进行清除会员的历史足迹
+     * 根据ID进行清除客户的历史足迹
      *
      * @param ids 商品ID列表
      * @return 处理结果
@@ -41,17 +41,17 @@ public interface FootprintService extends IService<FootPrint> {
     boolean deleteByIds(List<String> ids);
 
     /**
-     * 获取会员浏览历史分页
+     * 获取客户浏览历史分页
      *
      * @param params 分页
-     * @return 会员浏览历史列表
+     * @return 客户浏览历史列表
      */
     IPage<EsGoodsIndex> footPrintPage(FootPrintQueryParams params);
 
     /**
-     * 获取当前会员的浏览记录数量
+     * 获取当前客户的浏览记录数量
      *
-     * @return 当前会员的浏览记录数量
+     * @return 当前客户的浏览记录数量
      */
     long getFootprintNum();
 

@@ -39,7 +39,7 @@ public class Message extends BaseEntity {
     /**
      * @see MessageSendClient
      */
-    @Schema(description = "发送客户端 商家或者会员")
+    @Schema(description = "发送客户端 商家或者客户")
     private String messageClient;
 
     @TableField(exist = false)

@@ -25,10 +25,10 @@ public class OrderComplaintSearchParams {
     @Schema(description = "订单号")
     private String orderSn;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "商家id")

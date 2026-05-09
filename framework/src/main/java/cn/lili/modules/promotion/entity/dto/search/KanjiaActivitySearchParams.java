@@ -22,7 +22,7 @@ public class KanjiaActivitySearchParams extends BasePromotionsSearchParams {
     @Schema(description = "砍价商品SkuID")
     private String kanjiaActivityGoodsId;
 
-    @Schema(description = "会员ID", hidden = true)
+    @Schema(description = "客户ID", hidden = true)
     private String memberId;
 
     @Schema(description = "状态")

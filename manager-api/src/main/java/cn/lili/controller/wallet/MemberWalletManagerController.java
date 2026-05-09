@@ -26,15 +26,15 @@ public class MemberWalletManagerController {
     private MemberWalletService memberWalletService;
 
     @GetMapping
-    @Operation(summary = "查询会员预存款余额")
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Operation(summary = "查询客户预存款余额")
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     public ResultMessage<MemberWalletVO> get(@RequestParam("memberId") String memberId) {
         return ResultUtil.data(memberWalletService.getMemberWallet(memberId));
     }
 
     @PutMapping("/increase")
     @Operation(summary = "增加用户余额")
-    @Parameter(name = "memberId", description = "会员ID", required = true)
+    @Parameter(name = "memberId", description = "客户ID", required = true)
     @Parameter(name = "rechargeMoney", description = "充值金额", required = true)
     public ResultMessage<Object> increase(String memberId ,Double rechargeMoney) {
 

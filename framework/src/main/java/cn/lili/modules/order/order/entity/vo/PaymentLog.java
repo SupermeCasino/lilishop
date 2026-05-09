@@ -36,7 +36,7 @@ public class PaymentLog extends BaseEntity {
     @Schema(description = "店铺名称")
     private String storeName;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "用户名")

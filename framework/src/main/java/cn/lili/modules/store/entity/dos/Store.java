@@ -33,10 +33,10 @@ public class Store extends BaseEntity {
 
     private static final long serialVersionUID = -5861767726387892272L;
 
-    @Schema(description = "会员Id")
+    @Schema(description = "客户Id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "店铺名称")

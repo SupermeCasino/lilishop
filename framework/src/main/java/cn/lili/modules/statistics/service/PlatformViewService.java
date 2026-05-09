@@ -26,7 +26,7 @@ public interface PlatformViewService extends IService<PlatformViewData> {
     Long online();
 
     /**
-     * 会员分布
+     * 客户分布
      *
      * @return
      */

@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 会员数据处理层
+ * 客户数据处理层
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -22,8 +22,8 @@ import java.util.List;
 public interface MemberMapper extends BaseMapper<Member> {
 
     /**
-     * 获取所有的会员手机号
-     * @return 会员手机号
+     * 获取所有的客户手机号
+     * @return 客户手机号
      */
     @Select("SELECT m.mobile FROM li_member m")
     List<String> getAllMemberMobile();

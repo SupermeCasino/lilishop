@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 
 /**
- * 会员预存款
+ * 客户预存款
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -16,21 +16,21 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_wallet")
-@Schema(description = "会员预存款")
+@Schema(description = "客户预存款")
 public class MemberWallet extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员用户名")
+    @Schema(description = "客户用户名")
     private String memberName;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员预存款")
+    @Schema(description = "客户预存款")
     private Double memberWallet;
 
-    @Schema(description = "会员预存款冻结金额,提现使用")
+    @Schema(description = "客户预存款冻结金额,提现使用")
     private Double memberFrozenWallet;
 
     @Schema(description = "预存款密码")

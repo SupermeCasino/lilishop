@@ -51,7 +51,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
     @Autowired
     private StoreMessageService storeMessageService;
     /**
-     * 会员消息
+     * 客户消息
      */
     @Autowired
     private MemberMessageService memberMessageService;
@@ -61,7 +61,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
     @Autowired
     private StoreService storeService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -72,9 +72,9 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
             case SMS:
                 String smsJsonStr = new String(messageExt.getBody());
                 SmsReachDTO smsReachDTO = JSONUtil.toBean(smsJsonStr, SmsReachDTO.class);
-                //发送全部会员
+                //发送全部客户
                 if (smsReachDTO.getSmsRange().equals(RangeEnum.ALL.name())) {
-                    //获取所有会员的手机号
+                    //获取所有客户的手机号
                     List<String> list = memberService.getAllMemberMobile();
                     smsUtil.sendBatchSms(smsReachDTO.getSignName(), list, smsReachDTO.getMessageCode());
                     //判断为发送部分用户
@@ -89,7 +89,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
                 if (message.getMessageClient().equals(MessageSendClient.STORE.name().toLowerCase())) {
                     saveStoreMessage(message);
                 } else {
-                    //管理员发送给会员的站内信
+                    //管理员发送给客户的站内信
                     saveMemberMessage(message);
                 }
                 break;
@@ -140,15 +140,15 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
     }
 
     /**
-     * 保存会员消息
+     * 保存客户消息
      *
      * @param message 消息
      */
     private void saveMemberMessage(Message message) {
         List<MemberMessage> list = new ArrayList<>();
-        //如果是给所有会员发送消息
+        //如果是给所有客户发送消息
         if ("ALL".equals(message.getMessageRange())) {
-            //查询所有会员总数，因为会员总数比较大 如果一次性查出来会占用数据库资源，所以要分页查询
+            //查询所有客户总数，因为客户总数比较大 如果一次性查出来会占用数据库资源，所以要分页查询
             MemberSearchVO memberSearchVO = new MemberSearchVO();
             memberSearchVO.setDisabled(SwitchEnum.OPEN.name());
             long memberNum = memberService.getMemberNum(memberSearchVO);
@@ -177,7 +177,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
             }
 
         } else {
-            //如果是给指定会员发送消息
+            //如果是给指定客户发送消息
             int i = 0;
             for (String str : message.getUserIds()) {
                 MemberMessage memberMessage = new MemberMessage();

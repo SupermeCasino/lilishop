@@ -78,7 +78,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private Cache<Object> cache;
     /**
-     * 会员优惠券
+     * 客户优惠券
      */
     @Autowired
     private MemberCouponService memberCouponService;
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private PointsGoodsService pointsGoodsService;
     /**
-     * 会员地址
+     * 客户地址
      */
     @Autowired
     private MemberAddressService memberAddressService;
@@ -213,10 +213,10 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * 读取当前会员购物原始数据key
+     * 读取当前客户购物原始数据key
      *
      * @param cartTypeEnum 获取方式
-     * @return 当前会员购物原始数据key
+     * @return 当前客户购物原始数据key
      */
     private String getOriginKey(CartTypeEnum cartTypeEnum) {
 
@@ -620,7 +620,7 @@ public class CartServiceImpl implements CartService {
      * 使用优惠券判定
      *
      * @param tradeDTO     交易对象
-     * @param memberCoupon 会员优惠券
+     * @param memberCoupon 客户优惠券
      * @param cartTypeEnum 购物车
      */
     private void useCoupon(TradeDTO tradeDTO, MemberCoupon memberCoupon, CartTypeEnum cartTypeEnum) {
@@ -779,7 +779,7 @@ public class CartServiceImpl implements CartService {
             Optional<Map.Entry<String, Object>> kanjiaPromotions = cartSkuVO.getPromotionMap().entrySet().stream().filter(i -> i.getKey().contains(PromotionTypeEnum.KANJIA.name())).findFirst();
             if (kanjiaPromotions.isPresent()) {
                 JSONObject promotionsObj = JSON.parseObject(JSON.toJSONString(kanjiaPromotions.get().getValue()));
-                //查找当前会员的砍价商品活动
+                //查找当前客户的砍价商品活动
                 KanjiaActivitySearchParams kanjiaActivitySearchParams = new KanjiaActivitySearchParams();
                 kanjiaActivitySearchParams.setKanjiaActivityGoodsId(promotionsObj.getString("id"));
                 kanjiaActivitySearchParams.setMemberId(UserContext.getCurrentUser().getId());

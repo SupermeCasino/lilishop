@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 会员自身业务
- * 会员登录，会员第三方登录
+ * 客户自身业务
+ * 客户登录，客户第三方登录
  *
  * @author Chopper
  * @version v1.0

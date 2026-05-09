@@ -58,9 +58,9 @@ public interface ClerkService extends IService<Clerk> {
     Clerk saveClerk(ClerkAddDTO clerkAddDTO);
 
     /**
-     * 根据会员id获取店员信息
+     * 根据客户id获取店员信息
      *
-     * @param memberId 会员id
+     * @param memberId 客户id
      * @return
      */
     Clerk getClerkByMemberId(String memberId);
@@ -80,7 +80,7 @@ public interface ClerkService extends IService<Clerk> {
     void deleteClerk(List<String> ids);
 
     /**
-     * 检测会员有效性
+     * 检测客户有效性
      *
      * @param mobile 手机号码
      * @return

@@ -44,7 +44,7 @@ public class PointLogInterceptor {
             if (obj[1] != null) {
                 type = obj[1].toString();
             }
-            // 会员ID
+            // 客户ID
             String memberId = "";
             if (obj[2] != null) {
                 memberId = obj[2].toString();
@@ -54,7 +54,7 @@ public class PointLogInterceptor {
                 return;
             }
 
-            //根据会员id查询会员信息
+            //根据客户id查询客户信息
             Member member = memberService.getById(memberId);
             if (member != null) {
                 MemberPointsHistory memberPointsHistory = new MemberPointsHistory();

@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员商品评价业务层实现
+ * 客户商品评价业务层实现
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
@@ -70,7 +70,7 @@ public class MemberEvaluationServiceImpl extends ServiceImpl<MemberEvaluationMap
     @Autowired
     private OrderItemService orderItemService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -116,7 +116,7 @@ public class MemberEvaluationServiceImpl extends ServiceImpl<MemberEvaluationMap
             throw new ServiceException(ResultCode.ORDER_NOT_EXIST);
         }
 
-        //检测是否可以添加会员评价
+        //检测是否可以添加客户评价
         Member member;
 
         checkMemberEvaluation(orderItem, order);
@@ -289,7 +289,7 @@ public class MemberEvaluationServiceImpl extends ServiceImpl<MemberEvaluationMap
     }
 
     /**
-     * 检测会员评价
+     * 检测客户评价
      *
      * @param orderItem 子订单
      * @param order     订单
@@ -301,7 +301,7 @@ public class MemberEvaluationServiceImpl extends ServiceImpl<MemberEvaluationMap
             throw new ServiceException(ResultCode.EVALUATION_DOUBLE_ERROR);
         }
 
-        //判断是否是当前会员的订单
+        //判断是否是当前客户的订单
         if (UserContext.getCurrentUser() != null && !order.getMemberId().equals(UserContext.getCurrentUser().getId())) {
             throw new ServiceException(ResultCode.ORDER_NOT_USER);
         }

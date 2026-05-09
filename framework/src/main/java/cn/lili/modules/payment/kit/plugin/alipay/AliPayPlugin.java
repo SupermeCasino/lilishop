@@ -233,7 +233,7 @@ public class AliPayPlugin implements Payment {
      * 支付宝提现
      * 文档地址：https://opendocs.alipay.com/open/02byuo?scene=ca56bca529e64125a2786703c6192d41&ref=api
      *
-     * @param memberWithdrawApply 会员提现申请
+     * @param memberWithdrawApply 客户提现申请
      */
     @Override
     public TransferResultDTO transfer(MemberWithdrawApply memberWithdrawApply) {

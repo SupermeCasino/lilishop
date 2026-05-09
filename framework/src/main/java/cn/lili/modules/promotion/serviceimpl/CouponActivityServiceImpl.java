@@ -112,10 +112,10 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
         //获取活动优惠券发送范围
         List<Map<String, Object>> member = this.getMemberList(couponActivity);
 
-        //如果指定会员发券，则当下直接进行发送，如果是全体会员发券，则变更为用户登录首页进行请求发券
+        //如果指定客户发券，则当下直接进行发送，如果是全体客户发券，则变更为用户登录首页进行请求发券
         //PS:即不主动发券，需要用户在活动时间内登录自动领取优惠券，类似美团、饿了么 的发放方式
         if (couponActivity.getActivityScope().equals(CouponActivitySendTypeEnum.DESIGNATED.name())) {
-            //会员拆成多个小组进行发送
+            //客户拆成多个小组进行发送
             List<List<Map<String, Object>>> memberGroup = new ArrayList<>();
 
             //循环分组
@@ -143,7 +143,7 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
         super.initPromotion(promotions);
         if (promotions instanceof CouponActivityDTO) {
             CouponActivityDTO couponActivityDTO = (CouponActivityDTO) promotions;
-            //如果有会员，则写入会员信息
+            //如果有客户，则写入客户信息
             if (couponActivityDTO.getMemberDTOS() != null && !couponActivityDTO.getMemberDTOS().isEmpty()) {
                 couponActivityDTO.setActivityScopeInfo(JSONUtil.toJsonStr(couponActivityDTO.getMemberDTOS()));
             }
@@ -159,7 +159,7 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
     public void checkPromotions(CouponActivity couponActivity) {
         if (couponActivity instanceof CouponActivityDTO) {
             CouponActivityDTO couponActivityDTO = (CouponActivityDTO) couponActivity;
-            //指定会员判定
+            //指定客户判定
             if (couponActivity.getActivityScope().equals(CouponActivitySendTypeEnum.DESIGNATED.name()) && couponActivityDTO.getMemberDTOS().isEmpty()) {
                 throw new ServiceException(ResultCode.COUPON_ACTIVITY_MEMBER_ERROR);
             }
@@ -354,7 +354,7 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
     /**
      * 给当前用户发送优惠券
      * 1.循环优惠券列表
-     * 2.判断优惠券每个会员发送数量
+     * 2.判断优惠券每个客户发送数量
      * 3.记录优惠券发送数量
      *
      * @param authUser            发送目标用户
@@ -405,10 +405,10 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
      * 此方法用于精准发券
      *
      * @param couponActivity 优惠券活动
-     * @return 获取优惠券的会员列表
+     * @return 获取优惠券的客户列表
      */
     private List<Map<String, Object>> getMemberList(CouponActivity couponActivity) {
-        //判断优惠券的发送范围，获取会员列表
+        //判断优惠券的发送范围，获取客户列表
 
         List<String> ids = new ArrayList<>();
         String scopeInfo = couponActivity.getActivityScopeInfo();

@@ -15,7 +15,7 @@ import java.util.Map;
 @Data
 public class NoticeMessageDTO {
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "消息节点")

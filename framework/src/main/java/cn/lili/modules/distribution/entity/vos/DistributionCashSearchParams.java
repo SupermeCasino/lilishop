@@ -23,9 +23,9 @@ public class DistributionCashSearchParams extends PageVO {
     @Schema(description = "编号")
     private String sn;
     /**
-     * 会员名称
+     * 客户名称
      */
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     /**

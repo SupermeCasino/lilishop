@@ -17,21 +17,21 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 /**
- * 会员商品评价
+ * 客户商品评价
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_evaluation")
-@Schema(description = "会员商品评价")
+@Schema(description = "客户商品评价")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class MemberEvaluation extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @NotNull
@@ -51,12 +51,12 @@ public class MemberEvaluation extends BaseEntity {
     private String skuId;
 
     @NotNull
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
     @NotNull
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String memberProfile;
 
     @NotNull
@@ -117,11 +117,11 @@ public class MemberEvaluation extends BaseEntity {
     public MemberEvaluation(MemberEvaluationDTO memberEvaluationDTO, GoodsSku goodsSku, Member member, Order order) {
         //复制评价信息
         BeanUtils.copyProperties(memberEvaluationDTO, this);
-        //设置会员
+        //设置客户
         this.memberId = member.getId();
-        //会员名称
+        //客户名称
         this.memberName = member.getNickName();
-        //设置会员头像
+        //设置客户头像
         this.memberProfile = member.getFace();
         //商品名称
         this.goodsName = goodsSku.getGoodsName();

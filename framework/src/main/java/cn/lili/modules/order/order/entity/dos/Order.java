@@ -55,7 +55,7 @@ public class Order extends BaseEntity {
     @Schema(description = "店铺名称")
     private String storeName;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
     @Schema(description = "用户名")
@@ -203,10 +203,10 @@ public class Order extends BaseEntity {
     @Schema(description = "分销员ID")
     private String distributionId;
 
-    @Schema(description = "使用的店铺会员优惠券id(,区分)")
+    @Schema(description = "使用的店铺客户优惠券id(,区分)")
     private String useStoreMemberCouponIds;
 
-    @Schema(description = "使用的平台会员优惠券id")
+    @Schema(description = "使用的平台客户优惠券id")
     private String usePlatformMemberCouponId;
 
     @Schema(description = "qrCode  实物为提货码  虚拟货物为账号")
@@ -243,7 +243,7 @@ public class Order extends BaseEntity {
         this.setTradeSn(tradeDTO.getSn());
         this.setRemark(cartVO.getRemark());
         this.setFreightPrice(cartVO.getPriceDetailDTO().getFreightPrice());
-        //会员收件信息
+        //客户收件信息
         if (tradeDTO.getMemberAddress() != null && DeliveryMethodEnum.LOGISTICS.name().equals(cartVO.getDeliveryMethod())) {
             this.setConsigneeAddressIdPath(tradeDTO.getMemberAddress().getConsigneeAddressIdPath());
             this.setConsigneeAddressPath(tradeDTO.getMemberAddress().getConsigneeAddressPath());

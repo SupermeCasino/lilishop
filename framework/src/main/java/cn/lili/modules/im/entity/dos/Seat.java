@@ -28,7 +28,7 @@ public class Seat extends BaseTenantEntity {
     @Schema(description = "坐席用户名")
     private String username;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 
     @Schema(description = "坐席密码")

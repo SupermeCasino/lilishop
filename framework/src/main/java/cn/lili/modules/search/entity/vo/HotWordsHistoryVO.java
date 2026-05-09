@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 在线会员
+ * 在线客户
  *
  * @author Chopper
  * @since 2021-02-21 09:59

@@ -14,14 +14,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员发票
+ * 客户发票
  *
  * @author Chopper
  * @since 2021-03-29 14:10:16
  */
 @Data
 @TableName("li_member_receipt")
-@Schema(description = "会员发票")
+@Schema(description = "客户发票")
 @EqualsAndHashCode(callSuper = false)
 public class MemberReceipt extends BaseIdEntity {
 
@@ -36,10 +36,10 @@ public class MemberReceipt extends BaseIdEntity {
     @Schema(description = "发票内容")
     private String receiptContent;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     /**

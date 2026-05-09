@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 管理端,会员消息消息管理接口
+ * 管理端,客户消息管理接口
  *
  * @author pikachu
  * @since 2020/12/6 16:09
  */
 @RestController
-@Tag(name = "管理端,会员消息消息管理接口")
+@Tag(name = "管理端,客户消息管理接口")
 @RequestMapping("/manager/other/memberMessage")
 public class MemberMessageManagerController {
     @Autowired
@@ -33,7 +33,7 @@ public class MemberMessageManagerController {
 
     @GetMapping
     @Operation(summary = "多条件分页获取")
-    @Parameter(name = "memberMessageQueryVO", description = "会员消息查询VO")
+    @Parameter(name = "memberMessageQueryVO", description = "客户消息查询VO")
     @Parameter(name = "pageVo", description = "分页参数")
     public ResultMessage<IPage<MemberMessage>> getByCondition(MemberMessageQueryVO memberMessageQueryVO,
                                                               PageVO pageVo) {

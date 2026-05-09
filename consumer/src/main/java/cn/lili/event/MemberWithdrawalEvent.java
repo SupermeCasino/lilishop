@@ -3,7 +3,7 @@ package cn.lili.event;
 import cn.lili.modules.wallet.entity.dto.MemberWithdrawalMessage;
 
 /**
- * 会员提现消息
+ * 客户提现消息
  *
  * @author Chopper
  * @since 2020/11/17 7:13 下午
@@ -11,7 +11,7 @@ import cn.lili.modules.wallet.entity.dto.MemberWithdrawalMessage;
 public interface MemberWithdrawalEvent {
 
     /**
-     * 会员提现
+     * 客户提现
      *
      * @param memberWithdrawalMessage 提现对象
      */

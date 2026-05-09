@@ -18,10 +18,10 @@ public class WxChannelOrder extends BaseEntity {
     @Schema(description = "平台订单编号")
     private String orderSn;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员昵称")
+    @Schema(description = "客户昵称")
     private String memberNickName;
 
     @Schema(description = "订单金额")

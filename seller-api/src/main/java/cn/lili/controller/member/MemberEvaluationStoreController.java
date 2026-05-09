@@ -31,7 +31,7 @@ public class MemberEvaluationStoreController {
     @Autowired
     private MemberEvaluationService memberEvaluationService;
 
-    @Operation(summary = "分页获取会员评论列表")
+    @Operation(summary = "分页获取客户评论列表")
     @GetMapping
     public ResultMessage<IPage<MemberEvaluationListVO>> getByPage(EvaluationQueryParams evaluationQueryParams) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();

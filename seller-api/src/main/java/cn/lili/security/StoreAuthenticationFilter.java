@@ -148,7 +148,7 @@ public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
             Map<String, List<String>> permission =
                     (Map<String, List<String>>) cache.get(permissionCacheKey);
             if (permission == null || permission.isEmpty()) {
-                //根据会员id查询店员信息
+                //根据客户id查询店员信息
                 Clerk clerk = clerkService.getClerkByMemberId(authUser.getId());
                 if (clerk != null) {
                     permission = storeTokenGenerate.permissionList(storeMenuRoleService.findAllMenu(clerk.getId(), authUser.getId()));

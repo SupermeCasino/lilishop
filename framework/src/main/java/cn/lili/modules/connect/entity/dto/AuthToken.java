@@ -35,7 +35,7 @@ public class AuthToken implements Serializable {
      */
     private int expireIn;
     /**
-     * 会员id
+     * 客户id
      */
     private String uid;
     /**

@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 会员签到数据处理层
+ * 客户签到数据处理层
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -19,29 +19,29 @@ import java.util.List;
 public interface MemberSignMapper extends BaseMapper<MemberSign> {
 
     /**
-     * 获取会员之前签到信息
+     * 获取客户之前签到信息
      *
-     * @param memberId 会员ID
-     * @return 会员签到列表
+     * @param memberId 客户ID
+     * @return 客户签到列表
      */
     @Select("SELECT * FROM li_member_sign WHERE TO_DAYS( NOW( ) ) - TO_DAYS( create_time) = 1 and member_id = #{memberId}")
     List<MemberSign> getBeforeMemberSign(String memberId);
 
     /**
-     * 获取会员签到
+     * 获取客户签到
      *
      * @param queryWrapper 查询条件
-     * @return 会员签到列表
+     * @return 客户签到列表
      */
     @Select("select * from li_member_sign ${ew.customSqlSegment}")
     List<MemberSign> getTodayMemberSign(@Param(Constants.WRAPPER) Wrapper<MemberSign> queryWrapper);
 
     /**
-     * 获取当月的会员签到记录
+     * 获取当月的客户签到记录
      *
-     * @param memberId 会员ID
+     * @param memberId 客户ID
      * @param time     时间
-     * @return 会员签到列表
+     * @return 客户签到列表
      */
     @Select("SELECT * FROM li_member_sign WHERE DATE_FORMAT(create_time,'%Y%m') = #{time} and member_id = #{memberId}")
     List<MemberSign> getMonthMemberSign(String memberId, String time);

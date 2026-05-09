@@ -43,9 +43,9 @@ public class DistributionOrder extends BaseIdEntity {
      */
     @Schema(description = "分销订单状态")
     private String distributionOrderStatus;
-    @Schema(description = "购买会员的id")
+    @Schema(description = "购买客户的id")
     private String memberId;
-    @Schema(description = "购买会员的名称")
+    @Schema(description = "购买客户的名称")
     private String memberName;
     @Schema(description = "分销员id")
     private String distributionId;

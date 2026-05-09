@@ -294,7 +294,7 @@ public class AfterSaleServiceImpl extends ServiceImpl<AfterSaleMapper, AfterSale
             throw new ServiceException(ResultCode.AFTER_STATUS_ERROR);
         }
 
-        //查询会员回寄的物流公司信息
+        //查询客户回寄的物流公司信息
         Logistics logistics = logisticsService.getById(logisticsId);
 
         //判断物流公司是否为空
@@ -433,7 +433,7 @@ public class AfterSaleServiceImpl extends ServiceImpl<AfterSaleMapper, AfterSale
         AfterSale afterSale = new AfterSale();
         BeanUtil.copyProperties(afterSaleDTO, afterSale);
 
-        //写入会员信息
+        //写入客户信息
         afterSale.setMemberId(tokenUser.getId());
         afterSale.setMemberName(tokenUser.getNickName());
 

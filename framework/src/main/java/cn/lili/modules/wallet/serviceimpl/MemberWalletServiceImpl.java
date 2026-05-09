@@ -46,7 +46,7 @@ import java.util.Date;
 
 
 /**
- * 会员余额业务层实现
+ * 客户余额业务层实现
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16
@@ -71,12 +71,12 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Autowired
     private SettingService settingService;
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
     /**
-     * 会员提现申请
+     * 客户提现申请
      */
     @Autowired
     @Lazy
@@ -103,7 +103,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean increaseWithdrawal(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款信息是否存在，如果不存在则新建
+        //检测客户预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //余额变动
         memberWallet.setMemberWallet(CurrencyUtil.add(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney()));
@@ -118,7 +118,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean increase(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款信息是否存在，如果不存在则新建
+        //检测客户预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //新增预存款
         memberWallet.setMemberWallet(CurrencyUtil.add(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney()));
@@ -133,7 +133,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduce(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款信息是否存在，如果不存在则新建
+        //检测客户预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //减少预存款，需要校验 如果不够扣减预存款
         if (0 > CurrencyUtil.sub(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney())) {
@@ -152,7 +152,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduceWithdrawal(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款信息是否存在，如果不存在则新建
+        //检测客户预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //减少预存款，需要校验 如果不够扣减预存款
         if (0 > CurrencyUtil.sub(memberWallet.getMemberWallet(), memberWalletUpdateDTO.getMoney())) {
@@ -172,7 +172,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean reduceFrozen(MemberWalletUpdateDTO memberWalletUpdateDTO) {
-        //检测会员预存款信息是否存在，如果不存在则新建
+        //检测客户预存款信息是否存在，如果不存在则新建
         MemberWallet memberWallet = this.checkMemberWallet(memberWalletUpdateDTO.getMemberId());
         //校验此金额是否超过冻结金额
         if (0 > CurrencyUtil.sub(memberWallet.getMemberFrozenWallet(), memberWalletUpdateDTO.getMoney())) {
@@ -187,14 +187,14 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     }
 
     /**
-     * 检测会员预存款是否存在，如果不存在则新建
+     * 检测客户预存款是否存在，如果不存在则新建
      *
-     * @param memberId 会员id
+     * @param memberId 客户id
      */
     private MemberWallet checkMemberWallet(String memberId) {
-        //获取会员预存款信息
+        //获取客户预存款信息
         MemberWallet memberWallet = this.getOne(new QueryWrapper<MemberWallet>().eq("member_id", memberId), false);
-        //如果会员预存款信息不存在则同步重新建立预存款信息
+        //如果客户预存款信息不存在则同步重新建立预存款信息
         if (memberWallet == null) {
             Member member = memberService.getById(memberId);
             if (member != null) {
@@ -210,7 +210,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     public void setMemberWalletPassword(Member member, String password) {
         //对密码进行加密
         String pwd = new BCryptPasswordEncoder().encode(password);
-        //校验会员预存款是否存在
+        //校验客户预存款是否存在
         QueryWrapper<MemberWallet> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("member_id", member.getId());
         MemberWallet memberWallet = this.getOne(queryWrapper);
@@ -224,7 +224,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
 
     @Override
     public Boolean checkPassword() {
-        //获取当前登录会员
+        //获取当前登录客户
         AuthUser authUser = UserContext.getCurrentUser();
         //构建查询条件
         QueryWrapper<MemberWallet> queryWrapper = new QueryWrapper<>();
@@ -235,7 +235,7 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
 
     @Override
     public MemberWallet save(String memberId, String memberName) {
-        //获取会员预存款信息
+        //获取客户预存款信息
         MemberWallet memberWallet = this.getOne(new QueryWrapper<MemberWallet>().eq("member_id", memberId));
         if (memberWallet != null) {
             return memberWallet;

@@ -23,7 +23,7 @@ public class StoreSearchParams extends PageVO implements Serializable {
 
     private static final long serialVersionUID = 6916054310764833369L;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "店铺名称")

@@ -20,10 +20,10 @@ public class ReceiptSearchParams {
     @Schema(description = "纳税人识别号")
     private String taxpayerId;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "店铺名称")

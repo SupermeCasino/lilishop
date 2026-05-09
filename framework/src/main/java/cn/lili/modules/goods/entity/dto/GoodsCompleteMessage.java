@@ -19,7 +19,7 @@ public class GoodsCompleteMessage {
     @Schema(description = "商品skuId")
     private String skuId;
 
-    @Schema(description = "购买会员sn")
+    @Schema(description = "购买客户sn")
     private String memberId;
 
     @Schema(description = "购买数量")

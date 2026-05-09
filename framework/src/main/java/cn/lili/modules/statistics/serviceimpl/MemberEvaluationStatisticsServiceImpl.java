@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 /**
- * 会员商品评价业务层实现
+ * 客户商品评价业务层实现
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16

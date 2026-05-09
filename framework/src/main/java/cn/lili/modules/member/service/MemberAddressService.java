@@ -14,31 +14,31 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MemberAddressService extends IService<MemberAddress> {
 
     /**
-     * 根据会员获取会员地址分页列表
+     * 根据客户获取客户地址分页列表
      *
      * @param page     分页条件
-     * @param memberId 会员ID
-     * @return 会员地址分页列表
+     * @param memberId 客户ID
+     * @return 客户地址分页列表
      */
     IPage<MemberAddress> getAddressByMember(PageVO page, String memberId);
 
     /**
-     * 根据地址ID获取当前会员地址信息
+     * 根据地址ID获取当前客户地址信息
      *
      * @param id 地址ID
-     * @return 当前会员的地址信息
+     * @return 当前客户的地址信息
      */
     MemberAddress getMemberAddress(String id);
 
     /**
-     * 根据地址ID获取当前会员地址信息
+     * 根据地址ID获取当前客户地址信息
      *
-     * @return 当前会员的地址信息
+     * @return 当前客户的地址信息
      */
     MemberAddress getDefaultMemberAddress();
 
     /**
-     * 添加会员收货地址
+     * 添加客户收货地址
      *
      * @param memberAddress 收货地址
      * @return 操作状态
@@ -46,7 +46,7 @@ public interface MemberAddressService extends IService<MemberAddress> {
     MemberAddress saveMemberAddress(MemberAddress memberAddress);
 
     /**
-     * 修改会员收货地址信息
+     * 修改客户收货地址信息
      *
      * @param memberAddress 收货地址
      * @return 操作状态
@@ -54,7 +54,7 @@ public interface MemberAddressService extends IService<MemberAddress> {
     MemberAddress updateMemberAddress(MemberAddress memberAddress);
 
     /**
-     * 删除会员收货地址信息
+     * 删除客户收货地址信息
      *
      * @param id 收货地址ID
      * @return 操作状态

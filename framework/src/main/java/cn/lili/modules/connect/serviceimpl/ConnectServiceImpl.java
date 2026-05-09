@@ -219,7 +219,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
     }
 
     /**
-     * 成功登录，则检测cookie中的信息，进行会员绑定
+     * 成功登录，则检测cookie中的信息，进行客户绑定
      *
      * @param userId  用户ID
      * @param unionId 第三方用户ID
@@ -278,7 +278,7 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
             if (StrUtil.isNotBlank(authUser.getPhone())) {
                 member = memberService.findByMobile(authUser.getPhone());
             }
-            //如果未查到手机号的会员则使用第三方登录
+            //如果未查到手机号的客户则使用第三方登录
             if (member == null) {
                 LambdaQueryWrapper<Connect> queryWrapper = new LambdaQueryWrapper<Connect>();
                 //使用UnionId登录
@@ -298,9 +298,9 @@ public class ConnectServiceImpl extends ServiceImpl<ConnectMapper, Connect> impl
                 if (connect == null) {
                     member = memberService.autoRegister(authUser);
                 } else {
-                    //查询会员
+                    //查询客户
                     member = memberService.getById(connect.getUserId());
-                    //如果未绑定会员，则把刚才查询到的联合登录表数据删除
+                    //如果未绑定客户，则把刚才查询到的联合登录表数据删除
                     if (member == null) {
                         this.remove(queryWrapper);
                         member = memberService.autoRegister(authUser);

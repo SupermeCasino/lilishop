@@ -62,7 +62,7 @@ public class TradeServiceImpl extends ServiceImpl<TradeMapper, Trade> implements
     private OrderService orderService;
 
     /**
-     * 会员
+     * 客户
      */
     @Autowired
     private MemberService memberService;
@@ -74,7 +74,7 @@ public class TradeServiceImpl extends ServiceImpl<TradeMapper, Trade> implements
     private CouponService couponService;
 
     /**
-     * 会员优惠券
+     * 客户优惠券
      */
     @Autowired
     private MemberCouponService memberCouponService;

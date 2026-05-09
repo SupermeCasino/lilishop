@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * 会员提现申请业务层
+ * 客户提现申请业务层
  *
  * @author pikachu
  * @since 2020-02-25 14:10:16

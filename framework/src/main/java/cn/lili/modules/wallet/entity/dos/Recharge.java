@@ -51,10 +51,10 @@ public class Recharge extends BaseIdEntity {
     @Schema(description = "充值订单编号")
     private String rechargeSn;
 
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String memberName;
 
@@ -85,8 +85,8 @@ public class Recharge extends BaseIdEntity {
      * 构建充值账单信息
      *
      * @param rechargeSn 充值订单号
-     * @param memberId   会员id
-     * @param memberName 会员名称
+     * @param memberId   客户id
+     * @param memberName 客户名称
      * @param money      充值金额
      */
     public Recharge(String rechargeSn, String memberId, String memberName, Double money) {

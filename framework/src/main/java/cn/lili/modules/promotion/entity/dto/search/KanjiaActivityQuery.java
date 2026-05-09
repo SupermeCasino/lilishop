@@ -22,7 +22,7 @@ public class KanjiaActivityQuery {
     @Schema(description = "货品名称")
     private String goodsName;
 
-    @Schema(description = "会员id", hidden = true)
+    @Schema(description = "客户id", hidden = true)
     private String memberId;
 
     public <T> QueryWrapper<T> wrapper() {

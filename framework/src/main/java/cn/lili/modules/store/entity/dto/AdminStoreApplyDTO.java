@@ -17,7 +17,7 @@ import jakarta.validation.constraints.*;
 public class AdminStoreApplyDTO {
 
     /****店铺基本信息***/
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     public String memberId;
 
     @Size(min = 2, max = 200, message = "店铺名称长度为2-200位")

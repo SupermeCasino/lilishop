@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 会员等级
+ * 客户等级
  *
  * @author Bulbasaur
  * @since 2021/5/14 5:43 下午
@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_grade")
-@Schema(description = "会员等级")
+@Schema(description = "客户等级")
 public class MemberGrade extends BaseEntity {
 
     @NotNull
@@ -28,7 +28,7 @@ public class MemberGrade extends BaseEntity {
     private String gradeImage;
 
     @NotNull
-    @Schema(description = "会员等级")
+    @Schema(description = "客户等级")
     private Integer level;
 
     @Schema(description = "累计实付")

@@ -22,30 +22,30 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 买家端,会员商品评价接口
+ * 买家端,客户商品评价接口
  *
  * @author Bulbasaur
  * @since 2020/11/16 10:08 下午
  */
 @RestController
-@Tag(name = "买家端,会员商品评价接口")
+@Tag(name = "买家端,客户商品评价接口")
 @RequestMapping("/buyer/member/evaluation")
 public class MemberEvaluationBuyerController {
 
     /**
-     * 会员商品评价
+     * 客户商品评价
      */
     @Autowired
     private MemberEvaluationService memberEvaluationService;
 
     @PreventDuplicateSubmissions
-    @Operation(summary = "添加会员评价")
+    @Operation(summary = "添加客户评价")
     @PostMapping
     public ResultMessage<MemberEvaluationDTO> save(@Valid MemberEvaluationDTO memberEvaluationDTO) {
         return ResultUtil.data(memberEvaluationService.addMemberEvaluation(memberEvaluationDTO, true));
     }
 
-    @Operation(summary = "查看会员评价详情")
+    @Operation(summary = "查看客户评价详情")
     @Parameter(name = "id", description = "评价ID", required = true)
     @GetMapping("/get/{id}")
     public ResultMessage<MemberEvaluationVO> get(@NotNull(message = "评价ID不能为空") @PathVariable("id") String id) {
@@ -53,10 +53,10 @@ public class MemberEvaluationBuyerController {
 
     }
 
-    @Operation(summary = "查看当前会员评价列表")
+    @Operation(summary = "查看当前客户评价列表")
     @GetMapping
     public ResultMessage<IPage<MemberEvaluation>> queryMineEvaluation(EvaluationQueryParams evaluationQueryParams) {
-        //设置当前登录会员
+        //设置当前登录客户
         evaluationQueryParams.setMemberId(UserContext.getCurrentUser().getId());
         return ResultUtil.data(memberEvaluationService.managerQuery(evaluationQueryParams));
     }

@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 管理端,会员统计接口
+ * 管理端,客户统计接口
  *
  * @author Bulbasaur
  * @since 2020/12/9 19:04
  */
-@Tag(name = "管理端,会员统计接口")
+@Tag(name = "管理端,客户统计接口")
 @RestController
 @RequestMapping("/manager/statistics/member")
 public class MemberStatisticsManagerController {
     @Autowired
     private MemberStatisticsService memberStatisticsService;
 
-    @Operation(summary = "获取会员统计")
+    @Operation(summary = "获取客户统计")
     @Parameter(name = "statisticsQueryParam", description = "统计查询参数", required = true)
     @GetMapping
     public ResultMessage<List<MemberStatisticsData>> getByList(StatisticsQueryParam statisticsQueryParam) {

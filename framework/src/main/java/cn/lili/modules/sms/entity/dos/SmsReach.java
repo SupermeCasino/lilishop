@@ -40,7 +40,7 @@ public class SmsReach extends BaseIdEntity {
     @Schema(description = "消息内容")
     private String context;
 
-    @Schema(description = "接收人", allowableValues = "1:全部会员，2：选择会员")
+    @Schema(description = "接收人", allowableValues = "1:全部客户，2：选择客户")
     private String smsRange;
 
     @Schema(description = "预计发送条数")

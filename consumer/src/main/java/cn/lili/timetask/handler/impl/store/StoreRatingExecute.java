@@ -29,7 +29,7 @@ public class StoreRatingExecute implements EveryDayExecute {
     @Autowired
     private StoreService storeService;
     /**
-     * 会员评价
+     * 客户评价
      */
     @Autowired
     private MemberEvaluationService memberEvaluationService;

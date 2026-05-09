@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * 会员信息修改DTO
+ * 客户信息修改DTO
  *
  * @author Bulbasaur
  * @since 2020/12/11 14:39
@@ -22,30 +22,30 @@ public class MemberEditDTO {
 
 
     @Schema(description = "昵称", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Size(min = 2, max = 20, message = "会员昵称必须为2到20位之间")
+    @Size(min = 2, max = 20, message = "客户昵称必须为2到20位之间")
     private String nickName;
 
-    @Schema(description = "会员地址ID")
+    @Schema(description = "客户地址ID")
     private String regionId;
 
-    @Schema(description = "会员地址")
+    @Schema(description = "客户地址")
     private String region;
 
     @Min(message = "必须为数字且1为男,0为女", value = 0)
     @Max(message = "必须为数字且1为男,0为女", value = 1)
-    @NotNull(message = "会员性别不能为空")
-    @Schema(description = "会员性别,1为男，0为女", requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotNull(message = "客户性别不能为空")
+    @Schema(description = "客户性别,1为男，0为女", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Schema(description = "会员生日")
+    @Schema(description = "客户生日")
     private Date birthday;
 
     @Schema(description = "详细地址")
     private String address;
 
-    @Schema(description = "会员头像")
+    @Schema(description = "客户头像")
     private String face;
 
 }

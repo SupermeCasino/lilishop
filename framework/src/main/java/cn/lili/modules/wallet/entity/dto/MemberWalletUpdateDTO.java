@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * 会员余额变动模型
+ * 客户余额变动模型
  *
  * @author Chopper
  * @version v1.0
@@ -17,7 +17,7 @@ public class MemberWalletUpdateDTO {
 
     @Schema(description = "变动金额")
     private Double money;
-    @Schema(description = "变动会员id")
+    @Schema(description = "变动客户id")
     private String memberId;
     @Schema(description = "日志详情")
     private String detail;

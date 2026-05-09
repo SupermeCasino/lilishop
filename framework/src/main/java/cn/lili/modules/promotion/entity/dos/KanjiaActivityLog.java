@@ -25,13 +25,13 @@ public class KanjiaActivityLog extends BaseEntity {
     @Schema(description = "砍价活动参与记录id")
     private String kanjiaActivityId;
 
-    @Schema(description = "砍价会员id")
+    @Schema(description = "砍价客户id")
     private String kanjiaMemberId;
 
-    @Schema(description = "砍价会员名称")
+    @Schema(description = "砍价客户名称")
     private String kanjiaMemberName;
 
-    @Schema(description = "砍价会员头像")
+    @Schema(description = "砍价客户头像")
     private String kanjiaMemberFace;
 
     @Schema(description = "砍价金额")

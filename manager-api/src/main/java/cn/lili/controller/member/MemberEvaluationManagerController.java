@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 管理端,会员商品评价接口
+ * 管理端,客户商品评价接口
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Tag(name = "管理端,会员商品评价接口")
+@Tag(name = "管理端,客户商品评价接口")
 @RequestMapping("/manager/member/evaluation")
 public class MemberEvaluationManagerController {
     @Autowired

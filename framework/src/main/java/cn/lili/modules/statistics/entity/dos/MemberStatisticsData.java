@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Date;
 
 /**
- * 会员统计
+ * 客户统计
  *
  * @author Chopper
  * @since 2020/11/17 7:34 下午
@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("li_member_statistics_data")
-@Schema(description = "会员统计")
+@Schema(description = "客户统计")
 public class MemberStatisticsData extends BaseIdEntity {
 
     private static final long serialVersionUID = 1L;
@@ -27,10 +27,10 @@ public class MemberStatisticsData extends BaseIdEntity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createDate;
 
-    @Schema(description = "当前会员数量")
+    @Schema(description = "当前客户数量")
     private Long memberCount;
 
-    @Schema(description = "新增会员数量")
+    @Schema(description = "新增客户数量")
     private Long newlyAdded;
 
     @Schema(description = "当日活跃数量")

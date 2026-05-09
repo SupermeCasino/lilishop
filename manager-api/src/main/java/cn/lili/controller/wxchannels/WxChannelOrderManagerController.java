@@ -23,7 +23,7 @@ public class WxChannelOrderManagerController {
     @GetMapping
     @Operation(summary = "分页获取视频号订单")
     @Parameter(name = "channelOrderSn", description = "订单编号")
-    @Parameter(name = "memberNickName", description = "会员昵称")
+    @Parameter(name = "memberNickName", description = "客户昵称")
     @Parameter(name = "goodsName", description = "商品名称")
     @Parameter(name = "status", description = "订单状态")
     @Parameter(name = "scene", description = "下单场景 LIVE,WINDOW")

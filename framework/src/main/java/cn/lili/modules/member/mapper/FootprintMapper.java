@@ -14,7 +14,7 @@ public interface FootprintMapper extends BaseMapper<FootPrint> {
     /**
      * 删除超过100条后的记录
      *
-     * @param memberId 会员ID
+     * @param memberId 客户ID
      */
     @Delete("DELETE li_foot_print " +
             "FROM li_foot_print " +

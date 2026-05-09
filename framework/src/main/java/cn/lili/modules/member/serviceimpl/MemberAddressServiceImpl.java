@@ -49,9 +49,9 @@ public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, M
     }
 
     /**
-     * 根据地址ID获取当前会员地址信息
+     * 根据地址ID获取当前客户地址信息
      *
-     * @return 当前会员的地址信息
+     * @return 当前客户的地址信息
      */
     @Override
     public MemberAddress getDefaultMemberAddress() {
@@ -66,7 +66,7 @@ public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, M
     public MemberAddress saveMemberAddress(MemberAddress memberAddress) {
         //判断当前地址是否为默认地址，如果为默认需要将其他的地址修改为非默认
         removeDefaultAddress(memberAddress);
-        //添加会员地址
+        //添加客户地址
         this.save(memberAddress);
 
         return memberAddress;
@@ -95,14 +95,14 @@ public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, M
     }
 
     /**
-     * 修改会员默认收件地址
+     * 修改客户默认收件地址
      *
      * @param memberAddress 收件地址
      */
     private void removeDefaultAddress(MemberAddress memberAddress) {
         //如果不是默认地址不需要处理
         if (Boolean.TRUE.equals(memberAddress.getIsDefault())) {
-            //将会员的地址修改为非默认地址
+            //将客户的地址修改为非默认地址
             LambdaUpdateWrapper<MemberAddress> lambdaUpdateWrapper = Wrappers.lambdaUpdate();
             lambdaUpdateWrapper.set(MemberAddress::getIsDefault, false);
             lambdaUpdateWrapper.eq(MemberAddress::getMemberId, memberAddress.getMemberId());

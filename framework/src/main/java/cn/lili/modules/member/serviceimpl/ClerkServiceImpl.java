@@ -212,7 +212,7 @@ public class ClerkServiceImpl extends ServiceImpl<ClerkMapper, Clerk> implements
         Clerk clerk = new Clerk(clerkAddDTO);
         clerk.setShopkeeper(clerkAddDTO.getShopkeeper());
         clerk.setIsSuper(clerkAddDTO.getIsSuper());
-        //校验此会员是否已经是店员
+        //校验此客户是否已经是店员
         Clerk temp = this.getClerkByMemberId(clerkAddDTO.getMemberId());
 
         //店员信息不为空
@@ -236,7 +236,7 @@ public class ClerkServiceImpl extends ServiceImpl<ClerkMapper, Clerk> implements
 
         this.save(clerk);
 
-        //判断用户角色权限不为超级会员且权限路径不为空
+        //判断用户角色权限不为超级客户且权限路径不为空
         if (Boolean.FALSE.equals(clerkAddDTO.getIsSuper()) && clerkAddDTO.getRoles() != null) {
             //添加店员用户角色
             List<StoreClerkRole> storeClerkRoleList = new ArrayList<>();
@@ -264,7 +264,7 @@ public class ClerkServiceImpl extends ServiceImpl<ClerkMapper, Clerk> implements
         if (clerks.size() != ids.size()) {
             throw new ServiceException(ResultCode.USER_AUTHORITY_ERROR);
         }
-        //店员密码就是会员密码所以要组织会员修改密码参数信息
+        //店员密码就是客户密码所以要组织客户修改密码参数信息
         List<String> memberIds = new ArrayList<>();
         clerks.forEach(clerk -> {
             //如果是店主无法重置密码
@@ -290,7 +290,7 @@ public class ClerkServiceImpl extends ServiceImpl<ClerkMapper, Clerk> implements
             }
             //删除店员
             this.removeByIds(ids);
-            //更改会员为为拥有店铺
+            //更改客户为为拥有店铺
             List<String> memberIds = new ArrayList<>();
             clerks.forEach(clerk -> {
                 //无法删除当前登录的店员
@@ -309,18 +309,18 @@ public class ClerkServiceImpl extends ServiceImpl<ClerkMapper, Clerk> implements
 
     @Override
     public Member checkClerk(String mobile) {
-        //校验是否已经是会员
+        //校验是否已经是客户
         Member member = memberService.findByMobile(mobile);
         if (member != null) {
-            //校验要添加的会员是否已经是店主
+            //校验要添加的客户是否已经是店主
             if (Boolean.TRUE.equals(member.getHaveStore())) {
                 throw new ServiceException(ResultCode.STORE_APPLY_DOUBLE_ERROR);
             }
-            //校验会员的有效性
+            //校验客户的有效性
             if (Boolean.FALSE.equals(member.getDisabled())) {
                 throw new ServiceException(ResultCode.USER_STATUS_ERROR);
             }
-            //校验此会员是否已经是店员
+            //校验此客户是否已经是店员
             Clerk clerk = this.getClerkByMemberId(member.getId());
             if (clerk != null && !clerk.getStoreId().equals(UserContext.getCurrentUser().getStoreId())) {
                 throw new ServiceException(ResultCode.CLERK_USER_ERROR);

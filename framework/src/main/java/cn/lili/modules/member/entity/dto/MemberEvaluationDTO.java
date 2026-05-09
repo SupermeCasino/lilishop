@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * 会员评价DTO
+ * 客户评价DTO
  *
  * @author Chopper
  * @since 2020/11/29 11:13 下午

@@ -66,10 +66,10 @@ public class Receipt extends BaseEntity {
     @Schema(description = "发票金额")
     private Double receiptPrice;
 
-    @Schema(description = "会员ID")
+    @Schema(description = "客户ID")
     private String memberId;
 
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
 
     @Schema(description = "商家ID")

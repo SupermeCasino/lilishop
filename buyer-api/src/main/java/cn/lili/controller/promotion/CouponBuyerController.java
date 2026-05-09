@@ -56,7 +56,7 @@ public class CouponBuyerController {
     private CouponActivityService couponActivityService;
 
     /**
-     * 会员优惠券
+     * 客户优惠券
      */
     @Autowired
     private MemberCouponService memberCouponService;
@@ -91,7 +91,7 @@ public class CouponBuyerController {
         return ResultUtil.data(canUseCoupons);
     }
 
-    @Operation(summary = "获取当前会员的优惠券列表")
+    @Operation(summary = "获取当前客户的优惠券列表")
     @GetMapping("/getCoupons")
     public ResultMessage<IPage<MemberCoupon>> getCoupons(MemberCouponSearchParams param, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -99,7 +99,7 @@ public class CouponBuyerController {
         return ResultUtil.data(memberCouponService.getMemberCoupons(param, pageVo));
     }
 
-    @Operation(summary = "获取当前会员的对于当前商品可使用的优惠券列表")
+    @Operation(summary = "获取当前客户的对于当前商品可使用的优惠券列表")
     @GetMapping("/canUse")
     public ResultMessage<IPage<MemberCoupon>> getCouponsByCanUse(MemberCouponSearchParams param, Double totalPrice, PageVO pageVo) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
@@ -107,13 +107,13 @@ public class CouponBuyerController {
         return ResultUtil.data(memberCouponService.getMemberCouponsByCanUse(param, totalPrice, pageVo));
     }
 
-    @Operation(summary = "获取当前会员可使用的优惠券数量")
+    @Operation(summary = "获取当前客户可使用的优惠券数量")
     @GetMapping("/getCouponsNum")
     public ResultMessage<Object> getMemberCouponsNum() {
         return ResultUtil.data(memberCouponService.getMemberCouponsNum());
     }
 
-    @Operation(summary = "会员领取优惠券")
+    @Operation(summary = "客户领取优惠券")
     @Parameters({
             @Parameter(name = "couponId", description = "优惠券ID", required = true)
     })

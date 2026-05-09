@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 会员搜索VO
+ * 客户搜索VO
  *
  * @author Bulbasaur
  * @since 2020/12/15 10:48
@@ -16,7 +16,7 @@ public class MemberSearchVO {
     @Schema(description = "ID")
     private String id;
 
-    @Schema(description = "会员分组ID")
+    @Schema(description = "客户分组ID")
     private String groupId;
 
     @Schema(description = "用户名")
@@ -37,6 +37,6 @@ public class MemberSearchVO {
     /**
      * @see SwitchEnum
      */
-    @Schema(description = "会员状态")
+    @Schema(description = "客户状态")
     private String disabled;
 }

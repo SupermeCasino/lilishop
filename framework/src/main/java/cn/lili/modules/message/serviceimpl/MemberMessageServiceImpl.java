@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 会员接收消息业务层实现
+ * 客户接收消息业务层实现
  *
  * @author Chopper
  * @since 2020/11/17 3:48 下午
@@ -32,7 +32,7 @@ public class MemberMessageServiceImpl extends ServiceImpl<MemberMessageMapper, M
         queryWrapper.eq(StringUtils.isNotEmpty(memberMessageQueryVO.getMessageId()), "message_id", memberMessageQueryVO.getMessageId());
         //消息标题
         queryWrapper.like(StringUtils.isNotEmpty(memberMessageQueryVO.getTitle()), "title", memberMessageQueryVO.getTitle());
-        //会员id
+        //客户id
         queryWrapper.eq(StringUtils.isNotEmpty(memberMessageQueryVO.getMemberId()), "member_id", memberMessageQueryVO.getMemberId());
         //消息状态
         queryWrapper.eq(StringUtils.isNotEmpty(memberMessageQueryVO.getStatus()), "status", memberMessageQueryVO.getStatus());

@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 买家端,会员积分历史接口
+ * 买家端,客户积分历史接口
  *
  * @author Bulbasaur
  * @since 2020-02-25 14:10:16
  */
 @RestController
-@Tag(name = "买家端,会员积分历史接口")
+@Tag(name = "买家端,客户积分历史接口")
 @RequestMapping("/buyer/member/memberPointsHistory")
 public class PointsHistoryBuyerController {
     @Autowired
@@ -42,7 +42,7 @@ public class PointsHistoryBuyerController {
         return ResultUtil.data(memberPointsHistoryService.page(PageUtil.initPage(page), queryWrapper));
     }
 
-    @Operation(summary = "获取会员积分VO")
+    @Operation(summary = "获取客户积分VO")
     @GetMapping("/getMemberPointsHistoryVO")
     public ResultMessage<MemberPointsHistoryVO> getMemberPointsHistoryVO() {
         return ResultUtil.data(memberPointsHistoryService.getMemberPointsHistoryVO(UserContext.getCurrentUser().getId()));

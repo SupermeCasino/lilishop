@@ -39,7 +39,7 @@ public class Feedback extends BaseIdEntity {
     @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
-    @Schema(description = "会员名称", hidden = true)
+    @Schema(description = "客户名称", hidden = true)
     private String userName;
 
     @Schema(description = "反馈内容")

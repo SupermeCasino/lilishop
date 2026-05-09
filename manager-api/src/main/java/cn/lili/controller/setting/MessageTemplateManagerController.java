@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 会员消息模板聚合分页（站内信 + 微信分表，scene_code 关联）。
+ * 客户消息模板聚合分页（站内信 + 微信分表，scene_code 关联）。
  */
 @RestController
 @Tag(name = "管理端,消息模板聚合")

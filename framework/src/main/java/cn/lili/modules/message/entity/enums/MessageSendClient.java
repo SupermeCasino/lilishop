@@ -9,7 +9,7 @@ package cn.lili.modules.message.entity.enums;
 public enum MessageSendClient {
 
     //全部用户
-    MEMBER("会员"),
+    MEMBER("客户"),
     //指定用户
     STORE("店铺");
 

@@ -8,14 +8,14 @@ import lombok.EqualsAndHashCode;
 
 
 /**
- * 会员消息
+ * 客户消息
  *
  * @author Chopper
  * @since 2020-02-25 14:10:16
  */
 @Data
 @TableName("li_member_notice_senter")
-@Schema(description = "会员消息")
+@Schema(description = "客户消息")
 @EqualsAndHashCode(callSuper = false)
 public class MemberNoticeSenter extends BaseEntity {
     /**
@@ -29,14 +29,14 @@ public class MemberNoticeSenter extends BaseEntity {
     @Schema(description = "消息内容")
     private String content;
     /**
-     * 会员id
+     * 客户id
      */
-    @Schema(description = "会员id")
+    @Schema(description = "客户id")
     private String memberIds;
     /**
      * 发送类型
      */
-    @Schema(description = "发送类型,ALL 全站，SELECT 指定会员")
+    @Schema(description = "发送类型,ALL 全站，SELECT 指定客户")
     private String sendType;
 
 }

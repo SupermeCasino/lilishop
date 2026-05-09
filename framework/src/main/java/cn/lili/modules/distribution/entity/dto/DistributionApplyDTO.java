@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 public class DistributionApplyDTO {
 
     @NotBlank(message = "姓名不能为空")
-    @Schema(description = "会员姓名")
+    @Schema(description = "客户姓名")
     private String name;
 
     @NotBlank(message = "身份证号不能为空")

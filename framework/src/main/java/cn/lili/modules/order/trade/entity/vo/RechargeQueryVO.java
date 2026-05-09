@@ -29,14 +29,14 @@ public class RechargeQueryVO implements Serializable {
     private String rechargeSn;
 
     /**
-     * 会员ID
+     * 客户ID
      */
-    @Schema(description = "会员Id")
+    @Schema(description = "客户Id")
     private String memberId;
     /**
-     * 会员名称
+     * 客户名称
      */
-    @Schema(description = "会员名称")
+    @Schema(description = "客户名称")
     private String memberName;
     /**
      * 充值时间

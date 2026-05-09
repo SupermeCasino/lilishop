@@ -107,7 +107,7 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
     private ReceiptService receiptService;
 
     /**
-     * 会员优惠券
+     * 客户优惠券
      */
     @Autowired
     private MemberCouponService memberCouponService;
@@ -119,7 +119,7 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
     private StoreMessageService storeMessageService;
 
     /**
-     * 会员评价
+     * 客户评价
      */
     @Autowired
     private MemberEvaluationService memberEvaluationService;
@@ -153,7 +153,7 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
                 .eq("store_id", store.getId())
                 .set("store_name", store.getStoreName());
 
-        //修改会员优惠券中店铺名称
+        //修改客户优惠券中店铺名称
         memberCouponService.update(updateWrapper);
         //修改优惠券活动中店铺名称
         couponActivityService.update(updateWrapper);
@@ -185,7 +185,7 @@ public class StoreChangeEvent implements StoreSettingChangeEvent {
         orderComplaintService.update(updateWrapper);
         //修改店铺消息中的店铺名称
         storeMessageService.update(updateWrapper);
-        //修改会员评价中店铺名称
+        //修改客户评价中店铺名称
         memberEvaluationService.update(updateWrapper);
         //修改结算单中店铺名称
         billService.update(updateWrapper);

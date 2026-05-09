@@ -4,7 +4,7 @@ import cn.lili.modules.promotion.entity.dos.MemberCouponSign;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * 会员优惠券领取标记
+ * 客户优惠券领取标记
  *
  * @author liushuai(liushuai711 @ gmail.com)
  * @version v4.0

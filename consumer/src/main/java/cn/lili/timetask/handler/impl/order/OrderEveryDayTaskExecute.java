@@ -62,7 +62,7 @@ public class OrderEveryDayTaskExecute implements EveryDayExecute {
     @Autowired
     private SettingService settingService;
     /**
-     * 会员评价
+     * 客户评价
      */
     @Autowired
     private MemberEvaluationService memberEvaluationService;
