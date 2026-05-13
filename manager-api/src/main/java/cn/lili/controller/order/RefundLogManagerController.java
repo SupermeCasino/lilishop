@@ -6,7 +6,6 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.payment.entity.RefundLog;
 import cn.lili.modules.payment.service.RefundLogService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,7 +42,7 @@ public class RefundLogManagerController {
     @Parameter(name = "page", description = "分页参数")
     @GetMapping
     public ResultMessage<IPage<RefundLog>> getByPage(RefundLog entity, SearchVO searchVo, PageVO page) {
-        return ResultUtil.data(refundLogService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo)));
+        return ResultUtil.data(refundLogService.getByPage(entity, searchVo, page));
     }
 
 }

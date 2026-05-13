@@ -12,6 +12,8 @@ import cn.lili.modules.member.entity.dto.MemberEditDTO;
 import cn.lili.modules.member.entity.enums.QRCodeLoginSessionStatusEnum;
 import cn.lili.modules.member.entity.vo.QRLoginResultVo;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.member.service.MemberShareRegisterService;
+import cn.lili.modules.member.service.MemberShareLogService;
 import cn.lili.modules.sms.SmsUtil;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
@@ -49,6 +51,10 @@ public class MemberBuyerController {
     private SmsUtil smsUtil;
     @Autowired
     private VerificationService verificationService;
+    @Autowired
+    private MemberShareLogService memberShareLogService;
+    @Autowired
+    private MemberShareRegisterService memberShareRegisterService;
 
 
     @Operation(summary = "web-获取登录二维码")
@@ -195,17 +201,19 @@ public class MemberBuyerController {
     @Parameters({
             @Parameter(name = "username", description = "用户名", required = true),
             @Parameter(name = "password", description = "密码", required = true),
-            @Parameter(name = "mobilePhone", description = "手机号", required = true)
+            @Parameter(name = "mobilePhone", description = "手机号", required = true),
+            @Parameter(name = "shareCode", description = "分享码", required = false)
     })
     @PostMapping("/register")
     public ResultMessage<Object> register(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                           @NotNull(message = "密码不能为空") @RequestParam String password,
                                           @NotNull(message = "手机号为空") @RequestParam String mobilePhone,
                                           @RequestHeader String uuid,
-                                          @NotNull(message = "验证码不能为空") @RequestParam String code) {
+                                          @NotNull(message = "验证码不能为空") @RequestParam String code,
+                                          @RequestParam(required = false) String shareCode) {
 
         if (smsUtil.verifyCode(mobilePhone, VerificationEnums.REGISTER, uuid, code)) {
-            return ResultUtil.data(memberService.register(username, password, mobilePhone));
+            return ResultUtil.data(memberService.register(username, password, mobilePhone, shareCode));
         } else {
             throw new ServiceException(ResultCode.VERIFICATION_SMS_CHECKED_ERROR);
         }
@@ -312,6 +320,27 @@ public class MemberBuyerController {
     @Operation(summary = "获取用户信息")
     public ResultMessage<Member> getImUserDetail(@PathVariable String memberId) {
         return ResultUtil.data(memberService.getById(memberId));
+    }
+
+    @Operation(summary = "分享商城页面赠送经验值")
+    @PostMapping("/share/mall")
+    public ResultMessage<Object> shareMall() {
+        AuthUser currentUser = UserContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new ServiceException(ResultCode.USER_NOT_LOGIN);
+        }
+        memberShareLogService.saveShareAndGrantExperience(currentUser.getId(), "MALL", "MALL_HOME", null);
+        return ResultUtil.success();
+    }
+
+    @Operation(summary = "获取分享注册码")
+    @GetMapping("/share/register/code")
+    public ResultMessage<String> getRegisterShareCode() {
+        AuthUser currentUser = UserContext.getCurrentUser();
+        if (currentUser == null) {
+            throw new ServiceException(ResultCode.USER_NOT_LOGIN);
+        }
+        return ResultUtil.data(memberShareRegisterService.getOrCreateRegisterShareCode(currentUser.getId()));
     }
 
 }

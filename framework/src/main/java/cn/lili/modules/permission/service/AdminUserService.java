@@ -1,6 +1,8 @@
 package cn.lili.modules.permission.service;
 
 
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.security.token.Token;
 import cn.lili.modules.permission.entity.dos.AdminUser;
@@ -32,6 +34,16 @@ public interface AdminUserService extends IService<AdminUser> {
      * @return
      */
     IPage<AdminUserVO> adminUserPage(Page initPage, QueryWrapper<AdminUser> initWrapper);
+
+    /**
+     * 多条件分页获取用户列表（由 service 内部构造查询条件）
+     *
+     * @param adminUserDTO 查询参数
+     * @param searchVO 查询条件
+     * @param pageVO 分页参数
+     * @return 分页结果
+     */
+    IPage<AdminUserVO> adminUserPage(AdminUserDTO adminUserDTO, SearchVO searchVO, PageVO pageVO);
 
     /**
      * 通过用户名获取用户

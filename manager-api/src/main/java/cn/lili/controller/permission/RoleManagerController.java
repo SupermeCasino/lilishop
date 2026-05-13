@@ -1,6 +1,5 @@
 package cn.lili.controller.permission;
 
-import cn.lili.mybatis.util.PageUtil;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
@@ -41,7 +40,7 @@ public class RoleManagerController {
     @Parameter(name = "pageVo", description = "分页参数")
     @Parameter(name = "role", description = "查询参数")
     public ResultMessage<Page> add(PageVO pageVo, Role role) {
-        Page page = roleService.page(PageUtil.initPage(pageVo), PageUtil.initWrapper(role));
+        Page page = roleService.getRolePage(pageVo, role);
         return ResultUtil.data(page);
     }
 

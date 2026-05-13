@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 买家端,app/小程序 联合登录
+ * 买家端,第三方账户绑定
  *
  * @author Chopper
  * @since 2020-11-25 19:29
  */
 @RestController
-@Tag(name = "买家端,app/小程序 联合登录")
+@Tag(name = "买家端,第三方账户绑定")
 @RequestMapping("/buyer/passport/connect/bind")
 public class ConnectBuyerBindController {
 

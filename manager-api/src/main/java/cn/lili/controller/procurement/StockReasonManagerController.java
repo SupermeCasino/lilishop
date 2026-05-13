@@ -5,9 +5,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.procurement.entity.dos.StockReason;
 import cn.lili.modules.procurement.service.StockReasonService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,16 +40,7 @@ public class StockReasonManagerController {
     public ResultMessage<IPage<StockReason>> page(@RequestParam(required = false) String reason,
                                                  @RequestParam(required = false) String category,
                                                  PageVO pageVO) {
-        Page<StockReason> page = new Page<>(pageVO.getPageNumber(), pageVO.getPageSize());
-        LambdaQueryWrapper<StockReason> wrapper = new LambdaQueryWrapper<>();
-        if (reason != null && !reason.isEmpty()) {
-            wrapper.like(StockReason::getReason, reason);
-        }
-        if (category != null && !category.isEmpty()) {
-            wrapper.eq(StockReason::getCategory, category);
-        }
-        wrapper.orderByDesc(StockReason::getCreateTime);
-        return ResultUtil.data(stockReasonService.page(page, wrapper));
+        return ResultUtil.data(stockReasonService.page(reason, category, pageVO));
     }
 
     @Operation(summary = "添加出入库原因")

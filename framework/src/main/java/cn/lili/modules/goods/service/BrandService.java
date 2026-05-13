@@ -74,4 +74,11 @@ public interface BrandService extends IService<Brand> {
      */
     boolean brandDisable(String brandId, boolean disable);
 
+    /**
+     * 获取未删除的品牌列表
+     *
+     * @return 品牌列表
+     */
+    List<Brand> listNotDeleted();
+
 }

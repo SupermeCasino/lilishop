@@ -162,6 +162,16 @@ public class CouponServiceImpl extends AbstractPromotionsServiceImpl<CouponMappe
         return couponVO;
     }
 
+    @Override
+    public List<String> filterCouponIdsByStoreId(List<String> couponIds, String storeId) {
+        if (couponIds == null || couponIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return this.list(new LambdaQueryWrapper<Coupon>()
+                .in(Coupon::getId, couponIds)
+                .eq(Coupon::getStoreId, storeId)).stream().map(Coupon::getId).collect(Collectors.toList());
+    }
+
     /**
      * 更新促销状态
      * 如果要更新促销状态为关闭，startTime和endTime置为空即可

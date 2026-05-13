@@ -10,7 +10,6 @@ import cn.lili.modules.promotion.entity.dos.CouponActivityItem;
 import cn.lili.modules.promotion.entity.dto.CouponActivityDTO;
 import cn.lili.modules.promotion.entity.vos.CouponActivityVO;
 import cn.lili.modules.promotion.service.CouponActivityService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +38,7 @@ public class CouponActivityManagerController {
     @Parameter(name = "couponActivity", description = "查询参数", required = true)
     @GetMapping
     public ResultMessage<IPage<CouponActivity>> getCouponActivityPage(PageVO page, CouponActivity couponActivity) {
-        return ResultUtil.data(couponActivityService.page(PageUtil.initPage(page), PageUtil.initWrapper(couponActivity)));
+        return ResultUtil.data(couponActivityService.getByPage(page, couponActivity));
     }
 
     @Operation(description = "获取优惠券活动")

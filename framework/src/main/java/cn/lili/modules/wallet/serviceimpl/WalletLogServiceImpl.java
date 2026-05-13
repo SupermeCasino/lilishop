@@ -40,4 +40,10 @@ public class WalletLogServiceImpl extends ServiceImpl<WalletLogMapper, WalletLog
         //查询返回数据
         return this.page(PageUtil.initPage(page), depositLogQueryWrapper);
     }
+
+    @Override
+    public IPage<WalletLog> memberWalletLogPage(String memberId, PageVO pageVO) {
+        return this.page(PageUtil.initPage(pageVO),
+                new QueryWrapper<WalletLog>().eq("member_id", memberId).orderByDesc("create_time"));
+    }
 }

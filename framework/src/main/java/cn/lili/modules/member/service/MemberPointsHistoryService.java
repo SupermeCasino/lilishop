@@ -33,6 +33,14 @@ public interface MemberPointsHistoryService extends IService<MemberPointsHistory
      */
     IPage<MemberPointsHistory> MemberPointsHistoryList(PageVO page, String memberId, String memberName);
 
+    /**
+     * 分页查询指定会员的积分变更记录（按创建时间倒序）。
+     *
+     * @param memberId 会员ID
+     * @param pageVO   分页参数
+     * @return 积分历史分页
+     */
+    IPage<MemberPointsHistory> pageByMemberId(String memberId, PageVO pageVO);
 
     MemberPointsStatisticsVO queryMemberPointsStatistics();
 

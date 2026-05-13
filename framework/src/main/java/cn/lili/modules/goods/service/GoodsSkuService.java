@@ -126,6 +126,24 @@ public interface GoodsSkuService extends IService<GoodsSku> {
     List<GoodsSku> getGoodsSkuListByGoodsId(String goodsId);
 
     /**
+     * 查询指定店铺下的 SKU 列表（按 SKU ID 集合过滤）。
+     *
+     * @param skuIds  SKU ID集合
+     * @param storeId 店铺ID
+     * @return SKU 列表
+     */
+    List<GoodsSku> listByIdsAndStoreId(List<String> skuIds, String storeId);
+
+    /**
+     * 查询指定商品在指定店铺下的 SKU 列表。
+     *
+     * @param goodsId 商品ID
+     * @param storeId 店铺ID
+     * @return SKU 列表
+     */
+    List<GoodsSku> listByGoodsIdAndStoreId(String goodsId, String storeId);
+
+    /**
      * 根据goodsSku组装goodsSkuVO
      *
      * @param list 商品id

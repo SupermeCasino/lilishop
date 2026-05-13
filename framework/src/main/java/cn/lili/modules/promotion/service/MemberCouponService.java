@@ -170,4 +170,13 @@ public interface MemberCouponService extends IService<MemberCoupon> {
      */
     long getMemberCouponNum(String memberId, String couponId);
 
+    /**
+     * 按优惠券ID分页查询客户领取记录
+     *
+     * @param couponId 优惠券ID
+     * @param pageVO 分页参数
+     * @return 分页结果
+     */
+    IPage<MemberCoupon> pageByCouponId(String couponId, PageVO pageVO);
+
 }

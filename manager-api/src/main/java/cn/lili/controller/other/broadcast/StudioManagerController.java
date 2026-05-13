@@ -5,10 +5,8 @@ import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.goods.entity.dos.Studio;
 import cn.lili.modules.goods.entity.vos.StudioVO;
 import cn.lili.modules.goods.service.StudioService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,9 +50,7 @@ public class StudioManagerController {
     @Parameter(name = "recommend", description = "是否推荐", required = true)
     @PutMapping("/recommend/{id}")
     public ResultMessage<Object> recommend(@PathVariable String id, @NotNull boolean recommend) {
-        if (studioService.update(new UpdateWrapper<Studio>()
-                .eq("id", id)
-                .set("recommend", recommend))) {
+        if (studioService.updateRecommend(id, recommend)) {
             return ResultUtil.success();
         }
         throw new ServiceException(ResultCode.ERROR);

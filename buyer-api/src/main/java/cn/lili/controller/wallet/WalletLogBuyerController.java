@@ -7,8 +7,6 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.wallet.entity.dos.WalletLog;
 import cn.lili.modules.wallet.service.WalletLogService;
-import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +36,6 @@ public class WalletLogBuyerController {
     public ResultMessage<IPage<WalletLog>> getByPage(PageVO page) {
         //获取当前登录用户
         AuthUser authUser = UserContext.getCurrentUser();
-        //构建查询 返回数据
-        IPage<WalletLog> depositLogPage = walletLogService.page(PageUtil.initPage(page),
-                new QueryWrapper<WalletLog>().eq("member_id", authUser.getId()).orderByDesc("create_time"));
-        return ResultUtil.data(depositLogPage);
+        return ResultUtil.data(walletLogService.memberWalletLogPage(authUser.getId(), page));
     }
 }

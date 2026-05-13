@@ -7,7 +7,6 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.wechat.entity.dos.WechatMPMessage;
 import cn.lili.modules.wechat.service.WechatMPMessageService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,7 +56,7 @@ public class WechatMPMessageManagerController {
     public ResultMessage<IPage<WechatMPMessage>> getByPage(WechatMPMessage entity,
                                                            SearchVO searchVo,
                                                            PageVO page) {
-        IPage<WechatMPMessage> data = wechatMPMessageService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo));
+        IPage<WechatMPMessage> data = wechatMPMessageService.getByPage(entity, searchVo, page);
         return new ResultUtil<IPage<WechatMPMessage>>().setData(data);
     }
 

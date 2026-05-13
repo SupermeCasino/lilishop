@@ -24,4 +24,13 @@ public interface WalletLogService extends IService<WalletLog> {
      */
     IPage<WalletLog> depositLogPage(PageVO page, DepositQueryVO depositQueryVO);
 
+    /**
+     * 分页获取客户预存款变动日志
+     *
+     * @param memberId 客户ID
+     * @param pageVO 分页参数
+     * @return 日志分页
+     */
+    IPage<WalletLog> memberWalletLogPage(String memberId, PageVO pageVO);
+
 }

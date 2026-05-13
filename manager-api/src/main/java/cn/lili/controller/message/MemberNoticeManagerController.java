@@ -7,14 +7,12 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.MemberNotice;
 import cn.lili.modules.member.service.MemberNoticeService;
 import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.Parameter;
 
 import java.util.List;
 
@@ -52,20 +50,14 @@ public class MemberNoticeManagerController {
     @Parameter(name = "ids", description = "客户站内信ID列表", required = true)
     @PostMapping("/read/{ids}")
     public ResultMessage<Object> read(@PathVariable List<String> ids) {
-        UpdateWrapper<MemberNotice> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", ids);
-        updateWrapper.set("is_read", true);
-        memberNoticeService.update(updateWrapper);
+        memberNoticeService.read(ids);
         return ResultUtil.success();
     }
 
     @Operation(summary = "阅读全部")
     @PostMapping("/read/all")
     public ResultMessage<Object> readAll() {
-        UpdateWrapper<MemberNotice> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("member_id", UserContext.getCurrentUser().getId());
-        updateWrapper.set("is_read", true);
-        memberNoticeService.update(updateWrapper);
+        memberNoticeService.readAll(UserContext.getCurrentUser().getId());
         return ResultUtil.success();
     }
 
@@ -80,9 +72,7 @@ public class MemberNoticeManagerController {
     @Operation(summary = "删除所有")
     @DeleteMapping
     public ResultMessage<Object> deleteAll() {
-        QueryWrapper<MemberNotice> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("member_id", UserContext.getCurrentUser().getId());
-        memberNoticeService.remove(queryWrapper);
+        memberNoticeService.removeAll(UserContext.getCurrentUser().getId());
         return ResultUtil.success();
     }
 

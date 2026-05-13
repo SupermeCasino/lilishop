@@ -28,6 +28,9 @@ public class MemberSearchVO {
     @Schema(description = "用户手机号码")
     private String mobile;
 
+    @Schema(description = "会员等级ID")
+    private String gradeId;
+
     @Schema(description = "最小积分值")
     private Long minPoint;
 

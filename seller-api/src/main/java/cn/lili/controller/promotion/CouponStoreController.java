@@ -16,7 +16,6 @@ import cn.lili.modules.promotion.entity.vos.MemberCouponVO;
 import cn.lili.modules.promotion.service.CouponService;
 import cn.lili.modules.promotion.service.MemberCouponService;
 import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 店铺端,优惠券接口
@@ -98,11 +96,7 @@ public class CouponStoreController {
     @Parameter(name = "ids", description = "优惠券ID列表", required = true)
     public ResultMessage<Object> delAllByIds(@PathVariable List<String> ids) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        LambdaQueryWrapper<Coupon> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(Coupon::getId, ids);
-        queryWrapper.eq(Coupon::getStoreId, storeId);
-        List<Coupon> list = couponService.list(queryWrapper);
-        List<String> filterIds = list.stream().map(Coupon::getId).collect(Collectors.toList());
+        List<String> filterIds = couponService.filterCouponIdsByStoreId(ids, storeId);
         return couponService.removePromotions(filterIds) ? ResultUtil.success() : ResultUtil.error(ResultCode.COUPON_DELETE_ERROR);
     }
 
@@ -125,7 +119,7 @@ public class CouponStoreController {
     public ResultMessage<Object> updateCouponStatus(String couponIds, Long startTime, Long endTime) {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         String[] split = couponIds.split(",");
-        List<String> couponIdList = couponService.list(new LambdaQueryWrapper<Coupon>().in(Coupon::getId, Arrays.asList(split)).eq(Coupon::getStoreId, currentUser.getStoreId())).stream().map(Coupon::getId).collect(Collectors.toList());
+        List<String> couponIdList = couponService.filterCouponIdsByStoreId(Arrays.asList(split), currentUser.getStoreId());
         if (couponService.updateStatus(couponIdList, startTime, endTime)) {
             return ResultUtil.success(ResultCode.COUPON_EDIT_STATUS_SUCCESS);
         }

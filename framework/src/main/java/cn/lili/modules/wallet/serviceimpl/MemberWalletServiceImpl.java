@@ -234,6 +234,14 @@ public class MemberWalletServiceImpl extends ServiceImpl<MemberWalletMapper, Mem
     }
 
     @Override
+    public MemberWallet getMemberWalletDO(String memberId) {
+        if (StringUtils.isEmpty(memberId)) {
+            return null;
+        }
+        return this.getOne(new QueryWrapper<MemberWallet>().eq("member_id", memberId), false);
+    }
+
+    @Override
     public MemberWallet save(String memberId, String memberName) {
         //获取客户预存款信息
         MemberWallet memberWallet = this.getOne(new QueryWrapper<MemberWallet>().eq("member_id", memberId));

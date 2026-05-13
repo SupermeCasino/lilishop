@@ -6,7 +6,6 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.member.entity.dos.MemberNoticeSenter;
 import cn.lili.modules.member.service.MemberNoticeSenterService;
-import cn.lili.mybatis.util.PageUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -54,8 +53,7 @@ public class MemberNoticeSenterManagerController {
     public ResultMessage<IPage<MemberNoticeSenter>> getByPage(MemberNoticeSenter entity,
                                                               SearchVO searchVo,
                                                               PageVO page) {
-        IPage<MemberNoticeSenter> data = memberNoticeSenterService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo));
-        return ResultUtil.data(data);
+        return ResultUtil.data(memberNoticeSenterService.getByPage(entity, searchVo, page));
     }
 
     @Operation(summary = "编辑或更新数据")

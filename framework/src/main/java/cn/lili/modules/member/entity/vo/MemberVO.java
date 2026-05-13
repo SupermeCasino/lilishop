@@ -90,6 +90,9 @@ public class MemberVO implements Serializable {
     @Schema(description = "客户等级ID")
     private String gradeId;
 
+    @Schema(description = "客户等级名称")
+    private String gradeName;
+
     @Schema(description = "经验值数量")
     private Long experience;
 

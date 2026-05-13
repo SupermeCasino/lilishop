@@ -6,7 +6,6 @@ import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.permission.entity.dos.Department;
 import cn.lili.modules.permission.entity.vo.DepartmentVO;
 import cn.lili.modules.permission.service.DepartmentService;
-import cn.lili.mybatis.util.PageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,7 +43,7 @@ public class DepartmentManagerController {
     @GetMapping
     public ResultMessage<List<DepartmentVO>> getByPage(Department entity,
                                                        SearchVO searchVo) {
-        return ResultUtil.data(departmentService.tree(PageUtil.initWrapper(entity, searchVo)));
+        return ResultUtil.data(departmentService.tree(entity, searchVo));
 
     }
 

@@ -5,12 +5,10 @@ import cn.lili.common.security.OperationalJudgment;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.distribution.entity.dos.DistributionGoods;
-import cn.lili.modules.distribution.entity.dos.DistributionSelectedGoods;
 import cn.lili.modules.distribution.entity.dto.DistributionGoodsSearchParams;
 import cn.lili.modules.distribution.entity.vos.DistributionGoodsVO;
 import cn.lili.modules.distribution.service.DistributionGoodsService;
 import cn.lili.modules.distribution.service.DistributionSelectedGoodsService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,7 +65,7 @@ public class DistributionGoodsStoreController {
     public ResultMessage<Object> cancel(@NotNull @PathVariable String id) {
         OperationalJudgment.judgment(distributionGoodsService.getById(id));
         //清除分销商已选择分销商品
-        distributionSelectedGoodsService.remove(new QueryWrapper<DistributionSelectedGoods>().eq("distribution_goods_id", id));
+        distributionSelectedGoodsService.deleteByDistributionGoodsId(id);
         //清除分销商品
         distributionGoodsService.removeById(id);
         return ResultUtil.success();

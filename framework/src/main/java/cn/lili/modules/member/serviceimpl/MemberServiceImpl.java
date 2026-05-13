@@ -33,6 +33,7 @@ import cn.lili.modules.member.entity.vo.QRCodeLoginSessionVo;
 import cn.lili.modules.member.entity.vo.QRLoginResultVo;
 import cn.lili.modules.member.mapper.MemberMapper;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.member.service.MemberShareRegisterService;
 import cn.lili.modules.member.token.MemberTokenGenerate;
 import cn.lili.modules.member.token.StoreTokenGenerate;
 import cn.lili.modules.store.entity.dos.Store;
@@ -110,6 +111,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
      */
     @Autowired
     private Cache cache;
+    @Autowired
+    @Lazy
+    private MemberShareRegisterService memberShareRegisterService;
 
     @Override
     public Member findByUsername(String userName) {
@@ -418,12 +422,20 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Override
     @Transactional
     public Token register(String userName, String password, String mobilePhone) {
+        return register(userName, password, mobilePhone, null);
+    }
+
+    @Override
+    @Transactional
+    public Token register(String userName, String password, String mobilePhone, String shareCode) {
         //检测客户信息
         checkMember(userName, mobilePhone);
         //设置客户信息
         Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
         //注册成功后用户自动登录
         registerHandler(member);
+        // 绑定分享注册来源（仅当分享码有效时生效）
+        memberShareRegisterService.bindRegisterSource(member.getId(), shareCode);
         return memberTokenGenerate.createToken(member, false);
     }
 
@@ -510,6 +522,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getNickName()), "m.nick_name", memberSearchVO.getNickName());
         //按照电话号码查询
         queryWrapper.like(CharSequenceUtil.isNotBlank(memberSearchVO.getMobile()), "m.mobile", memberSearchVO.getMobile());
+        //按会员等级筛选
+        queryWrapper.eq(CharSequenceUtil.isNotBlank(memberSearchVO.getGradeId()), "m.grade_id", memberSearchVO.getGradeId());
         //按照积分范围查询
         queryWrapper.ge(memberSearchVO.getMinPoint() != null, "m.point", memberSearchVO.getMinPoint());
         queryWrapper.le(memberSearchVO.getMaxPoint() != null, "m.point", memberSearchVO.getMaxPoint());
@@ -777,7 +791,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     @Override
     public MemberVO getMember(String id) {
-        return new MemberVO(this.getById(id));
+        return this.baseMapper.getMemberVOById(id);
     }
 
     @Override

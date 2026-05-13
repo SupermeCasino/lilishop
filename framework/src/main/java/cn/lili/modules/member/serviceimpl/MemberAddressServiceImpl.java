@@ -4,15 +4,18 @@ import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.vo.PageVO;
+import cn.lili.modules.member.entity.enums.ExperienceRuleEnum;
 import cn.lili.modules.member.entity.dos.MemberAddress;
 import cn.lili.modules.member.mapper.MemberAddressMapper;
 import cn.lili.modules.member.service.MemberAddressService;
+import cn.lili.modules.member.service.MemberExperienceService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,9 @@ import java.util.Objects;
  */
 @Service
 public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, MemberAddress> implements MemberAddressService {
+
+    @Autowired
+    private MemberExperienceService memberExperienceService;
 
     @Override
     public IPage<MemberAddress> getAddressByMember(PageVO page, String memberId) {
@@ -68,6 +74,7 @@ public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, M
         removeDefaultAddress(memberAddress);
         //添加客户地址
         this.save(memberAddress);
+        memberExperienceService.grantExperience(memberAddress.getMemberId(), ExperienceRuleEnum.ADD_ADDRESS, memberAddress.getId(), "添加收货地址赠送经验值");
 
         return memberAddress;
     }

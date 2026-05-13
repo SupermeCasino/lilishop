@@ -104,4 +104,12 @@ public interface MemberWalletService extends IService<MemberWallet> {
      */
     void withdrawal(String withdrawApplyId);
 
+    /**
+     * 根据客户ID获取钱包DO
+     *
+     * @param memberId 客户ID
+     * @return 钱包信息（若不存在返回 null）
+     */
+    MemberWallet getMemberWalletDO(String memberId);
+
 }

@@ -216,6 +216,29 @@ public class PageDataServiceImpl extends ServiceImpl<PageDataMapper, PageData> i
     }
 
     @Override
+    public PageData getStorePageData(String storeId, String id) {
+        return this.getOne(new LambdaQueryWrapper<PageData>()
+                .eq(PageData::getPageType, PageEnum.STORE.name())
+                .eq(PageData::getNum, storeId)
+                .eq(PageData::getId, id));
+    }
+
+    @Override
+    public void checkStoreAuthority(String storeId, String id) {
+        PageData pageData = this.getStorePageData(storeId, id);
+        if (pageData == null) {
+            throw new ServiceException(ResultCode.USER_AUTHORITY_ERROR);
+        }
+    }
+
+    @Override
+    public PageData getSpecialByName(String name) {
+        return this.getOne(new LambdaQueryWrapper<PageData>()
+                .eq(PageData::getPageType, PageEnum.SPECIAL.name())
+                .eq(PageData::getName, name));
+    }
+
+    @Override
     public PageData getSpecial(String id) {
         return this.getById(id);
     }

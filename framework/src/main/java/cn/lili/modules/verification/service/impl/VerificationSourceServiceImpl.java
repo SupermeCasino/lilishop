@@ -1,11 +1,15 @@
 package cn.lili.modules.verification.service.impl;
 
 import cn.lili.cache.Cache;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.system.mapper.VerificationSourceMapper;
 import cn.lili.modules.verification.entity.dos.VerificationSource;
 import cn.lili.modules.verification.entity.dto.VerificationDTO;
 import cn.lili.modules.verification.entity.enums.VerificationSourceEnum;
 import cn.lili.modules.verification.service.VerificationSourceService;
+import cn.lili.mybatis.util.PageUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +60,10 @@ public class VerificationSourceServiceImpl extends ServiceImpl<VerificationSourc
             return initCache();
         }
         return verificationDTO;
+    }
+
+    @Override
+    public IPage<VerificationSource> getByPage(VerificationSource entity, SearchVO searchVO, PageVO pageVO) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(entity, searchVO));
     }
 }

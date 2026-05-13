@@ -8,6 +8,7 @@ import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.OperationalJudgment;
 import cn.lili.common.utils.SnowFlake;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.goods.entity.dto.GoodsSkuStockDTO;
 import cn.lili.modules.goods.entity.enums.GoodsStockTypeEnum;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
@@ -20,6 +21,9 @@ import cn.lili.modules.procurement.entity.enums.DamageReportStatusEnum;
 import cn.lili.modules.procurement.mapper.DamageReportMapper;
 import cn.lili.modules.procurement.service.DamageReportItemService;
 import cn.lili.modules.procurement.service.DamageReportService;
+import cn.lili.mybatis.util.PageUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -157,5 +161,21 @@ public class DamageReportServiceImpl extends ServiceImpl<DamageReportMapper, Dam
         report.setStatus(DamageReportStatusEnum.COMPLETED.name());
         this.updateById(report);
         return report;
+    }
+
+    @Override
+    public IPage<DamageReport> pageByCondition(PageVO pageVO, String storeId, String status, Date startDate, Date endDate) {
+        QueryWrapper<DamageReport> qw = new QueryWrapper<>();
+        if (storeId != null && !storeId.isEmpty()) {
+            qw.eq("store_id", storeId);
+        }
+        if (status != null && !status.isEmpty()) {
+            qw.eq("status", status);
+        }
+        if (startDate != null && endDate != null) {
+            qw.between("create_time", startDate, endDate);
+        }
+        qw.orderByDesc("create_time");
+        return this.page(PageUtil.initPage(pageVO), qw);
     }
 }

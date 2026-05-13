@@ -131,4 +131,19 @@ public interface StoreService extends IService<Store> {
      * @return
      */
     List<GoodsSku> getToMemberHistory(String memberId);
+
+    /**
+     * 获取启用中的店铺列表
+     *
+     * @return 店铺列表（store_disable=OPEN）
+     */
+    List<Store> listOpenStores();
+
+    /**
+     * 根据客户ID获取店铺信息
+     *
+     * @param memberId 客户ID
+     * @return 店铺信息（若不存在返回 null）
+     */
+    Store getStoreByMemberId(String memberId);
 }

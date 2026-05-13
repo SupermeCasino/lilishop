@@ -27,6 +27,13 @@ import java.util.List;
 @Service
 public class GoodsGroupGoodsServiceImpl extends ServiceImpl<GoodsGroupGoodsMapper, GoodsGroupGoods> implements GoodsGroupGoodsService {
 
+    @Override
+    public long countByGroupId(String groupId) {
+        QueryWrapper<GoodsGroupGoods> wrapper = new QueryWrapper<>();
+        wrapper.eq("group_id", groupId);
+        return this.count(wrapper);
+    }
+
     /**
      * 批量设置某分组下的商品关联关系。
      * <p>

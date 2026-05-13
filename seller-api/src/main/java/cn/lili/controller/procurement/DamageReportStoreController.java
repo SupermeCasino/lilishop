@@ -10,8 +10,6 @@ import cn.lili.modules.procurement.entity.dos.DamageReportItem;
 import cn.lili.modules.procurement.entity.dto.DamageReportCreateDTO;
 import cn.lili.modules.procurement.service.DamageReportItemService;
 import cn.lili.modules.procurement.service.DamageReportService;
-import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -104,14 +102,6 @@ public class DamageReportStoreController {
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(required = false) Date startDate,
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(required = false) Date endDate) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        QueryWrapper<DamageReport> qw = new QueryWrapper<>();
-        qw.eq("store_id", storeId);
-        if (status != null && !status.isEmpty()) {
-            qw.eq("status", status);
-        }
-        if (startDate != null && endDate != null) {
-            qw.between("create_time", startDate, endDate);
-        }
-        return ResultUtil.data(damageReportService.page(PageUtil.initPage(page), qw));
+        return ResultUtil.data(damageReportService.pageByCondition(page, storeId, status, startDate, endDate));
     }
 }

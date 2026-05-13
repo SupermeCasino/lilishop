@@ -75,6 +75,33 @@ public interface PageDataService extends IService<PageData> {
      */
     IPage<PageDataListVO> getPageDataList(PageVO pageVO, PageDataDTO pageDataDTO);
 
+    /**
+     * 获取店铺页面数据（仅查询店铺类型页面）。
+     *
+     * @param storeId 店铺ID
+     * @param id      页面ID
+     * @return 页面数据，不存在返回 {@code null}
+     */
+    PageData getStorePageData(String storeId, String id);
+
+    /**
+     * 店铺页面权限校验。
+     * <p>
+     * 校验页面是否属于当前店铺且为店铺页面；不符合则抛出业务异常。
+     * </p>
+     *
+     * @param storeId 店铺ID
+     * @param id      页面ID
+     */
+    void checkStoreAuthority(String storeId, String id);
+
+    /**
+     * 根据专题名称获取专题页面数据。
+     *
+     * @param name 专题名称
+     * @return 专题页面数据，不存在返回 {@code null}
+     */
+    PageData getSpecialByName(String name);
 
     /**
      * 获取专题信息

@@ -1,9 +1,13 @@
 package cn.lili.modules.order.trade.serviceimpl;
 
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.order.trade.entity.dos.OrderLog;
 import cn.lili.modules.order.trade.mapper.OrderLogMapper;
 import cn.lili.modules.order.trade.service.OrderLogService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +31,10 @@ public class OrderLogServiceImpl extends ServiceImpl<OrderLogMapper, OrderLog> i
         LambdaQueryWrapper<OrderLog> lambdaQueryWrapper = Wrappers.lambdaQuery();
         lambdaQueryWrapper.eq(OrderLog::getOrderSn, orderSn);
         return this.list(lambdaQueryWrapper);
+    }
+
+    @Override
+    public IPage<OrderLog> getByPage(OrderLog entity, SearchVO searchVO, PageVO pageVO) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(entity, searchVO));
     }
 }

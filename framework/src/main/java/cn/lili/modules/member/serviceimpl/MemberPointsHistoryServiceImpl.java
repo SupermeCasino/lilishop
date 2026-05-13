@@ -60,6 +60,14 @@ public class MemberPointsHistoryServiceImpl extends ServiceImpl<MemberPointsHist
     }
 
     @Override
+    public IPage<MemberPointsHistory> pageByMemberId(String memberId, PageVO pageVO) {
+        LambdaQueryWrapper<MemberPointsHistory> queryWrapper = new LambdaQueryWrapper<MemberPointsHistory>()
+                .eq(MemberPointsHistory::getMemberId, memberId)
+                .orderByDesc(MemberPointsHistory::getCreateTime);
+        return this.page(PageUtil.initPage(pageVO), queryWrapper);
+    }
+
+    @Override
     public MemberPointsStatisticsVO queryMemberPointsStatistics() {
         return memberMapper.queryMemberPointsStatistics();
     }

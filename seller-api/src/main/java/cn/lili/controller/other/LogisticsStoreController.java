@@ -15,7 +15,6 @@ import cn.lili.modules.system.entity.dto.LogisticsSetting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.entity.vo.StoreLogisticsVO;
 import cn.lili.modules.system.service.SettingService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -78,7 +77,7 @@ public class LogisticsStoreController {
     @DeleteMapping("/{id}")
     public ResultMessage<Object> cancel(@PathVariable String id) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        boolean remove = storeLogisticsService.remove(new LambdaQueryWrapper<StoreLogistics>().eq(StoreLogistics::getLogisticsId, id).eq(StoreLogistics::getStoreId, storeId));
+        boolean remove = storeLogisticsService.removeStoreLogistics(id, storeId);
         return ResultUtil.data(remove);
     }
 

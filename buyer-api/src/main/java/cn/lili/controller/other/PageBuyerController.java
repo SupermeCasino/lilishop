@@ -7,7 +7,6 @@ import cn.lili.modules.page.entity.dto.PageDataDTO;
 import cn.lili.modules.page.entity.enums.PageEnum;
 import cn.lili.modules.page.entity.vos.PageDataVO;
 import cn.lili.modules.page.service.PageDataService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -91,10 +90,7 @@ public class PageBuyerController {
             name = body.substring(body.indexOf("｜") + 1, body.lastIndexOf("｜"));
         }
 
-        PageData pageData = pageService.getOne(
-                new LambdaQueryWrapper<PageData>()
-                        .eq(PageData::getPageType, PageEnum.SPECIAL.name())
-                        .eq(PageData::getName, name));
+        PageData pageData = pageService.getSpecialByName(name);
         return ResultUtil.data(pageData);
 
     }

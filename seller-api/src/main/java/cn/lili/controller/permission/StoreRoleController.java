@@ -8,7 +8,6 @@ import cn.lili.modules.member.entity.dos.StoreRole;
 import cn.lili.modules.member.service.StoreRoleService;
 import cn.lili.modules.permission.entity.dos.Role;
 import cn.lili.modules.permission.service.RoleService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,7 +42,7 @@ public class StoreRoleController {
     @GetMapping
     public ResultMessage<Page> page(PageVO pageVo, StoreRole storeRole) {
         storeRole.setStoreId(UserContext.getCurrentUser().getStoreId());
-        Page page = storeRoleService.page(PageUtil.initPage(pageVo), PageUtil.initWrapper(storeRole));
+        Page page = storeRoleService.getRolePage(pageVo, storeRole);
         return ResultUtil.data(page);
     }
 

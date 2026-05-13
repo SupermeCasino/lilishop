@@ -22,7 +22,6 @@ import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.goods.service.GoodsSkuService;
 import cn.lili.modules.statistics.aop.PageViewPoint;
 import cn.lili.modules.statistics.aop.enums.PageViewEnum;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -111,7 +110,7 @@ public class GoodsStoreController {
         // 获取商品skuId集合
         List<String> goodsSkuIds = updateStockList.stream().map(GoodsSkuStockDTO::getSkuId).collect(Collectors.toList());
         // 根据skuId集合查询商品信息
-        List<GoodsSku> goodsSkuList = goodsSkuService.list(new LambdaQueryWrapper<GoodsSku>().in(GoodsSku::getId, goodsSkuIds).eq(GoodsSku::getStoreId, storeId));
+        List<GoodsSku> goodsSkuList = goodsSkuService.listByIdsAndStoreId(goodsSkuIds, storeId);
         // 过滤不符合当前店铺的商品
         List<String> filterGoodsSkuIds = goodsSkuList.stream().map(GoodsSku::getId).collect(Collectors.toList());
         List<GoodsSkuStockDTO> collect = updateStockList.stream().filter(i -> filterGoodsSkuIds.contains(i.getSkuId())).collect(Collectors.toList());
@@ -188,7 +187,7 @@ public class GoodsStoreController {
     @GetMapping("/sku/{goodsId}/list")
     public ResultMessage<List<GoodsSkuVO>> getSkuByList(@PathVariable String goodsId) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        return ResultUtil.data(goodsSkuService.getGoodsSkuVOList(goodsSkuService.list(new LambdaQueryWrapper<GoodsSku>().eq(GoodsSku::getGoodsId, goodsId).eq(GoodsSku::getStoreId, storeId))));
+        return ResultUtil.data(goodsSkuService.getGoodsSkuVOList(goodsSkuService.listByGoodsIdAndStoreId(goodsId, storeId)));
     }
 
     @Operation(summary = "修改商品库存")
@@ -198,7 +197,7 @@ public class GoodsStoreController {
         // 获取商品skuId集合
         List<String> goodsSkuIds = updateStockList.stream().map(GoodsSkuStockDTO::getSkuId).collect(Collectors.toList());
         // 根据skuId集合查询商品信息
-        List<GoodsSku> goodsSkuList = goodsSkuService.list(new LambdaQueryWrapper<GoodsSku>().in(GoodsSku::getId, goodsSkuIds).eq(GoodsSku::getStoreId, storeId));
+        List<GoodsSku> goodsSkuList = goodsSkuService.listByIdsAndStoreId(goodsSkuIds, storeId);
         // 过滤不符合当前店铺的商品
         List<String> filterGoodsSkuIds = goodsSkuList.stream().map(GoodsSku::getId).collect(Collectors.toList());
         List<GoodsSkuStockDTO> collect = updateStockList.stream().filter(i -> filterGoodsSkuIds.contains(i.getSkuId())).collect(Collectors.toList());

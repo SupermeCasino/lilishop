@@ -3,6 +3,7 @@ package cn.lili.modules.member.serviceimpl;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.context.UserContext;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.member.entity.dos.Clerk;
 import cn.lili.modules.member.entity.dos.StoreDepartment;
 import cn.lili.modules.member.entity.vo.StoreDepartmentVO;
@@ -10,6 +11,7 @@ import cn.lili.modules.member.mapper.StoreDepartmentMapper;
 import cn.lili.modules.member.service.ClerkService;
 import cn.lili.modules.member.service.StoreDepartmentRoleService;
 import cn.lili.modules.member.service.StoreDepartmentService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +81,11 @@ public class StoreDepartmentServiceImpl extends ServiceImpl<StoreDepartmentMappe
             log.error("部门业务错误", e);
             return null;
         }
+    }
+
+    @Override
+    public List<StoreDepartmentVO> tree(StoreDepartment entity, SearchVO searchVO) {
+        return tree(PageUtil.initWrapper(entity, searchVO));
     }
 
 

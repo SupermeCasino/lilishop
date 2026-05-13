@@ -1,8 +1,12 @@
 package cn.lili.modules.procurement.service;
 
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.procurement.entity.dos.DamageReport;
 import cn.lili.modules.procurement.entity.dto.DamageReportCreateDTO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Date;
 
 /**
  * 报损单业务接口
@@ -48,4 +52,16 @@ public interface DamageReportService extends IService<DamageReport> {
      * @return 完成后的报损单
      */
     DamageReport complete(String id);
+
+    /**
+     * 分页查询报损单。
+     *
+     * @param pageVO    分页参数
+     * @param storeId   店铺ID（为空则不过滤）
+     * @param status    状态（为空则不过滤）
+     * @param startDate 开始时间（与 endDate 同时存在才生效）
+     * @param endDate   结束时间（与 startDate 同时存在才生效）
+     * @return 报损单分页数据
+     */
+    IPage<DamageReport> pageByCondition(PageVO pageVO, String storeId, String status, Date startDate, Date endDate);
 }

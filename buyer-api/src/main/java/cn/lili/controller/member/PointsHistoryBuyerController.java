@@ -1,21 +1,17 @@
 package cn.lili.controller.member;
 
-import cn.lili.common.security.context.UserContext;
-import cn.lili.mybatis.util.PageUtil;
 import cn.lili.common.enums.ResultUtil;
+import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.MemberPointsHistory;
 import cn.lili.modules.member.entity.vo.MemberPointsHistoryVO;
 import cn.lili.modules.member.service.MemberPointsHistoryService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,11 +31,7 @@ public class PointsHistoryBuyerController {
     @Operation(summary = "分页获取")
     @GetMapping("/getByPage")
     public ResultMessage<IPage<MemberPointsHistory>> getByPage(PageVO page) {
-
-        LambdaQueryWrapper<MemberPointsHistory> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(MemberPointsHistory::getMemberId, UserContext.getCurrentUser().getId());
-        queryWrapper.orderByDesc(MemberPointsHistory::getCreateTime);
-        return ResultUtil.data(memberPointsHistoryService.page(PageUtil.initPage(page), queryWrapper));
+        return ResultUtil.data(memberPointsHistoryService.pageByMemberId(UserContext.getCurrentUser().getId(), page));
     }
 
     @Operation(summary = "获取客户积分VO")

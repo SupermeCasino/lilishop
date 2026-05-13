@@ -9,7 +9,6 @@ import cn.lili.modules.goods.entity.dos.Brand;
 import cn.lili.modules.goods.entity.dto.BrandPageDTO;
 import cn.lili.modules.goods.entity.vos.BrandVO;
 import cn.lili.modules.goods.service.BrandService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,8 +48,7 @@ public class BrandManagerController {
     @GetMapping("/all")
     @Operation(summary = "获取所有可用品牌")
     public List<Brand> getAll() {
-        List<Brand> list = brandService.list(new QueryWrapper<Brand>().eq("delete_flag", 0));
-        return list;
+        return brandService.listNotDeleted();
     }
 
     @Operation(summary = "分页获取")

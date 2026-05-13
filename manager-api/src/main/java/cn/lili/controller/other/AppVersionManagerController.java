@@ -2,14 +2,11 @@ package cn.lili.controller.other;
 
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
-import cn.lili.mybatis.util.PageUtil;
 import cn.lili.common.enums.ResultUtil;
-import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.system.entity.dos.AppVersion;
 import cn.lili.modules.system.service.AppVersionService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,8 +35,7 @@ public class AppVersionManagerController {
     @Parameter(name = "type", description = "APP类型", required = true)
     @GetMapping
     public ResultMessage<IPage<AppVersion>> getByPage(PageVO page, String type) {
-        return ResultUtil.data(this.appVersionService.page(PageUtil.initPage(page),
-                new QueryWrapper<AppVersion>().eq(StringUtils.isNotEmpty(type), "type", type).orderByDesc("create_time")));
+        return ResultUtil.data(this.appVersionService.pageByType(type, page));
     }
 
 

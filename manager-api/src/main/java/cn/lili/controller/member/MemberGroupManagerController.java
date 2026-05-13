@@ -9,7 +9,6 @@ import cn.lili.modules.member.entity.dos.MemberGroupUser;
 import cn.lili.modules.member.service.MemberGroupService;
 import cn.lili.modules.member.service.MemberGroupUserService;
 import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -71,9 +69,7 @@ public class MemberGroupManagerController {
     @Parameter(name = "id", description = "客户分组ID", required = true)
     @DeleteMapping("/delete/{id}")
     public ResultMessage<Object> delete(@PathVariable String id) {
-        QueryWrapper<MemberGroupUser> wrapper = new QueryWrapper<>();
-        wrapper.eq("group_id", id);
-        long count = memberGroupUserService.count(wrapper);
+        long count = memberGroupUserService.countByGroupId(id);
         if (count > 0) {
             return ResultUtil.error(ResultCode.ERROR.code(), "请移除分组下的用户后再删除");
         }
@@ -99,9 +95,7 @@ public class MemberGroupManagerController {
     @Parameter(name = "page", description = "分页参数")
     @GetMapping("/{groupId}/users")
     public ResultMessage<IPage<MemberGroupUser>> getGroupUsers(@PathVariable String groupId, PageVO page) {
-        QueryWrapper<MemberGroupUser> wrapper = new QueryWrapper<>();
-        wrapper.eq("group_id", groupId);
-        return ResultUtil.data(memberGroupUserService.page(PageUtil.initPage(page), wrapper));
+        return ResultUtil.data(memberGroupUserService.pageByGroupId(groupId, page));
     }
 
     @Operation(description = "移除分组中的客户")
@@ -109,9 +103,7 @@ public class MemberGroupManagerController {
     @Parameter(name = "memberId", description = "客户ID", required = true)
     @DeleteMapping("/{groupId}/user/{memberId}")
     public ResultMessage<Object> removeUser(@PathVariable String groupId, @PathVariable String memberId) {
-        QueryWrapper<MemberGroupUser> wrapper = new QueryWrapper<>();
-        wrapper.eq("group_id", groupId).eq("member_id", memberId);
-        if (memberGroupUserService.remove(wrapper)) {
+        if (memberGroupUserService.removeByGroupAndMember(groupId, memberId)) {
             return ResultUtil.success(ResultCode.SUCCESS);
         }
         return ResultUtil.error(ResultCode.ERROR);

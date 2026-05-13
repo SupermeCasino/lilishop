@@ -1,6 +1,7 @@
 package cn.lili.modules.procurement.serviceimpl;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.procurement.entity.dos.StockReason;
 import cn.lili.modules.procurement.mapper.StockReasonMapper;
 import cn.lili.modules.procurement.service.StockReasonService;
@@ -29,5 +30,11 @@ public class StockReasonServiceImpl extends ServiceImpl<StockReasonMapper, Stock
         }
         wrapper.orderByDesc(StockReason::getCreateTime);
         return this.page(page, wrapper);
+    }
+
+    @Override
+    public IPage<StockReason> page(String reason, String category, PageVO pageVO) {
+        Page<StockReason> page = new Page<>(pageVO.getPageNumber(), pageVO.getPageSize());
+        return this.page(reason, category, page);
     }
 }

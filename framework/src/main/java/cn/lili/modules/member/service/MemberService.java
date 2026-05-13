@@ -118,6 +118,17 @@ public interface MemberService extends IService<Member> {
     Token register(String userName, String password, String mobilePhone);
 
     /**
+     * 注册客户（支持分享码）
+     *
+     * @param userName 客户
+     * @param password 密码
+     * @param mobilePhone 手机号
+     * @param shareCode 分享码
+     * @return 处理结果
+     */
+    Token register(String userName, String password, String mobilePhone, String shareCode);
+
+    /**
      * 是否可以初始化密码
      *
      * @return

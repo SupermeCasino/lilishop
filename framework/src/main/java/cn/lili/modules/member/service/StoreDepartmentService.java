@@ -1,5 +1,6 @@
 package cn.lili.modules.member.service;
 
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.member.entity.dos.StoreDepartment;
 import cn.lili.modules.member.entity.vo.StoreDepartmentVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,6 +23,15 @@ public interface StoreDepartmentService extends IService<StoreDepartment> {
      * @return
      */
     List<StoreDepartmentVO> tree(QueryWrapper<StoreDepartment> initWrapper);
+
+    /**
+     * 获取店铺部门树（由 service 内部构造查询条件）
+     *
+     * @param entity 查询参数
+     * @param searchVO 查询条件
+     * @return 树结构结果
+     */
+    List<StoreDepartmentVO> tree(StoreDepartment entity, SearchVO searchVO);
 
     /**
      * 删除部门

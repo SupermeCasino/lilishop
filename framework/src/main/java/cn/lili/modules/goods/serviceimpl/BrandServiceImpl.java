@@ -109,6 +109,11 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
     }
 
     @Override
+    public List<Brand> listNotDeleted() {
+        return this.list(new LambdaQueryWrapper<Brand>().eq(Brand::getDeleteFlag, false));
+    }
+
+    @Override
     public void deleteBrands(List<String> ids) {
         checkBind(ids);
         this.removeByIds(ids);

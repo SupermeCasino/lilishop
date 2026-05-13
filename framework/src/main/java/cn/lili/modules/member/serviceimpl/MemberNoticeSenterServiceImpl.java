@@ -3,6 +3,8 @@ package cn.lili.modules.member.serviceimpl;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.entity.dos.MemberNotice;
 import cn.lili.modules.member.entity.dos.MemberNoticeSenter;
@@ -11,6 +13,8 @@ import cn.lili.modules.member.mapper.MemberNoticeSenterMapper;
 import cn.lili.modules.member.service.MemberNoticeSenterService;
 import cn.lili.modules.member.service.MemberNoticeService;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.mybatis.util.PageUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,5 +92,10 @@ public class MemberNoticeSenterServiceImpl extends ServiceImpl<MemberNoticeSente
             }
         }
         return true;
+    }
+
+    @Override
+    public IPage<MemberNoticeSenter> getByPage(MemberNoticeSenter entity, SearchVO searchVO, PageVO pageVO) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(entity, searchVO));
     }
 }

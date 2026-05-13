@@ -8,13 +8,11 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.modules.im.config.CustomSpringConfigurator;
 import cn.lili.modules.im.entity.dos.ImMessage;
-import cn.lili.modules.im.entity.dos.ImTalk;
 import cn.lili.modules.im.entity.enums.MessageResultType;
 import cn.lili.modules.im.entity.vo.MessageOperation;
 import cn.lili.modules.im.entity.vo.MessageVO;
 import cn.lili.modules.im.service.ImMessageService;
 import cn.lili.modules.im.service.ImTalkService;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
@@ -121,10 +119,8 @@ public class WebSocketServer {
                 ImMessage imMessage = new ImMessage(messageOperation);
                 imMessageService.save(imMessage);
                 //修改最后消息信息
-                imTalkService.update(new LambdaUpdateWrapper<ImTalk>().eq(ImTalk::getId, messageOperation.getTalkId())
-                    .set(ImTalk::getLastTalkMessage, messageOperation.getContext())
-                    .set(ImTalk::getLastTalkTime, imMessage.getCreateTime())
-                    .set(ImTalk::getLastMessageType, imMessage.getMessageType()));
+                imTalkService.updateLastTalkMessage(messageOperation.getTalkId(), messageOperation.getContext(),
+                    imMessage.getCreateTime(), imMessage.getMessageType() == null ? null : imMessage.getMessageType().name());
                 //发送消息
                 sendMessage(messageOperation.getTo(), new MessageVO(MessageResultType.MESSAGE, imMessage));
                 break;

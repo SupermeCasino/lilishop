@@ -1,7 +1,9 @@
 package cn.lili.modules.permission.service;
 
 
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.permission.entity.dos.Role;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -28,4 +30,13 @@ public interface RoleService extends IService<Role> {
      * @param roleIds
      */
     void deleteRoles(List<String> roleIds);
+
+    /**
+     * 角色分页查询
+     *
+     * @param pageVO 分页参数
+     * @param role 查询参数
+     * @return 分页结果
+     */
+    Page<Role> getRolePage(PageVO pageVO, Role role);
 }

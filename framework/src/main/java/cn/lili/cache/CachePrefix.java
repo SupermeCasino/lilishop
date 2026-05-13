@@ -453,6 +453,10 @@ public enum CachePrefix {
      * 邀请人
      */
     INVITER,
+    /**
+     * 邀请分享码
+     */
+    INVITER_SHARE_CODE,
 
     /**
      * 找回手机

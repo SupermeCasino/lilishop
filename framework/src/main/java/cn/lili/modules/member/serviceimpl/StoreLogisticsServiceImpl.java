@@ -94,5 +94,11 @@ public class StoreLogisticsServiceImpl extends ServiceImpl<StoreLogisticsMapper,
         return null;
     }
 
+    @Override
+    public boolean removeStoreLogistics(String logisticsId, String storeId) {
+        return this.remove(new LambdaQueryWrapper<StoreLogistics>()
+                .eq(StoreLogistics::getLogisticsId, logisticsId)
+                .eq(StoreLogistics::getStoreId, storeId));
+    }
 
 }

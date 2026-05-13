@@ -10,6 +10,8 @@ import cn.lili.modules.order.order.entity.vo.OrderDetailVO;
 import cn.lili.modules.order.order.entity.vo.OrderNumVO;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.order.order.entity.vo.PaymentLog;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.system.entity.vo.Traces;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -309,6 +311,16 @@ public interface OrderService extends IService<Order> {
      * @return 订单支付记录分页
      */
     IPage<PaymentLog> queryPaymentLogs(IPage<PaymentLog> page, Wrapper<PaymentLog> queryWrapper);
+
+    /**
+     * 查询订单支付记录（由 service 内部构造查询条件）
+     *
+     * @param order 查询参数
+     * @param searchVO 查询条件
+     * @param pageVO 分页参数
+     * @return 订单支付记录分页
+     */
+    IPage<PaymentLog> queryPaymentLogs(Order order, SearchVO searchVO, PageVO pageVO);
 
     /**
      * 检查是否开始虚拟成团

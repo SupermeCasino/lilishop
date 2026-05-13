@@ -17,7 +17,6 @@ import cn.lili.modules.promotion.service.CouponService;
 import cn.lili.modules.promotion.service.MemberCouponService;
 import cn.lili.modules.promotion.tools.PromotionTools;
 import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -118,12 +117,7 @@ public class CouponManagerController {
     @GetMapping("/member/{id}")
     public ResultMessage<IPage<MemberCoupon>> getByPage(@PathVariable String id,
                                                         PageVO page) {
-        QueryWrapper<MemberCoupon> queryWrapper = new QueryWrapper<>();
-        IPage<MemberCoupon> data = memberCouponService.page(PageUtil.initPage(page),
-                queryWrapper.eq("coupon_id", id)
-        );
-        return ResultUtil.data(data);
-
+        return ResultUtil.data(memberCouponService.pageByCouponId(id, page));
     }
 
     @Operation(description = "获取优惠券领取详情")

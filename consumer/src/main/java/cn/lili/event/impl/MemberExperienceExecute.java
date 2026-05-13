@@ -1,24 +1,19 @@
 package cn.lili.event.impl;
 
-
-import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.event.GoodsCommentCompleteEvent;
 import cn.lili.event.MemberRegisterEvent;
 import cn.lili.event.OrderStatusChangeEvent;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.entity.dos.MemberEvaluation;
-import cn.lili.modules.member.entity.enums.PointTypeEnum;
-import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.member.entity.enums.ExperienceRuleEnum;
+import cn.lili.modules.member.service.MemberExperienceService;
+import cn.lili.modules.member.service.MemberShareRegisterService;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.dto.OrderMessage;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.order.order.service.OrderService;
-import cn.lili.modules.system.entity.dos.Setting;
-import cn.lili.modules.system.entity.dto.ExperienceSetting;
-import cn.lili.modules.system.entity.enums.SettingEnum;
-import cn.lili.modules.system.service.SettingService;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 客户经验值
@@ -26,19 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Bulbasaur
  * @since 2021/5/16 11:16 下午
  */
-//@Service
+@Service
 public class MemberExperienceExecute implements MemberRegisterEvent, GoodsCommentCompleteEvent, OrderStatusChangeEvent {
 
-    /**
-     * 配置
-     */
     @Autowired
-    private SettingService settingService;
-    /**
-     * 客户
-     */
+    private MemberExperienceService memberExperienceService;
     @Autowired
-    private MemberService memberService;
+    private MemberShareRegisterService memberShareRegisterService;
     /**
      * 订单
      */
@@ -52,10 +41,8 @@ public class MemberExperienceExecute implements MemberRegisterEvent, GoodsCommen
      */
     @Override
     public void memberRegister(Member member) {
-        //获取经验值设置
-        ExperienceSetting experienceSetting = getExperienceSetting();
-        //赠送客户经验值
-        memberService.updateMemberPoint(Long.valueOf(experienceSetting.getRegister().longValue()), PointTypeEnum.INCREASE.name(), member.getId(), "客户注册，赠送经验值" + experienceSetting.getRegister());
+        memberExperienceService.grantExperience(member.getId(), ExperienceRuleEnum.REGISTER, member.getId(), "客户注册，赠送经验值");
+        memberShareRegisterService.handleShareRegisterReward(member);
     }
 
     /**
@@ -65,10 +52,15 @@ public class MemberExperienceExecute implements MemberRegisterEvent, GoodsCommen
      */
     @Override
     public void goodsComment(MemberEvaluation memberEvaluation) {
-        //获取经验值设置
-        ExperienceSetting experienceSetting = getExperienceSetting();
-        //赠送客户经验值
-        memberService.updateMemberPoint(Long.valueOf(experienceSetting.getComment().longValue()), PointTypeEnum.INCREASE.name(), memberEvaluation.getMemberId(), "客户评价，赠送经验值" + experienceSetting.getComment());
+        if (memberEvaluation == null || memberEvaluation.getContent() == null) {
+            return;
+        }
+        // 仅评论字数大于30字时才赠送经验值
+        String content = memberEvaluation.getContent().replaceAll("\\s+", "");
+        if (content.length() <= 30) {
+            return;
+        }
+        memberExperienceService.grantExperience(memberEvaluation.getMemberId(), ExperienceRuleEnum.COMMENT, memberEvaluation.getId(), "客户评价，赠送经验值");
     }
 
     /**
@@ -78,25 +70,17 @@ public class MemberExperienceExecute implements MemberRegisterEvent, GoodsCommen
      */
     @Override
     public void orderChange(OrderMessage orderMessage) {
-        if (orderMessage.getNewStatus().equals(OrderStatusEnum.COMPLETED)) {
-            //获取经验值设置
-            ExperienceSetting experienceSetting = getExperienceSetting();
-            //获取订单信息
-            Order order = orderService.getBySn(orderMessage.getOrderSn());
-            //计算赠送经验值数量
-            Double point = CurrencyUtil.mul(experienceSetting.getMoney(), order.getFlowPrice(), 0);
-            //赠送客户经验值
-            memberService.updateMemberPoint(point.longValue(), PointTypeEnum.INCREASE.name(), order.getMemberId(), "客户下单，赠送经验值" + point + "分");
+        //获取订单信息
+        Order order = orderService.getBySn(orderMessage.getOrderSn());
+        if (order == null) {
+            return;
         }
-    }
-
-    /**
-     * 获取经验值设置
-     *
-     * @return 经验值设置
-     */
-    private ExperienceSetting getExperienceSetting() {
-        Setting setting = settingService.get(SettingEnum.EXPERIENCE_SETTING.name());
-        return new Gson().fromJson(setting.getSettingValue(), ExperienceSetting.class);
+        if (orderMessage.getNewStatus().equals(OrderStatusEnum.COMPLETED)) {
+            memberExperienceService.grantExperienceByAmount(order.getMemberId(), ExperienceRuleEnum.CONSUME, order.getFlowPrice(), order.getSn(), "客户下单，赠送经验值");
+        }
+        // 订单支付后触发分享购买奖励
+        if (orderMessage.getNewStatus().equals(OrderStatusEnum.PAID)) {
+            memberShareRegisterService.handleShareBuyReward(order);
+        }
     }
 }

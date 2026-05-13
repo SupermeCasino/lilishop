@@ -11,6 +11,8 @@ import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.security.token.Token;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.utils.StringUtils;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.permission.entity.dos.AdminUser;
 import cn.lili.modules.permission.entity.dos.Department;
 import cn.lili.modules.permission.entity.dos.Role;
@@ -21,6 +23,7 @@ import cn.lili.modules.permission.mapper.AdminUserMapper;
 import cn.lili.modules.permission.service.*;
 import cn.lili.modules.system.aspect.annotation.SystemLogPoint;
 import cn.lili.modules.system.token.ManagerTokenGenerate;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -104,6 +107,11 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         pageResult.setRecords(result);
         return pageResult;
 
+    }
+
+    @Override
+    public IPage<AdminUserVO> adminUserPage(AdminUserDTO adminUserDTO, SearchVO searchVO, PageVO pageVO) {
+        return adminUserPage(PageUtil.initPage(pageVO), PageUtil.initWrapper(adminUserDTO, searchVO));
     }
 
     @Autowired

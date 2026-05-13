@@ -18,7 +18,6 @@ import cn.lili.modules.permission.entity.vo.AdminUserVO;
 import cn.lili.modules.permission.service.AdminUserService;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -155,7 +154,7 @@ public class AdminUserManagerController {
     public ResultMessage<IPage<AdminUserVO>> getByCondition(AdminUserDTO user,
                                                             SearchVO searchVo,
                                                             PageVO pageVo) {
-        IPage<AdminUserVO> page = adminUserService.adminUserPage(PageUtil.initPage(pageVo), PageUtil.initWrapper(user, searchVo));
+        IPage<AdminUserVO> page = adminUserService.adminUserPage(user, searchVo, pageVo);
 
         return ResultUtil.data(page);
     }

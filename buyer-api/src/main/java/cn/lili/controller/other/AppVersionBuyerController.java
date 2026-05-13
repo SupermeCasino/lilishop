@@ -5,8 +5,6 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.system.entity.dos.AppVersion;
 import cn.lili.modules.system.service.AppVersionService;
-import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +43,6 @@ public class AppVersionBuyerController {
     @Parameter(name = "appType", description = "app类型", required = true)
     @GetMapping("/appVersion/{appType}")
     public ResultMessage<IPage<AppVersion>> appVersion(@PathVariable String appType, PageVO pageVO) {
-
-        IPage<AppVersion> page = appVersionService.page(PageUtil.initPage(pageVO), new LambdaQueryWrapper<AppVersion>().eq(AppVersion::getType, appType));
-        return ResultUtil.data(page);
+        return ResultUtil.data(appVersionService.pageByType(appType, pageVO));
     }
 }

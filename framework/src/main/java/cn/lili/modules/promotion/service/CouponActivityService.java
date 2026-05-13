@@ -1,9 +1,11 @@
 package cn.lili.modules.promotion.service;
 
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.promotion.entity.dos.CouponActivity;
 import cn.lili.modules.promotion.entity.dos.MemberCoupon;
 import cn.lili.modules.promotion.entity.dto.CouponActivityTrigger;
 import cn.lili.modules.promotion.entity.vos.CouponActivityVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
 
@@ -45,5 +47,14 @@ public interface CouponActivityService extends AbstractPromotionsService<CouponA
      * @return 优惠券列表
      */
     List<MemberCoupon> trigger(CouponActivityTrigger couponActivityTrigger);
+
+    /**
+     * 优惠券活动分页查询
+     *
+     * @param pageVO 分页参数
+     * @param couponActivity 查询参数
+     * @return 分页结果
+     */
+    IPage<CouponActivity> getByPage(PageVO pageVO, CouponActivity couponActivity);
 
 }

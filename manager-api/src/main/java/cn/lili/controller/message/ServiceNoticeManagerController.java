@@ -6,7 +6,6 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.system.entity.dos.ServiceNotice;
 import cn.lili.modules.system.service.ServiceNoticeService;
-import cn.lili.mybatis.util.PageUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -47,8 +46,7 @@ public class ServiceNoticeManagerController {
     public ResultMessage<IPage<ServiceNotice>> getByPage(ServiceNotice entity,
                                                          SearchVO searchVo,
                                                          PageVO page) {
-        IPage<ServiceNotice> data = serviceNoticeService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo));
-        return ResultUtil.data(data);
+        return ResultUtil.data(serviceNoticeService.getByPage(entity, searchVo, page));
     }
 
     @Operation(summary = "新增服务订阅消息")

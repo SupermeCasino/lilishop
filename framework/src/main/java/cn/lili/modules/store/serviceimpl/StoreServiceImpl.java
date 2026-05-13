@@ -405,6 +405,19 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         return goodsSkuService.getGoodsSkuByIdFromCache(skuIdList);
     }
 
+    @Override
+    public List<Store> listOpenStores() {
+        return this.list(new LambdaQueryWrapper<Store>().eq(Store::getStoreDisable, StoreStatusEnum.OPEN.name()));
+    }
+
+    @Override
+    public Store getStoreByMemberId(String memberId) {
+        if (CharSequenceUtil.isBlank(memberId)) {
+            return null;
+        }
+        return this.getOne(new LambdaQueryWrapper<Store>().eq(Store::getMemberId, memberId).last("limit 1"), false);
+    }
+
     /**
      * 获取当前登录操作的店铺
      *

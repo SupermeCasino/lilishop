@@ -21,6 +21,14 @@ import java.util.List;
 public interface GoodsGroupGoodsService extends IService<GoodsGroupGoods> {
 
     /**
+     * 统计指定分组下的商品数量。
+     *
+     * @param groupId 分组ID
+     * @return 分组下商品数量
+     */
+    long countByGroupId(String groupId);
+
+    /**
      * 批量更新指定分组下的商品关联关系。
      * <p>
      * 具体策略由实现类决定（例如：清理旧关系并写入新关系）。

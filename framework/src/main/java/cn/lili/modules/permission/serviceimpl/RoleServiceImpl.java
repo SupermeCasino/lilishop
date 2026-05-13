@@ -5,13 +5,16 @@ import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.enums.UserEnums;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.permission.entity.dos.Role;
 import cn.lili.modules.permission.mapper.RoleMapper;
 import cn.lili.modules.permission.service.DepartmentRoleService;
 import cn.lili.modules.permission.service.RoleMenuService;
 import cn.lili.modules.permission.service.RoleService;
 import cn.lili.modules.permission.service.UserRoleService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,5 +71,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         roleMenuService.remove(queryWrapper);
         cache.vagueDel(CachePrefix.USER_MENU.getPrefix(UserEnums.MANAGER));
         cache.vagueDel(CachePrefix.PERMISSION_LIST.getPrefix(UserEnums.MANAGER));
+    }
+
+    @Override
+    public Page<Role> getRolePage(PageVO pageVO, Role role) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(role));
     }
 }

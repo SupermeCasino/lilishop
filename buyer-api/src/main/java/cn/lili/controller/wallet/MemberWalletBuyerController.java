@@ -19,7 +19,6 @@ import cn.lili.modules.verification.service.VerificationService;
 import cn.lili.modules.wallet.entity.dos.MemberWallet;
 import cn.lili.modules.wallet.entity.vo.MemberWalletVO;
 import cn.lili.modules.wallet.service.MemberWalletService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -129,7 +128,7 @@ public class MemberWalletBuyerController {
         if (member == null) {
             throw new ServiceException(ResultCode.USER_NOT_EXIST);
         }
-        MemberWallet memberWallet = this.memberWalletService.getOne(new QueryWrapper<MemberWallet>().eq("member_id", member.getId()));
+        MemberWallet memberWallet = this.memberWalletService.getMemberWalletDO(member.getId());
         //校验新旧密码是否一致
         if (memberWallet != null) {
             if (!new BCryptPasswordEncoder().matches(oldPassword, memberWallet.getWalletPassword())) {

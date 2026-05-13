@@ -3,8 +3,11 @@ package cn.lili.modules.order.aftersale.serviceimpl;
 import cn.lili.modules.order.aftersale.entity.dos.AfterSaleReason;
 import cn.lili.modules.order.aftersale.mapper.AfterSaleReasonMapper;
 import cn.lili.modules.order.aftersale.service.AfterSaleReasonService;
+import cn.lili.mybatis.util.PageUtil;
+import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,13 @@ public class AfterSaleReasonServiceImpl extends ServiceImpl<AfterSaleReasonMappe
         LambdaQueryWrapper<AfterSaleReason> lambdaQueryWrapper = Wrappers.lambdaQuery();
         lambdaQueryWrapper.eq(AfterSaleReason::getServiceType, serviceType);
         return this.list(lambdaQueryWrapper);
+    }
+
+    @Override
+    public IPage<AfterSaleReason> pageByServiceType(PageVO pageVO, String serviceType) {
+        LambdaQueryWrapper<AfterSaleReason> lambdaQueryWrapper = Wrappers.lambdaQuery();
+        lambdaQueryWrapper.eq(AfterSaleReason::getServiceType, serviceType);
+        return this.page(PageUtil.initPage(pageVO), lambdaQueryWrapper);
     }
 
     @Override

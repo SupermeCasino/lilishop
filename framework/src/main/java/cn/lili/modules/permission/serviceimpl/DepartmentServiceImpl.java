@@ -2,6 +2,7 @@ package cn.lili.modules.permission.serviceimpl;
 
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.permission.entity.dos.AdminUser;
 import cn.lili.modules.permission.entity.dos.Department;
 import cn.lili.modules.permission.entity.vo.DepartmentVO;
@@ -9,6 +10,7 @@ import cn.lili.modules.permission.mapper.DepartmentMapper;
 import cn.lili.modules.permission.service.AdminUserService;
 import cn.lili.modules.permission.service.DepartmentRoleService;
 import cn.lili.modules.permission.service.DepartmentService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +77,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             log.error("部门业务错误", e);
             return null;
         }
+    }
+
+    @Override
+    public List<DepartmentVO> tree(Department entity, SearchVO searchVO) {
+        return this.tree(PageUtil.initWrapper(entity, searchVO));
     }
 
 

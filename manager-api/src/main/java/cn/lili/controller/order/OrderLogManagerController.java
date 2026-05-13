@@ -6,7 +6,6 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.order.trade.entity.dos.OrderLog;
 import cn.lili.modules.order.trade.service.OrderLogService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,7 +45,7 @@ public class OrderLogManagerController {
     public ResultMessage<IPage<OrderLog>> getByPage(OrderLog entity,
                                                     SearchVO searchVo,
                                                     PageVO page) {
-        return ResultUtil.data(orderLogService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo)));
+        return ResultUtil.data(orderLogService.getByPage(entity, searchVo, page));
     }
 
 }

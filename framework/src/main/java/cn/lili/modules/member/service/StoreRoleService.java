@@ -1,7 +1,9 @@
 package cn.lili.modules.member.service;
 
 
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dos.StoreRole;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -53,4 +55,13 @@ public interface StoreRoleService extends IService<StoreRole> {
      * @return
      */
     List<StoreRole> list(List<String> ids);
+
+    /**
+     * 店铺角色分页查询
+     *
+     * @param pageVO 分页参数
+     * @param storeRole 查询参数
+     * @return 分页结果
+     */
+    Page<StoreRole> getRolePage(PageVO pageVO, StoreRole storeRole);
 }

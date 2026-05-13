@@ -77,4 +77,13 @@ public interface StudioService extends IService<Studio> {
      * @param broadcastMessage 直播间消息
      */
     void updateStudioStatus(BroadcastMessage broadcastMessage);
+
+    /**
+     * 更新直播间推荐状态。
+     *
+     * @param id        直播间ID
+     * @param recommend 是否推荐
+     * @return 是否更新成功
+     */
+    boolean updateRecommend(String id, boolean recommend);
 }

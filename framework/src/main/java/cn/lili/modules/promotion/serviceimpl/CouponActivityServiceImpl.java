@@ -9,6 +9,7 @@ import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.properties.RocketmqCustomProperties;
 import cn.lili.common.security.AuthUser;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.promotion.entity.dos.Coupon;
 import cn.lili.modules.promotion.entity.dos.CouponActivity;
@@ -22,6 +23,7 @@ import cn.lili.modules.promotion.entity.vos.CouponActivityVO;
 import cn.lili.modules.promotion.mapper.CouponActivityMapper;
 import cn.lili.modules.promotion.service.*;
 import cn.lili.modules.promotion.tools.PromotionTools;
+import cn.lili.mybatis.util.PageUtil;
 import cn.lili.trigger.enums.DelayTypeEnums;
 import cn.lili.trigger.interfaces.TimeTrigger;
 import cn.lili.trigger.message.CouponActivityMessage;
@@ -29,6 +31,7 @@ import cn.lili.trigger.model.TimeExecuteConstant;
 import cn.lili.trigger.model.TimeTriggerMsg;
 import cn.lili.trigger.util.DelayQueueTools;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +85,11 @@ public class CouponActivityServiceImpl extends AbstractPromotionsServiceImpl<Cou
     public CouponActivityVO getCouponActivityVO(String couponActivityId) {
         CouponActivity couponActivity = this.getById(couponActivityId);
         return new CouponActivityVO(couponActivity, couponActivityItemService.getCouponActivityItemListVO(couponActivityId));
+    }
+
+    @Override
+    public IPage<CouponActivity> getByPage(PageVO pageVO, CouponActivity couponActivity) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(couponActivity));
     }
 
 

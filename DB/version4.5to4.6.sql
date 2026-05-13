@@ -186,3 +186,166 @@ ALTER TABLE `li_member_evaluation`
     ADD COLUMN `top` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否置顶' AFTER `reply_status`;
 
 
+CREATE TABLE IF NOT EXISTS `li_member_grade` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `grade_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '等级名称',
+  `is_default` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否默认等级',
+  `grade_image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '等级图标URL',
+  `grade_background` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '等级背景图URL',
+  `grade_font_color` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '等级字体颜色',
+  `required_experience` int NOT NULL COMMENT '所需经验值',
+  `grade_sort` int NOT NULL DEFAULT 1 COMMENT '等级排序',
+  `grade_state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'OPEN' COMMENT '等级开关 OPEN/CLOSE',
+  `benefit_ids` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '会员权益ID列表',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_grade_name` (`grade_name`) USING BTREE,
+  UNIQUE KEY `uk_li_member_grade_required_experience` (`required_experience`) USING BTREE,
+  KEY `idx_li_member_grade_state_sort` (`grade_state`,`grade_sort`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='客户等级';
+
+-- 兼容存量库：补齐默认等级字段
+SET @li_member_grade_is_default_exists := (
+  SELECT COUNT(1)
+  FROM INFORMATION_SCHEMA.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE()
+    AND TABLE_NAME = 'li_member_grade'
+    AND COLUMN_NAME = 'is_default'
+);
+SET @li_member_grade_is_default_sql := IF(
+  @li_member_grade_is_default_exists = 0,
+  'ALTER TABLE `li_member_grade` ADD COLUMN `is_default` bit(1) NOT NULL DEFAULT b''0'' COMMENT ''是否默认等级'' AFTER `grade_name`',
+  'SELECT 1'
+);
+PREPARE li_stmt FROM @li_member_grade_is_default_sql;
+EXECUTE li_stmt;
+DEALLOCATE PREPARE li_stmt;
+
+
+CREATE TABLE IF NOT EXISTS `li_member_experience_log` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `member_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '客户ID',
+  `member_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '客户名称',
+  `rule_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '规则编码',
+  `biz_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '业务ID',
+  `experience` bigint NOT NULL DEFAULT 0 COMMENT '当前经验值',
+  `before_experience` bigint NOT NULL DEFAULT 0 COMMENT '变动前经验值',
+  `variable_experience` bigint NOT NULL DEFAULT 0 COMMENT '变动经验值',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_experience_log_member_rule_biz` (`member_id`,`rule_key`,`biz_id`) USING BTREE,
+  KEY `idx_li_member_experience_log_member_rule` (`member_id`,`rule_key`) USING BTREE,
+  KEY `idx_li_member_experience_log_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='客户经验值流水';
+
+CREATE TABLE IF NOT EXISTS `li_member_share_log` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `member_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '会员ID',
+  `share_scene` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '分享场景',
+  `share_page` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '分享页面',
+  `related_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '关联业务ID',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_li_member_share_log_member` (`member_id`) USING BTREE,
+  KEY `idx_li_member_share_log_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='会员分享记录';
+
+
+CREATE TABLE IF NOT EXISTS `li_member_share_code` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `member_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '会员ID',
+  `share_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '分享码',
+  `state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'OPEN' COMMENT '状态 OPEN/CLOSE',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_share_code_member` (`member_id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_share_code_code` (`share_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='会员分享码';
+
+CREATE TABLE IF NOT EXISTS `li_member_share_register_log` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `inviter_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '分享人ID',
+  `invitee_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '被分享注册用户ID',
+  `invitee_mobile` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '被分享注册用户手机号',
+  `share_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '分享码',
+  `reward_experience` bigint NOT NULL DEFAULT 0 COMMENT '奖励经验值',
+  `reward_status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '奖励状态 SUCCESS/SKIPPED',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_share_register_log_invitee` (`invitee_id`) USING BTREE,
+  KEY `idx_li_member_share_register_log_inviter` (`inviter_id`) USING BTREE,
+  KEY `idx_li_member_share_register_log_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='分享注册奖励记录';
+
+CREATE TABLE IF NOT EXISTS `li_member_share_buy_log` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+  `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+  `inviter_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '分享人ID',
+  `invitee_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '被分享购买用户ID',
+  `order_sn` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '订单编号',
+  `order_amount` double DEFAULT NULL COMMENT '订单金额',
+  `reward_experience` bigint NOT NULL DEFAULT 0 COMMENT '奖励经验值',
+  `reward_status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '奖励状态 SUCCESS/SKIPPED',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uk_li_member_share_buy_log_order_sn` (`order_sn`) USING BTREE,
+  KEY `idx_li_member_share_buy_log_inviter` (`inviter_id`) USING BTREE,
+  KEY `idx_li_member_share_buy_log_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='分享购买奖励记录';
+
+CREATE TABLE IF NOT EXISTS `li_member_benefit` (
+   `id` bigint NOT NULL COMMENT 'ID',
+   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+    `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志 true/false 删除/未删除',
+    `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+    `benefit_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '权益名称',
+    `benefit_logo` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '权益LOGO',
+    `benefit_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '权益类型',
+    `benefit_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '权益说明',
+    `benefit_sort` int NOT NULL DEFAULT 1 COMMENT '排序',
+    `benefit_state` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'OPEN' COMMENT '状态 OPEN/CLOSE',
+    `benefit_config` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展配置(JSON)',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `idx_li_member_benefit_state_sort` (`benefit_state`,`benefit_sort`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='客户权益';
+
+CREATE TABLE IF NOT EXISTS `li_member_grade_benefit_grant` (
+    `id` bigint NOT NULL COMMENT 'ID',
+    `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime(6) DEFAULT NULL COMMENT '创建时间',
+    `delete_flag` bit(1) DEFAULT b'0' COMMENT '删除标志',
+    `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime(6) DEFAULT NULL COMMENT '更新时间',
+    `member_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '会员ID',
+    `grade_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '等级ID',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_member_grade_benefit_grant` (`member_id`,`grade_id`) USING BTREE,
+    KEY `idx_grade_id` (`grade_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='等级权益发放记录（每个会员每个等级最多一条）';
+

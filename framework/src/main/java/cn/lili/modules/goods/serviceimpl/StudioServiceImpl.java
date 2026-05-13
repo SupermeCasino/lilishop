@@ -243,6 +243,13 @@ public class StudioServiceImpl extends ServiceImpl<StudioMapper, Studio> impleme
                 .set(Studio::getStatus, broadcastMessage.getStatus()));
     }
 
+    @Override
+    public boolean updateRecommend(String id, boolean recommend) {
+        return this.update(new LambdaUpdateWrapper<Studio>()
+                .eq(Studio::getId, id)
+                .set(Studio::isRecommend, recommend));
+    }
+
     /**
      * 根据直播间ID获取直播间
      *

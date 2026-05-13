@@ -16,8 +16,6 @@ import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
 import cn.lili.modules.goods.service.GoodsGroupGoodsService;
 import cn.lili.modules.goods.service.GoodsGroupService;
 import cn.lili.modules.goods.service.GoodsService;
-import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -71,9 +69,7 @@ public class GoodsGroupManagerController {
     @Parameter(name = "page", description = "分页参数")
     @GetMapping("/getByPage")
     public ResultMessage<IPage<GoodsGroup>> getByPage(PageVO page) {
-        QueryWrapper<GoodsGroup> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
-        return ResultUtil.data(goodsGroupService.page(PageUtil.initPage(page), queryWrapper));
+        return ResultUtil.data(goodsGroupService.getByPage(page));
     }
 
     @Operation(description = "添加商品分组")
@@ -102,9 +98,7 @@ public class GoodsGroupManagerController {
     @Parameter(name = "id", description = "商品分组ID", required = true)
     @DeleteMapping("/delete/{id}")
     public ResultMessage<Object> delete(@PathVariable String id) {
-        QueryWrapper<GoodsGroupGoods> wrapper = new QueryWrapper<>();
-        wrapper.eq("group_id", id);
-        long count = goodsGroupGoodsService.count(wrapper);
+        long count = goodsGroupGoodsService.countByGroupId(id);
         if (count > 0) {
             return ResultUtil.error(ResultCode.ERROR.code(), "请先移除分组下的商品后再删除");
         }

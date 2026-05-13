@@ -104,6 +104,7 @@ ignored:
     - /buyer/payment/cashierRefund/**
     - /buyer/other/pageData/**
     - /buyer/other/article/**
+    - /buyer/other/wechat/h5/callback
     - /buyer/goods/**
     - /buyer/store/**
     - /buyer/passport/connect/**
@@ -165,7 +166,7 @@ lili:
   # jwt 细节设定
   jwt-setting:
     # token过期时间（分钟）
-    tokenExpireTime: 129600
+    tokenExpireTime: 259200
 
   # 使用Spring @Cacheable注解失效时间
   cache:

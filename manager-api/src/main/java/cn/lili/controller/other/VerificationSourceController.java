@@ -8,7 +8,6 @@ import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.verification.entity.dos.VerificationSource;
 import cn.lili.modules.verification.service.VerificationService;
 import cn.lili.modules.verification.service.VerificationSourceService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +48,7 @@ public class VerificationSourceController {
     public ResultMessage<IPage<VerificationSource>> getByPage(VerificationSource entity,
                                                               SearchVO searchVo,
                                                               PageVO page) {
-        IPage<VerificationSource> data = verificationSourceService.page(PageUtil.initPage(page), PageUtil.initWrapper(entity, searchVo));
+        IPage<VerificationSource> data = verificationSourceService.getByPage(entity, searchVo, page);
         return ResultUtil.data(data);
     }
 

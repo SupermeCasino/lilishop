@@ -6,8 +6,10 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dos.StoreCollection;
 import cn.lili.modules.member.entity.dto.CollectionDTO;
+import cn.lili.modules.member.entity.enums.ExperienceRuleEnum;
 import cn.lili.modules.member.entity.vo.StoreCollectionVO;
 import cn.lili.modules.member.mapper.StoreCollectionMapper;
+import cn.lili.modules.member.service.MemberExperienceService;
 import cn.lili.modules.member.service.StoreCollectionService;
 import cn.lili.modules.store.service.StoreService;
 import cn.lili.mybatis.util.PageUtil;
@@ -33,6 +35,8 @@ public class StoreCollectionServiceImpl extends ServiceImpl<StoreCollectionMappe
 
     @Autowired
     private StoreService storeService;
+    @Autowired
+    private MemberExperienceService memberExperienceService;
 
     @Override
     public IPage<StoreCollectionVO> storeCollection(PageVO pageVo) {
@@ -59,6 +63,7 @@ public class StoreCollectionServiceImpl extends ServiceImpl<StoreCollectionMappe
             StoreCollection storeCollection = new StoreCollection(UserContext.getCurrentUser().getId(), storeId);
             this.save(storeCollection);
             storeService.updateStoreCollectionNum(new CollectionDTO(storeId, 1));
+            memberExperienceService.grantExperience(UserContext.getCurrentUser().getId(), ExperienceRuleEnum.FOLLOW_STORE, storeId, "关注店铺，赠送经验值");
             return storeCollection;
         }
         throw new ServiceException(ResultCode.USER_COLLECTION_EXIST);

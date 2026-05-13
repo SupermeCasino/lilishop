@@ -6,6 +6,8 @@ import cn.lili.modules.promotion.entity.dto.search.CouponSearchParams;
 import cn.lili.modules.promotion.entity.vos.CouponVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * 优惠券业务层
  *
@@ -47,4 +49,12 @@ public interface CouponService extends AbstractPromotionsService<Coupon> {
      */
     CouponVO getDetail(String couponId);
 
+    /**
+     * 过滤指定店铺下存在的优惠券ID列表。
+     *
+     * @param couponIds 优惠券ID列表
+     * @param storeId   店铺ID
+     * @return 归属于该店铺且存在的优惠券ID列表
+     */
+    List<String> filterCouponIdsByStoreId(List<String> couponIds, String storeId);
 }

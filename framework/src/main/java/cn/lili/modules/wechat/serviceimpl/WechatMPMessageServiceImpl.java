@@ -5,6 +5,8 @@ import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.HttpUtils;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.message.entity.enums.NoticeMessageNodeEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
 import cn.lili.modules.wechat.entity.dos.WechatMPMessage;
@@ -13,9 +15,11 @@ import cn.lili.modules.wechat.mapper.WechatMPMessageMapper;
 import cn.lili.modules.wechat.service.WechatMPMessageService;
 import cn.lili.modules.wechat.util.WechatAccessTokenUtil;
 import cn.lili.modules.wechat.util.WechatMessageUtil;
+import cn.lili.mybatis.util.PageUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONArray;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -146,6 +150,11 @@ public class WechatMPMessageServiceImpl extends ServiceImpl<WechatMPMessageMappe
             log.error("初始化微信消息异常", e);
         }
 
+    }
+
+    @Override
+    public IPage<WechatMPMessage> getByPage(WechatMPMessage entity, SearchVO searchVO, PageVO pageVO) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(entity, searchVO));
     }
 
 

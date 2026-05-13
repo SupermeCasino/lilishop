@@ -1,6 +1,8 @@
 package cn.lili.modules.system.service;
 
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.system.entity.dos.AppVersion;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -27,4 +29,13 @@ public interface AppVersionService extends IService<AppVersion> {
      * @return 是否可添加
      */
     boolean checkAppVersion(AppVersion appVersion);
+
+    /**
+     * app版本分页查询
+     *
+     * @param type APP类型（可选）
+     * @param pageVO 分页参数
+     * @return 分页结果
+     */
+    IPage<AppVersion> pageByType(String type, PageVO pageVO);
 }

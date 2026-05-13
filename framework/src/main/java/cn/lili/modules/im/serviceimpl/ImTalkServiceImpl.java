@@ -18,6 +18,7 @@ import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.service.StoreService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +173,15 @@ public class ImTalkServiceImpl extends ServiceImpl<ImTalkMapper, ImTalk> impleme
             imTalk.setDisable2(true);
             this.updateById(imTalk);
         }
+    }
+
+    @Override
+    public boolean updateLastTalkMessage(String talkId, String lastTalkMessage, java.util.Date lastTalkTime, String lastMessageType) {
+        return this.update(new LambdaUpdateWrapper<ImTalk>()
+                .eq(ImTalk::getId, talkId)
+                .set(ImTalk::getLastTalkMessage, lastTalkMessage)
+                .set(ImTalk::getLastTalkTime, lastTalkTime)
+                .set(ImTalk::getLastMessageType, lastMessageType));
     }
 
     @Override

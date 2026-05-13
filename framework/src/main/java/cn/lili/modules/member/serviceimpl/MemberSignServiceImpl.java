@@ -9,8 +9,10 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.common.utils.DateUtil;
 import cn.lili.modules.member.entity.dos.MemberSign;
+import cn.lili.modules.member.entity.enums.ExperienceRuleEnum;
 import cn.lili.modules.member.entity.enums.PointTypeEnum;
 import cn.lili.modules.member.mapper.MemberSignMapper;
+import cn.lili.modules.member.service.MemberExperienceService;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.member.service.MemberSignService;
 import cn.lili.modules.system.entity.dos.Setting;
@@ -23,10 +25,12 @@ import cn.lili.rocketmq.tags.MemberTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +40,7 @@ import java.util.List;
  * @since 2020-02-25 14:10:16
  */
 @Service
+@Slf4j
 public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberSign> implements MemberSignService {
 
     /**
@@ -58,6 +63,8 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
      */
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberExperienceService memberExperienceService;
 
 
     @Override
@@ -140,6 +147,8 @@ public class MemberSignServiceImpl extends ServiceImpl<MemberSignMapper, MemberS
                 //赠送客户积分
                 memberService.updateMemberPoint(point, PointTypeEnum.INCREASE.name(), memberId, content);
             }
+            String signBizId = DateUtil.toString(new Date(), DateUtil.STANDARD_DATE_NO_UNDERLINE_FORMAT);
+            memberExperienceService.grantExperience(memberId, ExperienceRuleEnum.SIGN_IN, signBizId, "客户签到赠送经验值");
         } catch (Exception e) {
             log.error("客户签到错误", e);
         }

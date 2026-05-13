@@ -6,13 +6,16 @@ import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dos.StoreRole;
 import cn.lili.modules.member.mapper.StoreRoleMapper;
 import cn.lili.modules.member.service.StoreClerkRoleService;
 import cn.lili.modules.member.service.StoreDepartmentRoleService;
 import cn.lili.modules.member.service.StoreMenuRoleService;
 import cn.lili.modules.member.service.StoreRoleService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,5 +115,10 @@ public class StoreRoleServiceImpl extends ServiceImpl<StoreRoleMapper, StoreRole
         queryWrapper.eq("store_id", UserContext.getCurrentUser().getStoreId());
         queryWrapper.in("id", ids);
         return this.baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Page<StoreRole> getRolePage(PageVO pageVO, StoreRole storeRole) {
+        return this.page(PageUtil.initPage(pageVO), PageUtil.initWrapper(storeRole));
     }
 }

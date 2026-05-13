@@ -89,4 +89,13 @@ public interface StoreLogisticsService extends IService<StoreLogistics> {
      */
     List<StoreLogisticsVO> getCloseStoreLogistics(String storeId);
 
+    /**
+     * 取消选择物流公司
+     *
+     * @param logisticsId 物流公司ID
+     * @param storeId 店铺ID
+     * @return 是否成功
+     */
+    boolean removeStoreLogistics(String logisticsId, String storeId);
+
 }

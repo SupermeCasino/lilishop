@@ -7,7 +7,6 @@ import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.vo.PaymentLog;
 import cn.lili.modules.order.order.service.OrderService;
-import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +40,6 @@ public class PaymentLogManagerController {
     public ResultMessage<IPage<PaymentLog>> getByPage(Order order,
                                                       SearchVO searchVo,
                                                       PageVO page) {
-        return ResultUtil.data(orderService.queryPaymentLogs(PageUtil.initPage(page), PageUtil.initWrapper(order, searchVo)));
+        return ResultUtil.data(orderService.queryPaymentLogs(order, searchVo, page));
     }
 }

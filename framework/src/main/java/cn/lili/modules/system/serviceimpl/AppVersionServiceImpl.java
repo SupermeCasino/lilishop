@@ -3,10 +3,13 @@ package cn.lili.modules.system.serviceimpl;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.utils.StringUtils;
+import cn.lili.common.vo.PageVO;
 import cn.lili.modules.system.entity.dos.AppVersion;
 import cn.lili.modules.system.mapper.AppVersionMapper;
 import cn.lili.modules.system.service.AppVersionService;
+import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +44,13 @@ public class AppVersionServiceImpl extends ServiceImpl<AppVersionMapper, AppVers
             throw new ServiceException(ResultCode.APP_VERSION_EXIST);
         }
         return true;
+    }
+
+    @Override
+    public IPage<AppVersion> pageByType(String type, PageVO pageVO) {
+        LambdaQueryWrapper<AppVersion> wrapper = new LambdaQueryWrapper<AppVersion>()
+                .eq(StringUtils.isNotEmpty(type), AppVersion::getType, type)
+                .orderByDesc(AppVersion::getCreateTime);
+        return this.page(PageUtil.initPage(pageVO), wrapper);
     }
 }

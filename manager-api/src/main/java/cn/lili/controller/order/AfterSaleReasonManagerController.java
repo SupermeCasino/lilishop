@@ -5,8 +5,6 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.order.aftersale.entity.dos.AfterSaleReason;
 import cn.lili.modules.order.aftersale.service.AfterSaleReasonService;
-import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +43,7 @@ public class AfterSaleReasonManagerController {
     @Parameter(name = "serviceType", description = "售后类型", required = true)
     @GetMapping("/getByPage")
     public ResultMessage<IPage<AfterSaleReason>> getByPage(PageVO page, @RequestParam String serviceType) {
-        return ResultUtil.data(afterSaleReasonService.page(PageUtil.initPage(page),new QueryWrapper<AfterSaleReason>().eq("service_Type", serviceType)));
+        return ResultUtil.data(afterSaleReasonService.pageByServiceType(page, serviceType));
     }
 
     @Operation(description = "添加售后原因")

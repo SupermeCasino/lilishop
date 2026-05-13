@@ -7,7 +7,6 @@ import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.member.entity.dos.StoreDepartment;
 import cn.lili.modules.member.entity.vo.StoreDepartmentVO;
 import cn.lili.modules.member.service.StoreDepartmentService;
-import cn.lili.mybatis.util.PageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +42,7 @@ public class StoreDepartmentController {
     public ResultMessage<List<StoreDepartmentVO>> getByPage(StoreDepartment entity,
                                                             SearchVO searchVo) {
         entity.setStoreId(UserContext.getCurrentUser().getStoreId());
-        return ResultUtil.data(storeDepartmentService.tree(PageUtil.initWrapper(entity, searchVo)));
+        return ResultUtil.data(storeDepartmentService.tree(entity, searchVo));
 
     }
 

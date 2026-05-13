@@ -20,6 +20,8 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.common.utils.SnowFlake;
+import cn.lili.common.vo.PageVO;
+import cn.lili.common.vo.SearchVO;
 import cn.lili.modules.goods.entity.dto.GoodsCompleteMessage;
 import cn.lili.modules.member.entity.dto.MemberAddressDTO;
 import cn.lili.modules.order.cart.entity.dto.TradeDTO;
@@ -784,6 +786,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     public IPage<PaymentLog> queryPaymentLogs(IPage<PaymentLog> page, Wrapper<PaymentLog> queryWrapper) {
         return baseMapper.queryPaymentLogs(page, queryWrapper);
+    }
+
+    @Override
+    public IPage<PaymentLog> queryPaymentLogs(Order order, SearchVO searchVO, PageVO pageVO) {
+        return queryPaymentLogs(PageUtil.initPage(pageVO), PageUtil.initWrapper(order, searchVO));
     }
 
     /**

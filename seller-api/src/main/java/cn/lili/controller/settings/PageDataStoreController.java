@@ -1,8 +1,6 @@
 package cn.lili.controller.settings;
 
-import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
-import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
@@ -11,7 +9,6 @@ import cn.lili.modules.page.entity.dto.PageDataDTO;
 import cn.lili.modules.page.entity.enums.PageEnum;
 import cn.lili.modules.page.entity.vos.PageDataListVO;
 import cn.lili.modules.page.service.PageDataService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,11 +52,7 @@ public class PageDataStoreController {
     @GetMapping("/{id}")
     public ResultMessage<PageData> getPageData(@PathVariable String id) {
         //查询当前店铺下的页面数据
-        PageData pageData = pageDataService.getOne(
-                new LambdaQueryWrapper<PageData>()
-                        .eq(PageData::getPageType, PageEnum.STORE.name())
-                        .eq(PageData::getNum, UserContext.getCurrentUser().getStoreId())
-                        .eq(PageData::getId, id));
+        PageData pageData = pageDataService.getStorePageData(UserContext.getCurrentUser().getStoreId(), id);
         return ResultUtil.data(pageData);
     }
 
@@ -110,10 +103,6 @@ public class PageDataStoreController {
      */
     private void checkAuthority(String id) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        LambdaQueryWrapper<PageData> queryWrapper = new LambdaQueryWrapper<PageData>().eq(PageData::getId, id).eq(PageData::getPageType, PageEnum.STORE.name()).eq(PageData::getNum, storeId);
-        PageData data = pageDataService.getOne(queryWrapper);
-        if (data == null) {
-            throw new ServiceException(ResultCode.USER_AUTHORITY_ERROR);
-        }
+        pageDataService.checkStoreAuthority(storeId, id);
     }
 }

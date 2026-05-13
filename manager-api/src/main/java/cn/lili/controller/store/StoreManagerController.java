@@ -13,7 +13,6 @@ import cn.lili.modules.store.entity.vos.StoreSearchParams;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreDetailService;
 import cn.lili.modules.store.service.StoreService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,7 +48,7 @@ public class StoreManagerController {
     @Operation(summary = "获取店铺分页列表")
     @GetMapping("/all")
     public ResultMessage<List<Store>> getAll() {
-        return ResultUtil.data(storeService.list(new QueryWrapper<Store>().eq("store_disable", "OPEN")));
+        return ResultUtil.data(storeService.listOpenStores());
     }
 
     @Operation(summary = "获取店铺分页列表")
@@ -122,11 +121,7 @@ public class StoreManagerController {
     @Parameter(name = "memberId", description = "客户id", required = true)
     @GetMapping("/{memberId}/member")
     public ResultMessage<Store> getByMemberId(@Valid @PathVariable String memberId) {
-        List<Store> list = storeService.list(new QueryWrapper<Store>().eq("member_id", memberId));
-        if (list.size() > 0) {
-            return ResultUtil.data(list.get(0));
-        }
-        return ResultUtil.data(null);
+        return ResultUtil.data(storeService.getStoreByMemberId(memberId));
     }
 
     @Operation(summary = "将所有店铺导入店员表")

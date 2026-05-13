@@ -465,6 +465,20 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuMapper, GoodsSku> i
     }
 
     @Override
+    public List<GoodsSku> listByIdsAndStoreId(List<String> skuIds, String storeId) {
+        return this.list(new LambdaQueryWrapper<GoodsSku>()
+                .in(GoodsSku::getId, skuIds)
+                .eq(GoodsSku::getStoreId, storeId));
+    }
+
+    @Override
+    public List<GoodsSku> listByGoodsIdAndStoreId(String goodsId, String storeId) {
+        return this.list(new LambdaQueryWrapper<GoodsSku>()
+                .eq(GoodsSku::getGoodsId, goodsId)
+                .eq(GoodsSku::getStoreId, storeId));
+    }
+
+    @Override
     public List<GoodsSkuVO> getGoodsSkuVOList(List<GoodsSku> list) {
         List<GoodsSkuVO> goodsSkuVOS = new ArrayList<>();
         for (GoodsSku goodsSku : list) {
