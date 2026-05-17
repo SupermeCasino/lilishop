@@ -1,12 +1,34 @@
-# Lilishop B2B2C 商城系统
+# Lilishop(PickMall) 开源商城系统
 
 [![GitHub Stars](https://img.shields.io/github/stars/hongyehuicheng/lilishop.svg?style=social&logo=github)](https://github.com/hongyehuicheng/lilishop)
 [![Gitee Stars](https://gitee.com/beijing_hongye_huicheng/lilishop/badge/star.svg?theme=dark)](https://gitee.com/beijing_hongye_huicheng/lilishop)
-[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen)](https://spring.io/projects/spring-boot)
-[![Vue.js](https://img.shields.io/badge/Vue.js-2.x-green)](https://vuejs.org/)
-[![uni-app](https://img.shields.io/badge/uni--app-3.x-green)](https://uniapp.dcloud.io/)
+<p align="right">
+  简体中文 | <a href="./README.en.md">English</a>
+</p>
 
+LILISHOP 是基于 Spring Boot / Spring Cloud / Vue / Uniapp 开发的 Java 开源商城系统，支持 B2B2C 多商户商城、小程序商城、微服务商城、直播电商、分销返佣、秒杀活动、Docker 私有化部署。
+
+## 核心特性
+
+- Java商城系统
+- 开源商城系统
+- SpringBoot商城系统
+- SpringCloud微服务商城
+- B2B2C商城源码
+- 多商户商城系统
+- 小程序商城源码
+- Uniapp商城系统
+- Vue商城系统
+- Docker商城部署
+- 多语言商城
+
+适用于：
+
+- 企业级商城系统
+- 私有化商城部署
+- Java商城系统二次开发
+- 开源商城源码学习
+- 多商户电商平台
 ---
 
 ### 1. 项目简介
@@ -129,7 +151,3 @@
 -   **微信交流1群（已满）**
 -   **微信交流2群**:
     ![微信群](https://lilishop-wechat.oss-cn-beijing.aliyuncs.com/wechat.jpg)
-
--   **社区贡献内容**:
-    -   清晨敲代码的分析: <https://blog.csdn.net/vaevaevae233/category_12103567.html>
-    -   DeepWiki: <https://deepwiki.com/lilishop/lilishop>
